@@ -1,0 +1,21 @@
+{
+  "android": {
+    "platformName": "Android",
+    "appium:automationName": "UiAutomator2",
+    "appium:deviceName": "Android Emulator",
+    "appium:platformVersion": "31",
+    "appium:app": "./apps/android/app-debug.apk",
+    "appium:udid": "emulator-5554"
+  },
+  "ios": {
+    "platformName": "iOS",
+    "appium:automationName": "XCUITest",
+    "appium:deviceName": "iPhone 14",
+    "appium:platformVersion": "16.0",
+    "appium:app": "./apps/ios/app.ipa",
+    "appium:udid": "auto"
+  },
+  "general": {
+    "platformName": "generic"
+  }
+}

@@ -9,7 +9,8 @@ on:
         default: 'android'
 
 jobs:
-  run-appium-tests:
+  run-appium-android:
+    if: ${{ github.event.inputs.platform == 'android' }}
     runs-on: ubuntu-latest
     env:
       NO_UI: 'true'
@@ -29,13 +30,19 @@ jobs:
 
       - name: Start Appium MCP (background)
         run: |
-          # Start appium-mcp in NO_UI mode for CI. It runs in foreground; run in background.
           npx -y appium-mcp@latest &
           sleep 3
 
+      - name: Start Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          target: google_apis
+          arch: x86_64
+          force-avd-creation: true
+
       - name: Run Playwright tests
         env:
-          # Placeholders — set via repository secrets or workflow inputs as needed.
           AI_VISION_ENABLED: ${{ secrets.AI_VISION_ENABLED }}
           AI_VISION_API_BASE_URL: ${{ secrets.AI_VISION_API_BASE_URL }}
           AI_VISION_API_KEY: ${{ secrets.AI_VISION_API_KEY }}
@@ -52,11 +59,59 @@ jobs:
       - name: Stop Appium MCP
         if: ${{ always() }}
         run: |
-          # Best-effort kill any appium-mcp node process
+          pkill -f appium-mcp || true
+
+  run-appium-ios:
+    if: ${{ github.event.inputs.platform == 'ios' }}
+    runs-on: macos-latest
+    env:
+      NO_UI: 'true'
+      CAPABILITIES_CONFIG: './Jira/student-refi/capabilities.json'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      - name: Start Appium MCP (background)
+        run: |
+          npx -y appium-mcp@latest &
+          sleep 3
+
+      - name: Prepare iOS simulator
+        run: |
+          echo "iOS simulator preparation placeholder — requires Xcode tooling and provisioning."
+
+      - name: Run Playwright tests
+        env:
+          AI_VISION_ENABLED: ${{ secrets.AI_VISION_ENABLED }}
+          AI_VISION_API_BASE_URL: ${{ secrets.AI_VISION_API_BASE_URL }}
+          AI_VISION_API_KEY: ${{ secrets.AI_VISION_API_KEY }}
+        run: |
+          npx playwright test
+
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+
+      - name: Stop Appium MCP
+        if: ${{ always() }}
+        run: |
           pkill -f appium-mcp || true
 
 # Notes:
-# - This workflow is a scaffold. Adjust CAPABILITIES_CONFIG, device management,
-#   and environment variables to match your CI/device-farm setup.
-# - For iOS testing on macOS runners, change `runs-on` to `macos-latest` and
-#   ensure Xcode tools are installed and signed correctly.
+# - This workflow scaffolds distinct jobs for Android (ubuntu) and iOS (macos).
+# - The Android job uses `reactivecircus/android-emulator-runner` to create a
+#   disposable emulator. Adjust API levels and system images as required.
+# - For iOS, the job runs on `macos-latest`; implement `prepare_ios_simulator`
+#   steps and code signing provisioning as required for real-device runs.
