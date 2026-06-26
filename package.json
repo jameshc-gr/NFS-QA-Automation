@@ -8,7 +8,9 @@
     "test:eligible": "npx playwright test tests/LK[0-9]*.spec.ts",
     "test:decline": "npx playwright test tests/LK_CD*.spec.ts",
     "test:nocredit": "npx playwright test tests/LK_NC*.spec.ts",
-    "test:ineligible": "npx playwright test tests/LK_IN*.spec.ts"
+    "test:ineligible": "npx playwright test tests/LK_IN*.spec.ts",
+    "generate:jira": "node scripts/generate_jira_artifacts.js",
+    "generate:jira:force": "node scripts/generate_jira_artifacts.js --force"
   },
   "keywords": [],
   "author": "",

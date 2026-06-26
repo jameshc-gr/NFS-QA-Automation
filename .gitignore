@@ -9,3 +9,4 @@ node_modules/
 
 # Environment variables (contains sensitive test data)
 .env
+jira.env

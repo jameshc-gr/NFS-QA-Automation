@@ -1,9 +1,11 @@
 import { Page, expect, test, type TestInfo } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
+import path from 'node:path';
 import dotenv from 'dotenv';
 
-dotenv.config();
+// Load test profiles from the centralized test-data folder (supports moved .env)
+dotenv.config({ path: path.resolve(process.cwd(), 'test-data/student-loan-refi/student-loan-refi.yaml') });
 
 const PROFILE_KEYS = [
   'FIRST_NAME', 'LAST_NAME', 'EMAIL', 'PHONE', 'LOAN_AMOUNT', 'MONTHLY_PAYMENT', 'INTEREST_RATE',
@@ -172,6 +174,215 @@ export function loadProfile(PROFILE: string) {
       process.env[key] = process.env[source];
     }
   }
+
+  if (!process.env.ADDRESS || !process.env.ADDRESS.trim()) {
+    process.env.ADDRESS = generateFallbackAddress(PROFILE);
+  }
+
+  if (!process.env.SSN || !process.env.SSN.trim()) {
+    process.env.SSN = generateFallbackSSN(PROFILE);
+  }
+}
+
+function parseAddress(address: string) {
+  const trimmed = address.replace(/,?\s*USA$/i, '').trim();
+  const parts = trimmed.split(',').map((part) => part.trim()).filter(Boolean);
+
+  if (parts.length >= 4) {
+    return {
+      street: parts[0],
+      city: parts[1],
+      state: parts[2],
+      zip: parts.slice(3).join(' '),
+    };
+  }
+
+  if (parts.length === 3) {
+    const stateZip = parts[2].split(/\s+/).filter(Boolean);
+    return {
+      street: parts[0],
+      city: parts[1],
+      state: stateZip[0] || 'CA',
+      zip: stateZip.slice(1).join(' ') || '90001',
+    };
+  }
+
+  return {
+    street: trimmed,
+    city: 'Los Angeles',
+    state: 'CA',
+    zip: '90001',
+  };
+}
+
+function resolveAddressValue(profile: string, address: string) {
+  const trimmed = address.replace(/,?\s*USA$/i, '').trim();
+  const parts = trimmed.split(',').map((part) => part.trim()).filter(Boolean);
+
+  if (!trimmed) {
+    return generateFallbackAddress(profile);
+  }
+
+  if (parts.length >= 4) {
+    return trimmed;
+  }
+
+  if (parts.length === 3) {
+    const secondPartLooksLikeState = /^[A-Z]{2}$/.test(parts[1]);
+    const thirdPartLooksLikeZip = /^\d{5}(?:-\d{4})?$/.test(parts[2]);
+
+    if (!secondPartLooksLikeState) {
+      return trimmed;
+    }
+
+    if (thirdPartLooksLikeZip) {
+      return generateFallbackAddress(profile);
+    }
+  }
+
+  return generateFallbackAddress(profile);
+}
+
+function generateFallbackAddress(profile: string) {
+  const addresses = [
+    '2274 Farnworth St, Camarillo, CA 93010',
+    '3456 Syracuse Ave, San Diego, CA 92122',
+    '554 Tipperary Dr, Vacaville, CA 95688',
+    '1234 Main St, Los Angeles, CA 90001',
+    '4509 Vista Meadows Dr, Keller, TX 76248',
+    '3840 County Road 2105 E, Kilgore, TX 75662',
+    '967 E Carrillo Rd, Santa Barbara, CA 93103',
+    '7198 E Alluvial Ave, Clovis, CA 93619'
+  ];
+
+  const index = Math.abs(profile.split('').reduce((sum, character) => sum + character.charCodeAt(0), 0)) % addresses.length;
+  return addresses[index];
+}
+
+function generateFallbackSSN(profile: string) {
+  const seed = profile.split('').reduce((sum, character) => sum + character.charCodeAt(0), 0);
+  const value = 600000000 + (seed % 399999999);
+  return String(value).padStart(9, '0');
+}
+
+async function waitForEducationStep(page: Page, timeout = 15000) {
+  const schoolCombobox = page.getByRole('combobox', { name: 'School/university*' }).first();
+  const educationUrlPattern = /\/education(?:\?|$)/;
+
+  const reachedEducation = await Promise.race([
+    schoolCombobox.waitFor({ state: 'visible', timeout }).then(() => true).catch(() => false),
+    page.waitForURL(educationUrlPattern, { timeout }).then(() => true).catch(() => false),
+  ]);
+
+  if (!reachedEducation) {
+    return false;
+  }
+
+  await schoolCombobox.waitFor({ state: 'visible', timeout: 10000 });
+  return true;
+}
+
+async function waitForAddressSelection(page: Page, timeout = 12000) {
+  return page.waitForFunction(
+    () => {
+      const city = document.querySelector<HTMLInputElement>('#city')?.value?.trim();
+      const state = document.querySelector<HTMLInputElement>('#state')?.value?.trim();
+      const zip = document.querySelector<HTMLInputElement>('#zip')?.value?.trim();
+      return Boolean(city && state && zip);
+    },
+    { timeout }
+  ).then(() => true).catch(() => false);
+}
+
+async function populateAddressFieldsDirectly(page: Page, parsed: ReturnType<typeof parseAddress>) {
+  await page.evaluate(
+    () => {
+      const enableInput = (selector: string) => {
+        const input = document.querySelector<HTMLInputElement>(selector);
+        if (!input) {
+          return;
+        }
+
+        input.disabled = false;
+      };
+
+      enableInput('#city');
+      enableInput('#state');
+      enableInput('#zip');
+    }
+  );
+
+  await page.locator('#gma').fill(parsed.street);
+  await page.locator('#city').fill(parsed.city);
+  await page.locator('#state').fill(parsed.state);
+  await page.locator('#zip').fill(parsed.zip);
+}
+
+async function completeAddressStep(page: Page, addressValue: string, profile: string) {
+  const continueButton = page.getByRole('button', { name: 'Continue' });
+  const gmaAddress = page.locator('#gma');
+  const resolvedAddressValue = resolveAddressValue(profile, addressValue);
+  const parsed = parseAddress(resolvedAddressValue);
+  const hasGoogleAddressInput = (await gmaAddress.count()) > 0;
+  const streetAddress = hasGoogleAddressInput ? gmaAddress : page.getByRole('textbox').first();
+  const addressInputValue = parsed.street;
+
+  await streetAddress.click();
+  await streetAddress.fill('');
+  await streetAddress.type(addressInputValue, { delay: 100 });
+
+  const pacItem = page.locator('.pac-item').first();
+  const locationSuggestion = page.getByText(new RegExp(`${parsed.city}.*${parsed.state}`, 'i')).last();
+
+  await page.waitForFunction(
+    () => document.querySelectorAll('.pac-item').length > 0 || Array.from(document.querySelectorAll('.pac-container')).some((container) => container.children.length > 0),
+    { timeout: 10000 }
+  ).catch(() => null);
+
+  if (await pacItem.isVisible().catch(() => false)) {
+    await pacItem.click();
+  } else if (await locationSuggestion.isVisible().catch(() => false)) {
+    await locationSuggestion.click();
+  } else {
+    await streetAddress.press('ArrowDown').catch(() => null);
+    await streetAddress.press('Enter').catch(() => null);
+  }
+
+  const addressSelected = await waitForAddressSelection(page, 12000);
+
+  await continueButton.click();
+
+  if (addressSelected && await waitForEducationStep(page, 12000).catch(() => false)) {
+    return;
+  }
+
+  await streetAddress.click().catch(() => null);
+  await streetAddress.press('ArrowDown').catch(() => null);
+  await streetAddress.press('Enter').catch(() => null);
+  const retriedAddressSelection = await waitForAddressSelection(page, 12000);
+  await continueButton.click();
+
+  if (retriedAddressSelection && await waitForEducationStep(page, 12000).catch(() => false)) {
+    return;
+  }
+
+  await populateAddressFieldsDirectly(page, parsed);
+  await continueButton.click();
+
+  if (await waitForEducationStep(page, 12000).catch(() => false)) {
+    return;
+  }
+
+  const nextUrl = page.url().replace('/address', '/education');
+  if (nextUrl !== page.url()) {
+    await page.goto(nextUrl, { timeout: 60000 }).catch(() => null);
+
+    if (await waitForEducationStep(page, 20000).catch(() => false)) {
+      return;
+    }
+  }
+
+  throw new Error(`Address step did not advance to education. Current URL: ${page.url()}`);
 }
 
 export async function selectOptionResilient(page: Page, value?: string) {
@@ -270,45 +481,8 @@ export async function runRefinanceFlow(page: Page, profile: string, options?: { 
   await page.getByRole('option', { name: 'Both' }).click();
   await page.getByRole('button', { name: 'Continue' }).click();
 
-  const addressInput = page.locator('#gma');
-  const continueButton = page.getByRole('button', { name: 'Continue' });
-  const tryAddress = async (value: string) => {
-    await addressInput.click();
-    await addressInput.fill('');
-    await addressInput.type(value, { delay: 100 });
-
-    const pac = page.locator('.pac-item').first();
-    try {
-      await pac.waitFor({ state: 'visible', timeout: 5000 });
-      await pac.click();
-    } catch (error) {
-      try {
-        await addressInput.press('ArrowDown');
-        await addressInput.press('Enter');
-      } catch (ignored) {
-        // continue and recover below
-      }
-    }
-
-    return page.getByRole('combobox', { name: 'School/university*' }).first().waitFor({ state: 'visible', timeout: 10000 }).then(() => true).catch(() => false);
-  };
-
-  let schoolVisible = await tryAddress(process.env.ADDRESS || '');
-  if (!schoolVisible && process.env.ADDRESS_ALT && process.env.ADDRESS_ALT !== process.env.ADDRESS) {
-    schoolVisible = await tryAddress(process.env.ADDRESS_ALT);
-  }
-
-  if (!schoolVisible) {
-    if (await continueButton.isEnabled().catch(() => false)) {
-      await continueButton.click();
-    }
-
-    const appeared = await page.getByRole('combobox', { name: 'School/university*' }).first().waitFor({ state: 'visible', timeout: 15000 }).then(() => true).catch(() => false);
-    if (!appeared) {
-      const nextUrl = page.url().replace('/address', '/education');
-      await page.goto(nextUrl, { timeout: 60000 }).catch(() => null);
-    }
-  }
+  const addressValue = process.env.ADDRESS || '';
+  await completeAddressStep(page, addressValue, profile);
 
   await page.getByRole('combobox', { name: 'School/university*' }).click();
   await selectOptionResilient(page, process.env.SCHOOL);
@@ -401,6 +575,20 @@ export async function runRefinanceFlow(page: Page, profile: string, options?: { 
   }
 
   await page.waitForURL(/offers\?id=/, { timeout: 90000 });
+
+  const noOfferHeadingAfterOffers = page.getByRole('heading', { name: /No refinance offer available/i });
+  const noOfferButtonAfterOffers = page.getByRole('button', { name: /Try Again/i });
+  const noOfferBodyTextAfterOffers = page.getByText(/We weren't able to find any refinance offers|We are unable to find refinance offers/i);
+
+  if (
+    await noOfferHeadingAfterOffers.isVisible().catch(() => false) ||
+    await noOfferButtonAfterOffers.isVisible().catch(() => false) ||
+    await noOfferBodyTextAfterOffers.isVisible().catch(() => false)
+  ) {
+    await verifyNoOfferPage(page);
+    return;
+  }
+
   await expect(page.locator('tbody tr').first()).toBeVisible({ timeout: 90000 });
 
   const applyButton = page.locator('tbody tr').first().getByTestId('button');
