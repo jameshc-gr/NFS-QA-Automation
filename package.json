@@ -1,0 +1,22 @@
+{
+  "name": "webautomation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:eligible": "npx playwright test tests/LK[0-9]*.spec.ts",
+    "test:decline": "npx playwright test tests/LK_CD*.spec.ts",
+    "test:nocredit": "npx playwright test tests/LK_NC*.spec.ts",
+    "test:ineligible": "npx playwright test tests/LK_IN*.spec.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.61.0",
+    "@types/node": "^25.9.3",
+    "dotenv": "^17.4.2"
+  }
+}

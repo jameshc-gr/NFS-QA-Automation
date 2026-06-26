@@ -1,0 +1,62 @@
+name: Run Playwright Tests (Dynamic)
+
+on:
+  workflow_dispatch:
+    inputs:
+      specs:
+        description: 'Spec files or glob pattern to run'
+        required: false
+        default: ''
+      project:
+        description: 'Playwright project to use (chromium, firefox, webkit)'
+        required: false
+        default: ''
+      headed:
+        description: 'Run tests in headed mode'
+        required: false
+        default: 'false'
+      grep:
+        description: 'Grep pattern for test names'
+        required: false
+        default: ''
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Build test command
+        id: build
+        run: |
+          cmd="npx playwright test"
+          [[ -n "${{ inputs.specs }}" ]] && cmd+=" ${{ inputs.specs }}"
+          [[ -n "${{ inputs.project }}" ]] && cmd+=" --project=${{ inputs.project }}"
+          [[ "${{ inputs.headed }}" == "true" ]] && cmd+=" --headed"
+          [[ -n "${{ inputs.grep }}" ]] && cmd+=" --grep='${{ inputs.grep }}'"
+          echo "cmd=$cmd" >> $GITHUB_OUTPUT
+
+      - name: Run Playwright tests
+        run: ${{ steps.build.outputs.cmd }}
+        env:
+          CI: true
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: test-results
