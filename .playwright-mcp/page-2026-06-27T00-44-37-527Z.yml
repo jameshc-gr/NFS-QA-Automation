@@ -1,0 +1,82 @@
+- generic [ref=e5]:
+  - link "Guaranteed Rate, Inc" [ref=e10] [cursor=pointer]:
+    - /url: /
+    - img "Guaranteed Rate, Inc" [ref=e11]
+  - generic [ref=e102]:
+    - heading "Loan details" [level=2] [ref=e110]
+    - generic [ref=e113]:
+      - paragraph [ref=e114]: Tell us about your current loan details.
+      - generic [ref=e115]:
+        - generic [ref=e116]:
+          - generic [ref=e117]:
+            - textbox "Loan amount to refinance*" [ref=e118]:
+              - /placeholder: ""
+            - generic: Loan amount to refinance*
+          - generic [ref=e119]:
+            - textbox "Current monthly payment*" [ref=e120]:
+              - /placeholder: ""
+            - generic: Current monthly payment*
+        - generic [ref=e121]:
+          - generic [ref=e122]:
+            - textbox "Current interest rate*" [ref=e123]:
+              - /placeholder: ""
+            - generic: Current interest rate*
+          - combobox "Type of loan*" [ref=e125] [cursor=pointer]:
+            - generic: Type of loan*
+            - generic [ref=e128]: 
+      - button "Continue" [ref=e130] [cursor=pointer]:
+        - generic [ref=e131]: Continue
+      - button "Back" [ref=e133] [cursor=pointer]:
+        - generic [ref=e135]: 
+        - generic [ref=e136]: Back
+  - generic [ref=e56]:
+    - generic [ref=e57]:
+      - generic [ref=e58]:
+        - link "Privacy Policy" [ref=e59] [cursor=pointer]:
+          - /url: https://www.rate.com/privacy?adtrk=undefined
+        - text: "|"
+      - generic [ref=e60]:
+        - link "Licensing" [ref=e61] [cursor=pointer]:
+          - /url: https://www.rate.com/licensing?adtrk=undefined
+        - text: "|"
+      - generic [ref=e62]:
+        - link "Legal" [ref=e63] [cursor=pointer]:
+          - /url: https://www.rate.com/terms?adtrk=undefined
+        - text: "|"
+      - generic [ref=e64]:
+        - link "Contact Us" [ref=e65] [cursor=pointer]:
+          - /url: https://www.rate.com/contact-us?adtrk=undefined
+        - text: "|"
+      - generic [ref=e66]:
+        - link "Accessibility" [ref=e67] [cursor=pointer]:
+          - /url: https://www.rate.com/accessibility?adtrk=undefined
+        - text: "|"
+      - generic [ref=e68]:
+        - link "SMS Terms" [ref=e69] [cursor=pointer]:
+          - /url: https://www.rate.com/sms-terms?adtrk=undefined
+        - text: "|"
+      - generic [ref=e70]:
+        - link "Notice to Vendors" [ref=e71] [cursor=pointer]:
+          - /url: https://www.rate.com/notice-to-vendor?adtrk=undefined
+        - text: "|"
+      - link "NMLS Consumer Access" [ref=e73] [cursor=pointer]:
+        - /url: https://www.nmlsconsumeraccess.org/TuringTestPage.aspx?ReturnUrl=/EntityDetails.aspx/COMPANY/2611?adtrk=undefined
+    - 'link "Texas Consumer: How to file a complaint" [ref=e76] [cursor=pointer]':
+      - /url: https://www.rate.com/texas-consumers-how-to-file-complaint?adtrk=undefined
+    - img "Equal housing lender" [ref=e78]
+    - paragraph [ref=e79]: Copyright © 2024 Guaranteed Rate, Inc. d/b/a Rate. All rights reserved.
+    - generic [ref=e80]:
+      - generic [ref=e82]: "Company NMLS License #2611"
+      - generic [ref=e84]: "Arizona Mortgage Banker License #0907078"
+      - generic [ref=e87]: 3940 N. Ravenswood Chicago, IL 60613 - (833) 539-1346
+      - generic [ref=e90]: The company name, Guaranteed Rate, should not suggest to a consumer that Guaranteed Rate provides an interest rate guaranteed prior to an interest rate lock.
+      - generic [ref=e93]: Operating in the state of New York as Guaranteed Rate, Inc.
+      - generic [ref=e96]:
+        - text: If you are a California resident, please review our
+        - link "Privacy Policy" [ref=e97] [cursor=pointer]:
+          - /url: https://rate.com/privacy/ca-consumer-privacy-notice?adtrk=undefined
+        - text: to learn more about the categories and business purpose of personal information we may collect and your right to opt-out from the sale of personal information.
+    - generic [ref=e100]:
+      - text: "When Your Home is On the Line: What You Should Know About Home Equity Lines of Credit"
+      - link "Home Equity Lines of Credit (HELOC)" [ref=e101] [cursor=pointer]:
+        - /url: https://files.consumerfinance.gov/f/documents/cfpb_heloc-brochure.pdf

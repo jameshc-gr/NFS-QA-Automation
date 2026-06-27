@@ -1,0 +1,3 @@
+{
+  "__raw": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"logging\":{},\"tools\":{\"listChanged\":true},\"resources\":{}},\"serverInfo\":{\"name\":\"atlassian-mcp-server\",\"version\":\"1.0.0\"},\"instructions\":\"Use getTeamworkGraphContext when retrieving or reasoning about relationships and connections between Atlassian entities - such as work items, people, teams, goals, projects, or third-party objects. Do not use Teamwork Graph tools for basic CRUD operations. After calling getTeamworkGraphContext, call getTeamworkGraphObject on key linked entities to retrieve richer detail.\"},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+}

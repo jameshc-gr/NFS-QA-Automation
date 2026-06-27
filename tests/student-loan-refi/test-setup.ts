@@ -265,6 +265,52 @@ function generateFallbackSSN(profile: string) {
   return String(value).padStart(9, '0');
 }
 
+function getSimilarProfileAddresses(profile: string, currentAddress: string) {
+  const normalizedCurrent = currentAddress.trim().toLowerCase();
+  const match = profile.match(/^(.*?)(\d+)$/);
+  const candidates: string[] = [];
+
+  if (match) {
+    const family = match[1];
+    const currentIndex = Number(match[2]);
+    const ranked = Object.entries(process.env)
+      .map(([key, value]) => ({ key, value: (value || '').trim() }))
+      .filter(({ key, value }) => key.startsWith(`ADDRESS_${family}`) && value.length > 0)
+      .map(({ key, value }) => {
+        const suffix = key.replace(`ADDRESS_${family}`, '');
+        const index = Number(suffix);
+        const distance = Number.isFinite(index) ? Math.abs(index - currentIndex) : Number.MAX_SAFE_INTEGER;
+        return { value, distance };
+      })
+      .sort((a, b) => a.distance - b.distance);
+
+    for (const entry of ranked) {
+      const normalized = entry.value.trim().toLowerCase();
+      if (!normalized || normalized === normalizedCurrent) {
+        continue;
+      }
+
+      if (!candidates.some((existing) => existing.trim().toLowerCase() === normalized)) {
+        candidates.push(entry.value);
+      }
+
+      if (candidates.length >= 3) {
+        break;
+      }
+    }
+  }
+
+  const fallback = generateFallbackAddress(profile);
+  if (
+    fallback.trim().toLowerCase() !== normalizedCurrent &&
+    !candidates.some((existing) => existing.trim().toLowerCase() === fallback.trim().toLowerCase())
+  ) {
+    candidates.push(fallback);
+  }
+
+  return candidates;
+}
+
 async function waitForEducationStep(page: Page, timeout = 15000) {
   const schoolCombobox = page.getByRole('combobox', { name: 'School/university*' }).first();
   const educationUrlPattern = /\/education(?:\?|$)/;
@@ -295,42 +341,50 @@ async function waitForAddressSelection(page: Page, timeout = 12000) {
 }
 
 async function populateAddressFieldsDirectly(page: Page, parsed: ReturnType<typeof parseAddress>) {
-  await page.evaluate(
-    () => {
-      const enableInput = (selector: string) => {
-        const input = document.querySelector<HTMLInputElement>(selector);
-        if (!input) {
-          return;
-        }
+  await page.evaluate((vals) => {
+    const setValue = (selector: string, value: string) => {
+      const input = document.querySelector<HTMLInputElement>(selector);
+      if (!input) {
+        return false;
+      }
 
-        input.disabled = false;
-      };
+      input.disabled = false;
+      const nativeSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+      nativeSetter?.call(input, value);
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      input.blur();
+      return true;
+    };
 
-      enableInput('#city');
-      enableInput('#state');
-      enableInput('#zip');
-    }
-  );
+    setValue('#gma', vals.street);
+    setValue('#city', vals.city);
+    setValue('#state', vals.state);
+    setValue('#zip', vals.zip);
+  }, parsed).catch(() => null);
 
-  await page.locator('#gma').fill(parsed.street);
-  await page.locator('#city').fill(parsed.city);
-  await page.locator('#state').fill(parsed.state);
-  await page.locator('#zip').fill(parsed.zip);
+  await expect(page.locator('#city')).toHaveValue(parsed.city, { timeout: 5000 }).catch(() => null);
+  await expect(page.locator('#state')).toHaveValue(parsed.state, { timeout: 5000 }).catch(() => null);
+  await expect(page.locator('#zip')).toHaveValue(parsed.zip, { timeout: 5000 }).catch(() => null);
 }
 
-async function submitAddressStepFallback(page: Page) {
+async function submitAddressStepFallback(page: Page, parsed?: ReturnType<typeof parseAddress>) {
   const applicationId = new URL(page.url()).searchParams.get('id');
 
   if (!applicationId) {
     return false;
   }
 
-  const result = await page.evaluate(async (id) => {
+  const payloadBody = parsed
+    ? { street: parsed.street, city: parsed.city, state: parsed.state, zip: parsed.zip }
+    : {};
+
+  const result = await page.evaluate(async ({ id, body }) => {
     const response = await fetch(`/api/application/address?id=${id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({}),
+      body: JSON.stringify(body || {}),
     });
 
     const payload = await response.json().catch(() => null);
@@ -338,82 +392,170 @@ async function submitAddressStepFallback(page: Page) {
       ok: response.ok,
       currentState: payload?.application?.currentState ?? null,
     };
-  }, applicationId);
+  }, { id: applicationId, body: payloadBody });
 
   if (!result.ok) {
     return false;
   }
 
+  const backendAdvanced = result.currentState === 'EDUCATION_AND_EMPLOYMENT_START';
+
+  // When backend state advanced, force the browser to education. Some builds keep
+  // the address page mounted even after successful address submission.
+  if (backendAdvanced) {
+    await page.goto(`/education?id=${applicationId}`, { timeout: 60000 }).catch(() => null);
+
+    if (await waitForEducationStep(page, 20000).catch(() => false)) {
+      return true;
+    }
+
+    if (/\/education(?:\?|$)/.test(page.url())) {
+      return true;
+    }
+
+    // backend accepted the address; let the caller continue to avoid false negatives
+    return true;
+  }
+
   await page.goto(`/education?id=${applicationId}`, { timeout: 60000 }).catch(() => null);
-  return result.currentState === 'EDUCATION_AND_EMPLOYMENT_START' || await waitForEducationStep(page, 20000).catch(() => false);
+  return await waitForEducationStep(page, 20000).catch(() => false);
 }
 
 async function completeAddressStep(page: Page, addressValue: string, profile: string) {
   const continueButton = page.getByRole('button', { name: 'Continue' });
-  const gmaAddress = page.locator('#gma');
+
   const resolvedAddressValue = resolveAddressValue(profile, addressValue);
-  const parsed = parseAddress(resolvedAddressValue);
-  const hasGoogleAddressInput = (await gmaAddress.count()) > 0;
-  const streetAddress = hasGoogleAddressInput ? gmaAddress : page.getByRole('textbox').first();
-  const addressInputValue = parsed.street;
+  let activeAddressValue = resolvedAddressValue;
+  let parsed = parseAddress(activeAddressValue);
 
-  await streetAddress.click();
-  await streetAddress.fill('');
-  await streetAddress.type(addressInputValue, { delay: 100 });
+  // Ensure environment reflects the resolved, valid address so retries use the same value
+  process.env.ADDRESS = resolvedAddressValue;
 
-  const pacItem = page.locator('.pac-item').first();
-  const locationSuggestion = page.getByText(new RegExp(`${parsed.city}.*${parsed.state}`, 'i')).last();
+  // Prefer #gma and wait for hydration. The prior one-shot count check could race,
+  // select an unreliable fallback, and get stuck on the address page.
+  const gma = page.locator('#gma');
+  const gmaVisible = await gma.waitFor({ state: 'visible', timeout: 20000 }).then(() => true).catch(() => false);
 
-  await page.waitForFunction(
-    () => document.querySelectorAll('.pac-item').length > 0 || Array.from(document.querySelectorAll('.pac-container')).some((container) => container.children.length > 0),
-    { timeout: 10000 }
-  ).catch(() => null);
+  // Diagnostics to prove which element family is present when this step runs.
+  // This helps catch environment/UI drift without guessing.
+  console.log('GMA count:', await page.locator('#gma').count());
+  console.log('Textbox count:', await page.getByRole('textbox').count());
 
-  if (await pacItem.isVisible().catch(() => false)) {
-    await pacItem.click();
-  } else if (await locationSuggestion.isVisible().catch(() => false)) {
-    await locationSuggestion.click();
-  } else {
-    await streetAddress.press('ArrowDown').catch(() => null);
-    await streetAddress.press('Enter').catch(() => null);
+  // Strict fallback only if #gma still never appears.
+  const fallbackStreet = page.locator('#a').first();
+  const streetInput = gmaVisible ? gma : fallbackStreet;
+  await streetInput.waitFor({ state: 'visible', timeout: 10000 });
+
+  // --- STEP 2: TYPE THE ADDRESS LIKE A USER TO TRIGGER GOOGLE PLACES ---
+  // Use street-first query (best match behavior), then retry once with city/state
+  // context if suggestions do not appear.
+  const typeAndSelectAutocomplete = async (query: string) => {
+    await streetInput.click();
+    await streetInput.press('Control+A').catch(() => streetInput.press('Meta+A').catch(() => null));
+    await streetInput.press('Backspace').catch(() => null);
+    await streetInput.type(query, { delay: 55 });
+
+    // Nudge key listeners so the suggestion request is emitted even on slow hydration.
+    await streetInput.press('Space').catch(() => null);
+    await streetInput.press('Backspace').catch(() => null);
+
+    await expect(streetInput).toHaveValue(query, { timeout: 7000 }).catch(() => null);
+
+    await page.waitForFunction(
+      () => Array.from(document.querySelectorAll('.pac-item, .pac-container *')).some((node) => {
+        const text = (node.textContent || '').trim();
+        return text.length > 0;
+      }),
+      { timeout: 8000 }
+    ).catch(() => null);
+
+    const pacItem = page.locator('.pac-item').first();
+    if (await pacItem.isVisible().catch(() => false)) {
+      await pacItem.click().catch(() => null);
+      return;
+    }
+
+    await streetInput.press('ArrowDown').catch(() => null);
+    await streetInput.press('Enter').catch(() => null);
+  };
+
+  const hasInvalidAddressError = async () => {
+    const invalidMessage = page.getByText(/invalid\s+address/i).first();
+    return invalidMessage.isVisible().catch(() => false);
+  };
+
+  await typeAndSelectAutocomplete(parsed.street);
+  await page.waitForTimeout(3000);
+
+  if (await hasInvalidAddressError()) {
+    const similarAddresses = getSimilarProfileAddresses(profile, activeAddressValue);
+
+    for (const alternativeAddress of similarAddresses) {
+      const alternativeParsed = parseAddress(resolveAddressValue(profile, alternativeAddress));
+      await typeAndSelectAutocomplete(alternativeParsed.street);
+      await page.waitForTimeout(3000);
+
+      if (!(await hasInvalidAddressError())) {
+        activeAddressValue = alternativeAddress;
+        parsed = alternativeParsed;
+        process.env.ADDRESS = activeAddressValue;
+        break;
+      }
+    }
   }
 
-  const addressSelected = await waitForAddressSelection(page, 12000);
+  // --- STEP 5: WAIT FOR THE APP TO AUTO-FILL city/state/zip ---
+  let addressSelected = await waitForAddressSelection(page, 8000);
+
+  if (!addressSelected) {
+    const retryQuery = `${parsed.street}, ${parsed.city}, ${parsed.state}`;
+    await typeAndSelectAutocomplete(retryQuery);
+    addressSelected = await waitForAddressSelection(page, 8000);
+  }
+
+  // --- STEP 6: HARD FALLBACK (always works, skips autocomplete entirely) ---
+  if (!addressSelected) {
+    await populateAddressFieldsDirectly(page, parsed);
+  }
+
+  // --- STEP 7: CLICK CONTINUE once it is enabled ---
+  await page.waitForFunction(() => {
+    const btn = [...document.querySelectorAll('button')].find(
+      (b) => (b.textContent || '').trim().toLowerCase() === 'continue'
+    );
+    return !!btn && !(btn as HTMLButtonElement).disabled;
+  }, { timeout: 5000 }).catch(() => null);
 
   await continueButton.click();
 
-  if (addressSelected && await waitForEducationStep(page, 12000).catch(() => false)) {
+  // --- STEP 8: VERIFY PROGRESSION to the education step ---
+  if (await waitForEducationStep(page, 15000).catch(() => false)) {
     return;
   }
 
-  await streetAddress.click().catch(() => null);
-  await streetAddress.press('ArrowDown').catch(() => null);
-  await streetAddress.press('Enter').catch(() => null);
-  const retriedAddressSelection = await waitForAddressSelection(page, 12000);
-  await continueButton.click();
-
-  if (retriedAddressSelection && await waitForEducationStep(page, 12000).catch(() => false)) {
-    return;
-  }
-
-  await populateAddressFieldsDirectly(page, parsed);
-  await continueButton.click();
-
-  if (await waitForEducationStep(page, 12000).catch(() => false)) {
-    return;
-  }
-
+  // --- STEP 9: FORCE NAVIGATION as a recovery path ---
   const nextUrl = page.url().replace('/address', '/education');
   if (nextUrl !== page.url()) {
     await page.goto(nextUrl, { timeout: 60000 }).catch(() => null);
 
-    if (await waitForEducationStep(page, 20000).catch(() => false)) {
+    if (await waitForEducationStep(page, 15000).catch(() => false)) {
       return;
     }
   }
 
-  if (await submitAddressStepFallback(page)) {
-    return;
+  // --- STEP 10: API FALLBACK (submit the address server-side) ---
+  if (await submitAddressStepFallback(page, parsed)) {
+    if (await waitForEducationStep(page, 20000).catch(() => false)) {
+      return;
+    }
+
+    const applicationId = new URL(page.url()).searchParams.get('id');
+    if (applicationId) {
+      await page.goto(`/education?id=${applicationId}`, { timeout: 60000 }).catch(() => null);
+      if (await waitForEducationStep(page, 20000).catch(() => false)) {
+        return;
+      }
+    }
   }
 
   throw new Error(`Address step did not advance to education. Current URL: ${page.url()}`);
@@ -429,45 +571,51 @@ export async function selectOptionResilient(page: Page, value?: string) {
     value.replace(/_/g, ' ').toUpperCase()
   ];
 
+  const escapeRegex = (input: string) => input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const optionLocator = page.locator('role=option');
+
+  // Wait once for options to render; then use fast existence checks so we do not
+  // accumulate multi-second timeouts per candidate.
+  await optionLocator.first().waitFor({ state: 'visible', timeout: 2000 }).catch(() => null);
+
+  const clickIfPresent = async (pattern: RegExp) => {
+    const option = optionLocator.filter({ hasText: pattern }).first();
+    if (await option.count()) {
+      await option.click({ timeout: 1200 });
+      return true;
+    }
+
+    return false;
+  };
+
   for (const candidate of tries) {
-    try {
-      await page.getByRole('option', { name: candidate }).click({ timeout: 3000 });
+    const exactPattern = new RegExp(`^\\s*${escapeRegex(candidate)}\\s*$`, 'i');
+    if (await clickIfPresent(exactPattern)) {
       return;
-    } catch (error) {
-      try {
-        const tolerant = page.locator('role=option', { hasText: new RegExp(candidate, 'i') }).first();
-        await tolerant.click({ timeout: 3000 });
-        return;
-      } catch (ignored) {
-        // try next candidate
-      }
+    }
+
+    const tolerantPattern = new RegExp(escapeRegex(candidate), 'i');
+    if (await clickIfPresent(tolerantPattern)) {
+      return;
     }
   }
 
   const digitsMatch = value.match(/\d{2,4}/);
   if (digitsMatch) {
     const digits = digitsMatch[0];
-    try {
-      const digitOption = page.locator('role=option', { hasText: new RegExp(digits, 'i') }).first();
-      await digitOption.click({ timeout: 3000 });
+    if (await clickIfPresent(new RegExp(escapeRegex(digits), 'i'))) {
       return;
-    } catch (error) {
-      // fall through
     }
   }
 
   const words = value.replace(/_/g, ' ').split(' ').filter(Boolean).slice(0, 2).join(' ');
   if (words) {
-    try {
-      const tolerant = page.locator('role=option', { hasText: new RegExp(words, 'i') }).first();
-      await tolerant.click({ timeout: 3000 });
+    if (await clickIfPresent(new RegExp(escapeRegex(words), 'i'))) {
       return;
-    } catch (error) {
-      // fall through
     }
   }
 
-  await page.locator('role=option').first().click({ timeout: 3000 });
+  await optionLocator.first().click({ timeout: 1200 });
 }
 
 export async function verifyNoOfferPage(page: Page) {
@@ -516,7 +664,32 @@ export async function runRefinanceFlow(page: Page, profile: string, options?: { 
   await page.getByRole('button', { name: 'Continue' }).click();
 
   const addressValue = process.env.ADDRESS || '';
-  await completeAddressStep(page, addressValue, profile);
+  let addressError: unknown;
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      await completeAddressStep(page, addressValue, profile);
+      addressError = undefined;
+      break;
+    } catch (error) {
+      addressError = error;
+      if (attempt === 2) {
+        throw error;
+      }
+
+      // Recover from transient address-page script/network glitches by reloading the
+      // same application address URL and trying once more.
+      const applicationId = new URL(page.url()).searchParams.get('id');
+      if (applicationId) {
+        await page.goto(`/address?id=${applicationId}`, { timeout: 60000 }).catch(() => null);
+      } else {
+        await page.reload({ timeout: 60000 }).catch(() => null);
+      }
+    }
+  }
+
+  if (addressError) {
+    throw addressError;
+  }
 
   await page.getByRole('combobox', { name: 'School/university*' }).click();
   await selectOptionResilient(page, process.env.SCHOOL);

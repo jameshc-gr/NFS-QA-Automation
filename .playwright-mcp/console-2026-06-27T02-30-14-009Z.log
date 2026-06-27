@@ -1,0 +1,6 @@
+[     678ms] [ERROR] TypeError: Failed to fetch
+    at vr (https://student-loans.qa.fsp.rate.com/assets/index-yihgGgbb.js:8:84111)
+    at cc (https://student-loans.qa.fsp.rate.com/assets/index-yihgGgbb.js:8:85229)
+    at vr (https://student-loans.qa.fsp.rate.com/assets/index-yihgGgbb.js:8:84148)
+    at async https://student-loans.qa.fsp.rate.com/assets/index-yihgGgbb.js:134:2359 @ https://student-loans.qa.fsp.rate.com/assets/index-yihgGgbb.js:7
+[     678ms] [ERROR] Error logging message @ https://student-loans.qa.fsp.rate.com/assets/index-yihgGgbb.js:7

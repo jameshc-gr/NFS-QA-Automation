@@ -1,0 +1,106 @@
+- generic [ref=e5]:
+  - link "Guaranteed Rate, Inc" [ref=e10] [cursor=pointer]:
+    - /url: /
+    - img "Guaranteed Rate, Inc" [ref=e11]
+  - generic [ref=e188]:
+    - heading "Education and employment" [level=2] [ref=e196]
+    - generic [ref=e199]:
+      - paragraph [ref=e200]: Help us understand your education and employment background.
+      - generic [ref=e201]:
+        - generic [ref=e203]:
+          - generic [ref=e205]:
+            - generic [ref=e206]:
+              - combobox "School/university*" [ref=e207]
+              - generic: School/university*
+            - button "Toggle search menu":
+              - generic [ref=e209] [cursor=pointer]: 
+          - paragraph [ref=e211]:
+            - tooltip "If-you-don't-see-your-school,-" [ref=e212]:
+              - text: If you don't see your school, email us at info@fitbux.com.
+              - generic [ref=e213]: 
+          - text: If you don't see your school, email us at info@fitbux.com. 
+        - generic [ref=e214]:
+          - combobox "Degree level*" [ref=e216] [cursor=pointer]:
+            - generic: Degree level*
+            - generic [ref=e219]: 
+          - generic [ref=e220]:
+            - textbox "Graduation date*" [ref=e221]:
+              - /placeholder: ""
+            - generic: Graduation date*
+        - combobox "Income type*" [ref=e224] [cursor=pointer]:
+          - generic: Income type*
+          - generic [ref=e227]: 
+        - generic [ref=e228]:
+          - generic [ref=e229]:
+            - textbox "Employer name*" [ref=e230]:
+              - /placeholder: ""
+            - generic: Employer name*
+          - generic [ref=e231]:
+            - textbox "Occupation/job title*" [ref=e232]:
+              - /placeholder: ""
+            - generic: Occupation/job title*
+        - generic [ref=e233]:
+          - generic [ref=e234]:
+            - textbox "Annual income*" [ref=e235]:
+              - /placeholder: ""
+            - generic: Annual income*
+          - generic [ref=e236]:
+            - textbox "Employment start date*" [ref=e237]:
+              - /placeholder: ""
+            - generic: Employment start date*
+      - button "Continue" [ref=e239] [cursor=pointer]:
+        - generic [ref=e240]: Continue
+      - button "Back" [ref=e242] [cursor=pointer]:
+        - generic [ref=e244]: 
+        - generic [ref=e245]: Back
+  - generic [ref=e56]:
+    - generic [ref=e57]:
+      - generic [ref=e58]:
+        - link "Privacy Policy" [ref=e59] [cursor=pointer]:
+          - /url: https://www.rate.com/privacy?adtrk=undefined
+        - text: "|"
+      - generic [ref=e60]:
+        - link "Licensing" [ref=e61] [cursor=pointer]:
+          - /url: https://www.rate.com/licensing?adtrk=undefined
+        - text: "|"
+      - generic [ref=e62]:
+        - link "Legal" [ref=e63] [cursor=pointer]:
+          - /url: https://www.rate.com/terms?adtrk=undefined
+        - text: "|"
+      - generic [ref=e64]:
+        - link "Contact Us" [ref=e65] [cursor=pointer]:
+          - /url: https://www.rate.com/contact-us?adtrk=undefined
+        - text: "|"
+      - generic [ref=e66]:
+        - link "Accessibility" [ref=e67] [cursor=pointer]:
+          - /url: https://www.rate.com/accessibility?adtrk=undefined
+        - text: "|"
+      - generic [ref=e68]:
+        - link "SMS Terms" [ref=e69] [cursor=pointer]:
+          - /url: https://www.rate.com/sms-terms?adtrk=undefined
+        - text: "|"
+      - generic [ref=e70]:
+        - link "Notice to Vendors" [ref=e71] [cursor=pointer]:
+          - /url: https://www.rate.com/notice-to-vendor?adtrk=undefined
+        - text: "|"
+      - link "NMLS Consumer Access" [ref=e73] [cursor=pointer]:
+        - /url: https://www.nmlsconsumeraccess.org/TuringTestPage.aspx?ReturnUrl=/EntityDetails.aspx/COMPANY/2611?adtrk=undefined
+    - 'link "Texas Consumer: How to file a complaint" [ref=e76] [cursor=pointer]':
+      - /url: https://www.rate.com/texas-consumers-how-to-file-complaint?adtrk=undefined
+    - img "Equal housing lender" [ref=e78]
+    - paragraph [ref=e79]: Copyright © 2024 Guaranteed Rate, Inc. d/b/a Rate. All rights reserved.
+    - generic [ref=e80]:
+      - generic [ref=e82]: "Company NMLS License #2611"
+      - generic [ref=e84]: "Arizona Mortgage Banker License #0907078"
+      - generic [ref=e87]: 3940 N. Ravenswood Chicago, IL 60613 - (833) 539-1346
+      - generic [ref=e90]: The company name, Guaranteed Rate, should not suggest to a consumer that Guaranteed Rate provides an interest rate guaranteed prior to an interest rate lock.
+      - generic [ref=e93]: Operating in the state of New York as Guaranteed Rate, Inc.
+      - generic [ref=e96]:
+        - text: If you are a California resident, please review our
+        - link "Privacy Policy" [ref=e97] [cursor=pointer]:
+          - /url: https://rate.com/privacy/ca-consumer-privacy-notice?adtrk=undefined
+        - text: to learn more about the categories and business purpose of personal information we may collect and your right to opt-out from the sale of personal information.
+    - generic [ref=e100]:
+      - text: "When Your Home is On the Line: What You Should Know About Home Equity Lines of Credit"
+      - link "Home Equity Lines of Credit (HELOC)" [ref=e101] [cursor=pointer]:
+        - /url: https://files.consumerfinance.gov/f/documents/cfpb_heloc-brochure.pdf
