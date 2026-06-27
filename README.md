@@ -48,6 +48,37 @@ The shared test framework now lives in [tests/student-loan-refi/test-setup.ts](t
 - Shared timing is centralized with longer per-test and navigation timeouts for the slower refinance and offer pages.
 - The canonical framework-context skill lives in [.github/skills/playwright-framework-context/SKILL.md](.github/skills/playwright-framework-context/SKILL.md) and should be updated whenever the framework mechanics change.
 
+## Recent Additions (local)
+
+The repository has a small feature branch workflow for Jira-driven QA templates and Appium MCP CI scaffolding. Key files added locally on branch `feat/jira-generator`:
+
+- Jira templates and generator:
+	- `Jira/student-refi/jira_agent.md` — agent prompt template for converting Jira tickets into QA artifacts.
+	- `Jira/student-refi/jira_planner.md` — QA planner template (test cases, preconditions, notes).
+	- `Jira/student-refi/automation_instruction.md` — automation hints and generator guidance.
+	- `Jira/student-refi/jira.env.example` — example env values; do not commit real secrets.
+	- `scripts/generate_jira_artifacts.js` — copies templates into `Jira/student-refi/jira-tickets/<TICKET>/` (non-destructive by default).
+
+- CI / Appium MCP:
+	- `.github/workflows/appium-mcp-ci.yml` — manual dispatch workflow that starts `appium-mcp`, provisions an Android emulator on Ubuntu or runs iOS steps on macOS, and runs Playwright tests.
+	- `Jira/student-refi/capabilities.json` — example capabilities for Android/iOS used by Appium MCP.
+
+Notes and usage
+- Generate ticket scaffolding locally:
+
+```bash
+node scripts/generate_jira_artifacts.js TEST-123
+```
+
+- npm scripts added:
+	- `npm run generate:jira` — wrapper for the generator
+	- `npm run generate:jira:force` — runs generator with `--force` to overwrite
+
+- Secrets: a committed `jira.env` was replaced with `jira.env.example`. Add your `jira.env` locally and keep it out of the repo. `.gitignore` includes `jira.env`.
+
+- Branch workflow: changes are committed locally on branch `feat/jira-generator`. If you want, provide a remote URL and I can push the branch and open a PR.
+
+
 ## Test Data Management
 
 This project uses profile-based environment variables to support multiple personas:

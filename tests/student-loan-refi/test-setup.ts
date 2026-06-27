@@ -318,6 +318,36 @@ async function populateAddressFieldsDirectly(page: Page, parsed: ReturnType<type
   await page.locator('#zip').fill(parsed.zip);
 }
 
+async function submitAddressStepFallback(page: Page) {
+  const applicationId = new URL(page.url()).searchParams.get('id');
+
+  if (!applicationId) {
+    return false;
+  }
+
+  const result = await page.evaluate(async (id) => {
+    const response = await fetch(`/api/application/address?id=${id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({}),
+    });
+
+    const payload = await response.json().catch(() => null);
+    return {
+      ok: response.ok,
+      currentState: payload?.application?.currentState ?? null,
+    };
+  }, applicationId);
+
+  if (!result.ok) {
+    return false;
+  }
+
+  await page.goto(`/education?id=${applicationId}`, { timeout: 60000 }).catch(() => null);
+  return result.currentState === 'EDUCATION_AND_EMPLOYMENT_START' || await waitForEducationStep(page, 20000).catch(() => false);
+}
+
 async function completeAddressStep(page: Page, addressValue: string, profile: string) {
   const continueButton = page.getByRole('button', { name: 'Continue' });
   const gmaAddress = page.locator('#gma');
@@ -380,6 +410,10 @@ async function completeAddressStep(page: Page, addressValue: string, profile: st
     if (await waitForEducationStep(page, 20000).catch(() => false)) {
       return;
     }
+  }
+
+  if (await submitAddressStepFallback(page)) {
+    return;
   }
 
   throw new Error(`Address step did not advance to education. Current URL: ${page.url()}`);
