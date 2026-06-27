@@ -33,3 +33,24 @@ Current Framework Notes
 - Specialized profiles use uppercase enum-style values for dropdowns where possible.
 - Narrow test runs are preferred before broad suite runs.
 - The authoritative customization split is `.github/agents/`, `.github/prompts/`, and `.github/skills/`.
+
+Recent changes (2026-06-26)
+- Added this "Recent changes" section and migration notes.
+- Migrated `agent-startup.skill.md` content into this skill and left a stub at `.github/agents/agent-startup.skill.md` for compatibility.
+- Updated README.md to include quickstart and repo layout information.
+
+How to use this file
+1. Read `AGENTS.md`, then this SKILL.md before editing or running tests.
+2. Use role-based locators first, test IDs second, CSS selectors last.
+3. Avoid `waitForTimeout` unless explicitly required; prefer Playwright built-in waiters.
+
+Contact
+- For framework changes, update this SKILL.md and then open a PR with the rationale.
+
+Changelog
+- 2026-06-26: Added "Recent changes" section and migration notes.
+- 2026-06-26: Consolidated `agent-startup` guidance into this file; left compatibility stub at `.github/agents/agent-startup.skill.md`.
+
+Recommended next steps
+- If this repo is under Git, create a small commit and push the updates so collaborators see the migration notes.
+- Consider updating `AGENTS.md` to reference this SKILL.md explicitly where agent bootstrap flow is documented.
