@@ -502,6 +502,27 @@ async function waitForSchoolOrSorry(page: Page, testInfo: TestInfo, timeoutMs: n
   ]).catch(() => 'timeout' as const);
 }
 
+async function checkErrorUrlAndExit(page: Page, testInfo: TestInfo, timeoutMs = 20000) {
+  if (page.isClosed()) return false;
+  const url = page.url?.() || '';
+  if (!/\/error\?id=/.test(url)) return false;
+
+  // Attach immediate screenshot and report, then ensure page is closed within timeoutMs
+  await savePassArtifact(page, testInfo, 'error-page-detected.png');
+  const deadline = Date.now() + timeoutMs;
+  try {
+    // give a short window for any other artifacts to attach
+    while (Date.now() < deadline && !page.isClosed()) {
+      await new Promise((r) => setTimeout(r, 500));
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  await page.close().catch(() => null);
+  throw new Error(`Detected error URL and exited early: ${url}`);
+}
+
 test.afterEach(async ({ page }, testInfo) => {
   await writeRunArtifacts(page, testInfo);
   await page.close().catch(() => null);
@@ -909,6 +930,9 @@ export async function runRefinanceFlow(page: Page, profile: string, options?: { 
     throw new Error(`LK_INXX did not reach the expected no-offer page within the timeout. Current URL: ${page.url()}`);
   }
 
+  // If an error URL is already present, exit early and capture artifacts.
+  await checkErrorUrlAndExit(page, testInfo, 20000).catch(() => null);
+
   const offersOrError = await Promise.race([
     page.waitForURL(/offers\?id=/, { timeout: 45000 }).then(() => 'offers' as const),
     page.waitForURL(/\/error(?:\?|$)/, { timeout: 45000 }).then(() => 'error' as const),
@@ -916,7 +940,7 @@ export async function runRefinanceFlow(page: Page, profile: string, options?: { 
 
   if (offersOrError !== 'offers') {
     await savePassArtifact(page, testInfo, 'sorry-error.png');
-    await page.close().catch(() => null);
+    await checkErrorUrlAndExit(page, testInfo, 20000).catch(() => null);
     throw new Error(`Flow reached error page instead of offers. URL: ${page.url()}`);
   }
 
