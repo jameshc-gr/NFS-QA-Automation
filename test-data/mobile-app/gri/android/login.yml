@@ -1,0 +1,8 @@
+emailPrefix: my-rateapp-jc
+emailDomain: yopmail.com
+password: Test123!
+loginEmail: my-rateapp-jc030@yopmail.com
+createEmailPrefix: my-rateapp-auto
+createEmailStart: 1
+accounts:
+  createUser: 1

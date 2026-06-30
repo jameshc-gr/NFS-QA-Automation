@@ -1,0 +1,8 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node", "mocha", "@wdio/globals/types"]
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["../node_modules", "../playwright-report", "../test-results"]
+}

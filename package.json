@@ -1,14 +1,22 @@
 {
   "name": "webautomation",
   "version": "1.0.0",
-  "description": "",
+  "description": "Playwright automation framework with web, API, and AI-assisted test generation layers",
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test:eligible": "npx playwright test tests/LK[0-9]*.spec.ts",
-    "test:decline": "npx playwright test tests/LK_CD*.spec.ts",
-    "test:nocredit": "npx playwright test tests/LK_NC*.spec.ts",
-    "test:ineligible": "npx playwright test tests/LK_IN*.spec.ts"
+    "test:web": "TEST_PROJECT=student-loan-refi npx playwright test tests/projects/student-loan-refi",
+    "test:web:cross-browser": "TEST_PROJECT=student-loan-refi npx playwright test tests/projects/student-loan-refi --project=chromium --project=firefox --project=webkit",
+    "test:mobile:android": "wdio run mobile/wdio.conf.ts --spec tests/android/**/*.spec.ts",
+    "test:mobile:ios": "wdio run mobile/wdio.conf.ts --spec tests/ios/**/*.spec.ts",
+    "test:eligible": "TEST_PROJECT=student-loan-refi npx playwright test tests/projects/student-loan-refi/LK[0-9]*.spec.ts",
+    "test:decline": "TEST_PROJECT=student-loan-refi npx playwright test tests/projects/student-loan-refi/LK_CD*.spec.ts",
+    "test:nocredit": "TEST_PROJECT=student-loan-refi npx playwright test tests/projects/student-loan-refi/LK_NC*.spec.ts",
+    "test:ineligible": "TEST_PROJECT=student-loan-refi npx playwright test tests/projects/student-loan-refi/LK_IN*.spec.ts",
+    "test:project:student-loan-refi": "TEST_PROJECT=student-loan-refi npx playwright test tests/projects/student-loan-refi",
+    "typecheck": "tsc --noEmit",
+    "typecheck:mobile": "tsc -p mobile/tsconfig.json --noEmit",
+    "generate:test": "node scripts/generate-test.js"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +24,25 @@
   "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.61.0",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^25.9.3",
-    "dotenv": "^17.4.2"
+    "@wdio/appium-service": "^9.10.0",
+    "@wdio/cli": "^9.10.0",
+    "@wdio/local-runner": "^9.10.0",
+    "@wdio/mocha-framework": "^9.10.0",
+    "@wdio/spec-reporter": "^9.10.0",
+    "@wdio/types": "^9.10.0",
+    "appium": "^3.1.0",
+    "appium-uiautomator2-driver": "^8.0.0",
+    "dotenv": "^17.4.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "webdriverio": "^9.10.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.57.0",
+    "langchain": "^1.5.2",
+    "yaml": "^2.8.1",
+    "zod": "^3.25.76"
   }
 }

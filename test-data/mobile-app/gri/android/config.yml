@@ -1,0 +1,5 @@
+verification:
+  email: manual
+  phone: manual
+  phoneNumber: 616-320-0701
+  provider: google-voice
