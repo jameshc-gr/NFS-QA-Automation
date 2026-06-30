@@ -107,6 +107,16 @@ Install the mobile runtime after the package dependencies are added:
 npm run typecheck:mobile
 ```
 
+To start the Android emulator using the command-line on Mac:
+
+```bash
+# 1) Start the emulator (e.g. Medium_Phone_API_36.1)
+/Users/jameshc/Library/Android/sdk/emulator/emulator -avd Medium_Phone_API_36.1
+
+# 2) Verify it state is "device" rather than "offline"
+/Users/jameshc/Library/Android/sdk/platform-tools/adb devices
+```
+
 The mobile scaffold expects the Android APK at:
 
 ```text

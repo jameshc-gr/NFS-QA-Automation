@@ -463,33 +463,59 @@ async function failFastOnSorryError(page: Page, testInfo: TestInfo) {
   if (!isVisible) {
     return false;
   }
-
   await savePassArtifact(page, testInfo, 'sorry-error.png');
-  // Only close the page and throw if we are actually on an /error URL.
+
   const currentUrl = page.isClosed() ? '' : page.url();
-  // Also treat the final apology screen as a terminal error when its body text appears.
   const finalApology = page.getByText(/We ran into an issue with your application\. Please try again\./i).first();
   const finalApologyVisible = await finalApology.isVisible().catch(() => false);
 
   if (currentUrl.includes('/error') || finalApologyVisible) {
-    // Allow up to 5 seconds to attach artifacts and close the page.
-    const deadline = Date.now() + 5000;
-    try {
-      // ensure artifact saved (already attempted above)
-      await Promise.race([
-        Promise.resolve(),
-        new Promise((r) => setTimeout(r, Math.max(0, deadline - Date.now())))
-      ]);
-    } catch (e) {
-      // ignore
-    }
-
     await page.close().catch(() => null);
-    throw new Error("Encountered final sorry/error screen. Captured screenshot and exited browser.");
+    throw new Error("Encountered a 'we're sorry' error page. Captured screenshot and exited browser.");
   }
 
-  // If it's a transient sorry-like overlay, don't close the page; allow recovery.
   return false;
+}
+
+async function checkErrorUrlAndExit(page: Page, testInfo: TestInfo, timeoutMs = 20000) {
+  if (page.isClosed()) return false;
+  const url = page.url?.() || '';
+  if (!/\/error\?id=/.test(url)) return false;
+
+  await savePassArtifact(page, testInfo, 'error-page-detected.png');
+  const timeline: string[] = [];
+  const mark = (m: string) => timeline.push(`${new Date().toISOString()} - ${m}`);
+  mark('saved error-page-detected.png');
+
+  mark('attempting page.close()');
+  const closePromise = (async () => {
+    try {
+      await page.close();
+      mark('page.close() succeeded');
+    } catch (err) {
+      mark('page.close() failed');
+    }
+  })();
+
+  const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('close timeout')), timeoutMs));
+
+  try {
+    await Promise.race([closePromise, timeoutPromise]);
+  } catch (e) {
+    mark('page.close() timed out, attempting context.close()');
+    try {
+      const context = (page as any)._context;
+      if (context && typeof context.close === 'function') {
+        await context.close().catch(() => null);
+        mark('context.close() attempted');
+      }
+    } catch (_) {
+      mark('context.close() failed');
+    }
+  }
+
+  await testInfo.attach('error-exit-timeline', { body: timeline.join('\n'), contentType: 'text/plain' }).catch(() => null);
+  throw new Error(`Detected error URL and exited early: ${url}`);
 }
 
 async function waitForSchoolOrSorry(page: Page, testInfo: TestInfo, timeoutMs: number) {
@@ -500,27 +526,6 @@ async function waitForSchoolOrSorry(page: Page, testInfo: TestInfo, timeoutMs: n
     schoolField.waitFor({ state: 'visible', timeout: timeoutMs }).then(() => 'school' as const),
     sorryMessage.waitFor({ state: 'visible', timeout: timeoutMs }).then(() => 'sorry' as const),
   ]).catch(() => 'timeout' as const);
-}
-
-async function checkErrorUrlAndExit(page: Page, testInfo: TestInfo, timeoutMs = 20000) {
-  if (page.isClosed()) return false;
-  const url = page.url?.() || '';
-  if (!/\/error\?id=/.test(url)) return false;
-
-  // Attach immediate screenshot and report, then ensure page is closed within timeoutMs
-  await savePassArtifact(page, testInfo, 'error-page-detected.png');
-  const deadline = Date.now() + timeoutMs;
-  try {
-    // give a short window for any other artifacts to attach
-    while (Date.now() < deadline && !page.isClosed()) {
-      await new Promise((r) => setTimeout(r, 500));
-    }
-  } catch (e) {
-    // ignore
-  }
-
-  await page.close().catch(() => null);
-  throw new Error(`Detected error URL and exited early: ${url}`);
 }
 
 test.afterEach(async ({ page }, testInfo) => {
