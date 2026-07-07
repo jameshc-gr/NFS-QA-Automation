@@ -23,3 +23,8 @@ Use this directory to keep tests separated by project.
 - Validate with narrow commands before running broader suites.
 
 See `ai/agents/readme-agents.md` for end-to-end flow and authoring templates.
+
+## Related Guides
+
+- [Root framework guide](../../readme.md)
+- [API how-to guide](../../api/README.md)

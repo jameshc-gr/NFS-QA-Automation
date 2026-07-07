@@ -33,6 +33,8 @@ Current Framework Notes
 - Specialized profiles use uppercase enum-style values for dropdowns where possible.
 - Narrow test runs are preferred before broad suite runs.
 - The authoritative customization split is `ai/agents/agents/`, `ai/agents/prompts/`, and `ai/agents/skills/`.
+- API tests now run from `api/tests/` via the `api-tests` Playwright project.
+- The API runner loads dotenv in `playwright.config.ts`, reads collection and mapping JSON from `api/postman/<projectname>/` and `api/api-mappings/<projectname>/`, and resolves placeholders from runtime saves, Postman environment JSON, `process.env`, and `API_PROJECT` selection.
 
 Output Contract
 - Return a short framework snapshot with:

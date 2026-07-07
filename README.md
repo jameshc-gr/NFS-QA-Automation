@@ -7,7 +7,7 @@ Playwright QA automation for the Student Loan Refinance flow.
 The repository now supports a layered architecture for hybrid migration and AI-assisted automation:
 
 - `web/`: TypeScript page objects, locators, resilience helpers, and migrated UI specs
-- `mobile/`: WebdriverIO + Appium scaffolding for native Android and future iOS/TestFlight coverage
+- `mobile/`: WebdriverIO + Appium scaffolding for native Android, iOS simulator, and iOS/TestFlight coverage
 - `api/`: API client wrappers, schema contracts, and API tests
 - `ai/`: agents for test generation, failure analysis, self-healing, and coverage analysis
 - `core/`: shared cross-layer utilities
@@ -92,7 +92,9 @@ Prerequisites:
 - Node.js 16+ and npm.
 - Android Studio with an emulator or a connected device for Android app runs.
 - Appium 3 for mobile execution.
-- For iOS later: a real device or TestFlight access, plus Apple signing/provisioning configured outside the repo.
+- For iOS simulator runs: Xcode Simulator plus a locally built `.app` artifact.
+- For iOS later/TestFlight: a real device, plus Apple signing/provisioning configured outside the repo.
+- Install the Appium XCUITest driver before the first iOS run: `npx appium driver install xcuitest`.
 
 Install dependencies and browsers:
 
@@ -107,16 +109,6 @@ Install the mobile runtime after the package dependencies are added:
 npm run typecheck:mobile
 ```
 
-To start the Android emulator using the command-line on Mac:
-
-```bash
-# 1) Start the emulator (e.g. Medium_Phone_API_36.1)
-/Users/jameshc/Library/Android/sdk/emulator/emulator -avd Medium_Phone_API_36.1
-
-# 2) Verify it state is "device" rather than "offline"
-/Users/jameshc/Library/Android/sdk/platform-tools/adb devices
-```
-
 The mobile scaffold expects the Android APK at:
 
 ```text
@@ -129,7 +121,10 @@ Mobile environment variables used by the scaffold:
 
 - `MOBILE_PLATFORM`: defaults to `android`
 - `MOBILE_ANDROID_APP_PATH`: defaults to `test-data/mobile-app/gri/android/app.apk`
-- `MOBILE_IOS_MODE`: defaults to `testflight`
+- `MOBILE_IOS_MODE`: `testflight`, `real-device`, or `simulator`; defaults to `testflight`
+- `MOBILE_IOS_APP_PATH`: required when `MOBILE_IOS_MODE=simulator`; defaults to `test-data/mobile-app/gri/ios/app.app`
+- `MOBILE_IOS_DEVICE_UDID`: required when `MOBILE_IOS_MODE` is `testflight` or `real-device`
+- `MOBILE_IOS_PLATFORM_VERSION`: optional override for the Xcode Simulator runtime version; normally auto-detected from installed runtimes
 - `MOBILE_APP_PACKAGE`: optional Android package name once discovery is complete
 - `MOBILE_APP_ACTIVITY`: optional Android launch activity once discovery is complete
 
@@ -152,6 +147,14 @@ Run the full Playwright suite:
 ```bash
 npx playwright test
 ```
+
+Run the API suite:
+
+```bash
+npm run test:api
+```
+
+The API runner reads JSON from `api/postman/` and `api/api-mappings/`, resolves Postman-style variables from `.env`, Postman environment JSON, and runtime saves, then executes through the Playwright `api-tests` project.
 
 Run the student-loan-refi suite:
 
@@ -177,6 +180,24 @@ Run the mobile iOS/TestFlight scaffold later:
 npm run test:mobile:ios
 ```
 
+Run the mobile iOS simulator scaffold:
+
+```bash
+npm run test:mobile:ios:simulator
+```
+
+Example simulator invocation with a local app bundle:
+
+```bash
+MOBILE_PLATFORM=ios \
+MOBILE_IOS_MODE=simulator \
+MOBILE_IOS_APP_PATH="test-data/mobile-app/gri/ios/GRI QA.app" \
+MOBILE_IOS_BUNDLE_ID=com.guaranteedrate.superapp.qa \
+npm run test:mobile:ios:simulator
+```
+
+TestFlight is still real-device only. Simulator runs use a locally built `.app` artifact instead of TestFlight, and the current simulator auth smoke validates the login flow and auth shell state rather than a reliable logout control.
+
 Run TypeScript validation:
 
 ```bash
@@ -194,6 +215,31 @@ Open the latest HTML report:
 ```bash
 npx playwright show-report
 ```
+
+## API Runner
+
+The API framework lives under `api/` and is driven by the same Playwright runner used for UI tests.
+
+Default files:
+
+- `api/postman/collection.json`
+- `api/postman/environment.qa.json`
+- `api/api-mappings/api-mapping.json`
+
+Environment variables used by the API runner:
+
+- `BASE_URL`
+- `API_TOKEN`
+- `API_PROJECT`
+- `POSTMAN_COLLECTION`
+- `POSTMAN_ENV`
+- `API_MAPPING_FILE`
+
+Runtime values saved during a request can be reused later with Postman-style placeholders such as `{{customerId}}` or `{{orderId}}`.
+
+Project-scoped assets live under `api/postman/<projectname>/` and `api/api-mappings/<projectname>/`. If `API_PROJECT=mobile`, the runners prefer `api/postman/mobile/*` and `api/api-mappings/mobile/*` before falling back to the root sample files.
+
+For the step-by-step API usage guide, see [api/README.md](api/README.md).
 
 ## Profile Data
 
@@ -242,8 +288,16 @@ Most specs in [tests/projects/student-loan-refi](tests/projects/student-loan-ref
 The mobile layer is intentionally Android-first:
 
 - Android uses the local APK at `test-data/mobile-app/gri/android/app.apk` until Firebase-based downloading is introduced later.
-- iOS is documented as TestFlight-only for now, so the scaffold keeps placeholder paths and config without assuming sideloaded IPA access.
-- The first mobile specs will live under `mobile/tests/android/` and use reusable page objects in `mobile/src/`.
+- iOS now supports a simulator lane plus a real-device/TestFlight lane. The simulator lane expects a local `.app` bundle; TestFlight remains real-device only.
+- The first mobile specs live under `mobile/tests/android/` and `mobile/tests/ios/` and use reusable page objects in `mobile/src/`.
+
+iOS simulator workflow:
+
+1. Install the XCUITest driver if needed: `npx appium driver install xcuitest`.
+2. Place your simulator build under `test-data/mobile-app/gri/ios/` or point `MOBILE_IOS_APP_PATH` at another local `.app` bundle.
+3. Confirm the bundle identifier is `com.guaranteedrate.superapp.qa` unless your build changes it.
+4. Run `npm run test:mobile:ios:simulator`.
+5. If Appium needs a different simulator runtime, set `MOBILE_IOS_PLATFORM_VERSION` to the installed Xcode Simulator version.
 
 Recommended mobile workflow:
 
@@ -265,6 +319,8 @@ Recommended mobile workflow:
 6. Set any optional environment variables such as `MOBILE_ANDROID_APP_PATH`.
 7. Run `npm run test:mobile:android`.
 8. Once discovery is complete, wire the discovered Android package/activity into the config and replace the placeholder selectors with real accessibility IDs.
+
+For iOS simulator discovery, use the same Appium runner with `MOBILE_IOS_MODE=simulator` and inspect the simulator accessibility tree before tightening selectors.
 
 Future Firebase automation will replace the static APK path with a download step before the run starts.
 

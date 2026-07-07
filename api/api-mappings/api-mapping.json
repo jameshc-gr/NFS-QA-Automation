@@ -1,0 +1,18 @@
+{
+	"variables": {
+		"baseUrl": "{{BASE_URL}}"
+	},
+	"apis": [
+		{
+			"name": "Actuator Health",
+			"method": "GET",
+			"endpoint": "{{baseUrl}}/actuator/health",
+			"headers": {
+				"Accept": "application/json"
+			},
+			"expected": {
+				"status": 200
+			}
+		}
+	]
+}

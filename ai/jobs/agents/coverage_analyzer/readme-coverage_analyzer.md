@@ -27,3 +27,9 @@ Path convention
 - Keep scenario targets in `tests/projects/<project>/...`.
 - Keep project data references in `test-data/<project>/...`.
 - Avoid leading slash path notation.
+
+## Related Guides
+
+- [AI agent framework guide](../../readme-agents.md)
+- [Root framework guide](../../../../readme.md)
+- [API how-to guide](../../../../api/README.md)

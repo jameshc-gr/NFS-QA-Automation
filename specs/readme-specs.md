@@ -102,3 +102,9 @@ The generator will:
 - Prompt authoring: `ai/agents/prompts/readme-prompts.md`
 - Framework overview: `ai/agents/readme-agents.md`
 
+## Related Guides
+
+- [Root framework guide](../readme.md)
+- [API how-to guide](../api/README.md)
+- [AI agent framework guide](../ai/jobs/readme-agents.md)
+

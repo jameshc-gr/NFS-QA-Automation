@@ -19,3 +19,9 @@ Integration
 Path convention
 - Use repo-relative paths (`tests/projects/...`, `test-data/...`).
 - Avoid leading slash path notation.
+
+## Related Guides
+
+- [AI agent framework guide](../../readme-agents.md)
+- [Root framework guide](../../../../readme.md)
+- [API how-to guide](../../../../api/README.md)

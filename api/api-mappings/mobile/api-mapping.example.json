@@ -1,0 +1,15 @@
+{
+	"apis": [
+		{
+			"name": "Actuator Info",
+			"method": "GET",
+			"endpoint": "{{baseUrl}}/actuator/info",
+			"headers": {
+				"Accept": "application/json"
+			},
+			"expected": {
+				"status": 200
+			}
+		}
+	]
+}

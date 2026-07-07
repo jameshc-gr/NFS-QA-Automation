@@ -1,0 +1,87 @@
+{
+	"info": {
+		"name": "API Starter Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"description": "Starter collection for the Playwright API runner. Point POSTMAN_COLLECTION at the exported production collection when you want the full suite."
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "{{BASE_URL}}"
+		},
+		{
+			"key": "gateway",
+			"value": "{{BASE_URL}}"
+		},
+		{
+			"key": "accessToken",
+			"value": "{{API_TOKEN}}"
+		},
+		{
+			"key": "tenantId",
+			"value": "{{TENANT_ID}}"
+		}
+	],
+	"item": [
+		{
+			"name": "Health Checks",
+			"item": [
+				{
+					"name": "Actuator Health",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/actuator/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actuator",
+								"health"
+							]
+						}
+					},
+					"response": [
+						{
+							"code": 200
+						}
+					]
+				},
+				{
+					"name": "Actuator Info",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/actuator/info",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actuator",
+								"info"
+							]
+						}
+					},
+					"response": [
+						{
+							"code": 200
+						}
+					]
+				}
+			]
+		}
+	]
+}

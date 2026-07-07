@@ -9,3 +9,11 @@ node_modules/
 
 # Environment variables (contains sensitive test data)
 .env
+.env.local
+.env.development
+.env.test
+.env.qa
+
+# Local simulator bundles and macOS metadata
+.DS_Store
+test-data/mobile-app/gri/ios/*.app/

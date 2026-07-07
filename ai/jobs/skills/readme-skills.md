@@ -27,3 +27,9 @@ Skills are compact, reusable operating procedures for recurring tasks.
 ## Template
 
 Use [ai/agents/skills/SKILL_TEMPLATE.md](ai/agents/skills/SKILL_TEMPLATE.md).
+
+## Related Guides
+
+- [Root framework guide](../../readme.md)
+- [AI agent framework guide](../readme-agents.md)
+- [API how-to guide](../../api/README.md)

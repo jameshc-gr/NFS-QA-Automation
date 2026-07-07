@@ -1,4 +1,7 @@
+import dotenv from 'dotenv';
 import { defineConfig, devices } from '@playwright/test';
+
+dotenv.config();
 
 const now = new Date();
 const mm = String(now.getMonth() + 1).padStart(2, '0');
@@ -11,6 +14,26 @@ const runDate = `${mm}${dd}${yyyy}`;
 const runStamp = `${runDate}-${HH}-${MM}-${SS}`;
 const testProject = process.env.TEST_PROJECT || 'student-loan-refi';
 const testSuiteDir = process.env.TEST_SUITE_DIR || 'tests';
+
+function buildApiHeaders() {
+  const headers: Record<string, string> = {};
+  const bearerToken = process.env.API_TOKEN || process.env.API_BEARER_TOKEN;
+  if (bearerToken) {
+    headers.Authorization = bearerToken.startsWith('Bearer ') ? bearerToken : `Bearer ${bearerToken}`;
+  }
+
+  const apiKey = process.env.API_KEY;
+  if (apiKey) {
+    headers['x-api-key'] = apiKey;
+  }
+
+  const tenantId = process.env.TENANT_ID || process.env.API_TENANT_ID || process.env.POSTMAN_TENANT_ID;
+  if (tenantId) {
+    headers['X-GR-FSP-TENANT-ID'] = tenantId;
+  }
+
+  return headers;
+}
 
 export default defineConfig({
   testDir: `./${testSuiteDir}`,
@@ -47,6 +70,14 @@ export default defineConfig({
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] }
+    },
+    {
+      name: 'api-tests',
+      testDir: './api/tests',
+      use: {
+        baseURL: process.env.BASE_URL || undefined,
+        extraHTTPHeaders: buildApiHeaders()
+      }
     }
   ]
 });

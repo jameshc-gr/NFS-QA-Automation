@@ -1,9 +1,23 @@
+import { resolveMobilePlatform } from '../config/mobile.config';
+
 export abstract class BasePage {
+  protected readonly platform = resolveMobilePlatform();
+
   protected byText(text: string): any {
+    if (this.platform === 'ios') {
+      return $(`~${text}`);
+    }
+
     return $(`//android.widget.TextView[@text=${JSON.stringify(text)}]/..`);
   }
 
   protected byInputLabel(label: string): any {
+    if (this.platform === 'ios') {
+      return $(
+        `//XCUIElementTypeTextField[@name=${JSON.stringify(label)} or @label=${JSON.stringify(label)} or @value=${JSON.stringify(label)}] | //XCUIElementTypeSecureTextField[@name=${JSON.stringify(label)} or @label=${JSON.stringify(label)} or @value=${JSON.stringify(label)}]`
+      );
+    }
+
     return $(`//android.widget.EditText[.//android.widget.TextView[@text=${JSON.stringify(label)}]]`);
   }
 

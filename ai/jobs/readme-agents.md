@@ -51,12 +51,12 @@ flowchart TD
 ## Mobile Test Generation Workflow
 
 - Review-first mobile test case files live in `ai/tests/mobile/`.
-- Use prompt `ai/jobs/prompts/generate-mobile-test-cases.prompt.md`.
-- The dedicated agent is `ai/jobs/agents/mobile-test-generator.agent.md`.
+- Use prompt `ai/agents/prompts/generate-mobile-test-cases.prompt.md`.
+- The dedicated agent is `ai/agents/agents/mobile-test-generator.agent.md`.
 
 Two-phase execution:
 
-1. `plan`: generate or refine one `.md` test case per file in `ai/tests/mobile/` targeting the mobile auth and onboarding controls.
+1. `plan`: generate or refine one `.md` test case per file in `ai/tests/mobile/`.
 2. `implement`: generate `.ts` WDIO specs from approved `.md` files into `mobile/tests/android/generated/`.
 
 ## How To Write A Skill
@@ -89,5 +89,10 @@ Create `ai/agents/agents/<agent-name>.agent.md` with:
 - YAML frontmatter including tools and model
 - Mission and workflow phases
 - Strict boundaries (what not to do)
+
+## Related Guides
+
+- [Root framework guide](../../readme.md)
+- [API how-to guide](../../api/README.md)
 
 Use [ai/agents/agents/AGENT_TEMPLATE.md](ai/agents/agents/AGENT_TEMPLATE.md).

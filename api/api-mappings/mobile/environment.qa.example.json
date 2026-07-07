@@ -1,0 +1,35 @@
+{
+	"name": "Mobile QA Example",
+	"values": [
+		{
+			"key": "baseUrl",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "gateway",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "token",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "tenantId",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "customerId",
+			"value": "",
+			"enabled": true
+		}
+	]
+}

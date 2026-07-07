@@ -34,3 +34,9 @@ Every test case Markdown file should include:
 - Notes
 
 Use `TEST_CASE_TEMPLATE.md` as the base.
+
+## Related Guides
+
+- [Root framework guide](../../readme.md)
+- [API how-to guide](../../api/README.md)
+- [iOS simulator artifact guide](../../test-data/mobile-app/gri/ios/README.md)

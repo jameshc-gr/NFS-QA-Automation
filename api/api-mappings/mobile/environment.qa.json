@@ -1,0 +1,35 @@
+{
+	"name": "Mobile QA",
+	"values": [
+		{
+			"key": "baseUrl",
+			"value": "{{BASE_URL}}",
+			"enabled": true
+		},
+		{
+			"key": "gateway",
+			"value": "{{BASE_URL}}",
+			"enabled": true
+		},
+		{
+			"key": "accessToken",
+			"value": "{{API_TOKEN}}",
+			"enabled": true
+		},
+		{
+			"key": "token",
+			"value": "{{API_TOKEN}}",
+			"enabled": true
+		},
+		{
+			"key": "tenantId",
+			"value": "{{TENANT_ID}}",
+			"enabled": true
+		},
+		{
+			"key": "customerId",
+			"value": "{{CUSTOMER_ID}}",
+			"enabled": true
+		}
+	]
+}

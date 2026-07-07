@@ -1,0 +1,25 @@
+{
+	"apis": [
+		{
+			"name": "Create Customer",
+			"method": "POST",
+			"endpoint": "/customers",
+			"headers": {
+				"Content-Type": "application/json"
+			},
+			"body": {
+				"firstName": "James",
+				"lastName": "Chang"
+			},
+			"expected": {
+				"status": 201,
+				"bodyContains": {
+					"firstName": "James"
+				}
+			},
+			"save": {
+				"customerId": "id"
+			}
+		}
+	]
+}
