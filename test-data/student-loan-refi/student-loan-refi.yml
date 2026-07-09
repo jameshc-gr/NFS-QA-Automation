@@ -1,10 +1,12 @@
 # Test URLs for different environments
 TEST_URL_QA: "https://student-loans.qa.fsp.rate.com/personal"
+TEST_URL_STAGE: "https://student-loans-apply-stage.rate.com/personal"
 TEST_URL_Stage: "https://student-loans-apply-stage.rate.com/personal"
 TEST_URL_Prod: "https://student-loans.rate.com/personal"
 
-# Base Profile (Ernest) - default values when PROFILE is unset
 TEST_ENV: "QA"
+
+# Base Profile (Ernest) - default values when PROFILE is unset
 LOAN_TYPE: "BOTH"
 FIRST_NAME: "ERNEST"
 LAST_NAME: "FOSTER"

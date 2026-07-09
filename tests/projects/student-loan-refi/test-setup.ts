@@ -59,7 +59,6 @@ const BASE_ENV = Object.fromEntries(
 type OfferBrand = 'Earnest' | 'LendKey' | 'Splash';
 
 const DEFAULT_TEST_URL = 'https://student-loans.qa.fsp.rate.com/personal';
-const KNOWN_GOOD_ADDRESS = '3456 Syracuse Ave, San Diego, CA, 92122';
 
 function inferOfferBrand(profile: string): OfferBrand {
   if (/^ER/i.test(profile)) {
@@ -83,6 +82,10 @@ function inferRedirectPattern(brand: OfferBrand) {
   }
 
   return /splash/i;
+}
+
+function isNoOfferExpectedProfile(profile: string) {
+  return /^LK_(CD|IN)\d+$/i.test((profile || '').trim());
 }
 
 function resolveTestUrl(profile: string, overrideUrl?: string) {
@@ -124,12 +127,12 @@ function parseAddressParts(address?: string) {
     .map((segment) => segment.trim())
     .filter(Boolean);
 
-  if (segments.length < 3) {
+  if (segments.length < 2) {
     return { city: '', state: '', zip: '' };
   }
 
-  const city = segments[segments.length - 2] || '';
-  const stateZip = segments[segments.length - 1] || '';
+  const city = segments.length >= 4 ? segments[1] || '' : segments[segments.length - 2] || '';
+  const stateZip = segments.length >= 4 ? `${segments[2] || ''} ${segments[3] || ''}`.trim() : (segments[segments.length - 1] || '');
   const stateZipMatch = stateZip.match(/([A-Za-z]{2})\s*(\d{5}(?:-\d{4})?)?/);
 
   return {
@@ -174,14 +177,35 @@ function escapeRegex(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+function normalizeAddressText(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' ');
+}
+
 async function selectMatchingAddressAutocomplete(page: Page, addressInput: Locator, fullAddress: string) {
   const normalizedAddress = (fullAddress || '').trim();
   const pacItems = page.locator('.pac-item');
+  const pacContainer = page.locator('.pac-container').first();
 
-  // Explicitly click once after typing to trigger the suggestions dropdown.
-  await addressInput.click().catch(() => null);
+  const isPacVisible = async () => pacContainer.evaluate((element) => {
+    const pac = element as HTMLElement;
+    const style = window.getComputedStyle(pac);
+    return style.display !== 'none' && style.visibility !== 'hidden' && pac.offsetParent !== null;
+  }).catch(() => false);
 
-  const hasSuggestions = await pacItems.first().waitFor({ state: 'visible', timeout: 1200 }).then(() => true).catch(() => false);
+  // Open autocomplete by clicking the input again until the PAC dropdown is visible.
+  // Do not re-type here; this only toggles visibility for already fetched suggestions.
+  const pacDeadline = Date.now() + 7000;
+  while (Date.now() < pacDeadline) {
+    const visible = await isPacVisible();
+    if (visible) {
+      break;
+    }
+
+    await addressInput.click().catch(() => null);
+    await page.waitForTimeout(250);
+  }
+
+  const hasSuggestions = await pacItems.first().waitFor({ state: 'visible', timeout: 2500 }).then(() => true).catch(() => false);
   if (!hasSuggestions) {
     return false;
   }
@@ -195,25 +219,65 @@ async function selectMatchingAddressAutocomplete(page: Page, addressInput: Locat
   const city = segments.length >= 3 ? segments[segments.length - 2] : '';
   const stateZip = segments.length >= 2 ? segments[segments.length - 1] : '';
   const zip = stateZip.match(/\d{5}(?:-\d{4})?/)?.[0] || '';
+  const normalizedAddressTokens = new Set(
+    [normalizedAddress, street, city ? `${street} ${city}` : '', city, zip]
+      .filter(Boolean)
+      .flatMap((candidate) => normalizeAddressText(candidate).split(' ').filter(Boolean))
+  );
 
-  const candidates = [
-    normalizedAddress,
-    street,
-    city ? `${street}, ${city}` : '',
-    city,
-    zip
-  ].filter(Boolean);
+  const itemCount = await pacItems.count().catch(() => 0);
+  const scoredItems: Array<{ index: number; score: number }> = [];
 
-  for (const candidate of candidates) {
-    const match = pacItems.filter({ hasText: new RegExp(escapeRegex(candidate), 'i') }).first();
-    if (await match.isVisible().catch(() => false)) {
-      await match.click().catch(() => null);
+  for (let index = 0; index < itemCount; index++) {
+    const itemText = await pacItems.nth(index).innerText().catch(() => '');
+    const normalizedItemText = normalizeAddressText(itemText);
+    if (!normalizedItemText) {
+      continue;
+    }
+
+    let score = 0;
+    for (const token of normalizedAddressTokens) {
+      if (normalizedItemText.includes(token)) {
+        score += 1;
+      }
+    }
+
+    if (normalizedItemText.includes(normalizeAddressText(normalizedAddress))) {
+      score += 5;
+    }
+
+    scoredItems.push({ index, score });
+  }
+
+  scoredItems.sort((left, right) => right.score - left.score);
+
+  for (const candidate of scoredItems) {
+    if (candidate.score <= 0) {
+      continue;
+    }
+
+    const option = pacItems.nth(candidate.index);
+    const isVisible = await option.isVisible().catch(() => false);
+    if (!isVisible) {
+      continue;
+    }
+
+    const clicked = await option.click({ timeout: 3000 }).then(() => true).catch(() => false);
+    if (clicked) {
       return true;
     }
   }
 
-  await pacItems.first().click().catch(() => null);
-  return true;
+  const firstVisible = pacItems.filter({ hasText: /.+/ }).first();
+  const fallbackVisible = await firstVisible.isVisible().catch(() => false);
+  if (fallbackVisible) {
+    const fallbackClicked = await firstVisible.click({ timeout: 3000 }).then(() => true).catch(() => false);
+    if (fallbackClicked) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 async function getSchoolField(page: Page) {
@@ -225,6 +289,88 @@ async function getSchoolField(page: Page) {
     page.locator('input[aria-label*="School" i]'),
     page.locator('[data-testid="dropdown-label"]').filter({ hasText: /School/i })
   ]);
+}
+
+type StudentLoanStep = 'loan' | 'address' | 'education' | 'financial' | 'identity';
+
+async function isAnyVisible(locators: Locator[]) {
+  for (const locator of locators) {
+    if (await locator.isVisible().catch(() => false)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+async function detectStudentLoanStep(page: Page): Promise<StudentLoanStep | null> {
+  if (await isAnyVisible([
+    page.locator('#dob').first(),
+    page.getByRole('textbox', { name: 'Social security number*' }).first(),
+    page.getByRole('button', { name: 'Agree and Check my Rates' }).first()
+  ])) {
+    return 'identity';
+  }
+
+  if (await isAnyVisible([
+    page.getByRole('combobox', { name: /Citizen status|Citizenship status/i }).first(),
+    page.getByRole('combobox', { name: /Credit score range|Credit score/i }).first(),
+    page.getByRole('combobox', { name: /Housing type/i }).first(),
+    page.getByRole('textbox', { name: /Monthly housing cost|Monthly housing payment/i }).first(),
+    page.getByRole('textbox', { name: /Enter total assets|Total assets/i }).first()
+  ])) {
+    return 'financial';
+  }
+
+  if (await isAnyVisible([
+    page.locator('input[name="educationalInstituteName"]').first(),
+    page.getByRole('combobox', { name: /School\s*\/\s*university|School/i }),
+    page.getByRole('textbox', { name: /School\s*\/\s*university|School/i }),
+    page.getByLabel(/School\s*\/\s*university|School/i),
+    page.locator('input[aria-label*="School" i]').first(),
+    page.locator('[data-testid="dropdown-label"]').filter({ hasText: /School/i }).first()
+  ])) {
+    return 'education';
+  }
+
+  if (await isAnyVisible([
+    page.locator('#gma').first(),
+    page.getByRole('textbox', { name: /Street address/i }).first(),
+    page.getByLabel(/Street address/i),
+    page.locator('input[placeholder*="Street address"]').first()
+  ])) {
+    return 'address';
+  }
+
+  if (await isAnyVisible([
+    page.getByRole('textbox', { name: 'Loan amount to refinance*' }).first(),
+    page.getByRole('textbox', { name: 'Current monthly payment*' }).first(),
+    page.getByRole('textbox', { name: 'Current interest rate*' }).first()
+  ])) {
+    return 'loan';
+  }
+
+  return null;
+}
+
+async function waitForStudentLoanTransition(page: Page, currentStep: StudentLoanStep | null, timeoutMs = 15000) {
+  const sorryMessage = page.getByText(/we[’']?re sorry|we are sorry|something went wrong/i).first();
+  const deadline = Date.now() + timeoutMs;
+
+  while (Date.now() < deadline) {
+    if (await sorryMessage.isVisible().catch(() => false)) {
+      return 'sorry' as const;
+    }
+
+    const detectedStep = await detectStudentLoanStep(page);
+    if (detectedStep && detectedStep !== currentStep) {
+      return detectedStep;
+    }
+
+    await page.waitForTimeout(250);
+  }
+
+  return 'timeout' as const;
 }
 
 async function fillSchoolFieldResilient(page: Page, schoolValue?: string) {
@@ -664,243 +810,404 @@ export async function runRefinanceFlow(page: Page, profile: string, options?: { 
   await page.getByRole('textbox', { name: 'Phone number*' }).fill(process.env.PHONE || '');
   await page.getByTestId('button').click();
 
-  await page.getByRole('textbox', { name: 'Loan amount to refinance*' }).click();
-  await page.getByRole('textbox', { name: 'Loan amount to refinance*' }).fill(process.env.LOAN_AMOUNT || '');
-  await page.getByRole('textbox', { name: 'Current monthly payment*' }).click();
-  await page.getByRole('textbox', { name: 'Current monthly payment*' }).fill(process.env.MONTHLY_PAYMENT || '');
-  await page.getByRole('textbox', { name: 'Current interest rate*' }).click();
-  await page.getByRole('textbox', { name: 'Current interest rate*' }).fill(process.env.INTEREST_RATE || '');
-  await page.getByTestId('dropdown-label').click();
-  await page.getByRole('option', { name: 'Both' }).click();
-  await page.getByRole('button', { name: 'Continue' }).click();
-
-  const addressInput = await getFirstVisibleLocator([
-    page.locator('#gma'),
-    page.getByRole('textbox', { name: /Street address/i }),
-    page.getByLabel(/Street address/i),
-    page.locator('input[placeholder*="Street address"]')
-  ]);
   const continueButton = page.getByRole('button', { name: 'Continue' });
-  const cityInput = page.getByRole('textbox', { name: /City/i }).first();
-  const stateInput = page.getByRole('textbox', { name: /State/i }).first();
-  const zipInput = page.getByRole('textbox', { name: /Zip code|Zip/i }).first();
-  const applyManualAddress = async (value: string) => {
-    const parts = parseAddressParts(value);
-    const street = (value || '').split(',')[0]?.trim() || '';
 
-    if (street && await addressInput.isEditable().catch(() => false)) {
-      const currentStreetValue = await addressInput.inputValue().catch(() => '');
-      if (!currentStreetValue.trim()) {
-        await addressInput.fill(street).catch(() => null);
-      }
-    }
-
-    if (parts.city && await cityInput.isEditable().catch(() => false)) {
-      await cityInput.fill(parts.city).catch(() => null);
-    }
-
-    if (parts.state && await stateInput.isEditable().catch(() => false)) {
-      await stateInput.fill(parts.state).catch(() => null);
-    }
-
-    if (parts.zip && await zipInput.isEditable().catch(() => false)) {
-      await zipInput.fill(parts.zip).catch(() => null);
-    }
-
-    await clickContinueFast(continueButton);
+  const completeLoanDetailsStep = async () => {
+    await page.getByRole('textbox', { name: 'Loan amount to refinance*' }).click();
+    await page.getByRole('textbox', { name: 'Loan amount to refinance*' }).fill(process.env.LOAN_AMOUNT || '');
+    await page.getByRole('textbox', { name: 'Current monthly payment*' }).click();
+    await page.getByRole('textbox', { name: 'Current monthly payment*' }).fill(process.env.MONTHLY_PAYMENT || '');
+    await page.getByRole('textbox', { name: 'Current interest rate*' }).click();
+    await page.getByRole('textbox', { name: 'Current interest rate*' }).fill(process.env.INTEREST_RATE || '');
+    await page.getByTestId('dropdown-label').click();
+    await page.getByRole('option', { name: 'Both' }).click();
+    await continueButton.click();
   };
 
-  const tryAddress = async (value: string) => {
-    const timeline: string[] = [];
-    const mark = (msg: string) => timeline.push(`${new Date().toISOString()} - ${msg}`);
-    const normalizedValue = value.trim().toLowerCase();
-    const currentValue = await addressInput.inputValue().catch(() => '');
-    const shouldRetype = currentValue.trim().toLowerCase() !== normalizedValue;
+  const completeAddressStep = async (value: string) => {
+    const addressInput = await getFirstVisibleLocator([
+      page.locator('#gma'),
+      page.getByRole('textbox', { name: /Street address/i }),
+      page.getByLabel(/Street address/i),
+      page.locator('input[placeholder*="Street address"]')
+    ]);
+    const cityInput = await getFirstVisibleLocator([
+      page.getByRole('textbox', { name: /City/i }),
+      page.getByPlaceholder(/City/i),
+      page.locator('input[placeholder*="City" i]')
+    ]);
+    const stateInput = await getFirstVisibleLocator([
+      page.getByRole('textbox', { name: /State/i }),
+      page.getByPlaceholder(/State/i),
+      page.locator('input[placeholder*="State" i]')
+    ]);
+    const zipInput = await getFirstVisibleLocator([
+      page.getByRole('textbox', { name: /Zip code|Zip/i }),
+      page.getByPlaceholder(/Zip code|Zip/i),
+      page.locator('input[placeholder*="Zip" i]')
+    ]);
 
-    mark('about to click address input');
-    await addressInput.click();
-    mark('clicked address input');
-    if (shouldRetype) {
-      mark('will retype address');
-      await addressInput.fill('');
-      // Type a bit slower so autocomplete has time to populate suggestions.
-      await addressInput.type(value, { delay: 50 });
-      mark('finished typing address');
-      // Click once after typing to ensure the suggestions dropdown is triggered.
-      await addressInput.click().catch(() => null);
-      mark('clicked after typing to trigger suggestions');
-      // small pause to allow pac-items to render
-      await new Promise((r) => setTimeout(r, 300));
-    }
-    const continueDeadline = Date.now() + 5000;
+    const forceSetValue = async (locator: Locator, value: string) => {
+      if (!value) {
+        return;
+      }
 
-    // Try Continue immediately after typing to satisfy the timing SLA.
-    mark('attempt initial continue click');
-    let clickedContinue = await clickContinueFast(continueButton, 700);
-    mark(`initial continue clicked=${clickedContinue}`);
+      const filled = await locator.fill(value).then(() => true).catch(() => false);
+      if (filled) {
+        return;
+      }
 
-    // If still on address, try autocomplete selection quickly, then keep clicking until deadline.
-    if (page.url().includes('/address')) {
-      const selectedAutocomplete = await selectMatchingAddressAutocomplete(page, addressInput, value);
-      if (!selectedAutocomplete) {
-        try {
-          await addressInput.press('ArrowDown');
-          await addressInput.press('Enter');
-        } catch (ignored) {
-          // continue and recover below
+      await locator.evaluate((element, nextValue) => {
+        const input = element as HTMLInputElement;
+        const nativeSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+        if (nativeSetter) {
+          nativeSetter.call(input, nextValue);
+        } else {
+          input.value = nextValue;
+        }
+
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      }, value).catch(() => null);
+    };
+
+    const applyManualAddress = async (manualValue: string) => {
+      const parts = parseAddressParts(manualValue);
+      const street = (manualValue || '').split(',')[0]?.trim() || '';
+
+      if (street) {
+        const currentStreetValue = await addressInput.inputValue().catch(() => '');
+        if (currentStreetValue.trim() !== street) {
+          await forceSetValue(addressInput, street);
         }
       }
-    }
 
-    while (Date.now() < continueDeadline && page.url().includes('/address')) {
-      const timeoutMs = Math.max(250, Math.min(900, continueDeadline - Date.now()));
-      const clickedNow = await clickContinueFast(continueButton, timeoutMs);
-      clickedContinue = clickedContinue || clickedNow;
-      mark(`retry continue clicked=${clickedNow}`);
-      if (!clickedNow) {
-        await new Promise((resolve) => setTimeout(resolve, 120));
+      if (parts.city) {
+        await forceSetValue(cityInput, parts.city);
       }
-    }
 
-    if (!clickedContinue) {
+      if (parts.state) {
+        await forceSetValue(stateInput, parts.state);
+      }
+
+      if (parts.zip) {
+        await forceSetValue(zipInput, parts.zip);
+      }
+
+      await clickContinueFast(continueButton);
+    };
+
+    const tryAddress = async (manualValue: string) => {
+      const timeline: string[] = [];
+      const mark = (msg: string) => timeline.push(`${new Date().toISOString()} - ${msg}`);
+      const normalizedValue = manualValue.trim().toLowerCase();
+      const currentValue = await addressInput.inputValue().catch(() => '');
+      const shouldRetype = currentValue.trim().toLowerCase() !== normalizedValue;
+
+      mark('about to click address input');
+      await addressInput.click();
+      mark('clicked address input');
+      // Pre-warm: wait for Google Places JS to attach its event listeners before typing.
+      await page.waitForTimeout(1500);
+      mark('waited for Google Places initialization');
+      if (shouldRetype) {
+        mark('will retype address');
+        await addressInput.fill('').catch(() => null);
+        await addressInput.press('Meta+A').catch(() => null);
+        await addressInput.press('Control+A').catch(() => null);
+        await addressInput.press('Backspace').catch(() => null);
+        // Type the full profile address once for better matching across diverse YAML data.
+        await addressInput.type(manualValue, { delay: 60 });
+        mark('finished typing full address');
+
+        // Clicking again should surface the dropdown suggestions without retyping.
+        await addressInput.click().catch(() => null);
+        mark('clicked again after typing to open autocomplete');
+
+        const selectedAutocomplete = await selectMatchingAddressAutocomplete(page, addressInput, manualValue);
+        mark(`selected autocomplete=${selectedAutocomplete}`);
+
+        if (!selectedAutocomplete) {
+          await testInfo.attach('address-timeline', { body: timeline.join('\n'), contentType: 'text/plain' }).catch(() => null);
+          throw new Error('Address autocomplete dropdown did not produce a selectable match for the profile address.');
+        }
+
+        // Ensure the app accepted the selection; otherwise Continue may remain blocked.
+        const invalidAddressHint = page.getByText(/must select a valid address/i).first();
+        let invalidHintVisible = await invalidAddressHint.isVisible().catch(() => false);
+        mark(`invalid address hint visible after selection=${invalidHintVisible}`);
+
+        if (invalidHintVisible) {
+          await addressInput.click().catch(() => null);
+          await page.waitForTimeout(250);
+          const secondSelection = await selectMatchingAddressAutocomplete(page, addressInput, manualValue);
+          mark(`second selection attempted=${secondSelection}`);
+          invalidHintVisible = await invalidAddressHint.isVisible().catch(() => false);
+          mark(`invalid address hint visible after second selection=${invalidHintVisible}`);
+        }
+
+        // Wait for Google Places to auto-fill city/state/zip (those fields are disabled and populated by Places API).
+        const cityDeadline = Date.now() + 6000;
+        while (Date.now() < cityDeadline) {
+          const cityValue = await cityInput.inputValue().catch(() => '');
+          const stateValue = await stateInput.inputValue().catch(() => '');
+          const zipValue = await zipInput.inputValue().catch(() => '');
+          if (cityValue.trim() && stateValue.trim() && zipValue.trim()) {
+            break;
+          }
+          await page.waitForTimeout(250);
+        }
+
+        let cityFinal = await cityInput.inputValue().catch(() => '');
+        let stateFinal = await stateInput.inputValue().catch(() => '');
+        let zipFinal = await zipInput.inputValue().catch(() => '');
+        mark(`city/state/zip auto-fill: ${cityFinal} / ${stateFinal} / ${zipFinal}`);
+
+        if (!cityFinal.trim() || !stateFinal.trim() || !zipFinal.trim()) {
+          // Retry selection once without retyping: open dropdown and click matching item again.
+          await addressInput.click().catch(() => null);
+          await page.waitForTimeout(250);
+          const reselectionSucceeded = await selectMatchingAddressAutocomplete(page, addressInput, manualValue);
+          mark(`reselected autocomplete=${reselectionSucceeded}`);
+
+          if (reselectionSucceeded) {
+            const refillDeadline = Date.now() + 3000;
+            while (Date.now() < refillDeadline) {
+              cityFinal = await cityInput.inputValue().catch(() => '');
+              stateFinal = await stateInput.inputValue().catch(() => '');
+              zipFinal = await zipInput.inputValue().catch(() => '');
+              if (cityFinal.trim() && stateFinal.trim() && zipFinal.trim()) {
+                break;
+              }
+              await page.waitForTimeout(200);
+            }
+            mark(`city/state/zip after reselection: ${cityFinal} / ${stateFinal} / ${zipFinal}`);
+          }
+        }
+
+        if (!cityFinal.trim() || !stateFinal.trim() || !zipFinal.trim()) {
+          // Fallback for addresses where Places selection is accepted but dependent fields do not hydrate.
+          // This uses the same single typed address value and does not retype the street input.
+          mark('auto-fill incomplete after reselection; applying parsed address fallback');
+          await applyManualAddress(manualValue);
+
+          cityFinal = await cityInput.inputValue().catch(() => '');
+          stateFinal = await stateInput.inputValue().catch(() => '');
+          zipFinal = await zipInput.inputValue().catch(() => '');
+          mark(`city/state/zip after parsed fallback: ${cityFinal} / ${stateFinal} / ${zipFinal}`);
+        }
+      }
+      const continueDeadline = Date.now() + 15000;
+
+      // Try Continue immediately after typing to satisfy the timing SLA.
+      mark('attempt initial continue click');
+      let clickedContinue = await clickContinueFast(continueButton, 700);
+      mark(`initial continue clicked=${clickedContinue}`);
+
+      while (Date.now() < continueDeadline) {
+        const transition = await waitForStudentLoanTransition(page, 'address', 500);
+        if (transition === 'sorry') {
+          await failFastOnSorryError(page, testInfo);
+          break;
+        }
+
+        if (transition !== 'timeout') {
+          await testInfo.attach('address-timeline', { body: timeline.join('\n'), contentType: 'text/plain' }).catch(() => null);
+          return transition;
+        }
+
+        if (!clickedContinue) {
+          const clickedNow = await clickContinueFast(continueButton, Math.max(250, Math.min(900, continueDeadline - Date.now())));
+          clickedContinue = clickedContinue || clickedNow;
+          mark(`retry continue clicked=${clickedNow}`);
+          if (!clickedNow) {
+            await new Promise((resolve) => setTimeout(resolve, 120));
+          }
+          continue;
+        }
+
+        break;
+      }
+
+      if (!clickedContinue) {
+        mark('continue click not achieved; attempting direct education navigation fallback');
+        const nextUrl = buildEducationUrl(page.url());
+        await page.goto(nextUrl, { timeout: 60000 }).catch(() => null);
+
+        const routeOutcome = await waitForStudentLoanTransition(page, 'address', 7000);
+        if (routeOutcome === 'sorry') {
+          await failFastOnSorryError(page, testInfo);
+        }
+
+        if (routeOutcome !== 'timeout') {
+          await testInfo.attach('address-timeline', { body: timeline.join('\n'), contentType: 'text/plain' }).catch(() => null);
+          return routeOutcome;
+        }
+
+        const invalidAddressStillVisible = await page.getByText(/must select a valid address/i).first().isVisible().catch(() => false);
+        const loadingStateVisible = await page.getByRole('button', { name: /Loading\.\.\.|Loading/i }).first().isVisible().catch(() => false);
+        if (invalidAddressStillVisible || loadingStateVisible) {
+          throw new Error(`Address page remained blocked after retries for profile ${profile}. invalidAddress=${invalidAddressStillVisible} loadingState=${loadingStateVisible}`);
+        }
+
+        await testInfo.attach('address-timeline', { body: timeline.join('\n'), contentType: 'text/plain' }).catch(() => null);
+        throw new Error('Address step did not click Continue within 15 seconds after filling address, and education fallback did not transition.');
+      }
+
+      await failFastOnSorryError(page, testInfo);
+
+      const firstOutcome = await waitForStudentLoanTransition(page, 'address', 10000);
+      if (firstOutcome === 'sorry') {
+        await failFastOnSorryError(page, testInfo);
+      }
+      if (firstOutcome !== 'timeout') {
+        await testInfo.attach('address-timeline', { body: timeline.join('\n'), contentType: 'text/plain' }).catch(() => null);
+        return firstOutcome;
+      }
+
+      // Fields should already be filled from autocomplete — just retry Continue.
+      mark('retrying continue after first outcome timeout');
+      await clickContinueFast(continueButton);
+
+      const secondOutcome = await waitForStudentLoanTransition(page, 'address', 10000);
+      if (secondOutcome === 'sorry') {
+        await failFastOnSorryError(page, testInfo);
+      }
+
+      if (secondOutcome === 'timeout') {
+        const nextUrl = buildEducationUrl(page.url());
+        await page.goto(nextUrl, { timeout: 60000 }).catch(() => null);
+
+        const fallbackOutcome = await waitForStudentLoanTransition(page, 'address', 5000);
+        if (fallbackOutcome === 'sorry') {
+          await failFastOnSorryError(page, testInfo);
+        }
+
+        await testInfo.attach('address-timeline', { body: timeline.join('\n'), contentType: 'text/plain' }).catch(() => null);
+        return fallbackOutcome;
+      }
+
       await testInfo.attach('address-timeline', { body: timeline.join('\n'), contentType: 'text/plain' }).catch(() => null);
-      throw new Error('Address step did not click Continue within 5 seconds after filling address.');
+      return secondOutcome;
+    };
+
+    // Use profile-specific address from YAML so each test runs with unique data.
+    const normalizedAddressValue = (value || '').trim();
+    if (!normalizedAddressValue) {
+      throw new Error('Address step cannot run because ADDRESS is missing for this profile.');
     }
 
-    await failFastOnSorryError(page, testInfo);
+    const outcome = await tryAddress(normalizedAddressValue);
 
-    const firstOutcome = await waitForSchoolOrSorry(page, testInfo, 3000);
-    if (firstOutcome === 'sorry') {
-      await failFastOnSorryError(page, testInfo);
-    }
-    if (firstOutcome === 'school') {
-      return true;
+    if (outcome === 'timeout') {
+      throw new Error(`Address step did not advance to the next screen. Current URL: ${page.url()}`);
     }
 
-    await applyManualAddress(value);
-
-    const secondOutcome = await waitForSchoolOrSorry(page, testInfo, 3000);
-    if (secondOutcome === 'sorry') {
-      await failFastOnSorryError(page, testInfo);
-    }
-
-    await testInfo.attach('address-timeline', { body: timeline.join('\n'), contentType: 'text/plain' }).catch(() => null);
-    return secondOutcome === 'school';
+    return outcome;
   };
 
-  await failFastOnSorryError(page, testInfo);
-  let schoolVisible = await tryAddress(process.env.ADDRESS || '');
-  await failFastOnSorryError(page, testInfo);
-  if (!schoolVisible && process.env.ADDRESS_ALT && process.env.ADDRESS_ALT !== process.env.ADDRESS) {
-    schoolVisible = await tryAddress(process.env.ADDRESS_ALT);
+  const completeEducationEmploymentStep = async () => {
+    const schoolField = await getSchoolField(page);
+    const schoolTag = await schoolField.evaluate((element) => element.tagName.toLowerCase()).catch(() => '');
+    const schoolRole = await schoolField.getAttribute('role').catch(() => '');
+
+    if (schoolTag === 'input' || schoolRole === 'textbox') {
+      await fillSchoolFieldResilient(page, process.env.SCHOOL);
+    } else {
+      await schoolField.click();
+      await selectOptionResilient(page, process.env.SCHOOL);
+    }
+    await page.getByRole('combobox', { name: /Degree level/i }).getByTestId('dropdown-label').click();
+    await selectOptionResilient(page, process.env.DEGREE_LEVEL);
+    await page.getByRole('textbox', { name: /Graduation date/i }).click();
+    await page.getByRole('textbox', { name: /Graduation date/i }).fill(process.env.GRADUATION_DATE || '');
+
+    await page.getByRole('combobox', { name: /Income type/i }).getByTestId('dropdown-label').click();
+    await selectOptionResilient(page, process.env.INCOME_TYPE);
+    await page.getByRole('textbox', { name: /Employer name/i }).click();
+    await page.getByRole('textbox', { name: /Employer name/i }).fill(process.env.EMPLOYER || '');
+    await page.getByRole('textbox', { name: /Occupation\/job title/i }).click();
+    await page.getByRole('textbox', { name: /Occupation\/job title/i }).fill(process.env.OCCUPATION || '');
+    await page.getByRole('textbox', { name: /Annual income/i }).click();
+    await page.getByRole('textbox', { name: /Annual income/i }).fill(process.env.ANNUAL_INCOME || '');
+    await page.getByRole('textbox', { name: /Employment start date/i }).click();
+    await page.getByRole('textbox', { name: /Employment start date/i }).fill(process.env.EMPLOYMENT_START || '');
+    await continueButton.click();
+  };
+
+  const completeFinancialStep = async () => {
+    await selectComboboxChoice(page, /Citizen status|Citizenship status/i, process.env.CITIZEN_STATUS);
+    await selectComboboxChoice(page, /Credit score range|Credit score/i, process.env.CREDIT_SCORE);
+    await selectComboboxChoice(page, /Housing type/i, process.env.HOUSING_TYPE);
+    await page.getByRole('textbox', { name: /Monthly housing cost|Monthly housing payment/i }).click();
+    await page.getByRole('textbox', { name: /Monthly housing cost|Monthly housing payment/i }).fill(process.env.HOUSING_COST || '');
+    await page.getByRole('textbox', { name: /Enter total assets|Total assets/i }).click();
+    await page.getByRole('textbox', { name: /Enter total assets|Total assets/i }).fill(process.env.TOTAL_ASSETS || '');
+    await continueButton.click();
+  };
+
+  const completeIdentityStep = async () => {
+    await page.locator('#dob').click();
+    await page.locator('#dob').fill(process.env.DOB || '');
+    await page.getByRole('textbox', { name: 'Social security number*' }).click();
+    await page.getByRole('textbox', { name: 'Social security number*' }).fill(process.env.SSN || '');
+    await page.getByRole('button').filter({ hasText: /^$/ }).click();
+    await expect(page.getByRole('checkbox').first()).toBeVisible({ timeout: 15000 });
+
+    const checkboxes = page.getByRole('checkbox');
+    const count = await checkboxes.count();
+    for (let index = 0; index < count; index++) {
+      await checkboxes.nth(index).check();
+    }
+
+    await page.getByRole('button', { name: 'Agree and Check my Rates' }).click();
+  };
+
+  let currentStep = await waitForStudentLoanTransition(page, null, 15000);
+  if (currentStep === 'sorry') {
     await failFastOnSorryError(page, testInfo);
   }
-
-  if (!schoolVisible && (process.env.ADDRESS || '') !== KNOWN_GOOD_ADDRESS) {
-    schoolVisible = await tryAddress(KNOWN_GOOD_ADDRESS);
-    await failFastOnSorryError(page, testInfo);
+  if (currentStep === 'timeout') {
+    throw new Error(`Could not determine the first post-personal-info screen. Current URL: ${page.url()}`);
   }
 
-  if (!schoolVisible) {
-    await clickContinueFast(continueButton);
+  while (true) {
+    if (currentStep === 'identity') {
+      await completeIdentityStep();
+      break;
+    }
 
-    await failFastOnSorryError(page, testInfo);
+    if (currentStep === 'loan') {
+      await completeLoanDetailsStep();
+    } else if (currentStep === 'address') {
+      currentStep = await completeAddressStep(process.env.ADDRESS || '');
+      if (currentStep === 'sorry') {
+        await failFastOnSorryError(page, testInfo);
+      }
+      if (currentStep === 'timeout') {
+        throw new Error(`Address step did not advance to a different screen. Current URL: ${page.url()}`);
+      }
+      continue;
+    } else if (currentStep === 'education') {
+      await completeEducationEmploymentStep();
+    } else if (currentStep === 'financial') {
+      await completeFinancialStep();
+    } else {
+      throw new Error(`Could not route student-loan flow from screen: ${String(currentStep)}`);
+    }
 
-    const fallbackOutcome = await waitForSchoolOrSorry(page, testInfo, 4000);
-    if (fallbackOutcome === 'sorry') {
+    const nextStep = await waitForStudentLoanTransition(page, currentStep, 15000);
+    if (nextStep === 'sorry') {
       await failFastOnSorryError(page, testInfo);
     }
-
-    const appeared = fallbackOutcome === 'school';
-    if (!appeared) {
-      const nextUrl = buildEducationUrl(page.url());
-      await page.goto(nextUrl, { timeout: 60000 }).catch(() => null);
-    }
-  }
-
-  await failFastOnSorryError(page, testInfo);
-  const schoolField = await ensureSchoolFieldVisible(page);
-  const schoolTag = await schoolField.evaluate((element) => element.tagName.toLowerCase()).catch(() => '');
-  const schoolRole = await schoolField.getAttribute('role').catch(() => '');
-
-  if (schoolTag === 'input' || schoolRole === 'textbox') {
-    await fillSchoolFieldResilient(page, process.env.SCHOOL);
-  } else {
-    await schoolField.click();
-    await selectOptionResilient(page, process.env.SCHOOL);
-  }
-  await page.getByRole('combobox', { name: /Degree level/i }).getByTestId('dropdown-label').click();
-  await selectOptionResilient(page, process.env.DEGREE_LEVEL);
-  await page.getByRole('textbox', { name: /Graduation date/i }).click();
-  await page.getByRole('textbox', { name: /Graduation date/i }).fill(process.env.GRADUATION_DATE || '');
-
-  await page.getByRole('combobox', { name: /Income type/i }).getByTestId('dropdown-label').click();
-  await selectOptionResilient(page, process.env.INCOME_TYPE);
-  await page.getByRole('textbox', { name: /Employer name/i }).click();
-  await page.getByRole('textbox', { name: /Employer name/i }).fill(process.env.EMPLOYER || '');
-  await page.getByRole('textbox', { name: /Occupation\/job title/i }).click();
-  await page.getByRole('textbox', { name: /Occupation\/job title/i }).fill(process.env.OCCUPATION || '');
-  await page.getByRole('textbox', { name: /Annual income/i }).click();
-  await page.getByRole('textbox', { name: /Annual income/i }).fill(process.env.ANNUAL_INCOME || '');
-  await page.getByRole('textbox', { name: /Employment start date/i }).click();
-  await page.getByRole('textbox', { name: /Employment start date/i }).fill(process.env.EMPLOYMENT_START || '');
-  const continueButtonAfterEmployment = page.getByRole('button', { name: 'Continue' }).first();
-  await continueButtonAfterEmployment.click();
-
-  const citizenStatusCombobox = page.getByRole('combobox', { name: /Citizen status|Citizenship status/i }).first();
-  let isFinancialStepVisible = await citizenStatusCombobox.isVisible().catch(() => false);
-  if (!isFinancialStepVisible) {
-    const educationHeading = page.getByRole('heading', { name: /Education and employment/i }).first();
-    if (await educationHeading.isVisible().catch(() => false)) {
-      await continueButtonAfterEmployment.click({ timeout: 10000 }).catch(() => null);
+    if (nextStep === 'timeout') {
+      throw new Error(`Student-loan flow did not advance after ${currentStep} step. Current URL: ${page.url()}`);
     }
 
-    isFinancialStepVisible = await citizenStatusCombobox
-      .waitFor({ state: 'visible', timeout: 15000 })
-      .then(() => true)
-      .catch(() => false);
+    currentStep = nextStep;
   }
 
-  if (!isFinancialStepVisible && page.url().includes('/error')) {
-    throw new Error(`Flow reached error page before Basic Additional Info step: ${page.url()}`);
-  }
-
-  await selectComboboxChoice(page, /Citizen status|Citizenship status/i, process.env.CITIZEN_STATUS);
-  await selectComboboxChoice(page, /Credit score range|Credit score/i, process.env.CREDIT_SCORE);
-  await selectComboboxChoice(page, /Housing type/i, process.env.HOUSING_TYPE);
-  await page.getByRole('textbox', { name: /Monthly housing cost|Monthly housing payment/i }).click();
-  await page.getByRole('textbox', { name: /Monthly housing cost|Monthly housing payment/i }).fill(process.env.HOUSING_COST || '');
-  await page.getByRole('textbox', { name: /Enter total assets|Total assets/i }).click();
-  await page.getByRole('textbox', { name: /Enter total assets|Total assets/i }).fill(process.env.TOTAL_ASSETS || '');
-  await page.getByRole('button', { name: 'Continue' }).click();
-
-  await page.locator('#dob').click();
-  await page.locator('#dob').fill(process.env.DOB || '');
-  await page.getByRole('textbox', { name: 'Social security number*' }).click();
-  await page.getByRole('textbox', { name: 'Social security number*' }).fill(process.env.SSN || '');
-  await page.getByRole('button').filter({ hasText: /^$/ }).click();
-  await expect(page.getByRole('checkbox').first()).toBeVisible({ timeout: 15000 });
-
-  const checkboxes = page.getByRole('checkbox');
-  const count = await checkboxes.count();
-  for (let index = 0; index < count; index++) {
-    await checkboxes.nth(index).check();
-  }
-
-  await page.getByRole('button', { name: 'Agree and Check my Rates' }).click();
-  await failFastOnSorryError(page, testInfo);
-  await page.getByText(/Finding your best options|No refinance offer available/i).waitFor({ state: 'visible', timeout: 30000 });
-  await failFastOnSorryError(page, testInfo);
-
-  const noOfferHeading = page.getByRole('heading', { name: /No refinance offer available/i });
-  const noOfferDetected = await noOfferHeading.isVisible().catch(() => false);
-
-  if (noOfferDetected || /_(CD|NC)/.test(profile)) {
-    await verifyNoOfferPage(page);
-    return;
-  }
-
-  if (/_(IN)/.test(profile)) {
+  if (isNoOfferExpectedProfile(profile)) {
     const noOfferHeading = page.getByRole('heading', { name: /No refinance offer available/i });
     const offerText = page.getByText(/Your refinance offers/i);
     const offerButtons = page.getByRole('button', { name: /Apply now/i });
@@ -919,7 +1226,7 @@ export async function runRefinanceFlow(page: Page, profile: string, options?: { 
 
         const currentUrl = page.url();
         const currentTitle = await page.title().catch(() => '');
-        throw new Error(`LK_INXX reached the lendkey offer page instead of the no-offer page. URL: ${currentUrl}${currentTitle ? ` | Title: ${currentTitle}` : ''}`);
+        throw new Error(`No-offer expected profile ${profile} reached offers page instead. URL: ${currentUrl}${currentTitle ? ` | Title: ${currentTitle}` : ''}`);
       }
 
       offerDetectedAt = null;
@@ -932,7 +1239,7 @@ export async function runRefinanceFlow(page: Page, profile: string, options?: { 
       await noOfferHeading.waitFor({ state: 'visible', timeout: 2000 }).catch(() => null);
     }
 
-    throw new Error(`LK_INXX did not reach the expected no-offer page within the timeout. Current URL: ${page.url()}`);
+    throw new Error(`No-offer expected profile ${profile} did not reach the expected no-offer page within the timeout. Current URL: ${page.url()}`);
   }
 
   // If an error URL is already present, exit early and capture artifacts.
@@ -947,6 +1254,12 @@ export async function runRefinanceFlow(page: Page, profile: string, options?: { 
     await savePassArtifact(page, testInfo, 'sorry-error.png');
     await checkErrorUrlAndExit(page, testInfo, 20000).catch(() => null);
     throw new Error(`Flow reached error page instead of offers. URL: ${page.url()}`);
+  }
+
+  const noOfferHeadingOnOffersPage = page.getByRole('heading', { name: /No refinance offer available/i });
+  const environmentHasNoOffers = await noOfferHeadingOnOffersPage.isVisible().catch(() => false);
+  if (environmentHasNoOffers) {
+    throw new Error(`Offers page returned 'No refinance offer available' for profile ${profile}. URL: ${page.url()}`);
   }
 
   await expect(page.locator('tbody tr').first()).toBeVisible({ timeout: 10000 });
