@@ -3,6 +3,9 @@ import { defineConfig, devices } from '@playwright/test';
 
 dotenv.config();
 
+process.env.API_BASE_URL = process.env.API_BASE_URL || process.env.BASE_URL;
+process.env.API_BEARER_TOKEN = process.env.API_BEARER_TOKEN || process.env.API_TOKEN;
+
 const now = new Date();
 const mm = String(now.getMonth() + 1).padStart(2, '0');
 const dd = String(now.getDate()).padStart(2, '0');
@@ -75,7 +78,7 @@ export default defineConfig({
       name: 'api-tests',
       testDir: './api/tests',
       use: {
-        baseURL: process.env.BASE_URL || undefined,
+        baseURL: process.env.API_BASE_URL || undefined,
         extraHTTPHeaders: buildApiHeaders()
       }
     }

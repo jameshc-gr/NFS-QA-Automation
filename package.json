@@ -18,6 +18,7 @@
     "test:nocredit": "TEST_PROJECT=student-loan-refi npx playwright test tests/projects/student-loan-refi/LK_NC*.spec.ts",
     "test:ineligible": "TEST_PROJECT=student-loan-refi npx playwright test tests/projects/student-loan-refi/LK_IN*.spec.ts",
     "test:project:student-loan-refi": "TEST_PROJECT=student-loan-refi npx playwright test tests/projects/student-loan-refi",
+    "test:project:student-IDR": "TEST_PROJECT=student-IDR npx playwright test tests/projects/student-IDR",
     "typecheck": "tsc --noEmit",
     "typecheck:mobile": "tsc -p mobile/tsconfig.json --noEmit",
     "generate:test": "node scripts/generate-test.js"

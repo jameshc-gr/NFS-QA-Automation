@@ -32,3 +32,20 @@ Use this skill to identify the narrowest and most relevant Playwright test files
 ## Guardrails
 - Do not recommend full-suite runs before focused runs
 - Do not return generated files unless explicitly requested
+
+## Implementation
+This skill includes an executable runner: `discover_tests.ts` which can be invoked directly or imported by agents.
+
+CLI usage example:
+
+```
+node ai/jobs/skills/test-discovery/discover_tests.ts "loan application flow"
+```
+
+Programmatic usage:
+
+```ts
+import {discoverTests} from './discover_tests'
+const res = await discoverTests({query: 'loan application'})
+```
+
