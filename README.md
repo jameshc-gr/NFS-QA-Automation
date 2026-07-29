@@ -12,7 +12,10 @@ The repository now supports a layered architecture for hybrid migration and AI-a
 - `ai/`: agents for test generation, failure analysis, self-healing, and coverage analysis
 - `core/`: shared cross-layer utilities
 
-All Playwright specs live under `tests/projects/student-loan-refi`.
+Playwright specs live under `tests/projects/`. The active UI suites are:
+
+- `tests/projects/student-loan-refi` for Student Loan Refinance
+- `tests/projects/student-IDR` for Student IDR / forgiveness
 
 ## AI Framework Layout
 
@@ -72,7 +75,7 @@ flowchart TD
 
 ## Current Scope
 
-This repository is focused on the student-loan-refi suite under [tests/projects/student-loan-refi](tests/projects/student-loan-refi). The active profile source of truth is [test-data/student-loan-refi/student-loan-refi.yml](test-data/student-loan-refi/student-loan-refi.yml). The root [`.env`](.env) file is kept as a compatibility copy of the same profile data.
+This repository includes Student Loan Refinance and Student IDR suites. Their profile sources are [test-data/student-loan-refi/student-loan-refi.yml](test-data/student-loan-refi/student-loan-refi.yml) and [test-data/student-IDR/student-IDR.yml](test-data/student-IDR/student-IDR.yml). The root [`.env`](.env) file is a compatibility source for shared environment settings.
 
 ## Directory Conventions
 
@@ -82,6 +85,8 @@ This repository is focused on the student-loan-refi suite under [tests/projects/
 - For this repository, active project paths are:
 	- `test-data/student-loan-refi/student-loan-refi.yml`
 	- `tests/projects/student-loan-refi/`
+	- `test-data/student-IDR/student-IDR.yml`
+	- `tests/projects/student-IDR/`
 
 The old [test-data/student-loan-refi/profiles.json](test-data/student-loan-refi/profiles.json) file has been removed.
 
@@ -121,12 +126,36 @@ Mobile environment variables used by the scaffold:
 
 - `MOBILE_PLATFORM`: defaults to `android`
 - `MOBILE_ANDROID_APP_PATH`: defaults to `test-data/mobile-app/gri/android/app.apk`
-- `MOBILE_IOS_MODE`: `testflight`, `real-device`, or `simulator`; defaults to `testflight`
-- `MOBILE_IOS_APP_PATH`: required when `MOBILE_IOS_MODE=simulator`; defaults to `test-data/mobile-app/gri/ios/app.app`
-- `MOBILE_IOS_DEVICE_UDID`: required when `MOBILE_IOS_MODE` is `testflight` or `real-device`
+- `MOBILE_IOS_BUILD`: name of a build defined under `ios.builds` in `test-data/mobile-app/gri/ios/config.yml` (for example `qa-simulator`, `qa-ipa`, `stage-testflight`); falls back to `ios.defaultBuild`
+- `MOBILE_IOS_MODE`: `testflight`, `real-device`, or `simulator`; normally taken from the selected build's `source`
+- `MOBILE_IOS_APP_PATH`: `.app` bundle for simulator builds; defaults to the build's `appPath`
+- `MOBILE_IOS_IPA_PATH` / `MOBILE_IOS_IPA_URL`: signed `.ipa` for real-device builds; a URL is downloaded once into `mobile/.builds`
+- `MOBILE_IOS_IPA_AUTH_HEADER`: optional header sent when downloading `MOBILE_IOS_IPA_URL` (store it encrypted as `ipaAuthHeader` instead where possible)
+- `MOBILE_IOS_DEVICE_UDID`: required for `ipa` and `testflight` builds; defaults to the build's `deviceUdid`
 - `MOBILE_IOS_PLATFORM_VERSION`: optional override for the Xcode Simulator runtime version; normally auto-detected from installed runtimes
 - `MOBILE_APP_PACKAGE`: optional Android package name once discovery is complete
 - `MOBILE_APP_ACTIVITY`: optional Android launch activity once discovery is complete
+
+### Choosing an iOS build
+
+`test-data/mobile-app/gri/ios/config.yml` holds named builds, each declaring how the
+app reaches the target:
+
+| `source` | Target | How the app is installed |
+| --- | --- | --- |
+| `simulator` | iOS Simulator | Appium installs the local `.app` bundle |
+| `ipa` | Connected real device | Appium installs `ipaPath`, or downloads `ipaUrl` first |
+| `testflight` | Connected real device | You install the build from TestFlight by hand; the run only launches it |
+
+TestFlight cannot run on the iOS Simulator — Apple does not ship the TestFlight app
+for simulators, and TestFlight builds are device-only. Use a `simulator` build
+locally and an `ipa` or `testflight` build on a real device.
+
+```bash
+npm run test:mobile:ios:create-account                     # qa-simulator (default)
+MOBILE_IOS_BUILD=stage-ipa npm run test:mobile:ios:create-account
+npm run test:mobile:ios:create-account:qa-testflight
+```
 
 ## Running Tests
 
@@ -135,6 +164,18 @@ Run the student-loan-refi suite with Chromium:
 ```bash
 npx playwright test tests/projects/student-loan-refi --project=chromium
 ```
+
+Run the Student IDR suite with Chromium:
+
+```bash
+npm run test:project:student-IDR -- --project=chromium --workers=1
+```
+
+Student IDR test cases, profile-backed test data, and the latest Jira-style execution report are documented in:
+
+- [tests/projects/student-IDR/readme-projects.md](tests/projects/student-IDR/readme-projects.md)
+- [test-data/student-IDR/04_final_test_cases_with_data.csv](test-data/student-IDR/04_final_test_cases_with_data.csv)
+- [docs/student-IDR-test-execution-report-2026-07-27.md](docs/student-IDR-test-execution-report-2026-07-27.md)
 
 Run with project tagging for grouped reports:
 

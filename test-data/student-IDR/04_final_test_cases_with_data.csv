@@ -1,0 +1,38 @@
+Test_Case_ID,Spec_or_Profile,Page,Scenario,Test_Data,Expected_Result,Priority,Latest_Status
+IDR-E2E-001,SCN-001,/income > /federal > /repayment > /assets > /dashboard,Single applicant baseline,AGI=72000; loans=42000|4|42000|0; plan=IBR for New Borrowers; asset=Savings|Cash|Chase|12500,Completes through dashboard,Critical,Blocked by IDR-001
+IDR-E2E-002,SCN-002,/repayment,Old IBR historical start,AGI=125000; balance=58000; APR=6; plan=IBR for Old Borrowers; start=06/01/2011,Accepts historical start and completes,High,Blocked by IDR-001
+IDR-E2E-003,SCN-003,/repayment,RAP low-income,AGI=28000; dependent-age=2; balance=36000; APR=6; plan=RAP,RAP plan accepts data and completes,High,Blocked by IDR-001
+IDR-E2E-004,SCN-004,/repayment,PAYE mapping,AGI=85000; balance=45000; APR=6; plan=PAYE,PAYE plan accepts data and completes,High,Blocked by IDR-001
+IDR-E2E-005,SCN-005,/federal,No-loan edge,AGI=65000; balance=0; APR=0,Defined no-loan behavior is enforced,Critical,Blocked by product decision
+IDR-E2E-006,SCN-006,/income,Very low income,AGI=12000; savings=0; balance=30000; APR=6,No negative/invalid values and completes,High,Blocked by IDR-001
+IDR-E2E-007,SCN-007,/federal,Large-balance entry,AGI=95000; balance=250000; APR=8,Formats large numbers and completes,Medium,Blocked by IDR-001
+IDR-E2E-008,SCN-008,/repayment,Forbearance,balance=52000; APR=7; forbearance=24,Forbearance data persists and completes,High,Blocked by IDR-001
+IDR-E2E-009,SCN-009,/partner-student-loans,Married jointly spouse loans,applicant AGI=90000; spouse=Mary Jane|60000; applicant balance=70000; spouse balance=45000,Routes through spouse loan flow and completes,Critical,Blocked by IDR-001
+IDR-E2E-010,SCN-010,/partner-student-loans,Married separated spouse no loans,applicant AGI=78000; spouse AGI=115000; spouse has loans=No,Skips spouse loan pages and completes,High,Blocked by IDR-001
+IDR-E2E-011,SCN-011,/assets,Joint savings,applicant savings=15000; spouse savings=0; joint=18000; owner=Joint,Joint asset entry persists,High,Blocked by IDR-001
+IDR-E2E-012,SCN-012,/federal,Low debt high income,AGI=160000; balance=18000; APR=5,Completes and supports paid-off projection,Critical,Blocked by IDR-001
+IDR-E2E-013,SCN-013,/repayment,PSLF selected,AGI=64000; balance=72000; APR=6; PSLF=true,PSLF selection persists and completes,Critical,Blocked by IDR-001
+IDR-E2E-014,SCN-014,/assets,Growth-rate sensitivity,Asset profile=Frank high return sensitivity,Asset flow exposes supported behavior,Medium,Blocked by IDR-001
+IDR-E2E-015,SCN-015,/assets,Zero savings,No manual asset,Allows no-assets path or shows defined validation,High,Blocked by IDR-001
+IDR-E2E-016,SCN-016,/welcome,Weak password,Password below configured strength,Rejects password,High,Passed 2026-07-27
+IDR-E2E-017,SCN-017,/welcome,Existing user login,Existing-user fixture,Routes to authentication,Medium,Passed 2026-07-27
+IDR-E2E-018,SCN-018,/income,Married-to-single toggle,Set Married and spouse fields; switch to Single,Spouse fields hide without crash,Medium,Passed 2026-07-27
+IDR-E2E-019,SCN-019,/assets,Plaid linked spouses,Married profile; Plaid sandbox credentials,Linked accounts render and complete,High,Not run after blocker
+IDR-E2E-020,SCN-020,/assets,Excluded tax-bomb asset,Asset includeInPlan=false,Asset saves excluded from calculation,High,Blocked by IDR-001
+IDR-VAL-001,GLOBAL-06,/welcome,Invalid email,email=not-an-email,Inline validation and disabled Continue,High,Passed 2026-07-27
+IDR-VAL-002,GLOBAL-07,/welcome,Terms required,Valid fields; terms unchecked,Continue disabled,Critical,Passed 2026-07-27
+IDR-VAL-003,UI-FLOW-04-welcome,/welcome,Missing fields,All required fields blank,Required-field validation,Critical,Passed 2026-07-27
+IDR-ASSET-001,UI-FLOW-ASSETS-01,/assets,Plaid opens and cancels,Plaid=Platypus Bank|user_good|pass_good,Modal opens and returns to Assets,High,Blocked by IDR-001
+IDR-ASSET-002,UI-FLOW-ASSETS-01,/assets,Plaid completion refresh,Plaid=Platypus Bank|user_good|pass_good,Refresh occurs only after Plaid completes,High,Blocked by IDR-001
+IDR-ASSET-003,UI-FLOW-ASSETS-02,/assets,Manual CRUD,Savings=15000->25000; 401K=85000,Add edit delete retains values,High,Blocked by IDR-001
+IDR-ASSET-004,UI-FLOW-ASSETS-02,/assets,Manual retention,Starter=10100->13500; IRA=91000->97500; 401K=55500->59000,Add delete add-multiple edit/save and refresh retain values,Critical,Blocked by IDR-001
+IDR-ASSET-005,UI-FLOW-ASSETS-03,/assets,Plaid plus manual,Plaid plus Checking=8500,Both sources render and continue,High,Blocked by IDR-001
+IDR-ASSET-006,UI-FLOW-ASSETS-03,/assets,Manual add-more edit Plaid refresh,Cash=12500->15000; 401K=89000; Plaid sandbox,Refresh verifies accounts then reaches dashboard,Critical,Blocked by IDR-001
+IDR-FED-001,FED-VAL-CHART-01,/federal,Valid two-loan equation,30000|3|25000|5000;45000|5|35000|10000,Advances to repayment,Critical,Not run after blocker
+IDR-FED-002,FED-VAL-CHART-02,/federal,Valid two-loan equation,25000|4.5|20000|5000;50000|6|40000|10000,Advances to repayment,Critical,Not run after blocker
+IDR-FED-003,FED-VAL-CHART-03,/federal,Valid three-loan equation,15000|3|12000|3000;25000|5|20000|5000;35000|6.8|30000|5000,Advances to repayment,Critical,Not run after blocker
+IDR-FED-004,FED-VAL-CHART-04,/federal,Balance mismatch,30000|3|25000|4000;45000|5|35000|9000,Stays on federal with validation,Critical,Not run after blocker
+IDR-FED-005,FED-VAL-CHART-05,/federal,Balance mismatch,30000|3|50000|20000;45000|5|60000|15000,Stays on federal with validation,Critical,Not run after blocker
+IDR-FED-006,FED-VAL-CHART-06,/federal,Zero balance mismatch,0|3|25000|5000,Stays on federal with validation,Critical,Not run after blocker
+IDR-FED-007,FED-VAL-CHART-07,/federal,Negative APR,30000|-1|25000|5000,Stays on federal with validation,Critical,Not run after blocker
+IDR-FED-008,FED-VAL-CHART-08,/federal,Required APR,30000||25000|5000,Stays on federal with validation,Critical,Not run after blocker

@@ -8,7 +8,7 @@ process.env.ANDROID_SDK_ROOT = androidSdkRoot;
 process.env.JAVA_HOME = process.env.JAVA_HOME || '/Applications/Android Studio.app/Contents/jbr/Contents/Home';
 
 const platform = resolveMobilePlatform();
-const iosMode = platform === 'ios' ? String(process.env.MOBILE_IOS_MODE || 'testflight').toLowerCase() : '';
+const iosMode = platform === 'ios' ? String(process.env.MOBILE_IOS_MODE || 'simulator').toLowerCase() : '';
 const defaultSpecs = platform === 'ios'
   ? [path.join('tests', 'ios', iosMode === 'simulator' ? 'launch-simulator.spec.ts' : 'launch-testflight.spec.ts')]
   : [path.join('tests', 'android', '**', '*.spec.ts')];
@@ -31,7 +31,9 @@ export const config = {
   framework: 'mocha',
   mochaOpts: {
     ui: 'bdd',
-    timeout: 180000
+    // Verification emails can take several minutes to arrive, so specs that
+    // poll an inbox need far more headroom than the usual UI test.
+    timeout: 900000
   },
   reporters: ['spec'],
   services: [

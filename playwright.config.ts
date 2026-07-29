@@ -53,6 +53,11 @@ export default defineConfig({
         open: 'never'
       }
     ]
+    ,
+    [
+      './scripts/playwright-date-type-reporter.js',
+      {}
+    ]
   ],
   use: {
     trace: 'on-first-retry',

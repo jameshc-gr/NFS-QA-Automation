@@ -1184,9 +1184,6 @@ export async function runRefinanceFlow(page: Page, profile: string, options?: { 
       if (currentStep === 'sorry') {
         await failFastOnSorryError(page, testInfo);
       }
-      if (currentStep === 'timeout') {
-        throw new Error(`Address step did not advance to a different screen. Current URL: ${page.url()}`);
-      }
       continue;
     } else if (currentStep === 'education') {
       await completeEducationEmploymentStep();

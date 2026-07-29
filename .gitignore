@@ -17,3 +17,7 @@ node_modules/
 # Local simulator bundles and macOS metadata
 .DS_Store
 test-data/mobile-app/gri/ios/*.app/
+
+# Saved browser sessions for verification-code retrieval (Google Voice / Outlook+Okta)
+mobile/.auth/
+mobile/.builds/

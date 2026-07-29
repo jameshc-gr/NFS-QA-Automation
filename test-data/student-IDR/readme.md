@@ -10,6 +10,7 @@ This directory contains the source-of-truth test data for the Student IDR (Incom
 | [01_field_matrix.csv](01_field_matrix.csv) | Field inventory per page (from QA walkthrough) |
 | [02_scenario_matrix.csv](02_scenario_matrix.csv) | Persona scenarios driving the regression suite |
 | [03_test_cases.csv](03_test_cases.csv) | Detailed test intents and expected results |
+| [04_final_test_cases_with_data.csv](04_final_test_cases_with_data.csv) | Final executable case matrix with profile and input data references |
 
 ## Profile structure
 
@@ -60,3 +61,19 @@ At runtime, the framework also appends a sequential per-worker number to every e
 
 - "Full flow (needs auth)" specs automate the pages from `/forgiveness/welcome` through `/forgiveness/assets`, but currently require a pre-authenticated session because the QA environment redirects newly created accounts to `my.gr-dev.com/dashboard`.
 - See [tests/projects/student-IDR/readme-projects.md](../../tests/projects/student-IDR/readme-projects.md) for execution commands and authentication options.
+- See [docs/student-IDR-test-execution-report-2026-07-27.md](../../docs/student-IDR-test-execution-report-2026-07-27.md) for the latest pass/fail results and Jira-ready bugs.
+
+## Generated credentials and counters
+
+- `student-IDR-counters/`: per-worker counter files used by the email-generation helper to allocate unique email suffixes. Each file is named `email-counter-worker-<N>.txt` and contains a single integer representing the next counter value for that worker.
+- Run artifacts containing generated credentials are written to `test-results/student-IDR-emails.json`. This file lists the generated `email`, `password`, `runId`, `workerIndex`, `testTitle`, `testFile`, and `createdAt` timestamp for each generated account.
+
+Usage summary:
+1. Tests read and update `student-IDR-counters/email-counter-worker-<N>.txt` to reserve a unique suffix for worker `N`.
+2. The email helper writes the generated credential to `test-results/student-IDR-emails.json` for traceability and post-run analysis.
+3. Counters are kept in `test-data/` because they are small, shareable artifacts that may persist across runs.
+
+Maintenance:
+- Do not commit `test-results/*.json` files; treat them as ephemeral run artifacts.
+- Reset counters by editing the files in `student-IDR-counters/` if you need to reuse email ranges.
+- Consider adding a cleanup script to remove generated accounts from shared QA environments.
