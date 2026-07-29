@@ -1,80 +1,53 @@
 import { chromium } from '@playwright/test';
-import path from 'node:path';
-import { existsSync } from 'node:fs';
-import { extractCodeFromText } from './code-parser';
-
-export { extractCodeFromText };
 
 export interface GoogleVoiceOptions {
   googleEmail?: string;
   googlePassword?: string;
   headless?: boolean;
   timeoutMs?: number;
-  pollIntervalMs?: number;
-  /** Expected number of digits in the code. Defaults to 6. */
-  codeLength?: number;
 }
 
-const STORAGE_STATE_PATH = path.resolve(process.cwd(), 'mobile/.auth/google-voice-session.json');
-
-const THREAD_SELECTORS = [
-  'gv-thread-item',
-  '.gvThreadItem',
-  'div[gv-id="thread-item"]',
-  'div[role="listitem"]',
-];
-
-async function readLatestThreadText(page: import('@playwright/test').Page): Promise<string> {
-  for (const selector of THREAD_SELECTORS) {
-    const locator = page.locator(selector).first();
-    if (await locator.count().then((count) => count > 0).catch(() => false)) {
-      const text = await locator.innerText().catch(() => '');
-      if (text.trim()) return text;
-    }
-  }
-  return '';
+export function extractCodeFromText(text: string): string | null {
+  const match = text.match(/\b\d{4,8}\b/);
+  return match ? match[0] : null;
 }
 
 export async function fetchGoogleVoiceSmsCode(options: GoogleVoiceOptions = {}): Promise<string> {
+  const email = options.googleEmail || process.env.GV_EMAIL;
+  const password = options.googlePassword || process.env.GV_PASSWORD;
   const headless = options.headless ?? true;
-  const timeoutMs = options.timeoutMs ?? 60000;
-  const pollIntervalMs = options.pollIntervalMs ?? 3000;
+  const timeoutMs = options.timeoutMs ?? 30000;
 
-  if (!existsSync(STORAGE_STATE_PATH)) {
-    throw new Error(
-      'Google Voice session file not found. Run "npx ts-node scripts/setup-gv-session.ts" once to save a signed-in session.'
-    );
+  if (!email || !password) {
+    throw new Error('Google Voice credentials not configured. Please set GV_EMAIL and GV_PASSWORD environment variables.');
   }
 
   const browser = await chromium.launch({ headless });
-  const context = await browser.newContext({ storageState: STORAGE_STATE_PATH });
+  const context = await browser.newContext();
   const page = await context.newPage();
-  const deadline = Date.now() + timeoutMs;
 
   try {
-    await page.goto('https://voice.google.com/messages', {
-      waitUntil: 'domcontentloaded',
-      timeout: Math.min(timeoutMs, 30000),
-    });
-
-    if (page.url().includes('accounts.google.com') || page.url().includes('signin')) {
-      throw new Error(
-        'Google Voice session expired. Re-run "npx ts-node scripts/setup-gv-session.ts" to refresh the saved session.'
-      );
+    await page.goto('https://voice.google.com/messages', { waitUntil: 'domcontentloaded', timeout: timeoutMs });
+    
+    // Perform standard Google authentication if redirected
+    if (page.url().includes('accounts.google.com')) {
+      await page.fill('input[type="email"]', email);
+      await page.click('#identifierNext');
+      await page.waitForSelector('input[type="password"]', { timeout: 10000 });
+      await page.fill('input[type="password"]', password);
+      await page.click('#passwordNext');
+      await page.waitForURL((url) => url.toString().includes('voice.google.com'), { timeout: timeoutMs });
     }
 
-    while (Date.now() < deadline) {
-      const messageText = await readLatestThreadText(page);
-      const code = extractCodeFromText(messageText, options.codeLength ?? 6);
-      if (code) {
-        return code;
-      }
+    await page.waitForSelector('.gvThreadItem', { timeout: timeoutMs });
+    const messageText = await page.innerText('.gvThreadItem:first-child');
+    const code = extractCodeFromText(messageText);
 
-      await page.waitForTimeout(pollIntervalMs);
-      await page.reload({ waitUntil: 'domcontentloaded' }).catch(() => {});
+    if (!code) {
+      throw new Error(`Could not locate verification code in Google Voice message: "${messageText}"`);
     }
 
-    throw new Error('Timed out waiting for an SMS verification code in Google Voice.');
+    return code;
   } finally {
     await browser.close();
   }

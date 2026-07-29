@@ -1,0 +1,12 @@
+{
+  "version": "1.43",
+  "versionName": "1.43-qa",
+  "versionCode": "1130",
+  "environment": "qa",
+  "appPackage": "com.guaranteedrate.superapp.qa",
+  "build": "qa-local",
+  "source": "local",
+  "artifact": "app.apk",
+  "sourceFile": "/Users/jameshc/Automation/WebAutomation/test-data/mobile-app/gri/android/app.apk",
+  "publishedAt": "2026-07-29T22:13:10.854Z"
+}

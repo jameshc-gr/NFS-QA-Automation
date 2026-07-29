@@ -21,4 +21,4 @@ Use this when the target specs are already known or when you want a fast verific
 
 ## Constraints
 - Prefer a single spec and single browser first
-- Follow repository conventions in `readme.md` and `ai/agents/skills/playwright-framework-context/SKILL.md`
+- Follow repository conventions in `readme.md` and `ai/jobs/skills/playwright-framework-context/SKILL.md`

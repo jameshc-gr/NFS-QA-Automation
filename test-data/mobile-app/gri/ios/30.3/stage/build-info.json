@@ -1,0 +1,14 @@
+{
+  "version": "30.3",
+  "buildNumber": "1000",
+  "environment": "stage",
+  "bundleId": "com.guaranteedrate.superapp.stage",
+  "scheme": "GRI - Stage",
+  "configuration": "Stage",
+  "target": "simulator",
+  "artifact": "GRI Stage.app",
+  "sourceRepo": "/Users/jameshc/iOS /SuperApp-iOS-30.3",
+  "gitBranch": "release-30.3",
+  "gitCommit": "2020e3d29",
+  "builtAt": "2026-07-29T17:53:28.546Z"
+}

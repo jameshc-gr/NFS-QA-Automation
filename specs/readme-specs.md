@@ -98,9 +98,9 @@ The generator will:
 
 ## Authoring References
 
-- Skill authoring: `ai/agents/skills/readme-skills.md`
-- Prompt authoring: `ai/agents/prompts/readme-prompts.md`
-- Framework overview: `ai/agents/readme-agents.md`
+- Skill authoring: `ai/jobs/skills/readme-skills.md`
+- Prompt authoring: `ai/jobs/prompts/readme-prompts.md`
+- Framework overview: `ai/jobs/readme-agents.md`
 
 ## Related Guides
 

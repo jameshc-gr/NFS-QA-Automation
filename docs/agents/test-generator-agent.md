@@ -6,10 +6,10 @@ Generate syntactically valid, runnable Playwright TypeScript tests from JIRA tic
 
 ## Files
 
-- ai/agents/agents/test_generator/prompt.md: LLM prompt template
-- ai/agents/agents/test_generator/index.ts: Anthropic-powered generator module
-- ai/agents/agents/playwright-test-generator.agent.md: generator agent mode
-- ai/agents/prompts/PROMPT_TEMPLATE.md: prompt template for extension work
+- ai/jobs/agents/test_generator/prompt.md: LLM prompt template
+- ai/jobs/agents/test_generator/index.ts: Anthropic-powered generator module
+- ai/jobs/agents/playwright-test-generator.agent.md: generator agent mode
+- ai/jobs/prompts/PROMPT_TEMPLATE.md: prompt template for extension work
 - scripts/generate-test.js: CLI entrypoint for local generation
 
 ## Usage
@@ -31,8 +31,8 @@ node scripts/generate-test.js --jira PROJ-123 --summary "happy path" --descripti
 3. Run focused validation (`chromium` first) on generated specs.
 4. Use the healer agent for deterministic failures.
 
-See `ai/agents/readme-agents.md` for the complete framework flow chart and authoring standards.
+See `ai/jobs/readme-agents.md` for the complete framework flow chart and authoring standards.
 
 ## Next integration step
 
-Replace fallback generation in scripts/generate-test.js with a call to ai/agents/agents/test_generator/index.ts plus JIRA API ticket fetch.
+Replace fallback generation in scripts/generate-test.js with a call to ai/jobs/agents/test_generator/index.ts plus JIRA API ticket fetch.

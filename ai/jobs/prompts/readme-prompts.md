@@ -24,10 +24,10 @@ Prompts in this folder are reusable entrypoints that route requests to agents.
 
 ## Template
 
-Start from [ai/agents/prompts/PROMPT_TEMPLATE.md](ai/agents/prompts/PROMPT_TEMPLATE.md).
+Start from [ai/jobs/prompts/PROMPT_TEMPLATE.md](ai/jobs/prompts/PROMPT_TEMPLATE.md).
 
 ## Related Guides
 
-- [Root framework guide](../../readme.md)
+- [Root framework guide](../../../readme.md)
 - [AI agent framework guide](../readme-agents.md)
-- [API how-to guide](../../api/README.md)
+- [API how-to guide](../../../api/README.md)

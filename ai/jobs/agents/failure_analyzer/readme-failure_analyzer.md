@@ -20,8 +20,8 @@ Expected output
 - One narrow rerun or debug command
 
 Integration
-- Pair with `ai/agents/prompts/summarize-test-results.prompt.md`.
-- Use after focused execution from `ai/agents/prompts/run-tests.prompt.md`.
+- Pair with `ai/jobs/prompts/summarize-test-results.prompt.md`.
+- Use after focused execution from `ai/jobs/prompts/run-tests.prompt.md`.
 
 Path convention
 - Reference tests as `tests/projects/<project>/...`.

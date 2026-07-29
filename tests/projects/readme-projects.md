@@ -22,7 +22,7 @@ Use this directory to keep tests separated by project.
 - Generate tests into `tests/projects/<project>/generated/`.
 - Validate with narrow commands before running broader suites.
 
-See `ai/agents/readme-agents.md` for end-to-end flow and authoring templates.
+See `ai/jobs/readme-agents.md` for end-to-end flow and authoring templates.
 
 ## Related Guides
 

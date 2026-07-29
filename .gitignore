@@ -17,6 +17,16 @@ node_modules/
 # Local simulator bundles and macOS metadata
 .DS_Store
 test-data/mobile-app/gri/ios/*.app/
+# Versioned build artifacts (test-data/mobile-app/gri/ios/<version>/<env>/), but
+# keep build-info.json so the tested build stays identifiable.
+test-data/mobile-app/gri/ios/*/*/*.app/
+test-data/mobile-app/gri/ios/*/*/*.ipa
+test-data/mobile-app/gri/android/*.apk
+test-data/mobile-app/gri/android/*/*/*.apk
+test-data/mobile-app/gri/android/*/*/*.aab
+
+# Service account keys for Firebase App Distribution downloads
+*-service-account.json
 
 # Saved browser sessions for verification-code retrieval (Google Voice / Outlook+Okta)
 mobile/.auth/

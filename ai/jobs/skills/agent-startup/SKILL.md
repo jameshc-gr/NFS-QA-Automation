@@ -6,7 +6,7 @@ argument-hint: 'Initialize the repo context'
 
 # Agent Startup (Migration Stub)
 
-This file now points to [ai/agents/skills/playwright-framework-context/SKILL.md](../playwright-framework-context/SKILL.md).
+This file now points to [ai/jobs/skills/playwright-framework-context/SKILL.md](../playwright-framework-context/SKILL.md).
 
 Keep it only so older references can be migrated cleanly.
 

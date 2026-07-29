@@ -32,9 +32,23 @@ Current Framework Notes
 - Profile values are loaded through `tests/projects/student-loan-refi/test-setup.ts` from suffix-based env vars such as `FIRST_NAME_LK1`.
 - Specialized profiles use uppercase enum-style values for dropdowns where possible.
 - Narrow test runs are preferred before broad suite runs.
-- The authoritative customization split is `ai/agents/agents/`, `ai/agents/prompts/`, and `ai/agents/skills/`.
+- The authoritative customization split is `ai/jobs/agents/`, `ai/jobs/prompts/`, and `ai/jobs/skills/`.
 - API tests now run from `api/tests/` via the `api-tests` Playwright project.
 - The API runner loads dotenv in `playwright.config.ts`, reads collection and mapping JSON from `api/postman/<projectname>/` and `api/api-mappings/<projectname>/`, and resolves placeholders from runtime saves, Postman environment JSON, `process.env`, and `API_PROJECT` selection.
+- Mobile runs resolve the app under test from a named build in
+  `test-data/mobile-app/gri/<platform>/config.yml`, selected with
+  `MOBILE_ANDROID_BUILD` / `MOBILE_IOS_BUILD` or the config's `defaultBuild`.
+  Android sources are `local`, `firebase`, `firebase-web` and `url`; iOS sources
+  are `simulator`, `xcode`, `ipa` and `testflight`.
+- Every mobile artifact is republished to
+  `test-data/mobile-app/gri/<platform>/<version>/<environment>/` with a
+  `build-info.json`, so the build under test is identifiable from the repo alone.
+  Use `npm run build:mobile:ios` and `npm run build:mobile:android` to produce them.
+- The iOS app clone is read-only for automation. Build it with `xcodebuild`, but
+  never commit, push, or otherwise write to that repo.
+- Firebase downloads need either an App Distribution API token or the browser
+  session saved by `npm run setup:firebase-session`. Google sign-in is always
+  performed by hand and never scripted.
 
 Output Contract
 - Return a short framework snapshot with:
@@ -44,8 +58,14 @@ Output Contract
 	- One recommended prompt or agent for the task
 	- Three smallest commands/checks to run first
 
+Recent changes (2026-07-29)
+- Mobile build selection is config-driven on both platforms, with versioned,
+  per-environment artifacts and `build-info.json` provenance.
+- Added Firebase App Distribution downloads for Android, over the REST API and
+  over the web UI with Playwright for testers without API access.
+
 Recent changes (2026-06-30)
-- Confirmed all agent assets are centralized under `ai/agents/*`.
+- Confirmed all agent assets are centralized under `ai/jobs/*`.
 - Added explicit output contract to make skill responses consistent.
 - Updated guidance to align with single test root under `tests/projects`.
 
@@ -60,7 +80,8 @@ Contact
 Changelog
 - 2026-06-26: Added "Recent changes" section and migration notes.
 - 2026-06-26: Consolidated `agent-startup` guidance into this file.
-- 2026-06-30: Migrated canonical references from `.github/*` to `ai/agents/*`.
+- 2026-06-30: Migrated canonical references from `.github/*` to `ai/jobs/*`.
+- 2026-07-29: Documented config-driven mobile build selection, versioned artifacts, and Firebase downloads.
 
 Recommended next steps
 - If this repo is under Git, create a small commit and push the updates so collaborators see the migration notes.

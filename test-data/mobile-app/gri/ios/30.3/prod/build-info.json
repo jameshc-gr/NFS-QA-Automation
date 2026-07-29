@@ -1,0 +1,14 @@
+{
+  "version": "30.3",
+  "buildNumber": "1000",
+  "environment": "prod",
+  "bundleId": "com.guaranteedrate.superapp",
+  "scheme": "GRI - Release",
+  "configuration": "Release",
+  "target": "simulator",
+  "artifact": "Rate.app",
+  "sourceRepo": "/Users/jameshc/iOS /SuperApp-iOS-30.3",
+  "gitBranch": "release-30.3",
+  "gitCommit": "2020e3d29",
+  "builtAt": "2026-07-29T21:50:29.793Z"
+}

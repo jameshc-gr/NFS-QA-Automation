@@ -61,7 +61,7 @@ At runtime, the framework also appends a sequential per-worker number to every e
 
 - "Full flow (needs auth)" specs automate the pages from `/forgiveness/welcome` through `/forgiveness/assets`, but currently require a pre-authenticated session because the QA environment redirects newly created accounts to `my.gr-dev.com/dashboard`.
 - See [tests/projects/student-IDR/readme-projects.md](../../tests/projects/student-IDR/readme-projects.md) for execution commands and authentication options.
-- See [docs/student-IDR-test-execution-report-2026-07-27.md](../../docs/student-IDR-test-execution-report-2026-07-27.md) for the latest pass/fail results and Jira-ready bugs.
+- See [docs/student-IDR-test-execution-report-2026-07-27.md](../../test-results/student-IDR-test-execution-report-2026-07-27.md) for the latest pass/fail results and Jira-ready bugs.
 
 ## Generated credentials and counters
 

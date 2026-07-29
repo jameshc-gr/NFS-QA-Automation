@@ -4,7 +4,7 @@ Skills are compact, reusable operating procedures for recurring tasks.
 
 ## Naming
 
-- Folder: `ai/agents/skills/<skill-name>/`
+- Folder: `ai/jobs/skills/<skill-name>/`
 - File: `SKILL.md`
 
 ## Required Sections
@@ -26,10 +26,10 @@ Skills are compact, reusable operating procedures for recurring tasks.
 
 ## Template
 
-Use [ai/agents/skills/SKILL_TEMPLATE.md](ai/agents/skills/SKILL_TEMPLATE.md).
+Use [ai/jobs/skills/SKILL_TEMPLATE.md](ai/jobs/skills/SKILL_TEMPLATE.md).
 
 ## Related Guides
 
-- [Root framework guide](../../readme.md)
+- [Root framework guide](../../../readme.md)
 - [AI agent framework guide](../readme-agents.md)
-- [API how-to guide](../../api/README.md)
+- [API how-to guide](../../../api/README.md)

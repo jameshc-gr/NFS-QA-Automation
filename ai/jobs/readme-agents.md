@@ -51,8 +51,8 @@ flowchart TD
 ## Mobile Test Generation Workflow
 
 - Review-first mobile test case files live in `ai/tests/mobile/`.
-- Use prompt `ai/agents/prompts/generate-mobile-test-cases.prompt.md`.
-- The dedicated agent is `ai/agents/agents/mobile-test-generator.agent.md`.
+- Use prompt `ai/jobs/prompts/generate-mobile-test-cases.prompt.md`.
+- The dedicated agent is `ai/jobs/agents/mobile-test-generator.agent.md`.
 
 Two-phase execution:
 
@@ -61,7 +61,7 @@ Two-phase execution:
 
 ## How To Write A Skill
 
-Create `ai/agents/skills/<skill-name>/SKILL.md` with:
+Create `ai/jobs/skills/<skill-name>/SKILL.md` with:
 
 - YAML frontmatter: `name`, `description`, `argument-hint`
 - `When to Use`
@@ -70,21 +70,21 @@ Create `ai/agents/skills/<skill-name>/SKILL.md` with:
 - `Output Contract` (what the assistant should return)
 - `Guardrails`
 
-Use [ai/agents/skills/SKILL_TEMPLATE.md](ai/agents/skills/SKILL_TEMPLATE.md) as a starting point.
+Use [ai/jobs/skills/SKILL_TEMPLATE.md](ai/jobs/skills/SKILL_TEMPLATE.md) as a starting point.
 
 ## How To Write A Prompt
 
-Create `ai/agents/prompts/<prompt-name>.prompt.md` with:
+Create `ai/jobs/prompts/<prompt-name>.prompt.md` with:
 
 - YAML frontmatter: `name`, `description`, `argument-hint`, `agent`
 - Clear `Inputs` and `Expected Output`
 - Explicit constraints and failure behavior
 
-Use [ai/agents/prompts/PROMPT_TEMPLATE.md](ai/agents/prompts/PROMPT_TEMPLATE.md).
+Use [ai/jobs/prompts/PROMPT_TEMPLATE.md](ai/jobs/prompts/PROMPT_TEMPLATE.md).
 
 ## How To Write An Agent
 
-Create `ai/agents/agents/<agent-name>.agent.md` with:
+Create `ai/jobs/agents/<agent-name>.agent.md` with:
 
 - YAML frontmatter including tools and model
 - Mission and workflow phases
@@ -95,4 +95,4 @@ Create `ai/agents/agents/<agent-name>.agent.md` with:
 - [Root framework guide](../../readme.md)
 - [API how-to guide](../../api/README.md)
 
-Use [ai/agents/agents/AGENT_TEMPLATE.md](ai/agents/agents/AGENT_TEMPLATE.md).
+Use [ai/jobs/agents/AGENT_TEMPLATE.md](ai/jobs/agents/AGENT_TEMPLATE.md).

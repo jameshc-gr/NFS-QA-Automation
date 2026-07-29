@@ -35,8 +35,20 @@ Every test case Markdown file should include:
 
 Use `TEST_CASE_TEMPLATE.md` as the base.
 
+## Build Selection
+
+Approved specs run against whichever build is named in the platform config, not a
+fixed artifact path:
+
+- Android: `test-data/mobile-app/gri/android/config.yml` (`MOBILE_ANDROID_BUILD`)
+- iOS: `test-data/mobile-app/gri/ios/config.yml` (`MOBILE_IOS_BUILD`)
+
+State the environment a test case targets (qa, stage, prod) rather than a file
+path, so the same case can run against any published build.
+
 ## Related Guides
 
-- [Root framework guide](../../readme.md)
-- [API how-to guide](../../api/README.md)
-- [iOS simulator artifact guide](../../test-data/mobile-app/gri/ios/README.md)
+- [Root framework guide](../../../readme.md)
+- [API how-to guide](../../../api/README.md)
+- [Android build artifact guide](../../../test-data/mobile-app/gri/android/README.md)
+- [iOS build artifact guide](../../../test-data/mobile-app/gri/ios/README.md)

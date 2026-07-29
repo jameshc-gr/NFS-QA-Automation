@@ -1,41 +1,18 @@
 # You can encrypt sensitive values using: npx ts-node scripts/encrypt-config.ts encrypt "your-secret"
 # The loaded YAML will automatically decrypt any values formatted as ENC(...)
-
-# Active environment. Override at runtime with MOBILE_ENV=dev|prod
-environment: dev
-
 verification:
-  email: yopmail        # manual | yopmail | outlook
-  phone: google-voice   # manual | google-voice
+  email: manual
+  phone: manual
   phoneNumber: 616-320-0701
   provider: google-voice
 
-# Where the app's verification email actually lands, per environment.
-#   dev  -> every verification email is redirected to the shared Outlook inbox,
-#           so the message is found by the generated account address in the subject.
-#   prod -> email is delivered normally, so the generated account's own Yopmail
-#           mailbox is read (leave mailbox/address empty to use it automatically).
-verificationInbox:
-  dev:
-    provider: outlook
-    address: v3test@rate.com
-    mailbox: v3test@rate.com
-    matchSubjectByAccountEmail: true
-  prod:
-    provider: yopmail
-    address: ""
-    mailbox: ""
-    matchSubjectByAccountEmail: false
-
 googleVoice:
-  email: "ENC(e848550282e3578ebc6e35ac:e9d529605ad73ecf6960554c7bae1ec5:3a6ba226ff236ec62a37b441da8060534e3a2356b9379f39)" # or "ENC(...)"
-  password: "ENC(a018633d967870fae89031b5:bb282f4556da95aeb7481ac744957fd9:af5f61e1174af70b08)" # or "ENC(...)"
+  email: "" # or "ENC(...)"
+  password: "" # or "ENC(...)"
 
 outlook:
-  email: "ENC(e0fa8e986a435c83731a805e:9679c45f9bc609b5ea25b78fd47bbef4:b49b27f0ae96fd66d46e7062d47686a266d6ca8f9a1f8dccdee2)" # or "ENC(...)"
-  password: "ENC(7cd70a149c833069e46fb4dd:5ebf0665d0c377b267b3f06f28be1499:cd12d9fcc1920a1c87653f63f269)" # or "ENC(...)"
+  email: "" # or "ENC(...)"
+  password: "" # or "ENC(...)"
   tenantId: "common"
-  # Okta sign-in id (the AD user id, not the mailbox address).
-  oktaUsername: "jameshc"
   clientId: "" # or "ENC(...)"
   clientSecret: "" # or "ENC(...)"
