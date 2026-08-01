@@ -1,0 +1,13 @@
+{
+  "version": "1.48",
+  "versionName": "1.48-prod",
+  "versionCode": "398",
+  "environment": "prod",
+  "appPackage": "com.guaranteedrate.superapp",
+  "build": "prod",
+  "source": "firebase-web",
+  "artifact": "app.apk",
+  "firebaseWebUrl": "https://console.firebase.google.com/u/0/project/rate---prod/appdistribution/app/android:com.guaranteedrate.superapp/releases",
+  "firebaseRelease": "1.48-prod (398)",
+  "publishedAt": "2026-08-01T01:16:25.872Z"
+}

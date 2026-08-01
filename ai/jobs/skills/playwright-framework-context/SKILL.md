@@ -46,9 +46,23 @@ Current Framework Notes
   Use `npm run build:mobile:ios` and `npm run build:mobile:android` to produce them.
 - The iOS app clone is read-only for automation. Build it with `xcodebuild`, but
   never commit, push, or otherwise write to that repo.
-- Firebase downloads need either an App Distribution API token or the browser
-  session saved by `npm run setup:firebase-session`. Google sign-in is always
-  performed by hand and never scripted.
+- Firebase downloads reuse the Google browser profile saved by
+  `npm run setup:gv-session` (the same one Google Voice uses); there is no
+  separate Firebase login. Google sign-in is always performed by hand and never
+  scripted. Verify access with `npm run verify:firebase-access`.
+- Prod Android App Distribution releases are `.aab` and need Java + bundletool
+  (`android.bundletoolJar`) to become an installable universal apk; QA releases
+  are already `.apk`.
+- Mobile verification is environment-driven via `MOBILE_ENV`, resolved from
+  `environments.<env>` in `test-data/mobile-app/gri/android/config.yml`:
+  `prod` reads codes from Guerrilla Mail, `qa` reads them from the Outlook
+  mailbox `v3test@rate.com`. Yopmail is retired for create-account (reCAPTCHA).
+  `AuthPage.assertEnvironmentMatchesBuild()` fails fast on an env/build mismatch.
+- Both platforms share `test-data/mobile-app/gri/android/{login,config}.yml`
+  (`authRoot` in `mobile/src/utils/mobile-auth.ts`); the iOS `config.yml` only
+  supplies `ios.builds`.
+- Mobile specs run under WebdriverIO, not Playwright: `npx wdio run
+  mobile/wdio.conf.ts` with `MOBILE_SPECS` paths relative to `mobile/`.
 
 Output Contract
 - Return a short framework snapshot with:
@@ -57,6 +71,14 @@ Output Contract
 	- Locator and wait conventions
 	- One recommended prompt or agent for the task
 	- Three smallest commands/checks to run first
+
+Recent changes (2026-07-31)
+- Create-account verification is now environment-driven: `MOBILE_ENV=prod` reads
+  codes from Guerrilla Mail, `MOBILE_ENV=qa` from Outlook `v3test@rate.com`.
+- Implemented `scripts/download-firebase-build.ts` for the `firebase-web` source;
+  it reuses the Google Voice browser profile, so tester access is sufficient.
+- iOS/Android create-user specs verified green end to end, including SMS
+  verification and dismissing the "working with someone from Rate?" modal.
 
 Recent changes (2026-07-29)
 - Mobile build selection is config-driven on both platforms, with versioned,

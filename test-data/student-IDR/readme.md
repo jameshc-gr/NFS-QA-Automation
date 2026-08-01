@@ -24,7 +24,7 @@ Example:
 ```yaml
 FIRST_NAME: "Alex"
 FIRST_NAME_SCN-002: "Marcus"
-EMAIL_SCN-002: "marcus.older@example.test"
+EMAIL_SCN-002: "marcus.older@yopmail.com"
 ```
 
 At runtime, the framework also appends a sequential per-worker number to every email address and varies the password, so no two test runs reuse the same credentials.

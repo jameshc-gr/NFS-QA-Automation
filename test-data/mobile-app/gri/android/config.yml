@@ -1,14 +1,104 @@
 # You can encrypt sensitive values using: npx ts-node scripts/encrypt-config.ts encrypt "your-secret"
 # The loaded YAML will automatically decrypt any values formatted as ENC(...)
+# NOTE: this file is loaded for BOTH iOS and Android (see authRoot in mobile/src/utils/mobile-auth.ts).
+
+# Select with MOBILE_ENV=prod|qa (defaults to defaultEnvironment below).
+defaultEnvironment: prod
+
+android:
+  defaultBuild: prod
+  artifactRoot: test-data/mobile-app/gri/android
+  # Prod App Distribution releases are .aab, so they must be converted to a
+  # universal .apk before an emulator can install them. QA releases are .apk.
+  bundletoolJar: /opt/homebrew/opt/bundletool/libexec/bundletool-all.jar
+  firebase:
+    # Downloads reuse the saved Google browser profile (same login as Google Voice),
+    # so no service account or gcloud token is required.
+    serviceAccountKeyFile: ""
+  builds:
+    # Play Store production line. Emails go to Guerrilla Mail (MOBILE_ENV=prod).
+    prod:
+      source: firebase-web
+      environment: prod
+      appPackage: com.guaranteedrate.superapp
+      firebase:
+        # Console label; "398" (buildVersion alone) also matches.
+        release: "1.48-prod (398)"
+        webUrl: https://console.firebase.google.com/u/0/project/rate---prod/appdistribution/app/android:com.guaranteedrate.superapp/releases
+    # QA/dev line. Emails go to the Outlook mailbox (MOBILE_ENV=qa).
+    qa:
+      source: firebase-web
+      environment: qa
+      appPackage: com.guaranteedrate.superapp.qa
+      firebase:
+        release: latest
+        webUrl: https://console.firebase.google.com/u/0/project/rate---qa/appdistribution/app/android:com.guaranteedrate.superapp.qa/releases
+    # Fallback to an apk already on disk.
+    prod-local:
+      source: local
+      environment: prod
+      appPackage: com.guaranteedrate.superapp
+      appPath: test-data/mobile-app/gri/android/1.48/prod/app.apk
+    qa-local:
+      source: local
+      environment: qa
+      appPackage: com.guaranteedrate.superapp.qa
+      appPath: test-data/mobile-app/gri/android/1.43/qa/app.apk
+
+environments:
+  # Play Store / App Store builds. Signup only accepts tagged addresses, and the
+  # code lands in the Guerrilla Mail inbox.
+  prod:
+    verification:
+      email: guerrillamail
+      phone: google-voice
+    createEmail:
+      prefix: my-rateapp-auto
+      domain: sharklasers.com
+      tag: "--ra"
+
+  # QA/dev builds route all signup mail to the shared v3test@rate.com mailbox,
+  # so codes are read over Microsoft Graph instead.
+  qa:
+    verification:
+      email: outlook
+      phone: google-voice
+    createEmail:
+      prefix: v3test+auto
+      domain: rate.com
+      tag: ""
+    outlook:
+      email: v3test@rate.com
+      folder: Inbox
+
 verification:
-  email: manual
-  phone: manual
+  email: guerrillamail
+  phone: google-voice
   phoneNumber: 616-320-0701
   provider: google-voice
+  googleVoiceProfile: default
 
 googleVoice:
-  email: "" # or "ENC(...)"
-  password: "" # or "ENC(...)"
+  sessionPath: mobile/.auth/gv-session.json
+  headless: false
+  timeoutMs: 120000
+  pollIntervalMs: 5000
+  resendAttempts: 2
+  profiles:
+    default:
+      sessionPath: mobile/.auth/gv-session.json
+      phoneNumber: 616-320-0701
+      headless: false
+      timeoutMs: 120000
+      pollIntervalMs: 5000
+      resendAttempts: 2
+    # qa2:
+    #   sessionPath: mobile/.auth/gv-qa2-session.json
+    #   phoneNumber: 555-555-0100
+    #   headless: false
+    #   timeoutMs: 120000
+    #   pollIntervalMs: 5000
+    #   resendAttempts: 2
 
 outlook:
   email: "" # or "ENC(...)"

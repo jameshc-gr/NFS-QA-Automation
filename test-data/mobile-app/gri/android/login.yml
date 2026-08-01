@@ -3,6 +3,7 @@ emailDomain: yopmail.com
 password: Test123!
 loginEmail: my-rateapp-jc030@yopmail.com
 createEmailPrefix: my-rateapp-auto
+createEmailDomain: sharklasers.com
 createEmailStart: 1
 accounts:
-  createUser: 1
+  createUser: 483923

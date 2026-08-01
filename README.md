@@ -104,9 +104,34 @@ Prerequisites:
 - Android Studio with an emulator or a connected device for Android app runs.
 - Appium 3 for mobile execution.
 - For iOS runs: Xcode, plus either a checked-out app clone to build from or a prebuilt `.app`/`.ipa`.
-- For Android builds pulled from Firebase: the Android SDK build-tools (for `aapt2`), and either an App Distribution API token or a saved browser session.
+- For Android builds pulled from Firebase: the Android SDK build-tools (for `aapt2`), plus a saved browser session (see [Downloading builds without Firebase API access](#downloading-builds-without-firebase-api-access)).
+- For **prod** Android builds: Java and bundletool, because prod App Distribution releases are `.aab`. QA releases are `.apk` and need neither.
+  ```bash
+  brew install openjdk bundletool
+  export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"   # openjdk is keg-only
+  ```
+  bundletool signs the universal apk with `~/.android/debug.keystore`. If you have never run Android Studio, create it once:
+  ```bash
+  keytool -genkeypair -v -keystore ~/.android/debug.keystore -storepass android \
+    -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 \
+    -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+  ```
+  Without it bundletool emits an unsigned apk that cannot be installed.
 - For iOS later/TestFlight: a real device, plus Apple signing/provisioning configured outside the repo.
 - Install the Appium XCUITest driver before the first iOS run: `npx appium driver install xcuitest`.
+
+The Android SDK is usually not on `PATH`. Export it before Android runs, and note
+that the AVD name is the one in `~/.android/avd/*.ini`, which may differ from the
+`.avd` folder name:
+
+```bash
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
+emulator -list-avds                 # use this exact name
+emulator -avd <name> &
+adb wait-for-device
+```
 
 Install dependencies and browsers:
 
@@ -214,49 +239,36 @@ must be installed from the tester app by hand.
 
 ### Downloading builds without Firebase API access
 
-The REST API needs a role on the project. If you only have tester access, the
-`firebase-web` source drives the App Distribution page in a browser instead: if
-you can see the build, this can fetch it.
+The REST API needs an IAM role on the project. If you only have **tester**
+access (the usual case here), use the `firebase-web` source: it drives the App
+Distribution page in a browser, so if you can see the build in the console, it
+can fetch it.
 
-Google blocks scripted sign-in, so you sign in by hand once and the session is
-reused after that, exactly like the Outlook and Google Voice inboxes:
-
-```bash
-# 1. Sign in once, by hand, and save the session
-npm run setup:firebase-session
-
-# 2. Put the releases page you landed on into android.firebase.webUrl,
-#    then list what is available
-npm run download:firebase-build -- --list
-
-# 3. Download a specific build and file it under <version>/<environment>/
-npm run download:firebase-build -- --release "1.43-qa (1130)" --publish
-
-# Or let a test run fetch it
-MOBILE_ANDROID_BUILD=qa-web npm run test:mobile:android:create-account
-```
-
-The page is matched on text (`versionName (versionCode)`) rather than on
-generated class names, and the script tries a direct link, a Download button,
-then a row overflow menu. If the markup changes, `--manual` opens the page with
-your session, waits up to five minutes for you to click Download yourself, and
-still files the result correctly:
+Google blocks scripted sign-in, so the downloader reuses the **same saved
+browser profile as Google Voice** (`mobile/.auth/gv-session-user-data`). There is
+no separate Firebase login to set up — if Google Voice works, Firebase works.
 
 ```bash
-npm run download:firebase-build -- --manual --publish
+# 1. Sign in once by hand (also used for Google Voice SMS retrieval)
+npm run setup:gv-session
+
+# 2. Confirm that session can actually see both release lists
+npm run verify:firebase-access
+
+# 3. List what is available for a build defined in config.yml
+npm run download:firebase-build -- --build prod --list
+
+# 4. Let a test run fetch and install it
+npm run test:mobile:android:create-user
 ```
 
-Screenshots of what the browser saw land in `test-results/firebase-download/`.
-The session expires periodically — re-run `npm run setup:firebase-session` when
-the script reports that it was bounced to the Google sign-in page.
+`verify:firebase-access` prints the newest releases per project and saves
+screenshots to `mobile/.builds/firebase-{qa,prod}.png`. If it reports
+`NOT SIGNED IN`, re-run `npm run setup:gv-session`.
 
-Two lighter-weight alternatives worth asking your Firebase admin about:
+Releases are matched on the card header text (`versionName (versionCode)`), so
+`--release` accepts `"1.48-prod (398)"`, `1.48-prod`, or just `398`.
 
-- The **Firebase App Distribution Viewer** role (`roles/firebaseappdistro.viewer`)
-  is enough for the API-based `firebase` source — it grants read access only, so
-  it is a much smaller ask than Admin.
-- A tester invite gives you a per-release download link you can paste into a
-  `url` build, though those links expire.
 
 ### Finding the Android build under test
 
@@ -364,6 +376,35 @@ npm run test:mobile:ios:create-account:qa-testflight
 
 ## Running Tests
 
+### Mobile create-user (verified end to end)
+
+Mobile uses WebdriverIO, not Playwright — `npm test` will not run these. Spec
+paths in `MOBILE_SPECS` are relative to `mobile/`, and `wdio` needs `npx`.
+
+```bash
+# iOS simulator, PROD build -> Guerrilla Mail + Google Voice
+npm run test:mobile:ios:create-user
+
+# Android emulator, PROD 1.48 (398) pulled from Firebase -> Guerrilla Mail + Google Voice
+npm run test:mobile:android:create-user
+
+# Android, QA build -> Outlook v3test@rate.com + Google Voice
+npm run test:mobile:android:create-user:qa
+```
+
+Equivalent explicit form:
+
+```bash
+MOBILE_PLATFORM=ios MOBILE_ENV=prod MOBILE_SPECS="tests/ios/create-user.spec.ts" \
+  npx wdio run mobile/wdio.conf.ts
+```
+
+Both flows complete email verification, SMS verification, dismiss the
+"working with someone from Rate?" modal, and assert the app lands on the home
+screen.
+
+### Web suites
+
 Run the student-loan-refi suite with Chromium:
 
 ```bash
@@ -425,8 +466,9 @@ Fetch and publish Android builds before a run:
 ```bash
 npm run build:mobile:android              # qa, stage and prod from Firebase
 npm run build:mobile:android -- qa-local  # publish the checked-in apk
-npm run setup:firebase-session            # one-time, for browser downloads
-npm run download:firebase-build -- --list # what builds can be seen
+npm run setup:gv-session                  # one-time Google login (also used by Firebase)
+npm run verify:firebase-access            # confirm that session sees both projects
+npm run download:firebase-build -- --build prod --list  # what builds can be seen
 ```
 
 Run a specific Android build:
@@ -613,6 +655,90 @@ Verification codes are read from the inboxes configured in
 `verificationInbox`; refresh the saved sessions with
 `npm run setup:outlook-session` when a run reports an expired session.
 
+### Create-account verification flow
+
+Both Android and iOS read their auth/verification settings from
+`test-data/mobile-app/gri/android/login.yml` and
+`test-data/mobile-app/gri/android/config.yml`. There is no separate iOS copy, so
+editing the `android` files changes iOS runs as well.
+
+#### Environment configuration: QA vs PROD
+
+The email a verification code arrives in depends on which **build** is under
+test, so the environment must be selected before any retrieval is attempted.
+`MOBILE_ENV` picks a block from `environments` in
+`test-data/mobile-app/gri/android/config.yml` (default: `defaultEnvironment`):
+
+| | `MOBILE_ENV=prod` | `MOBILE_ENV=qa` |
+| --- | --- | --- |
+| App under test | `com.guaranteedrate.superapp` (Play Store / App Store) | `com.guaranteedrate.superapp.qa` |
+| Email channel | **Guerrilla Mail** | **Outlook** `v3test@rate.com` (Microsoft Graph) |
+| Signup address | `my-rateapp-auto<n>--ra@sharklasers.com` | `v3test+auto<n>@rate.com` |
+| SMS channel | Google Voice `616-320-0701` | Google Voice `616-320-0701` |
+
+The `--ra` tag on the prod address is required — prod signup rejects untagged
+disposable domains. It is configured per environment via `createEmail.tag`, not
+hardcoded.
+
+Yopmail is **not** used for create-account: it sits behind a site-wide reCAPTCHA
+Enterprise quota that automation cannot clear. Only the fixed *login* account
+still uses a yopmail address, and that account never needs its inbox read.
+
+Two safeguards apply this configuration before any code retrieval:
+
+- `AuthPage.assertEnvironmentMatchesBuild()` throws if a `.qa` build is running
+  under `MOBILE_ENV=prod` (or vice versa), instead of silently polling an inbox
+  that will never receive the code.
+- Every retrieval logs its source and result:
+
+  ```
+  [Verification] env=prod app=com.guaranteedrate.superapp emailSource=guerrillamail
+  [Verification] env=prod channel=email source=guerrillamail:my-rateapp-auto545271--ra
+  [Verification] SUCCESS via guerrillamail:my-rateapp-auto545271--ra — code 796754 in 54s
+  ```
+
+Check the resolved configuration without launching a device:
+
+```bash
+MOBILE_ENV=qa npx ts-node -e "const a=require('./mobile/src/utils/mobile-auth');\
+console.log(a.getVerificationConfig().verification, a.getAutomationAccount('createUser').email)"
+```
+
+QA runs additionally need Microsoft Graph credentials for the shared mailbox —
+set `OUTLOOK_CLIENT_ID`, `OUTLOOK_CLIENT_SECRET` and `OUTLOOK_TENANT_ID` (or the
+encrypted `outlook.*` keys in `config.yml`).
+
+#### Verification steps
+
+`AuthPage.completeAllVerifications` runs three ordered steps:
+
+1. Email verification — fetch the code from the environment's email provider,
+   type it into `confirm_email.field.code`, and submit.
+2. Phone number entry — type the number from `verification.phoneNumber` and
+   continue.
+3. Phone code verification — fetch the latest SMS code from Google Voice, type it
+   into the code field, and submit.
+
+On iOS the SMS screen uses the `verify_sms_number.*` accessibility ids
+(`field.code`, `button.verify`, `button.resend`) — *not* `confirm_phone.*`, which
+only covers the phone-number screen.
+
+After verification the app shows a modal — "Are you already working with someone
+from Rate?" on iOS, "Are you working with someone from Rate?" on Android. It is
+dismissed automatically, and `waitForHomeScreen()` confirms the app lands on the
+home screen before the test asserts anything.
+
+Timing rules for these steps:
+
+- Phone code retrieval polls Google Voice for up to 3 minutes.
+- Google Voice renders timestamps in the account's timezone (Eastern) while the
+  runner may be Pacific, so freshness checks cancel out whole-hour offsets. A
+  just-arrived SMS is never treated as stale.
+- Email code retrieval waits up to 1 minute and resends at most once, so a slow
+  inbox cannot block the run from reaching the SMS step.
+- The phone step never auto-resends. If no eligible SMS arrives it fails with an
+  explicit error instead of looping resend requests.
+
 ## AI Test Generation
 
 Generate a baseline runnable test from ticket data:
@@ -634,6 +760,12 @@ Mobile:
 - If a run installs the wrong build, check the log line `[mobile] using <platform> build "<name>"` and the `build-info.json` next to the published artifact.
 - If an iOS build compiles but account registration never reaches the verification prompt, code signing was skipped. Leave `xcode.codeSigning` on.
 - If a verification step times out waiting for an email, the saved mailbox session has expired. Re-run `npm run setup:outlook-session`.
-- If a Firebase download reports being bounced to the Google sign-in page, re-run `npm run setup:firebase-session`.
+- If a run looks stuck before the SMS step, check which code field the log is polling. `confirm_email.field.code` and `confirm_email.button.resend` mean the run is still on email verification and has not reached phone verification yet, so Google Voice is not the cause.
+- If the Google Voice browser opens and closes immediately, no eligible code was found in the newest message thread. Confirm the session is still valid with `npm run verify:gv-session`, which renders the inbox rather than just checking cookies.
+- `Could not locate a valid 6-digit verification code ... in Google Voice` is usually not a session problem: Google Voice renders timestamps in the account timezone (Eastern) while the runner may be Pacific. Freshness checks already cancel whole-hour offsets — do not re-run `setup:gv-session` for this.
+- Do not pipe a long WDIO run through `head`; the closed pipe kills the run. Redirect to a log file and grep it instead.
+- If a Firebase download reports being bounced to the Google sign-in page, re-run `npm run setup:gv-session` — the downloader shares that profile.
+- `element ("~...") still not displayed after 15000ms` from `typeAny` usually means a wrong accessibility id, not a timing issue: `findFirstDisplayedSelector()` silently falls back to the first candidate. `AuthPage.dumpScreenIfCandidatesMissing()` writes the page source to `mobile/.builds/<label>-screen.xml` so the real ids can be recovered.
+- `[EMAIL] Code retrieval failed: [TypeError: fetch failed]` is a network problem reaching Guerrilla Mail or Graph, not a configuration regression.
 - If `aapt2` cannot be found, set `MOBILE_AAPT2` or install the Android SDK build-tools; without it the apk still installs but is published as `unknown`.
 - Start the Android emulator in its own terminal. Launching it as a background job in a terminal that is later cleaned up will stop the emulator mid-run.

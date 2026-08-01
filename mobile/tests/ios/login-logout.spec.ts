@@ -7,6 +7,7 @@ describe('iOS simulator login and logout flow', () => {
   it('logs in and logs out', async () => {
     const auth = new AuthPage();
     const { email, password } = getAutomationAccount('login');
+    process.env.MOBILE_LOGIN_EMAIL = email;
 
     await auth.openLogin();
     await auth.login(email, password);

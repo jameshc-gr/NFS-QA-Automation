@@ -122,6 +122,12 @@ export class UserPage extends BasePage {
 
   /** Returns null when the platform exposes no readable checked state. */
   private async readCheckedState(element: any): Promise<boolean | null> {
+    // iOS exposes these as plain buttons and does not support a `checked`
+    // attribute, so skip attribute probing entirely.
+    if (this.ios) {
+      return null;
+    }
+
     const checked = await element.getAttribute('checked').catch(() => null);
     if (checked !== null && checked !== undefined) {
       return String(checked) === 'true';

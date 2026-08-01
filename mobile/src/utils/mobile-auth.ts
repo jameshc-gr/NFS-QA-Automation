@@ -12,20 +12,49 @@ interface LoginConfig {
   password: string;
   loginEmail?: string;
   createEmailPrefix?: string;
+  createEmailDomain?: string;
   createEmailStart?: number;
   accounts: Partial<Record<LoginAccountKey, number>>;
 }
 
+interface CreateEmailConfig {
+  prefix?: string;
+  domain?: string;
+  // Local-part suffix required by the target backend's signup allowlist (PROD needs "--ra").
+  tag?: string;
+}
+
+interface EnvironmentConfig {
+  verification?: Partial<RuntimeConfig['verification']>;
+  createEmail?: CreateEmailConfig;
+  outlook?: RuntimeConfig['outlook'];
+}
+
 interface RuntimeConfig {
+  defaultEnvironment?: string;
+  environments?: Record<string, EnvironmentConfig>;
   verification: {
-    email: 'manual' | 'yopmail' | 'outlook';
+    email: 'manual' | 'yopmail' | 'guerrillamail' | 'outlook';
     phone: 'manual' | 'google-voice';
     phoneNumber: string;
-    provider: string;
+    provider?: string;
+    googleVoiceProfile?: string;
   };
   googleVoice?: {
-    email?: string;
-    password?: string;
+    sessionPath?: string;
+    phoneNumber?: string;
+    headless?: boolean;
+    timeoutMs?: number;
+    pollIntervalMs?: number;
+    resendAttempts?: number;
+    profiles?: Record<string, {
+      sessionPath?: string;
+      phoneNumber?: string;
+      headless?: boolean;
+      timeoutMs?: number;
+      pollIntervalMs?: number;
+      resendAttempts?: number;
+    }>;
   };
   outlook?: {
     email?: string;
@@ -33,6 +62,7 @@ interface RuntimeConfig {
     tenantId?: string;
     clientId?: string;
     clientSecret?: string;
+    folder?: string;
   };
 }
 
@@ -54,6 +84,14 @@ const DEFAULT_RUNTIME_CONFIG: RuntimeConfig = {
     phone: 'manual',
     phoneNumber: '616-320-0701',
     provider: 'google-voice',
+    googleVoiceProfile: 'default',
+  },
+  googleVoice: {
+    sessionPath: 'mobile/.auth/gv-session.json',
+    headless: false,
+    timeoutMs: 120000,
+    pollIntervalMs: 5000,
+    resendAttempts: 2,
   },
 };
 
@@ -72,6 +110,23 @@ const authRoot = path.resolve(process.cwd(), 'test-data/mobile-app/gri/android')
 const loginConfig = loadYamlFile<LoginConfig>(path.join(authRoot, 'login.yml'), DEFAULT_LOGIN_CONFIG);
 const runtimeConfig = loadYamlFile<RuntimeConfig>(path.join(authRoot, 'config.yml'), DEFAULT_RUNTIME_CONFIG);
 
+export function getMobileEnvironment(): string {
+  return process.env.MOBILE_ENV || runtimeConfig.defaultEnvironment || 'prod';
+}
+
+function getEnvironmentConfig(): EnvironmentConfig {
+  return runtimeConfig.environments?.[getMobileEnvironment()] || {};
+}
+
+function resolveCreateEmailConfig(): Required<CreateEmailConfig> {
+  const envCreateEmail = getEnvironmentConfig().createEmail || {};
+  return {
+    prefix: envCreateEmail.prefix || loginConfig.createEmailPrefix || 'my-rateapp-auto',
+    domain: envCreateEmail.domain || loginConfig.createEmailDomain || loginConfig.emailDomain,
+    tag: envCreateEmail.tag ?? '',
+  };
+}
+
 export function formatAutomationEmail(index: number): string {
   const safeIndex = Number.isFinite(index) && index > 0 ? Math.trunc(index) : 1;
   return `${loginConfig.emailPrefix}${String(safeIndex).padStart(8, '0')}@${loginConfig.emailDomain}`;
@@ -79,8 +134,8 @@ export function formatAutomationEmail(index: number): string {
 
 export function formatCreateUserEmail(index: number): string {
   const safeIndex = Number.isFinite(index) && index > 0 ? Math.trunc(index) : 1;
-  const prefix = loginConfig.createEmailPrefix || 'my-rateapp-auto';
-  return `${prefix}${String(safeIndex).padStart(6, '0')}@${loginConfig.emailDomain}`;
+  const { prefix, domain, tag } = resolveCreateEmailConfig();
+  return `${prefix}${String(safeIndex).padStart(6, '0')}${tag}@${domain}`;
 }
 
 export function getAutomationAccount(accountKey: LoginAccountKey): { email: string; password: string } {
@@ -91,10 +146,13 @@ export function getAutomationAccount(accountKey: LoginAccountKey): { email: stri
     };
   }
 
-  const accountIndex = loginConfig.accounts[accountKey];
-  if (typeof accountIndex !== 'number') {
-    throw new Error(`Missing mobile login account configuration for ${accountKey}.`);
-  }
+  // Every create-user run needs a brand new mailbox; a static index from
+  // login.yml gets reused across runs and collides with "account already
+  // exists". Derive a fresh index from the current time instead, so each
+  // run gets a different email without hand-editing the YAML.
+  const accountIndex = process.env.MOBILE_CREATE_USER_INDEX
+    ? Number(process.env.MOBILE_CREATE_USER_INDEX)
+    : Math.floor(Date.now() / 1000) % 1000000;
 
   return {
     email: formatCreateUserEmail(accountIndex),
@@ -107,23 +165,99 @@ export function getAutomationPassword(): string {
 }
 
 export function getVerificationConfig(): RuntimeConfig {
-  return runtimeConfig;
+  const environmentConfig = getEnvironmentConfig();
+
+  return {
+    ...runtimeConfig,
+    verification: { ...runtimeConfig.verification, ...environmentConfig.verification },
+    outlook: { ...runtimeConfig.outlook, ...environmentConfig.outlook },
+  };
+}
+
+export interface ResolvedGoogleVoiceProfile {
+  name: string;
+  sessionPath: string;
+  phoneNumber: string;
+  headless: boolean;
+  timeoutMs: number;
+  pollIntervalMs: number;
+  resendAttempts: number;
+}
+
+export function resolveGoogleVoiceProfile(profileName?: string): ResolvedGoogleVoiceProfile {
+  const explicitName = profileName || process.env.MOBILE_GV_PROFILE || runtimeConfig.verification.googleVoiceProfile || 'default';
+  const rootConfig = runtimeConfig.googleVoice || {};
+  const profileConfig = rootConfig.profiles?.[explicitName];
+
+  if (rootConfig.profiles && !profileConfig) {
+    const available = Object.keys(rootConfig.profiles);
+    throw new Error(
+      `Unknown Google Voice profile "${explicitName}". Available profiles: ${available.join(', ') || '(none configured)'}`
+    );
+  }
+
+  const selected = profileConfig || rootConfig;
+  const defaultSession = explicitName === 'default'
+    ? 'mobile/.auth/gv-session.json'
+    : `mobile/.auth/gv-${explicitName}-session.json`;
+
+  return {
+    name: explicitName,
+    sessionPath: selected.sessionPath || defaultSession,
+    phoneNumber: selected.phoneNumber || runtimeConfig.verification.phoneNumber,
+    headless: selected.headless ?? (process.env.MOBILE_GV_HEADLESS ? process.env.MOBILE_GV_HEADLESS === 'true' : true),
+    timeoutMs: Number(selected.timeoutMs || 120000),
+    pollIntervalMs: Number(selected.pollIntervalMs || 5000),
+    resendAttempts: Number(selected.resendAttempts || 2),
+  };
 }
 
 export async function promptForVerificationCode(channel: 'email' | 'phone'): Promise<string> {
-  if (!process.stdin.isTTY) {
-    throw new Error(`Manual ${channel} verification required, but the terminal is not interactive.`);
-  }
+  // Create readline interface that works in both TTY and non-TTY environments
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: process.stdin.isTTY
+  });
 
-  return await new Promise<string>((resolve) => {
-    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-    const verificationHint =
-      channel === 'phone'
-        ? `phone ${runtimeConfig.verification.phoneNumber} via ${runtimeConfig.verification.provider}`
-        : 'email inbox';
-    rl.question(`Enter the ${channel} verification code from ${verificationHint} and press Enter: `, (answer) => {
+  const verificationHint =
+    channel === 'phone'
+      ? `phone ${runtimeConfig.verification.phoneNumber} via ${runtimeConfig.verification.provider}`
+      : 'email inbox';
+
+  console.log(`\n[VERIFICATION REQUIRED] Enter the ${channel} verification code from ${verificationHint}:`);
+  console.log('Waiting for input from stdin...\n');
+
+  return await new Promise<string>((resolve, reject) => {
+    const timeout = setTimeout(() => {
       rl.close();
-      resolve(answer.trim());
+      reject(new Error(`${channel} verification code input timeout (no input received within 5 minutes)`));
+    }, 300000); // 5 minute timeout for manual entry
+
+    rl.on('line', (answer) => {
+      clearTimeout(timeout);
+      rl.close();
+      const code = answer.trim();
+      if (!code) {
+        reject(new Error(`${channel} verification code cannot be empty`));
+      } else {
+        console.log(`[VERIFICATION] ${channel.toUpperCase()} code received: ${code}`);
+        resolve(code);
+      }
     });
+
+    rl.on('error', (error) => {
+      clearTimeout(timeout);
+      reject(error);
+    });
+
+    rl.on('close', () => {
+      clearTimeout(timeout);
+    });
+
+    // In TTY mode, show the prompt
+    if (process.stdin.isTTY) {
+      rl.prompt();
+    }
   });
 }

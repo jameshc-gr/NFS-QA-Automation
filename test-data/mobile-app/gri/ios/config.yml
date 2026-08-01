@@ -1,0 +1,61 @@
+# iOS PROD Configuration
+# You can encrypt sensitive values using: npx ts-node scripts/encrypt-config.ts encrypt "your-secret"
+# The loaded YAML will automatically decrypt any values formatted as ENC(...)
+
+ios:
+  defaultBuild: prod-simulator
+  artifactRoot: test-data/mobile-app/gri/ios
+  repo:
+    root: /Users/jameshc/iOS 
+    folderPrefix: SuperApp-iOS
+    projectName: SuperApp.xcodeproj
+  builds:
+    prod-simulator:
+      source: simulator
+      environment: prod
+      bundleId: com.guaranteedrate.superapp
+      appPath: test-data/mobile-app/gri/ios/30.3/prod/Rate.app
+    prod-testflight:
+      source: testflight
+      environment: prod
+      bundleId: com.guaranteedrate.superapp
+      deviceName: iPhone 17
+    qa-simulator:
+      source: simulator
+      environment: qa
+      bundleId: com.guaranteedrate.superapp.qa
+      appPath: test-data/mobile-app/gri/ios/30.3/qa/GRI QA.app
+    stage-simulator:
+      source: simulator
+      environment: stage
+      bundleId: com.guaranteedrate.superapp.stage
+      appPath: test-data/mobile-app/gri/ios/30.3/stage/GRI Stage.app
+
+verification:
+  email: guerrillamail
+  phone: google-voice
+  phoneNumber: 616-320-0701
+  provider: google-voice
+  googleVoiceProfile: default
+
+googleVoice:
+  sessionPath: mobile/.auth/gv-session.json
+  headless: false
+  timeoutMs: 120000
+  pollIntervalMs: 5000
+  resendAttempts: 2
+  profiles:
+    default:
+      sessionPath: mobile/.auth/gv-session.json
+      phoneNumber: 616-320-0701
+      headless: false
+      timeoutMs: 120000
+      pollIntervalMs: 5000
+      resendAttempts: 2
+
+outlook:
+  email: "" # or "ENC(...)"
+  password: "" # or "ENC(...)"
+  tenantId: "common"
+  clientId: "" # or "ENC(...)"
+  clientSecret: "" # or "ENC(...)"

@@ -475,7 +475,17 @@ function downloadFirebaseReleaseWithBrowser(resolved: ResolvedAndroidConfig): st
   execFileSync(
     'npx',
     ['ts-node', 'scripts/download-firebase-build.ts', '--build', resolved.name, '--result', resultPath],
-    { stdio: 'inherit', env: { ...process.env, MOBILE_ANDROID_BUILD: resolved.name } }
+    {
+      stdio: 'inherit',
+      env: {
+        ...process.env,
+        MOBILE_ANDROID_BUILD: resolved.name,
+        // wdio workers point TS_NODE_PROJECT at mobile/tsconfig.json, which does not
+        // cover scripts/; type-checking the helper there fails on ts-node's own preamble.
+        TS_NODE_PROJECT: path.resolve(process.cwd(), 'tsconfig.json'),
+        TS_NODE_TRANSPILE_ONLY: 'true',
+      },
+    }
   );
 
   if (!existsSync(resultPath)) {
