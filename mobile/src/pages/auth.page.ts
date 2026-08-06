@@ -3,10 +3,18 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 
 import { BasePage } from './base.page';
 import { getVerificationCode } from '../utils/verification-service';
-import { getVerificationConfig, getMobileEnvironment, promptForVerificationCode, resolveGoogleVoiceProfile } from '../utils/mobile-auth';
+import {
+  expectedEmailVerificationProvider,
+  type EmailVerificationProvider,
+  getVerificationConfig,
+  getMobileEnvironment,
+  promptForVerificationCode,
+  resolveGoogleVoiceProfile
+} from '../utils/mobile-auth';
 
 export class AuthPage extends BasePage {
   private readonly verificationConfig = getVerificationConfig();
+  private buildEmailProviderOverride: EmailVerificationProvider | null = null;
   private readonly loginTab = this.byText('Log in');
   private readonly createAccountTab = this.byText('Create account');
   private readonly emailCandidates = this.platform === 'ios'
@@ -208,6 +216,7 @@ export class AuthPage extends BasePage {
   // so a mismatch here silently polls an inbox that will never receive the code.
   private assertEnvironmentMatchesBuild(): void {
     const environment = getMobileEnvironment();
+    const expectedEmailProvider = expectedEmailVerificationProvider(environment);
     const capabilities = (browser.capabilities || {}) as Record<string, string>;
     const appId =
       capabilities['appium:appPackage'] ||
@@ -223,20 +232,26 @@ export class AuthPage extends BasePage {
       return;
     }
 
-    const isQaBuild = appId.endsWith('.qa');
-    const expectsQaBuild = environment !== 'prod';
+    const appIdLower = appId.toLowerCase();
+    const isNonProdBuild = appIdLower.endsWith('.qa') || appIdLower.endsWith('.stage') || appIdLower.endsWith('.dev');
+    const buildEnvironment = isNonProdBuild ? 'qa' : 'prod';
+    const buildExpectedEmailProvider = expectedEmailVerificationProvider(buildEnvironment);
+    this.buildEmailProviderOverride = buildExpectedEmailProvider;
 
     console.log(
-      `[Verification] env=${environment} app=${appId} emailSource=${this.verificationConfig.verification.email}`
+      `[Verification] env=${environment} app=${appId} emailSource=${this.verificationConfig.verification.email} expectedEmailSource=${expectedEmailProvider} buildExpectedEmailSource=${buildExpectedEmailProvider}`
     );
 
-    if (isQaBuild !== expectsQaBuild) {
-      throw new Error(
-        `Environment/build mismatch: MOBILE_ENV=${environment} expects a ${expectsQaBuild ? 'QA' : 'production'} build, ` +
-        `but the app under test is "${appId}". Verification codes would be sent to a different inbox. ` +
-        `Run with MOBILE_ENV=${isQaBuild ? 'qa' : 'prod'} or install the matching build.`
+    if (buildExpectedEmailProvider !== expectedEmailProvider) {
+      console.warn(
+        `[Verification] MOBILE_ENV=${environment} does not match detected build (${buildEnvironment}). ` +
+        `Email verification will use ${buildExpectedEmailProvider} for this run.`
       );
     }
+  }
+
+  private getEffectiveEmailProvider(): EmailVerificationProvider {
+    return this.buildEmailProviderOverride || (this.verificationConfig.verification.email as EmailVerificationProvider);
   }
 
   async dismissLoanOfficerModalIfPresent(): Promise<void> {
@@ -518,12 +533,12 @@ export class AuthPage extends BasePage {
       try {
         const provider = channel === 'phone'
           ? this.verificationConfig.verification.phone
-          : this.verificationConfig.verification.email;
+          : this.getEffectiveEmailProvider();
         if (provider === 'manual') {
           return await promptForVerificationCode(channel);
         }
 
-        if (provider === 'yopmail' || provider === 'guerrillamail') {
+        if (provider === 'guerrillamail') {
           const mailbox = this.extractMailboxFromAccountEmail();
           return await getVerificationCode(channel, {
             provider,

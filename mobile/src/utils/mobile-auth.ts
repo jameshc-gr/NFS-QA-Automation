@@ -66,6 +66,8 @@ interface RuntimeConfig {
   };
 }
 
+export type EmailVerificationProvider = 'guerrillamail' | 'outlook';
+
 const DEFAULT_LOGIN_CONFIG: LoginConfig = {
   emailPrefix: 'my-rateapp-automation-jc',
   emailDomain: 'yopmail.com',
@@ -112,6 +114,10 @@ const runtimeConfig = loadYamlFile<RuntimeConfig>(path.join(authRoot, 'config.ym
 
 export function getMobileEnvironment(): string {
   return process.env.MOBILE_ENV || runtimeConfig.defaultEnvironment || 'prod';
+}
+
+export function expectedEmailVerificationProvider(environment = getMobileEnvironment()): EmailVerificationProvider {
+  return String(environment).toLowerCase() === 'prod' ? 'guerrillamail' : 'outlook';
 }
 
 function getEnvironmentConfig(): EnvironmentConfig {
@@ -199,10 +205,23 @@ export function getAutomationPassword(): string {
 
 export function getVerificationConfig(): RuntimeConfig {
   const environmentConfig = getEnvironmentConfig();
+  const environment = getMobileEnvironment();
+  const expectedEmailProvider = expectedEmailVerificationProvider(environment);
+  const mergedVerification = { ...runtimeConfig.verification, ...environmentConfig.verification };
+
+  if (mergedVerification.email !== expectedEmailProvider) {
+    console.warn(
+      `[Verification] Overriding email provider to ${expectedEmailProvider} for MOBILE_ENV=${environment} ` +
+      `(configured: ${mergedVerification.email || 'unset'}).`
+    );
+  }
 
   return {
     ...runtimeConfig,
-    verification: { ...runtimeConfig.verification, ...environmentConfig.verification },
+    verification: {
+      ...mergedVerification,
+      email: expectedEmailProvider,
+    },
     outlook: { ...runtimeConfig.outlook, ...environmentConfig.outlook },
   };
 }
