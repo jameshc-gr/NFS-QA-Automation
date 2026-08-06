@@ -138,6 +138,35 @@ export function formatCreateUserEmail(index: number): string {
   return `${prefix}${String(safeIndex).padStart(6, '0')}${tag}@${domain}`;
 }
 
+function assertCreateUserEmailPolicy(environment: string, email: string): void {
+  const normalizedEnv = (environment || '').toLowerCase();
+  const normalizedEmail = String(email || '').toLowerCase();
+  const domain = normalizedEmail.split('@')[1] || '';
+  const hasRateTag = normalizedEmail.includes('--ra@');
+
+  if (normalizedEnv === 'prod') {
+    if (!hasRateTag) {
+      throw new Error(
+        `Create-user email policy violation: production runs require the --ra-tagged local part. Received "${email}".`
+      );
+    }
+
+    if (domain === 'yopmail.com') {
+      throw new Error(
+        `Create-user email policy violation: yopmail.com is restricted to non-prod environments. `
+          + `Use the prod create-email channel with --ra tagging instead.`
+      );
+    }
+  }
+
+  if (normalizedEnv !== 'prod' && hasRateTag) {
+    throw new Error(
+      `Create-user email policy violation: --ra tagging is reserved for production builds. `
+        + `Received "${email}" under MOBILE_ENV=${environment}.`
+    );
+  }
+}
+
 export function getAutomationAccount(accountKey: LoginAccountKey): { email: string; password: string } {
   if (accountKey === 'login') {
     return {
@@ -154,8 +183,12 @@ export function getAutomationAccount(accountKey: LoginAccountKey): { email: stri
     ? Number(process.env.MOBILE_CREATE_USER_INDEX)
     : Math.floor(Date.now() / 1000) % 1000000;
 
+  const environment = getMobileEnvironment();
+  const email = formatCreateUserEmail(accountIndex);
+  assertCreateUserEmailPolicy(environment, email);
+
   return {
-    email: formatCreateUserEmail(accountIndex),
+    email,
     password: loginConfig.password,
   };
 }
