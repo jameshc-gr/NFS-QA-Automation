@@ -1,0 +1,51 @@
+Test Case ID,Test Name,API Endpoint,HTTP Method,Purpose,Expected Status,Test Data Required,Verification Type,Mobile UI Impact,Priority,Category
+API-001,Fetch Okta Token,POST /api/oauth/token,POST,Authenticate and retrieve access token,200,client_id|client_secret,Contract,Sets accessToken for subsequent requests,Critical,Authentication
+API-002,Health Check Info,GET /actuator/info,GET,Verify API service info and version,200,None,Smoke,Displays in app diagnostics/settings,High,Health Check
+API-003,Health Check Status,GET /actuator/health,GET,Verify API is healthy and responsive,200,None,Smoke,Confirms app can connect to backend,Critical,Health Check
+API-004,Get User Profile,GET /api/users/{userId},GET,Retrieve authenticated user profile data,200,userId|accessToken|tenantId,Contract,Displays in user account/profile screen,High,User Data
+API-005,Get User Accounts,GET /api/users/{userId}/accounts,GET,List all accounts for authenticated user,200,userId|accessToken|tenantId,Contract,Populates accounts list in mobile app,High,User Data
+API-006,Get Account Details,GET /api/accounts/{accountId},GET,Retrieve specific account information,200,accountId|accessToken|tenantId,Contract,Shows account details screen,High,Account Data
+API-007,Get Account Balance,GET /api/accounts/{accountId}/balance,GET,Retrieve current account balance,200,accountId|accessToken|tenantId,Contract,Updates balance display in UI,High,Account Data
+API-008,Get Account Transactions,GET /api/accounts/{accountId}/transactions,GET,Retrieve transaction history for account,200,accountId|accessToken|tenantId|limit,Performance,Populates transaction list view,High,Transaction Data
+API-009,Apply Loan,POST /api/loans/apply,POST,Submit new loan application,201,applicationData|accessToken|tenantId,Contract,Shows confirmation screen|redirects to next step,Critical,Loan Application
+API-010,Get Loan Status,GET /api/loans/{loanId}/status,GET,Check current loan application status,200,loanId|accessToken|tenantId,Contract,Updates application status view,High,Loan Status
+API-011,Upload Document,POST /api/documents/upload,POST,Upload document for application,201,document|documentType|accessToken,Contract,Shows upload success|displays document in list,High,Document Upload
+API-012,Get Documents,GET /api/documents/{applicationId},GET,Retrieve uploaded documents for application,200,applicationId|accessToken|tenantId,Contract,Lists documents in application screen,High,Document Management
+API-013,Update Profile,PUT /api/users/{userId},PUT,Update user profile information,200,userId|userData|accessToken,Contract,Reflects changes in profile screen,Medium,User Updates
+API-014,Verify Email,POST /api/users/{userId}/verify-email,POST,Send email verification code,200,userId|email|accessToken,Contract,Shows verification code input screen,High,Email Verification
+API-015,Confirm Email,POST /api/users/{userId}/confirm-email,POST,Confirm email with verification code,200,userId|verificationCode|accessToken,Contract,Unlocks app features|updates profile,High,Email Verification
+API-016,Set Security Questions,POST /api/security/questions,POST,Store security questions for account recovery,201,questions|answers|accessToken,Contract,Shows confirmation message,Medium,Account Security
+API-017,Enable Two-Factor Auth,POST /api/security/2fa/enable,POST,Enable two-factor authentication,201,accessToken|tenantId,Contract,Shows 2FA setup screen|requires code entry,High,Account Security
+API-018,Verify 2FA Code,POST /api/security/2fa/verify,POST,Validate two-factor authentication code,200,userId|2faCode|accessToken,Contract,Grants access to protected screens,High,Account Security
+API-019,Get Exchange Rates,GET /api/exchange-rates,GET,Retrieve current currency exchange rates,200,fromCurrency|toCurrency,Performance,Updates currency conversion display,Medium,Financial Data
+API-020,Calculate Loan Payment,POST /api/loans/calculate-payment,POST,Calculate monthly payment for loan parameters,200,loanAmount|term|rate|accessToken,Contract,Displays in loan calculator|shows in app UI,High,Loan Calculation
+API-021,Get Loan Offers,GET /api/loans/offers,GET,Retrieve available loan products and offers,200,accessToken|tenantId|criteria,Contract,Populates offers list/carousel,High,Loan Offers
+API-022,Accept Loan Offer,POST /api/loans/offers/{offerId}/accept,POST,Accept a specific loan offer,201,offerId|accessToken,Contract,Proceeds to next application step,Critical,Loan Application
+API-023,Get Application Status,GET /api/applications/{applicationId},GET,Get full application status and details,200,applicationId|accessToken,Contract,Shows application progress screen,High,Application Status
+API-024,Submit Application,POST /api/applications/{applicationId}/submit,POST,Submit completed application for processing,202,applicationId|accessToken,Contract,Shows confirmation|redirects to status screen,Critical,Application Submission
+API-025,Get Notifications,GET /api/users/{userId}/notifications,GET,Retrieve user notifications and messages,200,userId|accessToken,Contract,Populates notification center,High,Notifications
+API-026,Mark Notification Read,POST /api/notifications/{notificationId}/read,POST,Mark notification as read,200,notificationId|accessToken,Contract,Updates notification badge count,Medium,Notifications
+API-027,Get FAQ/Help Articles,GET /api/help/articles,GET,Retrieve FAQ and help content,200,None,Contract,Populates help/FAQ screen,Low,Help & Support
+API-028,Get Contact Info,GET /api/company/contact,GET,Retrieve company contact information,200,None,Contract,Displays in About/Contact screen,Low,Company Info
+API-029,Get Terms & Conditions,GET /api/legal/terms,GET,Retrieve terms and conditions,200,None,Contract,Displays in T&C screen|required for signup,Medium,Legal
+API-030,Get Privacy Policy,GET /api/legal/privacy,GET,Retrieve privacy policy,200,None,Contract,Displays in privacy screen,Medium,Legal
+API-031,Logout User,POST /api/auth/logout,POST,Clear authentication and end session,200,accessToken|userId,Smoke,Clears saved token|returns to login,High,Authentication
+API-032,Refresh Token,POST /api/auth/refresh-token,POST,Refresh expired access token,200,refreshToken|userId,Contract,Updates token silently|extends session,High,Authentication
+API-033,Reset Password,POST /api/auth/reset-password,POST,Initiate password reset process,200,email,Contract,Shows reset code input screen,High,Account Security
+API-034,Confirm Password Reset,POST /api/auth/confirm-reset,POST,Complete password reset with code,200,resetCode|newPassword,Contract,Allows login with new password,High,Account Security
+API-035,Get Interest Rates,GET /api/rates/interest,GET,Retrieve current interest rates,200,loanType|term,Performance,Updates rate display in calculator,Medium,Financial Data
+API-036,Get Loan Comparison,GET /api/loans/compare,GET,Compare multiple loan scenarios,200,scenarios|accessToken,Performance,Displays comparison table in UI,Medium,Loan Planning
+API-037,Save Loan Draft,POST /api/loans/draft,POST,Save application as draft,201,applicationData|accessToken,Contract,Shows draft saved confirmation,Medium,Application Draft
+API-038,Get Saved Drafts,GET /api/users/{userId}/drafts,GET,Retrieve saved application drafts,200,userId|accessToken,Contract,Lists drafts for user to resume,Medium,Application Draft
+API-039,Delete Draft,DELETE /api/loans/draft/{draftId},DELETE,Delete saved draft,204,draftId|accessToken,Contract,Removes from drafts list,Medium,Application Draft
+API-040,Get Co-Applicant Info,GET /api/applications/{applicationId}/co-applicant,GET,Retrieve co-applicant details,200,applicationId|accessToken,Contract,Displays co-applicant in application,Medium,Application Data
+API-041,Add Co-Applicant,POST /api/applications/{applicationId}/co-applicant,POST,Add co-applicant to application,201,co-applicantData|applicationId|accessToken,Contract,Updates applicants display,High,Application Management
+API-042,Update Co-Applicant,PUT /api/applications/{applicationId}/co-applicant,PUT,Update co-applicant information,200,co-applicantData|applicationId|accessToken,Contract,Reflects changes in co-applicant screen,Medium,Application Management
+API-043,Remove Co-Applicant,DELETE /api/applications/{applicationId}/co-applicant,DELETE,Remove co-applicant from application,204,applicationId|accessToken,Contract,Updates applicants display,Medium,Application Management
+API-044,Get Employment Info,GET /api/users/{userId}/employment,GET,Retrieve employment information,200,userId|accessToken,Contract,Shows in employment details screen,High,User Data
+API-045,Update Employment,PUT /api/users/{userId}/employment,PUT,Update employment information,200,userId|employmentData|accessToken,Contract,Reflects in profile/application,Medium,User Updates
+API-046,Get Income Documentation,GET /api/documents/income,GET,Retrieve income verification documents,200,accessToken|userId,Contract,Lists income docs in upload screen,High,Document Management
+API-047,Verify Income,POST /api/income/verify,POST,Verify and validate income information,200,incomeData|accessToken,Contract,Shows verification status in UI,High,Income Verification
+API-048,Get Property Info,GET /api/applications/{applicationId}/property,GET,Retrieve property information for application,200,applicationId|accessToken,Contract,Displays property details screen,High,Application Data
+API-049,Update Property Info,PUT /api/applications/{applicationId}/property,PUT,Update property information,200,propertyData|applicationId|accessToken,Contract,Reflects changes in property screen,Medium,Application Management
+API-050,Get Approval Status,GET /api/applications/{applicationId}/approval,GET,Check approval status of application,200,applicationId|accessToken,Contract,Shows approval decision screen,Critical,Application Status

@@ -1,7 +1,7 @@
 {
   "info": {
-    "_postman_id": "165acf3e-1e00-47dc-b4d4-c1ea8cb43ae4",
-    "name": "Gateway-API-Latest-June-26-2026",
+    "_postman_id": "0718fc52-50ca-491a-9a73-82702888ac45",
+    "name": "Gateway-API-Latest-Jul-29-2026",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "39258899"
   },
@@ -462,7 +462,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": " mutation {\n  verifyCreateUser(user: {\n     firstName : \"Andy\",\n    middleName : \"\",\n    lastName: \"America\",\n    emailAddress: \"sa-qa-nov10+q@yopmail.com\", \n    password:\"NewGR@123\"\n    last4ssn:\"3335\"\n    isAgent:false\n }) {\n    token\n    verified\n  }\n}\n\n",
+            "query": " mutation {\n  verifyCreateUser(user: {\n     firstName : \"Andy\",\n    middleName : \"\",\n    lastName: \"America\",\n    emailAddress: \"sa-qa-nov10+q@yopmail.com\", \n    password:\"NewGR@123\"\n    last4ssn:\"3335\"\n    isAgent:false\n    agentInviteId:\"3fa85f64-5717-4562-b3fc-2c963f66afa6\"\n }) {\n    token\n    verified\n  }\n}\n\n",
             "variables": ""
           }
         },
@@ -486,7 +486,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "eyJraWQiOiJ0OXJZSFdWbzJ3bUhVTjZndlNxN2ZSdnhDeFpTOXl5V2NnT1dZMnFjSmVJIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULlhDMk9BU2hnOE81clU3MHBkbFljejB1ZEItdkVLVHRYeE03VTI1aWo0TDAiLCJpc3MiOiJodHRwczovL2xvZ2luLmdyLWRldi5jb20vb2F1dGgyL2F1czFsc2s1c3QxMDBHdGVOMWQ3IiwiYXVkIjoiYXBpOi8vYm9ycm93ZXIiLCJpYXQiOjE2NzQ3NDUzNDIsImV4cCI6MTY3NDc0ODk0MiwiY2lkIjoiMG9hNmJtZDdieEJ2VVJaWHIxZDciLCJ1aWQiOiIwMHU2c3ZhMXUxQUptUEVQbDFkNyIsInNjcCI6WyJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNjc0NzQ1MjczLCJzdWIiOiJzdXBlcmFwcC10ZXN0LTAxQHlvcG1haWwuY29tIiwiYm9ycm93ZXJfaWQiOiJjZWM3YzJjYi0wZGZkLTRlYTUtYWNjMi0wNWVmODg2OTUwY2QifQ.NOUjyGJFyNf_Uu6jMVdK3340jKvf-lo72jkGE4B84NSxSK6HRlcpzf2qdtIFr0qYCk_6hXBmiSHPf2eb8Nt2EvjwmG_dimzZrcH9AfdoATWIUjXlL5-yJD9WFBWKbvHMwgxkPBTCC8SSVgIt5XGg8KTKv-sLbjr_iscxL2BQ0ZkrtxOFRaTyEQTOdRIjREea5usH-2SJHQuIQrEdn0L7bIX5DjQXYYq5jC-HguhvwYKS-1jVY6vNxgCIoRJWkzlBDn1xHg9YK1JDMPOacJnYFgIPpw1vN4wQfM0-UtMEHc-X4DvQ9z0a8x7xEoKIsCf4AAO-JXUzrBGHJGE2Bp2IqQ",
+              "value": "{{auth_secret_08wc}}",
               "type": "string"
             }
           ]
@@ -769,7 +769,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "eyJraWQiOiJzN1Vqa3NYN0lMLTZ2QmVxSGE0blVhRmVtNE5RN0g3MFFNR3llSGpHNnRJIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULkpQeWhkWXVjbXIta0QwOXd3ZFRCa2RwV2xfbGpEaVVndmJreWpJSHBac3ciLCJpc3MiOiJodHRwczovL2xvZ2luLmdyLWRldi5jb20vb2F1dGgyL2F1czFsc2s1c3QxMDBHdGVOMWQ3IiwiYXVkIjoiYXBpOi8vYm9ycm93ZXIiLCJpYXQiOjE3MDAyMDI2MDksImV4cCI6MTcwMDIwNjIwOSwiY2lkIjoiMG9hNmJtZDdieEJ2VVJaWHIxZDciLCJ1aWQiOiIwMHU1bW15dTBsR0RBVkZneTFkNyIsInNjcCI6WyJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNzAwMjAyNjA4LCJzdWIiOiJteWFjY291bnQtc2VydmljaW5nMjFkZXZAeW9wbWFpbC5jb20iLCJib3Jyb3dlcl9pZCI6IjYzOWZlNDlmLTU1MTgtNGMxMS1hMjZhLTVmZTVjNjBmMmZhNCJ9.g3mYrfUNBencvZxlWbpZww5zH6B1kbNrHCnTIE1n2x75zwYo0fZKBkJxDfi0uZdPc_upCxTiRkHQbSaBKbAwfS6XSf8M12Popdwu6S3TnfHl1AVm7ADoVfLjc4b_5YjYnnppAvSdNdONI_7lNU6KRn2TdPJPcS-JFbZkcjNhiNOz8UOztQMx35uiKLjDd8UmjffX_NyvLRrIWPZrHVTiBktlhBizUHBm99UWoEipYOLGLecN-U6uP0I6SOXa8LCn_k_Dnj7iAhMchaHQiRSEbfli9f9OC5l9nKlzcb23Qy3WZHR15NtZgvPuq_75RiWAEeBzgxySQBazUuwwZDWZsA",
+              "value": "{{auth_secret_1d1y}}",
               "type": "string"
             }
           ]
@@ -816,7 +816,8 @@
               ""
             ],
             "type": "text/javascript",
-            "packages": {}
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -835,7 +836,7 @@
         "header": [
           {
             "key": "X-GR-FSP-TENANT-ID",
-            "value": "{{tenantId}}",
+            "value": "gri",
             "type": "default"
           },
           {
@@ -847,7 +848,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{\n  fetchBorrower {\n    borrowerGuid\n    isFirstTimeHomeBuyer\n    isAgent\n    agent {\n      id\n      attributes {\n        firstName\n        lastName\n        professionalEmail\n        title\n        brokerageName\n        photoUrl\n      }\n    }\n    borrowerVersion\n    loginCount\n    name {\n      first\n      middle\n      last\n    }\n    postalAddress {\n      street\n      city\n      state\n      zip\n    }\n    phoneNumbers {\n      mobile\n      home\n    }\n    emailAddressCollection {\n      primary\n    }\n    contact {\n      name\n      id\n      title\n      subTitle\n      email\n      phone\n      mobile\n      avatarUrl\n      fax\n      displayRates\n      bio\n      schedulerLink\n      languages\n      address {\n        region\n        city\n      }\n    }\n    attributes {\n      rateAppUser\n    }\n    lastLoginDate\n\n    membershipDetails {\n      membershipDate\n      badges {\n        badgeTitle\n        badgeDate\n        badgeImage\n      }\n    }\n    isFirstTimeHomeBuyer\n    appTrackingConsentData {\n      advertisementId\n      allowTracking\n      deviceType\n    }\n  }\n}\n",
+            "query": "{\n  fetchBorrower {\n    borrowerGuid\n    isFirstTimeHomeBuyer\n    isAgent\n    agent {\n      id\n      attributes {\n        firstName\n        lastName\n        professionalEmail\n        title\n        brokerageName\n        photoUrl\n      }\n    }\n    isRateHomesLeadCreated\n    borrowerVersion\n    loginCount\n    name {\n      first\n      middle\n      last\n    }\n    postalAddress {\n      street\n      city\n      state\n      zip\n    }\n    phoneNumbers {\n      mobile\n      home\n    }\n    emailAddressCollection {\n      primary\n    }\n    contact {\n      name\n      id\n      title\n      subTitle\n      email\n      phone\n      mobile\n      avatarUrl\n      fax\n      displayRates\n      bio\n      schedulerLink\n      languages\n      address {\n        region\n        city\n      }\n    }\n    attributes {\n      rateAppUser\n    }\n    lastLoginDate\n\n    membershipDetails {\n      membershipDate\n      badges {\n        badgeTitle\n        badgeDate\n        badgeImage\n      }\n    }\n    isFirstTimeHomeBuyer\n    appTrackingConsentData {\n      advertisementId\n      allowTracking\n      deviceType\n    }\n  }\n}\n",
             "variables": ""
           }
         },
@@ -1384,7 +1385,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "eyJraWQiOiJDVW9FSjVBaU9iSHhaWXJjWlRRMWpoT3NScVM3SmxXVTE0eHVYaEVYdWlNIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULkRsVVpHUGxZWGlZTEU2aTQ3N041LTBHWlJ1OEwxRHhEdGQyQWZaa2g1OFUiLCJpc3MiOiJodHRwczovL2xvZ2luLmdyLWRldi5jb20vb2F1dGgyL2F1czFsc2s1c3QxMDBHdGVOMWQ3IiwiYXVkIjoiYXBpOi8vYm9ycm93ZXIiLCJpYXQiOjE3MDU2MDE4MTgsImV4cCI6MTcwNTYwNTQxOCwiY2lkIjoiMG9hNmJtZDdieEJ2VVJaWHIxZDciLCJ1aWQiOiIwMHVjZWg2Njh4aHJZMXVlcDFkNyIsInNjcCI6WyJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNzA1NjAxODE4LCJzdWIiOiJzYS1kZXYtamFuMTgtMDFAeW9wbWFpbC5jb20iLCJib3Jyb3dlcl9pZCI6ImI5OTdiN2Y1LWFhNTAtNGViMS1iOThmLWZmZDY1N2UwMmE4ZSJ9.GGGZf676mq3L_z8B4SbKJyc84QQxx_30WHF7vQ_gockW9ZxbX6COjYLbQTyy10nMrtq1fV38D0xkyxywU6kHeDD8JuzSNt0SiTgiaWDRaafMGucFaenEa5OMmXK_jRxgWUX-yS12clxXMVZyYlbTOHT1C9J9kWnb6Bd_2E7lvifpxUNMNWmp-H61e8Dd3FcIVmOXzmZDE3O6uVjeLn4xOADFH-Vggfx5uuDxVqOtpWyvfoS-FH3DQ8nGoYDQ9OhMgYMMpze0YLD9qQMkVYRVng2T62DA0jwxZymdyBpp473TYulbj9YGPm-VWpCXDLPE7Th6GeClrBHFjyKqXCsHfw",
+              "value": "{{auth_secret_0jaj}}",
               "type": "string"
             }
           ]
@@ -1438,46 +1439,25 @@
           "listen": "test",
           "script": {
             "exec": [
-              "function extractAccessToken(payload) {",
-              "  if (!payload || typeof payload !== 'object') {",
-              "    return null;",
-              "  }",
-              "",
-              "  if (typeof payload.accessToken === 'string' && payload.accessToken.trim()) {",
-              "    return payload.accessToken;",
-              "  }",
-              "",
-              "  for (const value of Object.values(payload)) {",
-              "    const token = extractAccessToken(value);",
-              "    if (token) {",
-              "      return token;",
-              "    }",
-              "  }",
-              "",
-              "  return null;",
-              "}",
-              "",
-              "const responseJson = pm.response.json();",
-              "const accessToken = extractAccessToken(responseJson);",
-              "",
               "pm.test(\"Status code is 200\", function () {",
-              "  pm.response.to.have.status(200);",
+              "    pm.response.to.have.status(200);",
               "});",
               "",
-              "pm.test(\"Response time is less than 3000ms\", function () {",
-              "  pm.expect(pm.response.responseTime).to.be.below(3000);",
+              "pm.test(\"Response time is less than 200ms\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(200);",
               "});",
               "",
+              "var data = JSON.parse(responseBody);",
               "pm.test(\"Has status == SUCCESS\", function () {",
-              "  pm.expect(responseJson.status).to.eql(\"SUCCESS\");",
+              "    pm.expect(data.status).to.eql(\"SUCCESS\");",
               "});",
               "",
-              "pm.test(\"Returns an access token\", function () {",
-              "  pm.expect(accessToken).to.be.a(\"string\").and.not.empty;",
+              "pm.test(\"Has accessToken != NULL\", function () {",
+              "    pm.expect(data.accessToken).to.not.eql(null);",
               "});",
               "",
-              "pm.collectionVariables.set(\"accessToken\", accessToken);",
-              "pm.globals.set(\"accessToken\", accessToken);"
+              "postman.setGlobalVariable(\"accessToken\", data.accessToken);",
+              ""
             ],
             "type": "text/javascript",
             "packages": {}
@@ -1490,7 +1470,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "20111Sw_lsWrwbjhdK74IaZay0mRk5CcU7d7wD5gPEEtjEAWB9DtrDq",
+              "value": "{{auth_secret_0wt4}}",
               "type": "string"
             }
           ]
@@ -1870,7 +1850,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "eyJraWQiOiJ0OXJZSFdWbzJ3bUhVTjZndlNxN2ZSdnhDeFpTOXl5V2NnT1dZMnFjSmVJIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULlRrWHVzVHhvVnBmUDBWY0o5bE9hVGhyTlIxOU1zRGxqTE51WUtNa1ZvLWciLCJpc3MiOiJodHRwczovL2xvZ2luLmdyLWRldi5jb20vb2F1dGgyL2F1czFsc2s1c3QxMDBHdGVOMWQ3IiwiYXVkIjoiYXBpOi8vYm9ycm93ZXIiLCJpYXQiOjE2NzUxODQxMTEsImV4cCI6MTY3NTE4NzcxMSwiY2lkIjoiMG9hNmJtZDdieEJ2VVJaWHIxZDciLCJ1aWQiOiIwMHU2dGoxNXA4ZDlwcDVOVTFkNyIsInNjcCI6WyJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNjc1MTg0MDgzLCJzdWIiOiJzdXBlcmFwcC10ZXN0LTA1QHlvcG1haWwuY29tIiwiYm9ycm93ZXJfaWQiOiI3NDQ0ZDA5Mi03MTQzLTRjOTQtOTg4OC0xMWNjMjdkNThhYjcifQ.efkuk3acQkoUS-c7Lt9gOOdI9q_7irhHUZ5HdQCxX20ft-BkILu6QDGbLY6PUeEG72FE3IQgCIf7pAOFqUs1EONcRBf0QtjyVx7uLo-JSOi3cw9muN2-gpD1CPFhZDAZbNlRFxK9YNbsriKvAZe8mu7r08P2qHIQSUK8dfad5qF4Dyi3nqVRHd--9_O5_SDt7Mi1IgZEPdgPqsDLPbNgob21RJGlleHit15DJ-ZUV0MGdPD-7_u2MkgViDfILkH8dqhg-sQ-RC9BnwR2W5H6K5d3f8dTDzTeFZFuN_I70ARUZB_cau32imfWLvF88gNpG4AdKAo33bBBLwcxCm-Vjg",
+              "value": "{{auth_secret_118t}}",
               "type": "string"
             }
           ]
@@ -1925,40 +1905,13 @@
           "listen": "test",
           "script": {
             "exec": [
-              "function extractAccessToken(payload) {",
-              "  if (!payload || typeof payload !== 'object') {",
-              "    return null;",
-              "  }",
-              "",
-              "  if (typeof payload.accessToken === 'string' && payload.accessToken.trim()) {",
-              "    return payload.accessToken;",
-              "  }",
-              "",
-              "  for (const value of Object.values(payload)) {",
-              "    const token = extractAccessToken(value);",
-              "    if (token) {",
-              "      return token;",
-              "    }",
-              "  }",
-              "",
-              "  return null;",
-              "}",
-              "",
+              "// Parse the JSON response",
               "const responseJson = pm.response.json();",
-              "const accessToken = extractAccessToken(responseJson);",
               "",
-              "pm.test(\"Status code is 200\", function () {",
-              "  pm.response.to.have.status(200);",
-              "});",
+              "// Extract the value you want to store",
+              "const accessToken = responseJson.data.fetchOktaToken.accessToken;",
               "",
-              "pm.test(\"Response time is less than 3000ms\", function () {",
-              "  pm.expect(pm.response.responseTime).to.be.below(3000);",
-              "});",
-              "",
-              "pm.test(\"Returns an access token\", function () {",
-              "  pm.expect(accessToken).to.be.a(\"string\").and.not.empty;",
-              "});",
-              "",
+              "// Set the value as a collection variable",
               "pm.collectionVariables.set(\"accessToken\", accessToken);"
             ],
             "type": "text/javascript",
@@ -2023,40 +1976,13 @@
           "listen": "test",
           "script": {
             "exec": [
-              "function extractAccessToken(payload) {",
-              "  if (!payload || typeof payload !== 'object') {",
-              "    return null;",
-              "  }",
-              "",
-              "  if (typeof payload.accessToken === 'string' && payload.accessToken.trim()) {",
-              "    return payload.accessToken;",
-              "  }",
-              "",
-              "  for (const value of Object.values(payload)) {",
-              "    const token = extractAccessToken(value);",
-              "    if (token) {",
-              "      return token;",
-              "    }",
-              "  }",
-              "",
-              "  return null;",
-              "}",
-              "",
+              "// Parse the JSON response",
               "const responseJson = pm.response.json();",
-              "const accessToken = extractAccessToken(responseJson);",
               "",
-              "pm.test(\"Status code is 200\", function () {",
-              "  pm.response.to.have.status(200);",
-              "});",
+              "// Extract the value you want to store",
+              "const accessToken = responseJson.data.fetchOktaToken.accessToken;",
               "",
-              "pm.test(\"Response time is less than 3000ms\", function () {",
-              "  pm.expect(pm.response.responseTime).to.be.below(3000);",
-              "});",
-              "",
-              "pm.test(\"Returns an access token\", function () {",
-              "  pm.expect(accessToken).to.be.a(\"string\").and.not.empty;",
-              "});",
-              "",
+              "// Set the value as a collection variable",
               "pm.collectionVariables.set(\"accessToken\", accessToken);"
             ],
             "type": "text/javascript",
@@ -2600,7 +2526,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "eyJraWQiOiJXa1BVU2R6Z3cyS3pPR2dzQWd1Ql9RRzZnOVVWLUhvWHJpaUtFMFRNS2UwIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULk05bnNQSC05dzM1WFR6SnlHUTlfWlVNS2JKZHQtM0xWLU1lS3ZRc0Z0VFEiLCJpc3MiOiJodHRwczovL2xvZ2luLmd1YXJhbnRlZWRyYXRlLmNvbS9vYXV0aDIvYXVzNHExMWptNWN2QlZDVzE2OTYiLCJhdWQiOiJhcGk6Ly9ib3Jyb3dlciIsImlhdCI6MTcwNTQyOTM3OSwiZXhwIjoxNzA1NDMyOTc5LCJjaWQiOiIwb2EzanVudmJ6aGdxSUF0YTY5NyIsInVpZCI6IjAwdThiMHpoeGd2amdKZzZjNjk3Iiwic2NwIjpbIm9wZW5pZCJdLCJhdXRoX3RpbWUiOjE3MDU0MjkzNzgsInN1YiI6InNhLXByb2Qtc2VwdDI2LWF4QHlvcG1haWwuY29tIiwiYm9ycm93ZXJfaWQiOiI1MDdjZDQ1MS1mNzQ0LTQ3MzktOTE2YS01YTE2NTFhNDEwODcifQ.PdJLJRecW_SMxJRVYpkAmE8MbNjrSHiTl4TdQP8CgyMyoF2B04si-oJjtyn2rOkKFuwbEqbhOAiFpIMpAmHfwq5L4XmX1WN49P4ptux--jQtLBCt_B81ML5z3QnlmiODrmAI6uz_h_TD-dlI0hj1Z7kFeKwoXNJ_WxMfXXvKzEg5W6tGwOUCWOQM-ioMTFNZ__mK3-5xZ8_6u7KjE-JMoUnpkKljOPvCAovEkU2pdF-zHBtNnUvEsYG9zexOsxETS6vkmfY0lfJDxLccKUfOTnk4delOCgDtWznRceu1W09GLazGfk9zD7tr6Abtbg30CTJiWZYJ2W3CdWCwyj6aRw",
+              "value": "{{auth_secret_0hnj}}",
               "type": "string"
             }
           ]
@@ -2660,7 +2586,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "eyJraWQiOiJDVW9FSjVBaU9iSHhaWXJjWlRRMWpoT3NScVM3SmxXVTE0eHVYaEVYdWlNIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULkhfSEZkM3dualE0MmZYbVRTbms0d19tLVVrVGpTQ3JGd08xcWgwS2EtRGciLCJpc3MiOiJodHRwczovL2xvZ2luLmdyLWRldi5jb20vb2F1dGgyL2F1czFsc2s1c3QxMDBHdGVOMWQ3IiwiYXVkIjoiYXBpOi8vYm9ycm93ZXIiLCJpYXQiOjE3MDQ5NTU5MDEsImV4cCI6MTcwNDk1OTUwMSwiY2lkIjoiMG9hNmJtZDdieEJ2VVJaWHIxZDciLCJ1aWQiOiIwMHVicG43cTlhcW0xUTNwTTFkNyIsInNjcCI6WyJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNzA0OTU1OTAwLCJzdWIiOiJzYS1xYS1kZWMwNkB5b3BtYWlsLmNvbSIsImJvcnJvd2VyX2lkIjoiOGVlYzE1MmUtZWI1Ni00MzY3LWI4MDAtYWIwNTkwMzcxYjJlIn0.Z7awSCT_KCHgMaLkvABVrCkFl1TGprJH4TdAHrw17o7qF86q2tCsTK33GMbMNlJIj84y0ZlgUlOx2wS_o5p0D9m0sFgpumBQgx3U7BWjFj4d6_OXoyfbidI6rWflBW_JhGWwTLv6f74viquRs4_ICX1LpvzUlY0SDEEI01Dp2-gf0O_PyuNWplDL3kybu3iH2a9yxrndBZV1A0mHWacjTjrPhKiEHTqX8o2_4r7xO3sb9X_lbj8M9Brh6DyqqArPzhQxBy8jjDpHCvPd2vLCxKhTxjrqfoDcZK95vW3OBxyIbkfV_PSuuQzN-mPWOmerva7Yvx8xSfPNwrTKFvYT8A",
+              "value": "{{auth_secret_06fn}}",
               "type": "string"
             }
           ]
@@ -2720,7 +2646,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "eyJraWQiOiJzN1Vqa3NYN0lMLTZ2QmVxSGE0blVhRmVtNE5RN0g3MFFNR3llSGpHNnRJIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULkNwZG1lU3RxOEI5T0F0WjlvSExldHBlN1VWSlJEVGFaMER3aEt6ZXZWQTQiLCJpc3MiOiJodHRwczovL2xvZ2luLmdyLWRldi5jb20vb2F1dGgyL2F1czFsc2s1c3QxMDBHdGVOMWQ3IiwiYXVkIjoiYXBpOi8vYm9ycm93ZXIiLCJpYXQiOjE3MDQzODEwMjYsImV4cCI6MTcwNDM4NDYyNiwiY2lkIjoiMG9hNmJtZDdieEJ2VVJaWHIxZDciLCJ1aWQiOiIwMHViZnI4b2NiVzJpaTdBajFkNyIsInNjcCI6WyJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNzA0MzgxMDI1LCJzdWIiOiJkZXYtbm92LTIxYkB5b3BtYWlsLmNvbSIsImJvcnJvd2VyX2lkIjoiM2U2NzFmYjktMzRlMi00MWE2LTgyNzQtY2Q1YWI4ZGFjNjc4In0.Q44Yhn_PsPUHz4Ot7fvfaWjeLQXnVUPPE_vjtspSdRD0LkT9hpxHZ3Qih2ZGvVC3ZbABDYsU5mkRGq8e9Flaf3sAEvPsOMyxL9d_riP1PuBZnt2bACXWfqBs-Oz9Zcz3Q25pFxo78Ayt5Z8pqPrBgnAEpqzRTEDn4mUJ00cCBWA55H1dyXdSVdT30yjF015_uikOdnJW3069NgQZ-r3NyeSdpPv_1A0pFwDMqDR3uCArTzszzv53NFnAoxlWokHJYZZFRd4r-Sx2ocP2LphC7IeeTZ8yNSKeTRmzaByc7tRXQlXp68hKjAcg5fAl053FI_bk9-cXDMx3b2JkSq8Q9Q",
+              "value": "{{auth_secret_0xmo}}",
               "type": "string"
             }
           ]
@@ -2993,7 +2919,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "eyJraWQiOiI2cUhndzVuckFUUzAwRk9pQUhsQTlnUU1ZaHJMeHIxSkUwT1ZFTXk4a0FFIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULnRGNmJwdUpRMWZzN3h4ZFFQY3RuRVZ5OUFiSTluN1F5SHVOSThtZTMzMHMiLCJpc3MiOiJodHRwczovL2xvZ2luLmRldi5yYXRlLmNvbS9vYXV0aDIvYXVzMWxzazVzdDEwMEd0ZU4xZDciLCJhdWQiOiJhcGk6Ly9ib3Jyb3dlciIsImlhdCI6MTcxNTM1OTMwMCwiZXhwIjoxNzE1MzYyOTAwLCJjaWQiOiIwb2E2Ym1kN2J4QnZVUlpYcjFkNyIsInVpZCI6IjAwdWVrNWJ2aW4xcmF4VExPMWQ3Iiwic2NwIjpbIm9wZW5pZCJdLCJhdXRoX3RpbWUiOjE3MTUzNTkyNTksInN1YiI6ImRldi1tYXktMTBrQHlvcG1haWwuY29tIiwiYm9ycm93ZXJfaWQiOiJmZTg5ZmZhNy01NTZhLTRjZDQtODY1NC1jZWJmZmI5YzA2YmQiLCJuYW1lIjoiQW5keSBBbWVyaWNhIiwiZW1haWwiOiJkZXYtbWF5LTEwa0B5b3BtYWlsLmNvbSJ9.TB9H_eI46MF2X6ClfPJ7IHPSUWbH8KQ0CVHCF9D4keujKZONNV7Di7ECTD5tasNEahMfbOAD6HeynNCKquG3PXF_YHzxpAaiRwGuKrTqgoHpF5znhGya9G6ORiepj78pE7VTuSzShOsR96zEHqxMh-Ko-BDAyCEK5VPqL-vOOmQWuAjcM9iszGHVhsZxixDi2vo7KjSXl2Lwijso5xRJaVyKg8xrmmZS53GTeZ1YS0nR6xV9WdjBhTsUAXeMnG2CRttVV9Ipbf503EVIltsHgog7YdMkHYV3S0XTs8ZCluyeEAYH7G1l5g_g6mL9_cyhTq3nLvyOjVOaWft42EathQ",
+              "value": "{{auth_secret_0sps}}",
               "type": "string"
             }
           ]
@@ -3174,7 +3100,48 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{\n  fetchCollections(filter: { featured: null, first: 0, count: 0 }) {\n    id\n    title\n    subTitle\n    featured\n    newContent\n    videoCount\n    description\n    overviewImageUrl\n    detailImageUrl\n    featuredImageUrl\n    level {\n      id\n      title\n      colorCode\n    }\npersonalVideos{\n    id,\n    category{\n        id,\n        title,\n        overviewImageUrl,\n        detailedImageUrl\n    },\n    subCategory{\n           id,\n        title,\n        overviewImageUrl\n    }\n    level{\n        id,\n        title,\n        colorCode\n    }\n    minutes,\n    date,\n    featured,\n    title,\n    subTitle,\n    newContent,\n    overviewImageUrl,\n    detailImageUrl,\n    featuredImageUrl,\n    destination,\n    description,\n    instructors{\n        id,\n        name\n    }\n    shareUrl\n  }\n  navigationRoute{\n        linkText\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n  }\n  \n}\n",
+            "query": "{\n  fetchCollections(filter: { featured: null, first: 0, count: 0 }) {\n    id\n    title\n    subTitle\n    featured\n    newContent\n    videoCount\n    description\n    overviewImageUrl\n    detailImageUrl\n    featuredImageUrl\n    level {\n      id\n      title\n      colorCode\n    }\npersonalVideos{\n    id,\n    category{\n        id,\n        title,\n        overviewImageUrl,\n        detailedImageUrl,\n        shareUrl\n    },\n    subCategory{\n           id,\n        title,\n        overviewImageUrl,\n        shareUrl\n    }\n    level{\n        id,\n        title,\n        colorCode\n    }\n    minutes,\n    date,\n    featured,\n    title,\n    subTitle,\n    newContent,\n    overviewImageUrl,\n    detailImageUrl,\n    featuredImageUrl,\n    destination,\n    description,\n    instructors{\n        id,\n        name\n    }\n    shareUrl\n  }\n  navigationRoute{\n        linkText\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n    shareUrl\n  }\n  \n}\n",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "38.1 - FetchWellnessCollections (All Collections)",
+      "protocolProfileBehavior": {
+        "followRedirects": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "gri",
+            "type": "default"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "default"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "{\n  fetchWellnessCollections(filter: { featured: null, first: 0, count: 0 }) {\n    id\n    title\n    description\n    subTitle\n    logoUrl\n    turnstileImageUrl\n    navigationRoute {\n      linkText\n      androidNavigationRoute\n      iOSNavigationRoute\n      analyticsName\n    }\n    shareUrl\n    collections {\n      id\n      title\n      subTitle\n      featured\n      newContent\n      videoCount\n      description\n      overviewImageUrl\n      detailImageUrl\n      featuredImageUrl\n      shareUrl\n      level {\n        id\n        title\n        colorCode\n      }\n      personalVideos {\n        id\n        title\n        shareUrl\n      }\n      navigationRoute {\n        linkText\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n    }\n  }\n}",
             "variables": ""
           }
         },
@@ -3534,7 +3501,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{\n  fetchWellnessSchema (filter:{\n      categoryId:null\n      subCategoryId:null\n      }){\n    id,\n    title,\n    subTitle\n    newContent\n    overviewImageUrl,\n    detailedImageUrl,\n    subCategories{\n        id,\n        title,\n        overviewImageUrl,\n        videoCount\n        newContent\n    }\n     customBanner{\n            title\n            overviewImageUrl\n            detailedImageUrl\n            bannerUrl\n        }\n  }\n}\n",
+            "query": "{\n  fetchWellnessSchema (filter:{\n      categoryId:null\n      subCategoryId:null\n      }){\n    id,\n    title,\n    subTitle\n    newContent\n    overviewImageUrl,\n    detailedImageUrl,\n    subCategories{\n        id,\n        title,\n        overviewImageUrl,\n        videoCount\n        newContent\n        shareUrl\n    }\n     customBanner{\n            title\n            overviewImageUrl\n            detailedImageUrl\n            bannerUrl\n        }\n    shareUrl\n  }\n}\n",
             "variables": ""
           }
         },
@@ -3601,7 +3568,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{\n  fetchPersonalWellnessVideos(\n    filter: {\n      classTypes: []\n      classSubTypes: []\n      mapFilter: [\n        # { classType: 3, classSubTypes: [1] }\n        # { classType: 4, classSubTypes: [1] }\n      ]\n      level: null\n      minutes: 0\n      startDate: \"\"\n      endDate: \"\"\n      instructors: []\n      instructorType: null\n      featured: null\n      first: 0\n      count: 0\n      videoId: 0\n      includeCount: null\n    }\n  ) {\n    id\n    category {\n      id\n      title\n      newContent\n      overviewImageUrl\n      detailedImageUrl\n    }\n    subCategory {\n      id\n      title\n      newContent\n      overviewImageUrl\n    }\n    level {\n      id\n      title\n      colorCode\n    }\n    minutes\n    date\n    featured\n    title\n    subTitle\n    newContent\n    overviewImageUrl\n    detailImageUrl\n    featuredImageUrl\n    destination\n    description\n    instructors {\n      id\n      name\n      newContent\n    }\n    shareUrl\n    videoCount\n  }\n}\n",
+            "query": "{\n  fetchPersonalWellnessVideos(\n    filter: {\n      classTypes: []\n      classSubTypes: []\n      mapFilter: [\n        # { classType: 3, classSubTypes: [1] }\n        # { classType: 4, classSubTypes: [1] }\n      ]\n      level: null\n      minutes: 0\n      startDate: \"\"\n      endDate: \"\"\n      instructors: []\n      instructorType: null\n      featured: null\n      first: 0\n      count: 0\n      videoId: 0\n      includeCount: null\n    }\n  ) {\n    id\n    category {\n      id\n      title\n      newContent\n      overviewImageUrl\n      detailedImageUrl\n      shareUrl\n    }\n    subCategory {\n      id\n      title\n      newContent\n      overviewImageUrl\n      shareUrl\n    }\n    level {\n      id\n      title\n      colorCode\n    }\n    minutes\n    date\n    featured\n    title\n    subTitle\n    newContent\n    overviewImageUrl\n    detailImageUrl\n    featuredImageUrl\n    destination\n    description\n    instructors {\n      id\n      name\n      newContent\n    }\n    shareUrl\n    videoCount\n  }\n}\n",
             "variables": ""
           }
         },
@@ -3662,7 +3629,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{\n  fetchChallenges(filter:{\n      challengeId:1\n      }){\n     id\n    title\n    featured\n    description\n    overviewImageUrl\n    detailedImageUrl\n    featuredImageUrl\n    inProgressImageUrl\n    badgeUrl\n    completedMessage\n    newContent\n    videoList\n    videos{\nid,\n    category{\n        id,\n        title,\n        overviewImageUrl,\n        detailedImageUrl\n    },\n    subCategory{\n           id,\n        title,\n        overviewImageUrl\n    }\n    level{\n        id,\n        title,\n        colorCode\n    }\n    minutes,\n    date,\n    featured,\n    title,\n    subTitle,\n    newContent,\n    overviewImageUrl,\n    detailImageUrl,\n    featuredImageUrl,\n    destination,\n    dashDestination,\n    description,\n    instructors{\n        id,\n        name\n    }\n    read\n    videoUnlocked\n    }\n    userChallengeStatus{\n        challengeStartDate\n    challengeEndDate\n    challengeStatus\n    challengeProgress\n    }\n  }\n}\n",
+            "query": "{\n  fetchChallenges(filter:{\n      challengeId:1\n      }){\n     id\n    title\n    featured\n    description\n    overviewImageUrl\n    detailedImageUrl\n    featuredImageUrl\n    inProgressImageUrl\n    badgeUrl\n    completedMessage\n    newContent\n    videoList\n    videos{\nid,\n    category{\n        id,\n        title,\n        overviewImageUrl,\n        detailedImageUrl,\n        shareUrl\n    },\n    subCategory{\n           id,\n        title,\n        overviewImageUrl,\n        shareUrl\n    }\n    level{\n        id,\n        title,\n        colorCode\n    }\n    minutes,\n    date,\n    featured,\n    title,\n    subTitle,\n    newContent,\n    overviewImageUrl,\n    detailImageUrl,\n    featuredImageUrl,\n    destination,\n    dashDestination,\n    description,\n    instructors{\n        id,\n        name\n    }\n    read\n    videoUnlocked\n    }\n    userChallengeStatus{\n        challengeStartDate\n    challengeEndDate\n    challengeStatus\n    challengeProgress\n    }\n    shareUrl\n  }\n}\n",
             "variables": ""
           }
         },
@@ -3931,7 +3898,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "\n{\n  gatewayMetadata(validationInput: { appType: \"ios\", appBuildNumber: 168 }) {\n    status\n    gatewayUrls {\n      oktaUrl\n      myAccountUrl\n      dmxUrl\n      plUrl\n      helocUrl\n      agentOktaUrl\n      agentAdvantageUrl\n      agentClosings\n      agentDashboard\n      agentHelp\n      agentProfessionalProfile\n      agentReferClient\n      agentMarketingRequest\n      westLakeUrl\n      westLakePreqlUrl\n      studentLoanUrl\n      loanServicingServiceMacUrl\n      agentsBranchRedirectUrl\n      rateAlertUrl\n      mlsUrl\n      rateTravelUrl\n      healthyMindsUrl\n      rentersInsuranceUrl\n      autoLoanRefiUrl\n    }\n    gatewayFeatureFlags {\n      mlsEnabled\n      agentLoginEnabled\n      mlsEnabledOnHomeScreen\n      userPersonaEnabled\n      tlacEnabled\n      messageCenterEnabled\n      westLakeEnabled\n      mortgageCalcWebViewEnabled\n      studentLoanEnabled\n      loShareEnabled\n      videoShareEnabled\n      rateTravelEnabled\n      healthyMindsEnabled\n      loanServicingServiceMacEnabled\n      rentersInsuranceEnabled\n      autoLoanRefiEnabled\n    }\n    gatewayUIFlags {\n      blackButtonsEnabled\n    }\n    gatewayLegalLinks {\n    aboutUs\n    privacyPolicy\n    accessibility\n    doNotSellMyInformation\n    faqs\n    licensing\n    smsTerms\n    contactCenter\n    personalLoansDisclosure\n    termsAndConditions\n    }\n    gatewayCalcLinks {\n    mortgageRatesUrl\n    mortgagePaymentsUrl\n    mortgageHomeAffordability\n    }\n    gatewayNewLabelFlags {\n        showRateTravelNewLabel\n        showHealthyMindsNewLabel\n        showAutoLoanNewLabel\n        showStudentLoanNewLabel\n        showRentersInsuranceNewLabel\n    }\n    gatewayIdx {\n        oidc {\n            agent {\n                clientId\n                redirectUri\n            }\n            alpWeb{\n                clientId\n                redirectUri\n            }\n            autoDm{\n                clientId\n                redirectUri\n            }\n            autoFlp{\n                clientId\n                redirectUri\n            }\n            comeHome{\n                clientId\n                redirectUri\n            }\n            dmx{\n                clientId\n                redirectUri\n            }\n            myAccount{\n                clientId\n                redirectUri\n            }\n            myAccountV2{\n                clientId\n                redirectUri\n            }\n            studentLoanForgiveness{\n                clientId\n                redirectUri\n            }\n            wildfire{\n                clientId\n                redirectUri\n            }\n        }\n        saml {\n            agilant {\n                appId\n                ssoUrl\n            }\n            laasy {\n                appId\n                ssoUrl\n            }\n            osConnect {\n                appId\n                ssoUrl\n            }\n            serviceMac {\n                appId\n                ssoUrl\n            }\n            talkuments {\n                appId\n                ssoUrl\n            }\n        }\n    }\n  }\n}\n",
+            "query": "\n{\n  gatewayMetadata(validationInput: { appType: \"ios\", appBuildNumber: 168 }) {\n    status\n    gatewayUrls {\n      oktaUrl\n      myAccountUrl\n      dmxUrl\n      plUrl\n      helocUrl\n      agentOktaUrl\n      agentAdvantageUrl\n      agentClosings\n      agentDashboard\n      agentHelp\n      agentProfessionalProfile\n      agentReferClient\n      agentMarketingRequest\n      westLakeUrl\n      westLakePreqlUrl\n      studentLoanUrl\n      loanServicingServiceMacUrl\n      agentsBranchRedirectUrl\n      rateAlertUrl\n      mlsUrl\n      rateTravelUrl\n      healthyMindsUrl\n      rentersInsuranceUrl\n      autoLoanRefiUrl\n      creditMonitoringUrl\n    }\n    gatewayFeatureFlags {\n      mlsEnabled\n      agentLoginEnabled\n      mlsEnabledOnHomeScreen\n      userPersonaEnabled\n      tlacEnabled\n      messageCenterEnabled\n      westLakeEnabled\n      mortgageCalcWebViewEnabled\n      studentLoanEnabled\n      loShareEnabled\n      videoShareEnabled\n      rateTravelEnabled\n      healthyMindsEnabled\n      loanServicingServiceMacEnabled\n      rentersInsuranceEnabled\n      autoLoanRefiEnabled\n      creditMonitoringEnabled\n      rateHomesEnabled\n    }\n    gatewayUIFlags {\n      blackButtonsEnabled\n    }\n    gatewayLegalLinks {\n    aboutUs\n    privacyPolicy\n    accessibility\n    doNotSellMyInformation\n    faqs\n    licensing\n    smsTerms\n    contactCenter\n    personalLoansDisclosure\n    termsAndConditions\n    }\n    gatewayCalcLinks {\n    mortgageRatesUrl\n    mortgagePaymentsUrl\n    mortgageHomeAffordability\n    }\n    gatewayNewLabelFlags {\n        showRateTravelNewLabel\n        showHealthyMindsNewLabel\n        showAutoLoanNewLabel\n        showStudentLoanNewLabel\n        showRentersInsuranceNewLabel\n    }\n    gatewayIdx {\n        oidc {\n            agent {\n                clientId\n                redirectUri\n            }\n            alpWeb{\n                clientId\n                redirectUri\n            }\n            autoDm{\n                clientId\n                redirectUri\n            }\n            autoFlp{\n                clientId\n                redirectUri\n            }\n            comeHome{\n                clientId\n                redirectUri\n            }\n            dmx{\n                clientId\n                redirectUri\n            }\n            myAccount{\n                clientId\n                redirectUri\n            }\n            myAccountV2{\n                clientId\n                redirectUri\n            }\n            studentLoanForgiveness{\n                clientId\n                redirectUri\n            }\n            wildfire{\n                clientId\n                redirectUri\n            }\n        }\n        saml {\n            agilant {\n                appId\n                ssoUrl\n            }\n            laasy {\n                appId\n                ssoUrl\n            }\n            osConnect {\n                appId\n                ssoUrl\n            }\n            serviceMac {\n                appId\n                ssoUrl\n            }\n            talkuments {\n                appId\n                ssoUrl\n            }\n        }\n    }\n  }\n}\n",
             "variables": ""
           }
         },
@@ -3988,7 +3955,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{\n  fetchTLAC(\n    filter: { collectionId: null, featured: null, first: 0, count: 0 }\n  ) {\n    id\n    title\n    description\n    subTitle\n    logoUrl\n    turnstileImageUrl\n    collections {\n      id\n      title\n      level {\n          id\n          title\n          colorCode\n        }\n      featured\n      newContent\n      description\n      subTitle\n      overviewImageUrl\n      detailedImageUrl\n      featuredImageUrl\n      videoCount\n      personalVideos{\n    id,\n    category{\n        id,\n        title,\n        newContent\n        overviewImageUrl,\n        detailedImageUrl\n    },\n    subCategory{\n           id,\n        title,\n        newContent\n        overviewImageUrl\n    }\n    level{\n        id,\n        title,\n        colorCode\n    }\n    minutes,\n    date,\n    featured,\n    title,\n    subTitle,\n    newContent,\n    overviewImageUrl,\n    detailImageUrl,\n    featuredImageUrl,\n    destination,\n    description,\n    instructors{\n        id,\n        name\n        newContent\n    }\n    shareUrl\n  }\n  }\n    }\n    }\n\n",
+            "query": "{\n  fetchTLAC(\n    filter: { collectionId: null, featured: null, first: 0, count: 0 }\n  ) {\n    id\n    title\n    description\n    subTitle\n    logoUrl\n    turnstileImageUrl\n    shareUrl\n    collections {\n      id\n      title\n      level {\n          id\n          title\n          colorCode\n        }\n      featured\n      newContent\n      description\n      subTitle\n      overviewImageUrl\n      detailedImageUrl\n      featuredImageUrl\n      videoCount\n      shareUrl\n      personalVideos{\n    id,\n    category{\n        id,\n        title,\n        newContent\n        overviewImageUrl,\n        detailedImageUrl,\n        shareUrl\n    },\n    subCategory{\n           id,\n        title,\n        newContent\n        overviewImageUrl,\n        shareUrl\n    }\n    level{\n        id,\n        title,\n        colorCode\n    }\n    minutes,\n    date,\n    featured,\n    title,\n    subTitle,\n    newContent,\n    overviewImageUrl,\n    detailImageUrl,\n    featuredImageUrl,\n    destination,\n    description,\n    instructors{\n        id,\n        name\n        newContent\n    }\n    shareUrl\n  }\n  }\n    }\n    }\n\n",
             "variables": ""
           }
         },
@@ -4056,7 +4023,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{\n  fetchPersonalWellnessSchema(\n    filter: { categoryId: null, subCategoryId: null }\n  ) {\n    title\n    subTitle\n    allCategories {\n      title\n      subTitle\n      categories {\n        id\n        title\n        subTitle\n        newContent\n        overviewImageUrl\n        detailedImageUrl\n        subCategories {\n          id\n          title\n          newContent\n          overviewImageUrl\n          videoCount\n        }\n        customBanner{\n            title\n            subTitle\n            overviewImageUrl\n            detailedImageUrl\n            bannerUrl\n            newLabel\n        }\n      }\n    }\n    allGurus {\n      title\n      subTitle\n      guruCategories {\n        title\n        subTitle\n        gurus {\n          id\n          title\n          guruImageUrl\n          videoCount\n        }\n      }\n    }\n    customBannersTitle\n    customBanners {\n        partnerName\n        title\n        subTitle\n        overviewImageUrl\n        detailedImageUrl\n        bannerUrl\n        navigationRoute {\n            title\n            linkText\n            androidNavigationRoute\n            iOSNavigationRoute\n            analyticsName\n            view\n            args\n        }\n        newLabel\n    }\n    personalWellnessOrder\n  }\n}\n",
+            "query": "{\n  fetchPersonalWellnessSchema(\n    filter: { categoryId: null, subCategoryId: null }\n  ) {\n    title\n    subTitle\n    allCategories {\n      title\n      subTitle\n      categories {\n        id\n        title\n        subTitle\n        newContent\n        overviewImageUrl\n        detailedImageUrl\n        subCategories {\n          id\n          title\n          newContent\n          overviewImageUrl\n          videoCount\n          shareUrl\n        }\n        customBanner{\n            title\n            subTitle\n            overviewImageUrl\n            detailedImageUrl\n            bannerUrl\n            newLabel\n        }\n        shareUrl\n      }\n    }\n    allGurus {\n      title\n      subTitle\n      guruCategories {\n        title\n        subTitle\n        gurus {\n          id\n          title\n          guruImageUrl\n          videoCount\n        }\n      }\n    }\n    customBannersTitle\n    customBanners {\n        partnerName\n        title\n        subTitle\n        overviewImageUrl\n        detailedImageUrl\n        bannerUrl\n        navigationRoute {\n            title\n            linkText\n            androidNavigationRoute\n            iOSNavigationRoute\n            analyticsName\n            view\n            args\n        }\n        newLabel\n    }\n    personalWellnessOrder\n  }\n}\n",
             "variables": ""
           }
         },
@@ -4168,7 +4135,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{\n    fetchMembershipContent(membershipContentRequest : {\n        membershipPartner: RATE_CONCIERGE\n        # ABT, ADT, RATE_TECH_SUPPORT, RATE_HOME_WARRANTY, RATE_CONCIERGE\n        }) {\n        id\n        partnerName\n        imageURL\n        imageTitle\n        poweredByLogoUrl\n        partnerTitle\n        description\n        offeringsTitle\n        offeringsDescription\n        services {\n            serviceId\n            serviceName\n            svgUrl\n        }\n        redirectUrl\n        videoDetails {\n            videoId\n            videoImageUrl\n            videoUrl\n            hlsUrl\n            dashUrl\n        }\n        featuresSectionTitle\n        featuresSectionDescription\n        features {\n            id\n            featureName\n            description\n            highlightText\n        }\n        featurePoints\n        faqs {\n            title\n            items {\n                id\n                question\n                answer\n            }\n        }\n        contactDetails {\n            title\n            subTitle\n            description\n            iconUrl\n        }\n        endorsementDetails {\n            title\n            description\n            iconUrl\n        }\n        redirectInfo\n        processOverviewTitle\n        processSteps {\n            id\n            featureName\n            description\n        }\n        processOverviewPoints\n        descriptionNotes\n        termsAndConditions {\n            title\n            iconUrl\n            redirectUrl\n        }\n        benefitsSectionTitle\n        benefits {\n            id\n            featureName\n            description\n            highlightText\n        }\n        newContent\n    }\n}",
+            "query": "{\n    fetchMembershipContent(membershipContentRequest : {\n        membershipPartner: RATE_CONCIERGE\n        # ABT, ADT, RATE_TECH_SUPPORT, RATE_HOME_WARRANTY, RATE_CONCIERGE\n        }) {\n        id\n        partnerName\n        imageURL\n        imageTitle\n        poweredByLogoUrl\n        partnerTitle\n        description\n        offeringsTitle\n        offeringsDescription\n        services {\n            serviceId\n            serviceName\n            svgUrl\n        }\n        redirectUrl\n        videoDetails {\n            videoId\n            videoImageUrl\n            videoUrl\n            hlsUrl\n            dashUrl\n        }\n        featuresSectionTitle\n        featuresSectionDescription\n        features {\n            id\n            featureName\n            description\n            highlightText\n        }\n        featurePoints\n        faqs {\n            title\n            items {\n                id\n                question\n                answer\n            }\n        }\n        contactDetails {\n            title\n            subTitle\n            description\n            iconUrl\n        }\n        endorsementDetails {\n            title\n            description\n            iconUrl\n        }\n        redirectInfo\n        processOverviewTitle\n        processSteps {\n            id\n            featureName\n            description\n        }\n        processOverviewPoints\n        descriptionNotes\n        termsAndConditions {\n            title\n            iconUrl\n            redirectUrl\n        }\n        benefitsSectionTitle\n        benefits {\n            id\n            featureName\n            description\n            highlightText\n        }\n        newContent\n        shareUrl\n    }\n}",
             "variables": ""
           }
         },
@@ -4348,7 +4315,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{\n    fetchMembershipSchema(membershipSchemaRequest: {\n        isSortByDetailViewId: false\n    }) {\n        title\n        description\n        products {\n            id\n            detailViewId\n            productName\n            dashboardImageUrl\n            featuredImageUrl\n            featuredTitle\n            detailImageUrl\n            detailTitle\n            subtitle\n            newContent\n        }\n    }\n}",
+            "query": "{\n    fetchMembershipSchema(membershipSchemaRequest: {\n        isSortByDetailViewId: false\n    }) {\n        title\n        description\n        products {\n            id\n            detailViewId\n            productName\n            dashboardImageUrl\n            featuredImageUrl\n            featuredTitle\n            detailImageUrl\n            detailTitle\n            subtitle\n            newContent\n            shareUrl\n        }\n        shareUrl\n    }\n}",
             "variables": ""
           }
         },
@@ -4568,7 +4535,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "query {\n  fetchFinancialWellnessSchema(\n    filter: { }\n  ) {\n    categories {\n      id\n      title\n      subTitle\n      newContent\n      overviewImageUrl\n      dashboardImageUrl\n      exploreLink{\n        linkText\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n      subCategories {\n        displayName\n        id\n        title\n        subTitle\n        newContent\n        overviewImageUrl\n        dashboardImageUrl\n        videoCount\n      }\n    }\n    products {\n      id\n      title\n      newContent\n      overviewImageUrl\n      androidNavigationRoute\n      iOSNavigationRoute\n      analyticsName\n    }\n    tools {\n      id\n      title\n      newContent\n      overviewImageUrl\n      androidNavigationRoute\n      iOSNavigationRoute\n      analyticsName\n    }\n  }\n}\n",
+            "query": "query {\n  fetchFinancialWellnessSchema(\n    filter: { }\n  ) {\n    categories {\n      id\n      title\n      subTitle\n      newContent\n      overviewImageUrl\n      dashboardImageUrl\n      exploreLink{\n        linkText\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n      subCategories {\n        displayName\n        id\n        title\n        subTitle\n        newContent\n        overviewImageUrl\n        dashboardImageUrl\n        videoCount\n        shareUrl\n      }\n      shareUrl\n    }\n    products {\n      id\n      title\n      newContent\n      overviewImageUrl\n      androidNavigationRoute\n      iOSNavigationRoute\n      analyticsName\n      shareUrl\n    }\n    tools {\n      id\n      title\n      newContent\n      overviewImageUrl\n      androidNavigationRoute\n      iOSNavigationRoute\n      analyticsName\n    }\n    shareUrl\n  }\n}\n",
             "variables": ""
           }
         },
@@ -4614,7 +4581,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "query {\n  fetchFinancialWellnessVideos(\n    filter: {\n      #   categories: [4, 2],\n        mapFilter: [\n          { category: 1, subCategories: [4] }\n        ],\n      minutes: 0\n      startDate: null\n      endDate: null\n      videoId: 0\n      featured: null\n      first: 0\n      count: 0\n      includeCount: null\n    }\n  ) {\n    videos {\n      id\n      title\n      category {\n        id\n        title\n        subTitle\n        newContent\n        overviewImageUrl\n        dashboardImageUrl\n         exploreLink{\n        linkText\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n      }\n      subCategory {\n        title\n        id\n        title\n        subTitle\n        newContent\n        overviewImageUrl\n        dashboardImageUrl\n        videoCount\n      }\n      minutes\n      date\n      featured\n      overviewImage\n      detailImage\n      featuredImage\n      destination\n      hlsDestination\n      dashDestination\n      description\n      tools {\n        title\n        id\n        displayName\n        newContent\n        overviewImageUrl\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n      products {\n        title\n        id\n        displayName\n        newContent\n        overviewImageUrl\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n      newContent\n    }\n    totalCount\n  }\n}\n",
+            "query": "query {\n  fetchFinancialWellnessVideos(\n    filter: {\n      #   categories: [4, 2],\n        mapFilter: [\n          { category: 1, subCategories: [4] }\n        ],\n      minutes: 0\n      startDate: null\n      endDate: null\n      videoId: 0\n      featured: null\n      first: 0\n      count: 0\n      includeCount: null\n    }\n  ) {\n    videos {\n      id\n      title\n      category {\n        id\n        title\n        subTitle\n        newContent\n        overviewImageUrl\n        dashboardImageUrl\n         exploreLink{\n        linkText\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n        shareUrl\n      }\n      subCategory {\n        title\n        id\n        title\n        subTitle\n        newContent\n        overviewImageUrl\n        dashboardImageUrl\n        videoCount\n        shareUrl\n      }\n      minutes\n      date\n      featured\n      overviewImage\n      detailImage\n      featuredImage\n      destination\n      hlsDestination\n      dashDestination\n      description\n      tools {\n        title\n        id\n        displayName\n        newContent\n        overviewImageUrl\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n      products {\n        title\n        id\n        displayName\n        newContent\n        overviewImageUrl\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n        shareUrl\n      }\n      newContent\n      shareUrl\n    }\n    totalCount\n  }\n}\n",
             "variables": ""
           }
         },
@@ -5009,7 +4976,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{\n  fetchOutdoorStudio(\n    filter: { collectionId: null, featured: null, first: 0, count: 0 }\n  ) {\n    id\n    title\n    description\n    subTitle\n    logoUrl\n    turnstileImageUrl\n    collections {\n      id\n      title\n      level {\n          id\n          title\n          colorCode\n        }\n      featured\n      newContent\n      description\n      subTitle\n      overviewImageUrl\n      detailedImageUrl\n      featuredImageUrl\n      videoCount\n      personalVideos{\n    id,\n    category{\n        id,\n        title,\n        newContent\n        overviewImageUrl,\n        detailedImageUrl\n    },\n    subCategory{\n           id,\n        title,\n        newContent\n        overviewImageUrl\n    }\n    level{\n        id,\n        title,\n        colorCode\n    }\n    minutes,\n    date,\n    featured,\n    title,\n    subTitle,\n    newContent,\n    overviewImageUrl,\n    detailImageUrl,\n    featuredImageUrl,\n    destination,\n    description,\n    instructors{\n        id,\n        name\n        newContent\n    }\n    shareUrl\n  }\n  }\n    }\n    }\n\n",
+            "query": "{\n  fetchOutdoorStudio(\n    filter: { collectionId: null, featured: null, first: 0, count: 0 }\n  ) {\n    id\n    title\n    description\n    subTitle\n    logoUrl\n    turnstileImageUrl\n    shareUrl\n    collections {\n      id\n      title\n      level {\n          id\n          title\n          colorCode\n        }\n      featured\n      newContent\n      description\n      subTitle\n      overviewImageUrl\n      detailedImageUrl\n      featuredImageUrl\n      videoCount\n      shareUrl\n      personalVideos{\n    id,\n    category{\n        id,\n        title,\n        newContent\n        overviewImageUrl,\n        detailedImageUrl,\n        shareUrl\n    },\n    subCategory{\n           id,\n        title,\n        newContent\n        overviewImageUrl,\n        shareUrl\n    }\n    level{\n        id,\n        title,\n        colorCode\n    }\n    minutes,\n    date,\n    featured,\n    title,\n    subTitle,\n    newContent,\n    overviewImageUrl,\n    detailImageUrl,\n    featuredImageUrl,\n    destination,\n    description,\n    instructors{\n        id,\n        name\n        newContent\n    }\n    shareUrl\n  }\n  }\n    }\n    }\n\n",
             "variables": ""
           }
         },
@@ -5078,6 +5045,162 @@
           ]
         },
         "description": "Generated from cURL: curl --location 'https://qa.fsp.rate.com/gateway/graphql' \\\n--header 'X-GR-FSP-TENANT-ID: gri' \\\n--header 'X-Request-ID: $$4a4685ca-ba41-4787-baf8-40503c41171b' \\\n--header 'Content-Type: application/json' \\\n--data '{\"query\":\"{\\n  fetchCollections(filter: { featured: null, first: 0, count: 0 }) {\\n    id\\n    title\\n    subTitle\\n    featured\\n    videoCount\\n    description\\n    overviewImageUrl\\n    detailImageUrl\\n    featuredImageUrl\\n    level {\\n      id\\n      title\\n      colorCode\\n    }\\npersonalVideos{\\n    id,\\n    category{\\n        id,\\n        title,\\n        overviewImageUrl,\\n        detailedImageUrl\\n    },\\n    subCategory{\\n           id,\\n        title,\\n        overviewImageUrl\\n    }\\n    level{\\n        id,\\n        title,\\n        colorCode\\n    }\\n    minutes,\\n    date,\\n    featured,\\n    title,\\n    subTitle,\\n    newContent,\\n    overviewImageUrl,\\n    detailImageUrl,\\n    featuredImageUrl,\\n    destination,\\n    description,\\n    instructors{\\n        id,\\n        name\\n    }\\n    shareUrl\\n  }\\n  }\\n  \\n}\\n\",\"variables\":{}}'"
+      },
+      "response": []
+    },
+    {
+      "name": "77 - Get Agent Invite By Id Query",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "gri",
+            "type": "default"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "default"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query {\n  getAgentInviteById(agentInviteId: \"3fa85f64-5717-4562-b3fc-2c963f66afa6\") {\n    id\n    type\n    attributes {\n      guid\n      agent {\n        firstName\n        lastName\n        email\n        title\n        brokerageName\n        officePhone\n        mobilePhone\n        address1\n        address2\n        city\n        state\n        zip\n        website\n        mlsAssociationId\n        mlsAgentId\n        teId\n        legacyRealtorId\n        images {\n          headshot {\n            full\n            small\n            medium\n          }\n          branding {\n            full\n            small\n            medium\n          }\n        }\n      }\n      loanOfficer {\n        id\n        company\n      }\n      createdDate\n      createdBy\n      updatedDate\n      updatedBy\n      expirationDate\n      invitorType\n      invitorConsumerId\n      status\n      agentId\n    }\n  }\n}\n",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "78 - Create Agent From Invite Mutation",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{auth_secret_0hlv}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "gri",
+            "type": "default"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "default"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation {\n  createAgentFromInvite(\n    input: {\n      agentInviteId: \"3fa85f64-5717-4562-b3fc-2c963f66afa6\"\n    }\n  ) {\n    type\n    id\n    attributes {\n      firstName\n      lastName\n      loginEmail\n      oktaId\n    }\n  }\n}\n",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "79 - Rate Homes Create Lead",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "gri",
+            "type": "text"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation {\n    createRateHomesLead(rateHomesLeadRequest :{\n        firstName: \"Andy\",\n        lastName: \"America\",\n        email: \"qa-bns-2107a@yopmail\",\n        phoneNumber: \"905-997-2011\",\n        zipCode: \"95630\",\n        city: \"Mountian View\",\n        state: \"CA\"\n    }){\n        status\n    }\n}",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
       },
       "response": []
     },
@@ -5261,73 +5384,7 @@
       "script": {
         "type": "text/javascript",
         "exec": [
-          "function extractAccessToken(payload) {",
-          "  if (!payload || typeof payload !== 'object') {",
-          "    return null;",
-          "  }",
-          "",
-          "  if (typeof payload.accessToken === 'string' && payload.accessToken.trim()) {",
-          "    return payload.accessToken;",
-          "  }",
-          "",
-          "  for (const value of Object.values(payload)) {",
-          "    const token = extractAccessToken(value);",
-          "    if (token) {",
-          "      return token;",
-          "    }",
-          "  }",
-          "",
-          "  return null;",
-          "}",
-          "",
-          "const requestName = pm.info.requestName || 'request';",
-          "let responseJson = null;",
-          "",
-          "try {",
-          "  responseJson = pm.response.json();",
-          "} catch (error) {",
-          "  responseJson = null;",
-          "}",
-          "",
-          "pm.test(`${requestName} returns a 2xx response`, function () {",
-          "  pm.expect(pm.response.code).to.be.within(200, 299);",
-          "});",
-          "",
-          "pm.test(`${requestName} responds within 3000ms`, function () {",
-          "  pm.expect(pm.response.responseTime).to.be.below(3000);",
-          "});",
-          "",
-          "if (responseJson && typeof responseJson === 'object') {",
-          "  if (Array.isArray(responseJson.errors)) {",
-          "    pm.test(`${requestName} has no GraphQL errors`, function () {",
-          "      pm.expect(responseJson.errors, JSON.stringify(responseJson.errors, null, 2)).to.have.length(0);",
-          "    });",
-          "  }",
-          "",
-          "  if (Object.prototype.hasOwnProperty.call(responseJson, 'data')) {",
-          "    pm.test(`${requestName} returns GraphQL data`, function () {",
-          "      pm.expect(responseJson.data).to.exist;",
-          "    });",
-          "  }",
-          "",
-          "  if (/HealthCheck/i.test(requestName)) {",
-          "    pm.test(`${requestName} reports UP`, function () {",
-          "      pm.expect(responseJson.status).to.eql('UP');",
-          "    });",
-          "  }",
-          "",
-          "  if (/Actuator Info/i.test(requestName)) {",
-          "    pm.test(`${requestName} returns actuator metadata`, function () {",
-          "      pm.expect(Object.keys(responseJson).length).to.be.greaterThan(0);",
-          "    });",
-          "  }",
-          "",
-          "  const accessToken = extractAccessToken(responseJson);",
-          "  if (accessToken) {",
-          "    pm.collectionVariables.set('accessToken', accessToken);",
-          "    pm.globals.set('accessToken', accessToken);",
-          "  }",
-          "}"
+          ""
         ]
       }
     }
@@ -5340,6 +5397,46 @@
     {
       "key": "tenantId",
       "value": ""
+    },
+    {
+      "key": "auth_secret_0hlv",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_0sps",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_0xmo",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_06fn",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_0hnj",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_118t",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_0wt4",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_0jaj",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_1d1y",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_08wc",
+      "secret": true
     }
   ]
 }

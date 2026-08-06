@@ -553,6 +553,24 @@ Project-scoped assets live under `api/postman/<projectname>/` and `api/api-mappi
 
 For the step-by-step API usage guide, see [api/README.md](api/README.md).
 
+### Quick Start: API Testing
+
+```bash
+# Extract environment from Postman collection
+npm run postman:extract-env
+
+# Run API smoke tests (uses config file)
+npm run postman:runner:smoke
+
+# Run full contract validation
+npm run test:api:contract
+
+# Run integration tests with mobile UI verification
+npm run test:api:integration:mobile
+```
+
+See [api/README.md](api/README.md) for complete API testing documentation.
+
 ## Profile Data
 
 The test helpers load profile values through dotenv from [test-data/student-loan-refi/student-loan-refi.yml](test-data/student-loan-refi/student-loan-refi.yml) (or `.yaml` when present). `loadProfile(PROFILE)` copies `KEY_PROFILE` values into the base keys used by the tests, for example `FIRST_NAME_LK1` becomes `FIRST_NAME`.
@@ -586,6 +604,14 @@ Most specs in [tests/projects/student-loan-refi](tests/projects/student-loan-ref
 
 ## Repository Notes
 
+**Documentation Organization:**
+- API testing documentation consolidated and organized by function (2026-08-06):
+  - [api/API-TESTING.md](api/API-TESTING.md) - Main guide (setup, running tests, token management, CI/CD, troubleshooting)
+  - [api/MOBILE-UI-VERIFICATION.md](api/MOBILE-UI-VERIFICATION.md) - Mobile verification procedures (6 verification categories, patterns, debugging)
+  - [api/tests/TEST-CASES-REFERENCE.md](api/tests/TEST-CASES-REFERENCE.md) - Test case reference (all 50 test cases, priorities, execution strategy)
+  - Deleted 10 duplicate files for cleaner documentation structure
+
+**Framework & Configuration:**
 - [package.json](package.json) contains npm shortcuts for the Playwright suite.
 - [package.json](package.json) also contains the mobile runner, build and validation entry points.
 - [scripts/build-ios-app.ts](scripts/build-ios-app.ts) builds and publishes iOS artifacts from the local app clone.

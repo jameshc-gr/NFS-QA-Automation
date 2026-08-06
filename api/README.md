@@ -1,103 +1,147 @@
-# API How To Use
+# API Testing
 
-This folder contains the Playwright-based API runner, shared parsers, and sample fixtures.
-
-## What It Does
-
-The API runner executes two input styles:
-
-- Postman collections under `api/postman/`
-- Custom mapping JSON under `api/api-mappings/`
-
-It resolves Postman-style placeholders such as `{{baseUrl}}`, `{{token}}`, and `{{customerId}}`, then runs the requests through Playwright's `request` fixture.
+This folder contains Postman collections, API mappings, and test case definitions.
 
 ## Quick Start
 
-1. Set your environment values in `.env` or your shell.
-2. Point the runner at a collection or mapping file, or let it discover the default files.
-3. Run the API project from Playwright.
-
-Example:
-
 ```bash
-npm run test:api
-```
+# Extract Postman environment configuration
+npm run postman:extract-env
 
-To run headed:
+# Run smoke tests (critical APIs only)
+npm run postman:runner:smoke
 
-```bash
-npm run test:api:headed
-```
+# Run full test suite with mobile UI verification
+npm run test:api:integration:mobile
 
-To open the HTML report:
-
-```bash
+# View results
 npm run test:api:report
 ```
 
-## Default File Layout
+## Main Documentation
 
-The runner looks for these default files first:
+For complete API testing guide, see:
+- **[API-TESTING.md](API-TESTING.md)** - Setup, running tests, token management, troubleshooting
+- **[MOBILE-UI-VERIFICATION.md](MOBILE-UI-VERIFICATION.md)** - Mobile verification procedures (6 verification categories, patterns)
+- **[tests/TEST-CASES-REFERENCE.md](tests/TEST-CASES-REFERENCE.md)** - All 50 test cases with execution strategy
 
-- `api/postman/collection.json`
-- `api/postman/environment.qa.json`
-- `api/api-mappings/api-mapping.json`
+## Test Cases
 
-Project-scoped files live under:
+**50 comprehensive test cases** covering:
+- Authentication & tokens (4 cases)
+- User profiles & accounts (8 cases)
+- Loan applications (12 cases)
+- Financial data (8 cases)
+- Document management (4 cases)
+- Account security (7 cases)
+- Notifications (2 cases)
+- Information & legal (3 cases)
 
-- `api/postman/<projectname>/`
-- `api/api-mappings/<projectname>/`
+### Running by Priority
 
-If `API_PROJECT=mobile`, the runner prefers the `mobile` folder before falling back to the root sample files.
+```bash
+# Critical tests only (5 min)
+npm run postman:runner:smoke
+
+# All high-priority tests (15 min)
+npm run test:api:contract
+
+# Full integration with mobile UI (30 min)
+npm run test:api:integration:mobile
+
+# All scenarios (45 min)
+npm run test:api:all-scenarios
+```
+
+### Running by Category
+
+```bash
+npm run test:api:by-tags auth              # Authentication
+npm run test:api:by-tags user              # User management
+npm run test:api:by-tags loan              # Loan applications
+npm run test:api:by-tags financial         # Financial data
+npm run test:api:by-tags security          # Security features
+npm run test:api:by-tags documents         # Document management
+```
+
+## File Organization
+
+```
+api/
+├── postman/                    # Postman collections & environments
+│   ├── environment.qa.json
+│   └── mobile/
+│       └── Gateway-API-Latest-*.json
+├── api-configs/                # Auto-generated configuration
+│   └── gateway-api-config.json
+├── api-mappings/               # Custom API definitions (optional)
+│   └── mobile/
+│       └── api-mapping.json
+├── tests/
+│   └── test-cases.csv          # Test case reference
+└── clients/                    # API client wrappers
+    └── ApplicationClient.ts
+```
 
 ## Environment Variables
 
-Use these variables to configure the API runner:
+Configure API testing with:
 
-- `BASE_URL`: Base URL for API requests.
-- `API_TOKEN`: Bearer token or API token used by the runner.
-- `API_PROJECT`: Selects a project folder such as `mobile`.
-- `POSTMAN_COLLECTION`: Explicit path to a Postman collection file.
-- `POSTMAN_ENV`: Explicit path to a Postman environment file.
-- `API_MAPPING_FILE`: Explicit path to a custom mapping JSON file.
-- `TENANT_ID`: Optional tenant header used by some requests.
-- `API_KEY`: Optional API key header used by some requests.
-
-The sample values live in [.env.example](../.env.example).
-
-## How Variable Resolution Works
-
-Variables are resolved in this order:
-
-1. Runtime values saved by earlier requests.
-2. Postman environment JSON.
-3. Postman collection variables.
-4. Process environment variables.
-5. Built-in dynamic values like `{{guid}}` and `{{timestamp}}`.
-
-That means you can save a value from one response and reuse it later with the same placeholder name.
-
-## Adding A New Postman Collection
-
-When a new collection is dropped into the workspace, keep the folder convention consistent:
-
-1. Put the collection under `api/postman/<projectname>/`.
-2. Add a matching environment file in the same project folder.
-3. Add a matching mapping file under `api/api-mappings/<projectname>/` if you use the custom mapping runner.
-4. Set `API_PROJECT=<projectname>` when running the suite.
-
-Example layout:
-
-```text
-api/
-  postman/
-    mobile/
-      Gateway-API-Latest-June-26-2026.postman_collection.json
-      environment.qa.json
-  api-mappings/
-    mobile/
-      api-mapping.json
+```bash
+BASE_URL=https://fsp.rate.com/gateway
+API_TOKEN=Bearer <token>
+TENANT_ID=gri
+CUSTOMER_ID=12345
 ```
+
+These are auto-loaded from:
+1. `api/api-configs/gateway-api-config.json` (auto-generated by `npm run postman:extract-env`)
+2. Environment variables (override config file)
+3. Process.env fallback
+
+## How It Works
+
+1. **Postman Collection** → Defines 100+ APIs
+2. **Extract Environment** → `npm run postman:extract-env`
+3. **Auto-Config** → Generates `api/api-configs/gateway-api-config.json`
+4. **Run Tests** → Test runners load config automatically
+5. **Token Extraction** → Fetches and injects Okta token
+6. **Mobile Verification** → Verifies API data in mobile UI
+
+## Token Management
+
+The framework automatically:
+- Locates the FetchOktaToken API
+- Extracts accessToken from response
+- Injects token into subsequent requests
+- Manages token lifecycle
+
+No manual token configuration needed!
+
+## Adding New Tests
+
+1. Update Postman collection
+2. Re-run `npm run postman:extract-env`
+3. Add test case to [tests/test-cases.csv](tests/test-cases.csv)
+4. Update [../TEST-CASES-REFERENCE.md](../TEST-CASES-REFERENCE.md)
+
+## Troubleshooting
+
+```bash
+# Verify connectivity
+curl https://fsp.rate.com/gateway/actuator/health
+
+# Check configuration
+cat api/api-configs/gateway-api-config.json
+
+# Run with verbose output
+npm run test:api:contract -- --verbose
+
+# Extract fresh configuration
+npm run postman:extract-env --force
+```
+
+For detailed troubleshooting, see [API-TESTING.md](API-TESTING.md)
 
 ## Adding A Custom Mapping File
 

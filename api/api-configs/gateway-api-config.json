@@ -1,0 +1,23 @@
+{
+  "name": "Gateway API - QA Environment",
+  "description": "Auto-extracted from Postman environment files",
+  "environment": "qa",
+  "updatedAt": "2026-08-06T22:13:56.905Z",
+  "config": {
+    "BASE_URL": "https://fsp.rate.com/gateway",
+    "API_TOKEN": "Bearer token-will-be-fetched-automatically",
+    "TIMEOUT": "10000",
+    "RETRY_COUNT": "0",
+    "BASEURL": "{{BASE_URL}}",
+    "GATEWAY": "{{BASE_URL}}",
+    "ACCESSTOKEN": "{{API_TOKEN}}",
+    "TOKEN": "{{API_TOKEN}}",
+    "TENANTID": "{{TENANT_ID}}",
+    "CUSTOMERID": "{{CUSTOMER_ID}}"
+  },
+  "notes": "This file is auto-generated from Postman environments. Edit BASE_URL and other values as needed, or re-run the environment extractor.",
+  "sources": {
+    "postmanEnvironment": "api/postman/environment.qa.json",
+    "postmanCollection": "api/postman/mobile/Gateway-API-Latest-Jul-29-2026.postman_collection.json"
+  }
+}

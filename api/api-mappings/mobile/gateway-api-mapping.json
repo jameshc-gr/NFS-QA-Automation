@@ -1,0 +1,2431 @@
+{
+  "version": "2.0",
+  "metadata": {
+    "name": "Gateway API - Converted from Postman",
+    "description": "Auto-converted from Gateway-API-Latest-Jul-29-2026.postman_collection.json",
+    "environment": "mobile",
+    "createdAt": "2026-08-06T22:07:14.782Z",
+    "source": "Postman Collection v2.1.0"
+  },
+  "variables": {
+    "gateway": "{{BASE_URL}}",
+    "accessToken": "{{ACCESS_TOKEN}}"
+  },
+  "globals": {
+    "timeout": 10000,
+    "retries": 0,
+    "tlsVerification": true
+  },
+  "testScenarios": {
+    "smoke": {
+      "description": "Quick token fetch and health check",
+      "tags": [
+        "critical",
+        "health"
+      ],
+      "apis": [
+        "fetch-okta-token",
+        "healthcheck-info",
+        "healthcheck"
+      ]
+    },
+    "contract": {
+      "description": "Full API contract validation",
+      "tags": [
+        "contract"
+      ],
+      "apis": [
+        "fetch-okta-token",
+        "healthcheck-info",
+        "healthcheck",
+        "actuator-info",
+        "actuator-refresh",
+        "0-contentquery",
+        "01-fetchwellnessvideos",
+        "02-fetchwellnessinstructors",
+        "1-registeruser---search-borrower",
+        "11-registeruser---search-create",
+        "12-registeruser---verify-create",
+        "13-changepassword",
+        "14-setpassword-for-forgot-password",
+        "15-generateemailverificationcode",
+        "16-verifycode",
+        "2--getallproductaccounts",
+        "21---only-mortgages",
+        "3---fetchmortgagerates",
+        "4---fetchuserdetails",
+        "5---dmxuserregistration"
+      ]
+    },
+    "integration": {
+      "description": "End-to-end integration tests",
+      "tags": [
+        "integration"
+      ],
+      "apis": [
+        "fetch-okta-token",
+        "healthcheck-info",
+        "healthcheck",
+        "actuator-info",
+        "actuator-refresh",
+        "0-contentquery",
+        "01-fetchwellnessvideos",
+        "02-fetchwellnessinstructors",
+        "1-registeruser---search-borrower",
+        "11-registeruser---search-create",
+        "12-registeruser---verify-create",
+        "13-changepassword",
+        "14-setpassword-for-forgot-password",
+        "15-generateemailverificationcode",
+        "16-verifycode"
+      ]
+    }
+  },
+  "apis": [
+    {
+      "id": "fetch-okta-token",
+      "name": "Fetch Okta Token",
+      "method": "POST",
+      "endpoint": "{{gateway}}/graphql",
+      "tags": [
+        "auth",
+        "critical"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "dynamic",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "query": "{\n  fetchOktaToken(\n    auth: {\n      userName: \"qa-bns-1112a@yopmail.com\",\n      password: \"NewGR@123\"\n    }\n  ) {\n    accessToken\n    userId\n    sessionToken\n    status\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "healthcheck-info",
+      "name": "HealthCheck Info",
+      "method": "GET",
+      "endpoint": "{{gateway}}/info",
+      "tags": [
+        "health",
+        "read-only"
+      ],
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "healthcheck",
+      "name": "HealthCheck",
+      "method": "GET",
+      "endpoint": "{{gateway}}/health",
+      "tags": [
+        "health",
+        "read-only"
+      ],
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "actuator-info",
+      "name": "Actuator Info",
+      "method": "GET",
+      "endpoint": "{{gateway}}/info",
+      "tags": [
+        "actuator",
+        "read-only"
+      ],
+      "headers": {
+        "X-Request-ID": "Bearer "
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "actuator-refresh",
+      "name": "Actuator Refresh",
+      "method": "POST",
+      "endpoint": "{{gateway}}/refresh",
+      "tags": [
+        "actuator"
+      ],
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "0-contentquery",
+      "name": "0-ContentQuery",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  content {\n    home {\n      dashBoardOrder\n      questions {\n        id\n        questionText\n        options {\n          id\n          optionText\n        }\n      }\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n      marketingPromos {\n        id\n        name\n        imageUrl\n        title\n        subTitle\n        description\n        redirectUrl\n        analyticsEventName\n      }\n      rateAlertTile {\n        title\n        subTitle\n        bannerImageUrl\n        bannerIconUrl\n        status\n        redirectUrl\n        analyticsName\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    loans {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    tools {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n      rateAlertTile {\n        title\n        subTitle\n        bannerImageUrl\n        bannerIconUrl\n        status\n        redirectUrl\n        analyticsName\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    financialWellness {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    personalWellness {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    growth {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    wellness {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    resources {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    applyHomeLoan {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    applyHelocAndRefinance {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\napplyStudentLoan {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n    applyPersonalLoan {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    applyInsurance {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    homeValuation {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    creditScore {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    mortgagePayment {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    mortgageRates {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    contactCenterServicing {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    applyRefinance {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    applyHeloc {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    applySameDayMortgage {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    applyReverseMortgage {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    homeValuationCalculator {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    creditScoreCalculator {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    mortgagePaymentCalculator {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    mortgageRatesCalculator {\n      message {\n        message\n        actionTitle\n        destination\n        htmlMessage\n        markdownMessage\n      }\n\n      featuredArticle {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      articles {\n        title\n        items {\n          title\n          imageUrl\n          destination\n        }\n      }\n\n      offers {\n        title\n        actionTitle\n        actionDestination\n        items {\n          id\n          title\n          subTitle\n          backgroundHexColor\n          imageUrl\n        }\n      }\n\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n\n    homeSearch {\n      faqs {\n        title\n        items {\n          id\n          question\n          answer\n        }\n      }\n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "01-fetchwellnessvideos",
+      "name": "0.1 FetchWellnessVideos",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchVideoClasses (filter:{\n      classTypes:[],\n      classSubTypes:[],\n      mapFilter:[{\n          classType:2,\n          classSubTypes:[]\n      }]\n      level:0,\n    minutes:0,\n      startDate:\"\",\n      endDate:\"\",\n      instructors:[],\n      featured:false,\n      first:0,\n      count:0,\n      videoId:0\n  }\n\n  ){\n\n    id,\n    classType,\n    subType,\n    level,\n    minutes,\n    date,\n    featured,\n    title,\n    subTitle,\n    newContent,\n    overviewImageUrl,\n    detailImageUrl,\n    featuredImageUrl,\n    destination,\n    description,\n    instructors{\n        id,\n        name\n    }\n\n\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "02-fetchwellnessinstructors",
+      "name": "0.2 FetchWellnessInstructors",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchVideoInstructors(\n    filter: {\n      instructorId: 70\n      classTypes: []\n      level: 0\n      featured: true\n      first: 0\n      count: 0\n    }\n  ) {\n    id\n    name\n    featured\n    classTypes\n    newContent\n    description\n    overviewImageUrl\n    detailImageUrl\n    guruImageUrl\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "1-registeruser---search-borrower",
+      "name": "1-RegisterUser - Search-Borrower",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": " {\n  searchBorrower(user: {\n    emailAddress: \"markmadore@aol.com\"\n }) {\n    status\n  }\n}\n\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "11-registeruser---search-create",
+      "name": "1.1-RegisterUser - Search-Create",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n  searchCreateUser(user: {\n    firstName : \"Andy\",\n    middleName : \"\",\n    lastName: \"America\",\n    emailAddress: \"sa-qa-oct23-04@yopmail.com\", \n    password:\"NewGR@123\"\n }) {\n    token\n    status\n  }\n}\n\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "12-registeruser---verify-create",
+      "name": "1.2-RegisterUser - Verify-Create",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": " mutation {\n  verifyCreateUser(user: {\n     firstName : \"Andy\",\n    middleName : \"\",\n    lastName: \"America\",\n    emailAddress: \"sa-qa-nov10+q@yopmail.com\", \n    password:\"NewGR@123\"\n    last4ssn:\"3335\"\n    isAgent:false\n    agentInviteId:\"3fa85f64-5717-4562-b3fc-2c963f66afa6\"\n }) {\n    token\n    verified\n  }\n}\n\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "13-changepassword",
+      "name": "1.3-ChangePassword",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n  changePassword(emailId: \"superapp-test-01@yopmail.com\",oldPassword:\"NewGR@12353\",\n  newPassword:\"NewGR@123\"){\n    status\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "14-setpassword-for-forgot-password",
+      "name": "1.4-SetPassword (For forgot password)",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n  setPassword(emailId: \"James1.Gosling12374@rate.com\",token:\"ffcdbedf-4c50-4676-bf22-9e792f6f5414\",newPassword:\"GRPwd@1237\"){\n    status\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "15-generateemailverificationcode",
+      "name": "1.5-GenerateEmailVerificationCode",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n  generateVerificationCode(emailId: \"qa-bns-1601a@yopmail.com\",codeType:\"new\", firstName:\"Andy\", lastName: \"America\"){\n    status,\n    token\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "16-verifycode",
+      "name": "1.6-VerifyCode",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\nverifyCode(userEmailVerificationInput:{\n    emailId: \"hari@yopmail.com\", code: \"635112\",token:\"b6ec0dd8-0533-4c7a-9976-4cd196ad646c\",codeType:\"new\"\n}) \n{\n\n    token,\nstatus\n}\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "2--getallproductaccounts",
+      "name": "2- GetAllProductAccounts",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{fetchAllProductAccounts \n {\npersonalLoans {\n    productId\n    productType\n    nextPaymentDate\n    loanAmount\n    loanStatus\n    loanNumber\n    isRefinance\n    isHeloc\n    isPersonalLoan\n    isMortgageLoan\n    canNavigateToApplication\n    canNavigateToMyAccount \n    redirectUrl\n    isInProgress\n    isInProgressAndEditable \n    isApplicationExpired \n    isApplicationNotEditable\n}\nmortgages {\n    productId\n    productType\n    lastModifiedDate\n    loanStatus\n    loanNumber\n    applicationStatus\n    contacts{\n    id\n    name\n    title\n    subTitle\n    email\n    fax\n    phone\n    avatarUrl\n    }\n    address{\n    streetAddress\n    city\n    state\n    zip\n    }\n    isRefinance\n    isHeloc\n    isPersonalLoan\n    isMortgageLoan\n    canNavigateToApplication\n    canNavigateToMyAccount \n    redirectUrl\n    loanServicingDetails{\n        isPayNowEligible\n        loanServicingRedirectURL\n        manageLoanAccountEligible\n        loanServicingNumber\n    }\n    isInProgress\n    isInProgressAndEditable \n    isApplicationExpired \n    isApplicationNotEditable\n    scheduledClosingDate\n    closingDate\n    mortgageBaseLoanAmount\n    mortgageInterestRate\n    applicationDate\n    fundedDate\n    isApplicationDelayed\n\n}\nhelocs {\n    productId\n    productType\n    loanAmount\n    loanStatus\n    loanNumber\n    address{\n    streetAddress\n    city\n    state\n    zip\n    }\n    isRefinance\n    isHeloc\n    isPersonalLoan\n    isMortgageLoan\n    canNavigateToApplication\n    canNavigateToMyAccount \n    redirectUrl\n    isInProgress\n    isInProgressAndEditable \n    isApplicationExpired \n    isApplicationNotEditable\n}\n}\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "21---only-mortgages",
+      "name": "2.1 - Only Mortgages",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{fetchListMortgageLoans \n{\n mortgages {\n    productId\n    productType\n    lastModifiedDate\n    loanStatus\n    loanNumber\n    applicationStatus\n    contacts{\n    id\n    name\n    title\n    subTitle\n    email\n    fax\n    phone\n    avatarUrl\n    }\n    address{\n    streetAddress\n    city\n    state\n    zip\n    }\n    isRefinance\n    isHeloc\n    isPersonalLoan\n    isMortgageLoan\n    canNavigateToApplication\n    canNavigateToMyAccount \n    redirectUrl\n    isInProgress\n    isInProgressAndEditable \n    isApplicationExpired \n    isApplicationNotEditable\n    scheduledClosingDate\n    closingDate\n    mortgageBaseLoanAmount\n    mortgageInterestRate\n    applicationDate\n    fundedDate\n    isApplicationDelayed\n }\n}\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "3---fetchmortgagerates",
+      "name": "3 - FetchMortgageRates",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{fetchMortgageRates(mortgageRateInput: { \n    cashoutAmount: \"11110\"\n    loanPurpose: \"Refinance\",\n    refinancePurpose : \"CashOutRefi\",\n    sourceID: \"SuperApp\",\n    zipCode: \"95630\",\n    isMilitary: false,\n    purchasePrice: \"801500\",\n    baseLoanAmount: \"640000\",\n    creditScore: \"780\",\n    waiveEscrows : false,\n    propertyType: \"Detached\",\n    propertyUse: \"InvestmentProperty\"}) \n  {\n\n    rates{\n    rate\n    apr\n    productId\n    armFixedPeriodMonths\n    margin\n    monthlyMi\n    totalClosingCosts\n    pmtPrincipalAndInterest\n    label\n    rebate\n    loanType\n    fees\n    lastUpdated\n    discountDollarAmount\n    totalPayment\n    calculatedMonthlyPayment\n    discountPoints{\n    cost\n    raw\n    closest\n    }\n    }\n    latestProductUpdatedDate\n}\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "4---fetchuserdetails",
+      "name": "4 - FetchUserDetails",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchBorrower {\n    borrowerGuid\n    isFirstTimeHomeBuyer\n    isAgent\n    agent {\n      id\n      attributes {\n        firstName\n        lastName\n        professionalEmail\n        title\n        brokerageName\n        photoUrl\n      }\n    }\n    isRateHomesLeadCreated\n    borrowerVersion\n    loginCount\n    name {\n      first\n      middle\n      last\n    }\n    postalAddress {\n      street\n      city\n      state\n      zip\n    }\n    phoneNumbers {\n      mobile\n      home\n    }\n    emailAddressCollection {\n      primary\n    }\n    contact {\n      name\n      id\n      title\n      subTitle\n      email\n      phone\n      mobile\n      avatarUrl\n      fax\n      displayRates\n      bio\n      schedulerLink\n      languages\n      address {\n        region\n        city\n      }\n    }\n    attributes {\n      rateAppUser\n    }\n    lastLoginDate\n\n    membershipDetails {\n      membershipDate\n      badges {\n        badgeTitle\n        badgeDate\n        badgeImage\n      }\n    }\n    isFirstTimeHomeBuyer\n    appTrackingConsentData {\n      advertisementId\n      allowTracking\n      deviceType\n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "5---dmxuserregistration",
+      "name": "5 - DMXUserRegistration",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n  registerDMXLoan(dmxLoanInput: {\n    loanPurpose:\"Purchase\"\n    firstName:\"Andy\"\n    lastName:\"America\"\n    phone:\"111-222-5555\"\n }) {\n    GrLoanGuid\n    AppUrl\n  }\n}\n\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "6---homevalue",
+      "name": "6 - HomeValue",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  homeValue(address: {street: [\"4437 Sanderson dr\"], city: \"Folsom\", state: \"CA\", zip: \"95630\"}) {\n    current {\n      details {\n        bathsResponse\n        bedsResponse\n        soldDateResponse\n        soldPriceResponse\n        yearBuiltResponse\n        livingAreaResponse\n        propertyType\n        taxAssessedYear\n        taxAssessedValueResponse\n      }\n      estimates {\n        maxValue\n        minValue\n        averageValue\n      }\n      comparables {\n        fullAddress\n        city\n        state\n        zip\n        soldPriceResponse\n      }\n      generatedAt\n    },\n    history{\n        details {\n        bathsResponse\n        bedsResponse\n        soldDateResponse\n        soldPriceResponse\n        yearBuiltResponse\n        livingAreaResponse\n        propertyType\n        taxAssessedYear\n        taxAssessedValueResponse\n      }\n      estimates {\n        maxValue\n        minValue\n        averageValue\n      }\n      comparables {\n        fullAddress\n        city\n        state\n        zip\n        soldPriceResponse\n      }\n      generatedAt\n    }\n    \n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "7---fetchcreditscore",
+      "name": "7 - FetchCreditScore",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchCreditScore{\n            creditScore\n            dateOfCapture\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "9---registerdevice",
+      "name": "9 - RegisterDevice",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n  registerDeviceToken(deviceTokenInput:{\n      token:\"devicetoken....\",\n      type:\"ios\",\n      enableNotifications: true\n  }\n      ){\n    status\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "10---generateinstallqrcode",
+      "name": "10 - GenerateInstallQrCode",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n  generateInstallQrCode(loqrCodeInput: {\n    size: 125\n    grLoanOfficerEmployeeId: \"11193\",\n    agentId:\"123\"\n }) {\n    imageFormat\n    encodedByteArray\n    url\n    redirectUrl\n    loName\n    avatarUrl\n  }\n}\n\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "11---findloanofficers",
+      "name": "11 - FindLoanOfficers",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  loanOfficers(loanOfficerInput: {search: \"Test\", start:1, count:10}) {\n      contacts{\n          name\n          id\n          title\n          subTitle\n          email\n          phone\n          mobile\n          avatarUrl\n          appQrCodeUrl\n          appDownloadLink\n          bio\n          schedulerLink\n          languages\n          description\n          address{\n            city\n            region\n          }\n      }\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "11---findloanofficers-copy",
+      "name": "11 - FindLoanOfficers Copy",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchCachedLOs(tenant: \"gri\") {\n          name\n          id\n          title\n          subTitle\n          email\n          phone\n          mobile\n          avatarUrl\n          appQrCodeUrl\n          appDownloadLink\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "12---saveloanofficer",
+      "name": "12 - SaveLoanOfficer",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n  saveLoanOfficer(loId: \"10195\",sourceType:\"branchIO\"){\n    status\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "121---saveloanofficerreferral",
+      "name": "12.1 - SaveLoanOfficerReferral",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n  saveLoanOfficerReferral(loId: \"22359\",phoneNumber: \"5555550000\"){\n    status\n    contact{\n        appQrCodeUrl\n        appRedirectUrl\n    }\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "122---getloanofficerreferral",
+      "name": "12.2 - GetLoanOfficerReferral",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "query{\n  getLoanOfficerReferral(phoneNumber: \"+12014176285\"){\n    loanOfficerId\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "13---totalexpertsfindloanofficers",
+      "name": "13 - TotalExpertsFindLoanOfficers",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchListLoanOfficers{      \n     id\n     email\n    status\n    externalId\n    role{\n     roleName\n    }\n    info{\n     costCenter\n    }\n      \n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "14---fetchhelocredirectquery",
+      "name": "14 - FetchHelocRedirectQuery",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchHelocRedirectQuery(empId: \"15488\"){  \n   url\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "15---fetchaccesstoken",
+      "name": "15 - FetchAccessToken",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n    fetchAccessToken(sessionToken:\"20111a_PXvbOvXmBtto4tZi1_m7iWNR0leH5En1QarYlHeuCOyya2FM\"){\n        accessToken\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "16---savefeedback",
+      "name": "16 - SaveFeedBack",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n  saveFeedBack(feedBackInput: {\n    feedBackType: \"review\" \n    message: \"I liked this App more\",\n    platform:\"IOS\",\n    osVersion:\"10.1\",\n    appVersion:\"\",\n    email:\"a@rate.com\",\n    rating:4\n }) {\n    status\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "17---fetchrssfeed",
+      "name": "17 - FetchRSSFeed",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchRSSFeed(feed:\"RateNews\") {\n    channel {\n      title\n      link\n      description\n      updateDetails {\n        date\n        period\n        frequency\n      }\n      homeImage {\n        url\n        title\n        link\n        width\n        height\n      }\n      items {\n        title\n        link\n         author\n        publishedDate\n        categories\n        image {\n          url\n          width\n          height\n        }\n        postId\n      }\n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "18---logusersession",
+      "name": "18 - LogUserSession",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n  logUserSession{\n    status\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "19---usergroupupdatemutation",
+      "name": "19 - UserGroupUpdateMutation",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n    addUserGroups {\n    status\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "50--chatbot-fetch-mutation",
+      "name": "50- ChatBot-Fetch-Mutation",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {fetchAnswerToQuestion(question:\"CEO\", sessionId:\"nfs:1cab44d4-d2db-4fd3-9c8b-3af692d67460\" )\n {\nmessages{\ncontent\ncontentType\nimageResponseCard{\n    title \n    subtitle \n    imageUrl \n    buttons {\n        text\n        value\n    }  \n}\n}\naltMessages{\n    markdown\n}\n}\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "501---chatbot-end-session-mutation",
+      "name": "50.1 - ChatBot-End-Session-Mutation",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n  endSession(sessionId: \"nfs123123\") {\n    sessionId\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "502---chatbot-start-session-mutation",
+      "name": "50.2 - ChatBot-Start-Session-Mutation",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n  startSession {\n    sessionId\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "503---findfeedback",
+      "name": "50.3 - FindFeedBack",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n    findFeedBack{\n        borrowerEmail\n        message\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "20---fetchoktatoken",
+      "name": "20 - FetchOktaToken",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchOktaToken(\n    auth: {\n    userName: \"qa-bns-1112a@yopmail.com\",\n      password: \"NewGR@123\",\n    }\n  ) {\n    factors{\n        id\n        factorType\n    }\n    userId\n    sessionToken\n    accessToken\n    status\n    stateToken\n    idToken\n    sid\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "201---fetchmlstoken",
+      "name": "20.1 - FetchMLSToken",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchMLSOktaToken(\n    auth: {\n    userName: \"sa-qa-aug21-a@yopmail.com\",\n      password: \"NewGR@123\",\n    }\n  ) {\n    factors{\n        id\n        factorType\n    }\n    userId\n    sessionToken\n    accessToken\n    status\n    stateToken\n    idToken\n    sid\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "202---fetchwildfiretoken",
+      "name": "20.2 - FetchWildFireToken",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchWildFireToken(\n    auth: {\n    userName: \"sa-qa-aug21-a@yopmail.com\",\n      password: \"NewGR@123\",\n    }\n  ) {\n    factors{\n        id\n        factorType\n    }\n    userId\n    sessionToken\n    accessToken\n    status\n    stateToken\n    idToken\n    sid\n    wildFireRedirectUrl\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "203---updateuserloanidentifier",
+      "name": "20.3 - UpdateUserLoanIdentifier",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n  updateUserLoanIdentifier(\n    userInput: {\n    loanIdentifier: \"1234\",\n    }\n  ) {\n    status\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "21---userenroll",
+      "name": "21 - UserEnroll",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n  userEnroll(\n    factor: {\n      stateToken: \"00QNWGej5CRdqil9l7TGlb1T3L0kzSPlly-p2plP-Q\"\n      factorType: \"sms\"\n      provider: \"OKTA\"\n      profile: { phoneNumber: \"+12014176285\" }\n    }) {\n    status\n    stateToken\n    factors{\n        id\n        factorType\n    }\n    userId\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "22---userenrollactivate",
+      "name": "22 - UserEnrollActivate",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  userEnrollActivate(factorId:\"mblldk128ipTKOVfv1d7\",\n    transaction: {\n      stateToken: \"00IdjH1dmFsjDFuxRm3ERUVfml1xSRZLTntpS_e2yR\",\n      passCode:\"150091\"\n    }) {\n    status\n     accessToken\n     sessionToken\nfactors{\n        id\n        factorType,\n    }\n    userId\n      }\n}\n    "
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "23---userenrollresend",
+      "name": "23 - UserEnrollResend",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  userEnrollResend(factorId:\"mbl88xhin299hKgCo1d7\",\n    transaction: {\n      stateToken: \"00AA_ahjtxANfzFhDYLIaFbAhYGapHC5x1U1MC4iFC\",\n    }) {\n    status\n     accessToken\n     sessionToken\n  }\n}\n    "
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "24---verifyenrolluser",
+      "name": "24 - VerifyEnrollUser",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  verifyEnroll(factorId:\"emf9fmjqwePIdMxQU1d7\",\n    transaction: {\n      stateToken: \"00K8gC7PU0PeONDca9F_y2z71mQCVzBED_sQ1Ua5qv\",\n      passCode: \"360729\"\n    }) {\n    status\n    stateToken\n    accessToken\n    sessionToken\n    factors{\n        id\n        factorType\n    }\n    userId\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "25---changetransactionstate",
+      "name": "25 - ChangeTransactionState",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  changeTransactionState(state:\"skip\",\n    transaction: {\n      stateToken: \"00vr7NiTQDAlB9DQg9_ny3mYB_RIR5lsAoyN4HF0ux\"\n    }) {\n    status\n     stateToken\n     accessToken\n     sessionToken\n     factors{\n        id\n        factorType\n    }\n     userId\n  }\n}\n    "
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "26---gatewaystatusquery",
+      "name": "26 - GatewayStatusQuery",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  gatewayStatus(\n    validationInput: { appType: \"ios\", appBuildNumber: 168 }\n  ) {\n  status\n  oktaUrl\n   myAccountUrl\n  dmxUrl\n  plUrl\n  helocUrl\n  agentOktaUrl\n  agentAdvantageUrl\n  agentClosings\n  agentDashboard\n  agentHelp\n  agentProfessionalProfile\n  agentReferClient\n  agentMarketingRequest\n  agentLoginEnabled\n  agentsBranchRedirectUrl\n  rateAlertUrl\n  mlsEnabled\n  mlsUrl\n  mlsEnabledOnHomeScreen\n  userPersonaEnabled\nblackButtonsEnabled\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "27---fetchmortgageratequery",
+      "name": "27 - FetchMortgageRateQuery",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchRateHistory(\n    startDateTime: \"2014-07-24T19:33:31.866Z\"\n    endDateTime: \"2023-07-24T19:33:31.866Z\"\n  ) {\n    productName\n    indexData {\n      indexName\n      value\n      date\n      message\n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "28-affordabilitymutation",
+      "name": "28-AffordabilityMutation",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  getUserAffordabilityData(\n    data: {\n      creditScore: \"780\"\n      isMilitary: true\n      cash: \"10000\"\n      equity: \"20000\"\n      city: \"Boston\"\n      zip: \"02122\"\n      isHomeOwner: true,\n      propertyType: \"Single-family\"\n      occupancyType: \"Primary\"\n      affordableDebtData: {\n        autoLoan: \"200\"\n        personalLoan: \"0\"\n        creditCardLoan: \"0\"\n        studentLoan: \"0\"\n        otherLoan: \"0\"\n        isMonthly: true\n      }\n      affordableIncomeData: {\n        base: \"5000\"\n        bonus: \"0\"\n        overTime: \"0\"\n        otherIncome: \"0\"\n        isMonthly: true\n      }\n    }\n  ) {\n    id\n    applicationType\n    loanAmount\n    totalAmount\n    downPayment\n    downPaymentPercent\n    estimatedMonthlyPayment\n    principalAndInterest\n    rate\n    apr\n    loanTermsInMonths\n    totalClosingCosts\n    discountPoints {\n      cost\n      raw\n      closest\n    }\n    hoa\n    pmi\n    taxes\n    insurance\n    affordabilityInputResponse {\n      creditScore\n      isMilitary\n      cash\n      equity\n      city\n      zip\n      isHomeOwner\n      propertyType\n      occupancyType\n      affordableDebtInfo {\n        autoLoan\n        personalLoan\n        creditCardLoan\n        studentLoan\n        otherLoan\n        isMonthly\n      }\n      affordableIncomeInfo {\n        base\n        bonus\n        overTime\n        otherIncome\n        isMonthly\n      }\n    }\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "29-getaffordabilitybyidquery",
+      "name": "29-GetAffordabilityByIdQuery",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  getUserAffordabilityById{\n    id\n    applicationType\n    loanAmount\n    totalAmount\n    downPayment\n    downPaymentPercent\n    estimatedMonthlyPayment\n    principalAndInterest\n    rate\n    apr\n    loanTermsInMonths\n    totalClosingCosts\n    hoa\n    pmi\n    taxes\n    insurance\n    createdAt\n    isScoreExpired\n      discountPoints {\n      cost\n      raw\n      closest\n    }\n    affordabilityInputResponse{\n     creditScore\n      isMilitary\n      cash\n      equity\n      city\n      zip\n      isHomeOwner\n      propertyType\n      occupancyType\n      affordableDebtInfo {\n        autoLoan\n        personalLoan\n        creditCardLoan\n        studentLoan\n        otherLoan\n        isMonthly\n      }\n      affordableIncomeInfo {\n        base\n        bonus\n        overTime\n        otherIncome\n        isMonthly\n      }\n    }\n\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "30---suppress-lo-rates",
+      "name": "30 - Suppress LO Rates",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n  suppressLORates{\n    message\n    list\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "31---financial-content-query",
+      "name": "31 - Financial Content Query",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchFinancialVideoClasses(filter:{\n      classTypes:[],\n      classSubTypes:[],\n      minutes:0,\n      startDate:\"\",\n      endDate:\"\",\n      featured:false,\n      first:0,\n      count:0,\n      sortByDate:true,\n      sortByPriority:false\n      videoId:0\n  }\n\n  ){   id\n    classType\n    subType\n    minutes\n    date\n    featured\n    title\n    overviewImage\n    detailImage\n    featuredImage\n    destination\n    description\n    newContent\n    tools\n    products\n       advisor {\n      id\n      name \n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "32---fetch-notification-settings-query",
+      "name": "32 - Fetch Notification Settings Query",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchNotificationSettings {\n    enableNotifications\n    flags {\n      loanMilestones\n      tasks\n      newContent\n      consent\n      rateAlerts\n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "33---update-notification-settings-mutation",
+      "name": "33 - Update Notification Settings Mutation",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n  updateNotificationSettings(\n    enableNotifications: true\n    flags: { \n        loanMilestones: false, \n        tasks: false, \n        newContent: true , \n        consent: false,\n        rateAlerts: true\n        }\n  ) {\n    enableNotifications\n    flags {\n      loanMilestones\n      tasks\n      newContent\n      consent\n      rateAlerts\n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "34---search-agent-query",
+      "name": "34 - Search Agent Query",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  searchAgent(input:{\n      professionalEmail:\"\",\n      agentId:\"\"\n  }) {\n    id\n    attributes{\n        firstName\n        lastName\n        professionalEmail\n        title\n        brokerageName\n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "35---register-agent-mutation",
+      "name": "35 - Register Agent Mutation",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n  createAgent(\n    input: {\n      title: \"Agent\"\n      brokerageName: \"ABC company\"\n      professionalEmail: \"agent-may-09e@yopmail.com\"\n    }\n  ) {\n    id\n    attributes {\n      firstName\n      lastName\n      professionalEmail\n      title\n      brokerageName\n      photoUrl\n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "36---mortgage-rates-payment-query",
+      "name": "36 - Mortgage Rates Payment Query",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchMortgagePaymentToday(ratesInput: {\n    homePrice:300000\n    downPaymentAmount:75000\n    interestRate:6.96\n    loanTerm:30\n    downPercentage:20\n    isVeteran:false\n    hoe:0\n    propertyTax:0\n    insurance:0\n\n }) {\n       monthlyPayment\n       principalInterest\n       pmi\n     \n  }\n}\n\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "37---clear-affordability-data",
+      "name": "37 - Clear Affordability Data",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n  deleteUserAffordability{\n      status\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "38--fetchwellnesscollections",
+      "name": "38- FetchWellnessCollections",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchCollections(filter: { featured: null, first: 0, count: 0 }) {\n    id\n    title\n    subTitle\n    featured\n    newContent\n    videoCount\n    description\n    overviewImageUrl\n    detailImageUrl\n    featuredImageUrl\n    level {\n      id\n      title\n      colorCode\n    }\npersonalVideos{\n    id,\n    category{\n        id,\n        title,\n        overviewImageUrl,\n        detailedImageUrl,\n        shareUrl\n    },\n    subCategory{\n           id,\n        title,\n        overviewImageUrl,\n        shareUrl\n    }\n    level{\n        id,\n        title,\n        colorCode\n    }\n    minutes,\n    date,\n    featured,\n    title,\n    subTitle,\n    newContent,\n    overviewImageUrl,\n    detailImageUrl,\n    featuredImageUrl,\n    destination,\n    description,\n    instructors{\n        id,\n        name\n    }\n    shareUrl\n  }\n  navigationRoute{\n        linkText\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n    shareUrl\n  }\n  \n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "381---fetchwellnesscollections-all-collections",
+      "name": "38.1 - FetchWellnessCollections (All Collections)",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchWellnessCollections(filter: { featured: null, first: 0, count: 0 }) {\n    id\n    title\n    description\n    subTitle\n    logoUrl\n    turnstileImageUrl\n    navigationRoute {\n      linkText\n      androidNavigationRoute\n      iOSNavigationRoute\n      analyticsName\n    }\n    shareUrl\n    collections {\n      id\n      title\n      subTitle\n      featured\n      newContent\n      videoCount\n      description\n      overviewImageUrl\n      detailImageUrl\n      featuredImageUrl\n      shareUrl\n      level {\n        id\n        title\n        colorCode\n      }\n      personalVideos {\n        id\n        title\n        shareUrl\n      }\n      navigationRoute {\n        linkText\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n    }\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "39--notification-history-list",
+      "name": "39- Notification History List",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  getNotificationHistory(notificationHistoryRequest: {\n    messageType: null,\n    isRead: null, \n    types: [], \n    onlyCount: null,\n    pageLimit: null,\n    lastNotificationId: null,\n    lastCreatedDate : null,\n    lastNotificationType : null\n    # lastNotificationId: \"83f72-284e-5212-b809-6055680c7a6a\",\n    # lastCreatedDate : \"2025-04-10T15:48:32.604301Z\",\n    # lastNotificationType : \"Task\"\n  }) {\n    notificationList{\n        notificationId\n        notificationType\n        category\n        title\n        description\n        isRead\n        isActive\n        loanNumber\n        redirectURL\n        productId\n        createdDate\n    }\n    notificationCount\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "40--read-notification-history",
+      "name": "40- Read Notification History",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": " mutation{\n    markNotificationAsRead(notificationId: \"83f72-284e-1398-b809-a6a\") {\n        status\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "41--delete-notification-history",
+      "name": "41- Delete Notification History",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": " mutation{\n    deleteNotification(notificationId: \"83f72-284e-1999-b809-6055680c7a6a\") {\n        status\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "42--get-saved-home---house-canary",
+      "name": "42- Get Saved Home - House Canary",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchSavedHomes {\n    borrowerId\n    loId\n    agentId\n    requestId\n    url\n    listingDate\n    daysOnMarket\n    listingStatus\n    listingPrice\n    ownerOccupied {\n      ownerOccupied\n    }\n    propertyAddress {\n      propertyId\n      streetAddress\n      unitNumber\n      city\n      stateOrProvince\n      postalCode\n      countyOrParish\n      latitude\n      longitude\n    }\n    propertyInfo {\n      hasAirConditioning\n      hasAttic\n      hasBasement\n      buildingAreaSqFt\n      buildingConditionScore\n      buildingQualityScore\n      constructionType\n      exteriorWalls\n      hasFireplace\n      fullBathCount\n      garageCapacity\n      garageType\n      heatingType\n      heatingFuelType\n      numberOfBuildings\n      numberOfStories\n      numberOfBedrooms\n      numberOfUnits\n      partialBathCount\n      hasPool\n      propertyType\n      roofCovering\n      roofType\n      lotSizeAcres\n      propertyStyle\n      totalBathCount\n      totalRooms\n      sewerType\n      subdivisionName\n      waterSource\n      yearBuilt\n      zoning\n      hoaFrequency\n      hoaAmount\n      propertyDescription\n      propertyImage1\n      propertyImage2\n      propertyImage3\n      disclaimer\n    }\n    assessment {\n      apn\n      assessmentYear\n      taxYear\n      totalAssessedValue\n      taxAmount\n    }\n    ltvDetails {\n      asOfMonth\n      fsd\n      inDefault\n      lastDefaultDate\n      ltvLwr\n      ltvMean\n      ltvUpr\n      propertyValueLwr\n      propertyValueMean\n      propertyValueUpr\n      totalEquityLwr\n      totalEquityMean\n      totalEquityUpr\n      totalLien\n      totalNoticeIds\n      totalMonthlyPayments\n      currentLiens {\n        armChangeDate\n        armIndex\n        dueDate\n        grantee1\n        grantee1Forenames\n        grantee2\n        grantee2Forenames\n        grantor1\n        grantor2\n        Isheloc\n        IsArm\n        IsStandAloneRefi\n        interestRate\n        lenderType\n        lienAmount\n        lienLengthMonths\n        lienMonthsCompletedAsOfDate\n        lienType\n        monthlyPayment\n        noticeIds\n        outstandingPrincipal\n        principalPaidAsOfDate\n        recordDate\n      }\n    }\n    salesHistory {\n      amount\n      apn\n      eventType\n      fips\n      grantee1Forenames\n      grantee1\n      grantee2Forenames\n      grantee2\n      grantor1Forenames\n      grantor1\n      grantor2Forenames\n      grantor2\n      recordBook\n      recordDate\n      recordDoc\n      recordPage\n    }\n    marketConditions {\n      marketGrade\n      marketDetails {\n        singleFamily {\n          daysOnMarketMedian\n          estimatedSalesTotal\n          inventoryTotal\n          marketActionMedian\n          monthsOfInventoryMedian\n          priceMedian\n        }\n        multiFamily {\n          daysOnMarketMedian\n          estimatedSalesTotal\n          inventoryTotal\n          marketActionMedian\n          monthsOfInventoryMedian\n          priceMedian\n        }\n        historicalInfo {\n          cagr1Year\n          cagr5Years\n          cagr10Years\n          cagr20Years\n          returns1Year\n          returns5Years\n          returns10Years\n          returns20Years\n        }\n      }\n    }\n    homeValue {\n      fsd\n      priceLower\n      priceUpper\n      priceMean\n    }\n    propertyId\n    propertyUrl\n    propertyImages\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "43--get-saved-searches---house-canary",
+      "name": "43- Get Saved Searches - House Canary",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchSavedSearches {\n    borrowerId\n    loId\n    agentId\n    url\n    saveId\n    savedSearchState {\n      name\n      mlsStateGroup\n      propertyType\n      minMarketGrade\n      maxMarketGrade\n      minAvmPrice\n      maxAvmPrice\n      minBeds\n      minBaths\n      minSqft\n      maxSqft\n      minLotArea\n      maxLotArea\n      minYearBuilt\n      maxYearBuilt\n      minBestPrimarySchoolPercentile\n      maxBestPrimarySchoolPercentile\n      minBestMiddleSchoolPercentile\n      maxBestMiddleSchoolPercentile\n      minBestHighSchoolPercentile\n      maxBestHighSchoolPercentile\n      minListPrice\n      maxListPrice\n      minListAgeDays\n      minHpi\n      maxHpi\n      minPricePerSqft50\n      maxPricePerSqft50\n      minCrimeCountyPercentile\n      maxCrimeCountyPercentile\n      min12moRiskOfDecline\n      max12moRiskOfDecline\n      maxConfidentListToAvmPrice\n      minConfidentRentalYield\n      minConfidentRentalAvmPrice\n      maxConfidentRentalAvmPrice\n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "44--fetchwellnessschema",
+      "name": "44- FetchWellnessSchema",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchWellnessSchema (filter:{\n      categoryId:null\n      subCategoryId:null\n      }){\n    id,\n    title,\n    subTitle\n    newContent\n    overviewImageUrl,\n    detailedImageUrl,\n    subCategories{\n        id,\n        title,\n        overviewImageUrl,\n        videoCount\n        newContent\n        shareUrl\n    }\n     customBanner{\n            title\n            overviewImageUrl\n            detailedImageUrl\n            bannerUrl\n        }\n    shareUrl\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "45---new-fetch-wellness-videos",
+      "name": "45 - New Fetch Wellness Videos",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchPersonalWellnessVideos(\n    filter: {\n      classTypes: []\n      classSubTypes: []\n      mapFilter: [\n        # { classType: 3, classSubTypes: [1] }\n        # { classType: 4, classSubTypes: [1] }\n      ]\n      level: null\n      minutes: 0\n      startDate: \"\"\n      endDate: \"\"\n      instructors: []\n      instructorType: null\n      featured: null\n      first: 0\n      count: 0\n      videoId: 0\n      includeCount: null\n    }\n  ) {\n    id\n    category {\n      id\n      title\n      newContent\n      overviewImageUrl\n      detailedImageUrl\n      shareUrl\n    }\n    subCategory {\n      id\n      title\n      newContent\n      overviewImageUrl\n      shareUrl\n    }\n    level {\n      id\n      title\n      colorCode\n    }\n    minutes\n    date\n    featured\n    title\n    subTitle\n    newContent\n    overviewImageUrl\n    detailImageUrl\n    featuredImageUrl\n    destination\n    description\n    instructors {\n      id\n      name\n      newContent\n    }\n    shareUrl\n    videoCount\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "46---fetchallchallenges",
+      "name": "46 - FetchAllChallenges",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchChallenges(filter:{\n      challengeId:1\n      }){\n     id\n    title\n    featured\n    description\n    overviewImageUrl\n    detailedImageUrl\n    featuredImageUrl\n    inProgressImageUrl\n    badgeUrl\n    completedMessage\n    newContent\n    videoList\n    videos{\nid,\n    category{\n        id,\n        title,\n        overviewImageUrl,\n        detailedImageUrl,\n        shareUrl\n    },\n    subCategory{\n           id,\n        title,\n        overviewImageUrl,\n        shareUrl\n    }\n    level{\n        id,\n        title,\n        colorCode\n    }\n    minutes,\n    date,\n    featured,\n    title,\n    subTitle,\n    newContent,\n    overviewImageUrl,\n    detailImageUrl,\n    featuredImageUrl,\n    destination,\n    dashDestination,\n    description,\n    instructors{\n        id,\n        name\n    }\n    read\n    videoUnlocked\n    }\n    userChallengeStatus{\n        challengeStartDate\n    challengeEndDate\n    challengeStatus\n    challengeProgress\n    }\n    shareUrl\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "47---update-challenge-mutation",
+      "name": "47 - Update Challenge Mutation",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n  updateChallengeMutation(request:{\n    challengeId:1\n    challengeStatus:\"In Progress\"\n    # ChallengeStatus : In Progress, Completed, Quit\n    videoClicked:1\n}\n  ){\n    status\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "48---fetchratealerteligibility",
+      "name": "48 - FetchRateAlertEligibility",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "query {\n  fetchRateAlertEligibility {\n      rateAlertCount\n    rateAlertTargetReachCount\n    rateAlertFavorableRateCount\n    rateAlert{\n    invitationNumber\n    targetRate\n    targetYearlySavingsAmount\n    estimatedCurrentRate\n    estimatedMonthlySavingsAmount\n    estimatedYearlySavingsAmount\n    }\n  }\n}\n\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "49-updateuserpersonamutation",
+      "name": "49-UpdateUserPersonaMutation",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n  updateUserPersona(request: [{\n    questionId:2\n    option:[1]\n  }\n]){\n  status\n}\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "50-updatehomeownerstatus",
+      "name": "50-UpdateHomeOwnerStatus",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n  updateHomeOwnerStatus(isHomeOwner: true){\n  status\n}\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "51-updateuserconsent",
+      "name": "51-UpdateUserConsent",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n  updateUserConsent {\n    status\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "52--gateway-metadata-query",
+      "name": "52- Gateway MetaData Query",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "\n{\n  gatewayMetadata(validationInput: { appType: \"ios\", appBuildNumber: 168 }) {\n    status\n    gatewayUrls {\n      oktaUrl\n      myAccountUrl\n      dmxUrl\n      plUrl\n      helocUrl\n      agentOktaUrl\n      agentAdvantageUrl\n      agentClosings\n      agentDashboard\n      agentHelp\n      agentProfessionalProfile\n      agentReferClient\n      agentMarketingRequest\n      westLakeUrl\n      westLakePreqlUrl\n      studentLoanUrl\n      loanServicingServiceMacUrl\n      agentsBranchRedirectUrl\n      rateAlertUrl\n      mlsUrl\n      rateTravelUrl\n      healthyMindsUrl\n      rentersInsuranceUrl\n      autoLoanRefiUrl\n      creditMonitoringUrl\n    }\n    gatewayFeatureFlags {\n      mlsEnabled\n      agentLoginEnabled\n      mlsEnabledOnHomeScreen\n      userPersonaEnabled\n      tlacEnabled\n      messageCenterEnabled\n      westLakeEnabled\n      mortgageCalcWebViewEnabled\n      studentLoanEnabled\n      loShareEnabled\n      videoShareEnabled\n      rateTravelEnabled\n      healthyMindsEnabled\n      loanServicingServiceMacEnabled\n      rentersInsuranceEnabled\n      autoLoanRefiEnabled\n      creditMonitoringEnabled\n      rateHomesEnabled\n    }\n    gatewayUIFlags {\n      blackButtonsEnabled\n    }\n    gatewayLegalLinks {\n    aboutUs\n    privacyPolicy\n    accessibility\n    doNotSellMyInformation\n    faqs\n    licensing\n    smsTerms\n    contactCenter\n    personalLoansDisclosure\n    termsAndConditions\n    }\n    gatewayCalcLinks {\n    mortgageRatesUrl\n    mortgagePaymentsUrl\n    mortgageHomeAffordability\n    }\n    gatewayNewLabelFlags {\n        showRateTravelNewLabel\n        showHealthyMindsNewLabel\n        showAutoLoanNewLabel\n        showStudentLoanNewLabel\n        showRentersInsuranceNewLabel\n    }\n    gatewayIdx {\n        oidc {\n            agent {\n                clientId\n                redirectUri\n            }\n            alpWeb{\n                clientId\n                redirectUri\n            }\n            autoDm{\n                clientId\n                redirectUri\n            }\n            autoFlp{\n                clientId\n                redirectUri\n            }\n            comeHome{\n                clientId\n                redirectUri\n            }\n            dmx{\n                clientId\n                redirectUri\n            }\n            myAccount{\n                clientId\n                redirectUri\n            }\n            myAccountV2{\n                clientId\n                redirectUri\n            }\n            studentLoanForgiveness{\n                clientId\n                redirectUri\n            }\n            wildfire{\n                clientId\n                redirectUri\n            }\n        }\n        saml {\n            agilant {\n                appId\n                ssoUrl\n            }\n            laasy {\n                appId\n                ssoUrl\n            }\n            osConnect {\n                appId\n                ssoUrl\n            }\n            serviceMac {\n                appId\n                ssoUrl\n            }\n            talkuments {\n                appId\n                ssoUrl\n            }\n        }\n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "53---fetch-train-like-a-champion-query",
+      "name": "53 - Fetch Train Like A Champion Query",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$$4a4685ca-ba41-4787-baf8-40503c41171b",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "query": "{\n  fetchTLAC(\n    filter: { collectionId: null, featured: null, first: 0, count: 0 }\n  ) {\n    id\n    title\n    description\n    subTitle\n    logoUrl\n    turnstileImageUrl\n    shareUrl\n    collections {\n      id\n      title\n      level {\n          id\n          title\n          colorCode\n        }\n      featured\n      newContent\n      description\n      subTitle\n      overviewImageUrl\n      detailedImageUrl\n      featuredImageUrl\n      videoCount\n      shareUrl\n      personalVideos{\n    id,\n    category{\n        id,\n        title,\n        newContent\n        overviewImageUrl,\n        detailedImageUrl,\n        shareUrl\n    },\n    subCategory{\n           id,\n        title,\n        newContent\n        overviewImageUrl,\n        shareUrl\n    }\n    level{\n        id,\n        title,\n        colorCode\n    }\n    minutes,\n    date,\n    featured,\n    title,\n    subTitle,\n    newContent,\n    overviewImageUrl,\n    detailImageUrl,\n    featuredImageUrl,\n    destination,\n    description,\n    instructors{\n        id,\n        name\n        newContent\n    }\n    shareUrl\n  }\n  }\n    }\n    }\n\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "54--new-fetch-wellness-schema",
+      "name": "54- New Fetch Wellness Schema",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n  fetchPersonalWellnessSchema(\n    filter: { categoryId: null, subCategoryId: null }\n  ) {\n    title\n    subTitle\n    allCategories {\n      title\n      subTitle\n      categories {\n        id\n        title\n        subTitle\n        newContent\n        overviewImageUrl\n        detailedImageUrl\n        subCategories {\n          id\n          title\n          newContent\n          overviewImageUrl\n          videoCount\n          shareUrl\n        }\n        customBanner{\n            title\n            subTitle\n            overviewImageUrl\n            detailedImageUrl\n            bannerUrl\n            newLabel\n        }\n        shareUrl\n      }\n    }\n    allGurus {\n      title\n      subTitle\n      guruCategories {\n        title\n        subTitle\n        gurus {\n          id\n          title\n          guruImageUrl\n          videoCount\n        }\n      }\n    }\n    customBannersTitle\n    customBanners {\n        partnerName\n        title\n        subTitle\n        overviewImageUrl\n        detailedImageUrl\n        bannerUrl\n        navigationRoute {\n            title\n            linkText\n            androidNavigationRoute\n            iOSNavigationRoute\n            analyticsName\n            view\n            args\n        }\n        newLabel\n    }\n    personalWellnessOrder\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "55--update-device-token-mutation",
+      "name": "55- Update Device Token Mutation",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n  updateDeviceToken(deviceToken: null,\n        newDeviceToken: \"token 6\",\n      type:\"android\")\n    {\n    status\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "56---fetchmembershipcontent",
+      "name": "56 - FetchMembershipContent",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n    fetchMembershipContent(membershipContentRequest : {\n        membershipPartner: RATE_CONCIERGE\n        # ABT, ADT, RATE_TECH_SUPPORT, RATE_HOME_WARRANTY, RATE_CONCIERGE\n        }) {\n        id\n        partnerName\n        imageURL\n        imageTitle\n        poweredByLogoUrl\n        partnerTitle\n        description\n        offeringsTitle\n        offeringsDescription\n        services {\n            serviceId\n            serviceName\n            svgUrl\n        }\n        redirectUrl\n        videoDetails {\n            videoId\n            videoImageUrl\n            videoUrl\n            hlsUrl\n            dashUrl\n        }\n        featuresSectionTitle\n        featuresSectionDescription\n        features {\n            id\n            featureName\n            description\n            highlightText\n        }\n        featurePoints\n        faqs {\n            title\n            items {\n                id\n                question\n                answer\n            }\n        }\n        contactDetails {\n            title\n            subTitle\n            description\n            iconUrl\n        }\n        endorsementDetails {\n            title\n            description\n            iconUrl\n        }\n        redirectInfo\n        processOverviewTitle\n        processSteps {\n            id\n            featureName\n            description\n        }\n        processOverviewPoints\n        descriptionNotes\n        termsAndConditions {\n            title\n            iconUrl\n            redirectUrl\n        }\n        benefitsSectionTitle\n        benefits {\n            id\n            featureName\n            description\n            highlightText\n        }\n        newContent\n        shareUrl\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "57---fetch-abt-orders",
+      "name": "57 - Fetch ABT Orders",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n    fetchAbtOrders {\n            id\n            abtId\n            createdTimestamp\n            updatedTimestamp\n            email\n            cartId\n            grandTotal\n            discountAmount\n            orderDate\n            orderDateTimestamp\n        }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "58---initiate-adt-registration",
+      "name": "58 - Initiate ADT Registration",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation{\n    initiateAdtRegistration(adtRegistrationRequest :{\n        firstName: \"Andy\",\n        lastName: \"America\",\n        phoneNumber: \"905-997-2011\",\n        email: \"qa-bns-2509a@yopmail.com\",\n        address: {\n            street: [\"12345 Valley St\"]\n            city: \"Mountian View\",\n            state: \"CA\"\n            zip: \"95630\"\n        }\n        loanOfficerId: \"12268\",\n        loanOfficerName: \"Indu Kapoor\"\n        notes: \"Notess for ADT Registration\"\n    }) {\n        status\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "59---adt-leads--subscriptions",
+      "name": "59 - ADT Leads & Subscriptions",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "{{tenantId}}",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n    fetchAdtLeadsAndSubscriptions {\n        adtLeads {\n            id\n            createdTimestamp\n            createdDate\n            updatedTimestamp\n            referenceNumber\n            status\n            address {\n                streetAddress\n                city\n                state\n                zip\n            }\n        }\n        adtSubscriptions {\n            id\n            createdTimestamp\n            createdDate\n            updatedTimestamp\n            adtId\n            secure24Id\n            planName\n            startDate\n            endDate\n            contactEmail\n            contactPhone\n            referenceNumber\n            status\n            address {\n                streetAddress\n                city\n                state\n                zip\n            }\n        }\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "60---fetch-membership-schema",
+      "name": "60 - Fetch Membership Schema",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n    fetchMembershipSchema(membershipSchemaRequest: {\n        isSortByDetailViewId: false\n    }) {\n        title\n        description\n        products {\n            id\n            detailViewId\n            productName\n            dashboardImageUrl\n            featuredImageUrl\n            featuredTitle\n            detailImageUrl\n            detailTitle\n            subtitle\n            newContent\n            shareUrl\n        }\n        shareUrl\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "61---fetch-agilant-sso-params",
+      "name": "61 - Fetch Agilant SSO Params",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "{\n    fetchAgilantUrl {\n     agilantRedirectUrl\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "62---fetch-entitlements",
+      "name": "62 - Fetch Entitlements",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "query {\n  fetchEntitlements {\n    entitlements {\n      uuid\n      dtCreated\n      dtUpdated\n      subscription {\n        uuid\n        isActive\n        dateStart\n        dateEnd\n        dateCancelled\n        dateRequestToCancel\n        token\n        frequency\n        amount\n        createdAt\n        updatedAt\n      }\n      datePurchase\n      pricePurchase\n      receiptNumber\n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "63---fetch-agilant-subscriptions",
+      "name": "63 - Fetch Agilant Subscriptions",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "query {\n  fetchAgilantSubscriptions {\n    subscriptions {\n      uuid\n      isActive\n      dateStart\n      dateEnd\n      dateCancelled\n      dateRequestToCancel\n      token\n      frequency\n      amount\n      createdAt\n      updatedAt\n    }\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "64---updateuserconsenttoapptracking",
+      "name": "64 - UpdateUserConsentToAppTracking",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n    updateUserConsentToAppTracking(appTrackingConsentRequest : {\n        advertisementId: \"1111-2222-3333\",\n        allowTracking: true,\n        deviceType: \"ios\" \n        # ios / android\n    }) {\n        status\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "65---financial-wellness-schema",
+      "name": "65 - Financial Wellness Schema",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "Content-Type": "application/json",
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "query {\n  fetchFinancialWellnessSchema(\n    filter: { }\n  ) {\n    categories {\n      id\n      title\n      subTitle\n      newContent\n      overviewImageUrl\n      dashboardImageUrl\n      exploreLink{\n        linkText\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n      subCategories {\n        displayName\n        id\n        title\n        subTitle\n        newContent\n        overviewImageUrl\n        dashboardImageUrl\n        videoCount\n        shareUrl\n      }\n      shareUrl\n    }\n    products {\n      id\n      title\n      newContent\n      overviewImageUrl\n      androidNavigationRoute\n      iOSNavigationRoute\n      analyticsName\n      shareUrl\n    }\n    tools {\n      id\n      title\n      newContent\n      overviewImageUrl\n      androidNavigationRoute\n      iOSNavigationRoute\n      analyticsName\n    }\n    shareUrl\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "66---new-financial-wellness-videos",
+      "name": "66 - New Financial Wellness Videos",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "query {\n  fetchFinancialWellnessVideos(\n    filter: {\n      #   categories: [4, 2],\n        mapFilter: [\n          { category: 1, subCategories: [4] }\n        ],\n      minutes: 0\n      startDate: null\n      endDate: null\n      videoId: 0\n      featured: null\n      first: 0\n      count: 0\n      includeCount: null\n    }\n  ) {\n    videos {\n      id\n      title\n      category {\n        id\n        title\n        subTitle\n        newContent\n        overviewImageUrl\n        dashboardImageUrl\n         exploreLink{\n        linkText\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n        shareUrl\n      }\n      subCategory {\n        title\n        id\n        title\n        subTitle\n        newContent\n        overviewImageUrl\n        dashboardImageUrl\n        videoCount\n        shareUrl\n      }\n      minutes\n      date\n      featured\n      overviewImage\n      detailImage\n      featuredImage\n      destination\n      hlsDestination\n      dashDestination\n      description\n      tools {\n        title\n        id\n        displayName\n        newContent\n        overviewImageUrl\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n      }\n      products {\n        title\n        id\n        displayName\n        newContent\n        overviewImageUrl\n        androidNavigationRoute\n        iOSNavigationRoute\n        analyticsName\n        shareUrl\n      }\n      newContent\n      shareUrl\n    }\n    totalCount\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "67---recover-password",
+      "name": "67 - Recover Password",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$$5ed0ea52-0611-4135-96fb-0acace444ad3",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "query": "mutation {\n    recoverPassword(recoverPasswordRequest : {\n        username: \"qa-bns-1211a@yopmail.com\",\n        factorType: SMS\n    }) {\n        status\n        stateToken\n        factors {\n            factorType\n        }\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "68---verify-recover-password",
+      "name": "68 - Verify Recover Password",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$$5ed0ea52-0611-4135-96fb-0acace444ad3",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "query": "mutation {\n    verifyPasswordRecoveryCode(transaction: {\n      stateToken: \"00Lst0jTscUpAQmpPXV2RfDauICWI5veKdZqf1Tic0\",\n      passCode:\"423491\"\n    }) {\n        status\n        stateToken\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "69---reset-password",
+      "name": "69 - Reset Password",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$$5ed0ea52-0611-4135-96fb-0acace444ad3",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "query": "mutation {\n    resetPassword(resetPasswordRequest: {\n      stateToken: \"00Lst0jTscUpAQmpPXV2RfDauICWI5veKdZqf1Tic0\",\n      newPassword: \"NewGR11@123\"\n    }) {\n        status\n        stateToken\n        sessionToken\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "70---resend-passcode",
+      "name": "70 - Resend Passcode",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$$5ed0ea52-0611-4135-96fb-0acace444ad3",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "query": "mutation {\n    resendPasscode(transactionTokenRequest: {\n      stateToken: \"00eJtOh3Cqts1npeO15ohgWX89LwyklIUJyhVOwoZd\"\n    }) {\n        status\n        stateToken\n        factors {\n            factorType\n        }\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "71---cancel-transaction",
+      "name": "71 - Cancel Transaction",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$$5ed0ea52-0611-4135-96fb-0acace444ad3",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "query": "mutation {\n    cancelRecoverPasswordTransaction(transactionTokenRequest: {\n      stateToken: \"00eJtOh3Cqts1npeO15ohgWX89LwyklIUJyhVOwoZd\"\n    }) {\n        status\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "72---unlock-account",
+      "name": "72 - Unlock Account",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$$5ed0ea52-0611-4135-96fb-0acace444ad3",
+        "Content-Type": "application/json",
+        "Cookie": "__cf_bm=EjZLBmFZwG4e.NvlfbAu8KTnP1ushqGGtdS5WANMegI-1764587463.3069327-1.0.1.1-u_HtYALIq7jV5RGgb9w58FYLSS85_ViDI8YZScRHw_7Ix.fjQFqWjW5Bu.wpSZmxEKy..vlCtkw07LnC1Gv.v9kIqC2SwzwYPgad7.Zjr.aD4qCamj4dqxA6aoMKkNL7"
+      },
+      "body": {
+        "query": "mutation {\n    unlockAccount(unlockAccountRequest : {\n        username: \"qa-bns-0801b@yopmail.com\",\n        factorType: EMAIL\n    }) {\n        status\n        stateToken\n        factors {\n            factorType\n        }\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "73---verify-email---unlock-account",
+      "name": "73 - Verify Email - Unlock Account",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$$5ed0ea52-0611-4135-96fb-0acace444ad3",
+        "Content-Type": "application/json",
+        "Cookie": "__cf_bm=EjZLBmFZwG4e.NvlfbAu8KTnP1ushqGGtdS5WANMegI-1764587463.3069327-1.0.1.1-u_HtYALIq7jV5RGgb9w58FYLSS85_ViDI8YZScRHw_7Ix.fjQFqWjW5Bu.wpSZmxEKy..vlCtkw07LnC1Gv.v9kIqC2SwzwYPgad7.Zjr.aD4qCamj4dqxA6aoMKkNL7"
+      },
+      "body": {
+        "query": "mutation {\n    verifyEmailForUnlockAccount(unlockEmailVerificationRequest : {\n        emailId: \"qa-bns-0801b@yopmail.com\",\n        code: \"179984\",\n        token: \"d24d5def-1664-45ce-9aae-d292cf266d6a\"\n    }) {\n        status\n        stateToken\n        factors {\n            factorType\n        }\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "74---fetch-auto-loan-vouchers",
+      "name": "74 - Fetch Auto Loan Vouchers",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$$5b641383-6c4e-486b-b96e-050900d5c1a7",
+        "Content-Type": "application/json",
+        "Cookie": "AdTrk=%7Cgnr%7Crate%7C%7C%7C%7C%7C%7C%7C%7Cdirect%7C%7C%7C%7C%7C"
+      },
+      "body": {
+        "query": "query {\n  fetchAutoLoanVouchers {\n    voucherDetails {\n      voucherCode\n      voucherExpirationDate\n      voucherResultDetails {\n        vin\n        computeId\n        lender\n        monthly\n        apr\n        down\n        term\n        amtFin\n        taxes\n        fees\n        maxGAP\n        maxWarranty\n        maxBackend\n        qualified\n        scenarioCode\n      }\n    }\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "75---fetch-outdoor-studio-query",
+      "name": "75 - Fetch Outdoor Studio Query",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$$4a4685ca-ba41-4787-baf8-40503c41171b",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "query": "{\n  fetchOutdoorStudio(\n    filter: { collectionId: null, featured: null, first: 0, count: 0 }\n  ) {\n    id\n    title\n    description\n    subTitle\n    logoUrl\n    turnstileImageUrl\n    shareUrl\n    collections {\n      id\n      title\n      level {\n          id\n          title\n          colorCode\n        }\n      featured\n      newContent\n      description\n      subTitle\n      overviewImageUrl\n      detailedImageUrl\n      featuredImageUrl\n      videoCount\n      shareUrl\n      personalVideos{\n    id,\n    category{\n        id,\n        title,\n        newContent\n        overviewImageUrl,\n        detailedImageUrl,\n        shareUrl\n    },\n    subCategory{\n           id,\n        title,\n        newContent\n        overviewImageUrl,\n        shareUrl\n    }\n    level{\n        id,\n        title,\n        colorCode\n    }\n    minutes,\n    date,\n    featured,\n    title,\n    subTitle,\n    newContent,\n    overviewImageUrl,\n    detailImageUrl,\n    featuredImageUrl,\n    destination,\n    description,\n    instructors{\n        id,\n        name\n        newContent\n    }\n    shareUrl\n  }\n  }\n    }\n    }\n\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "76--map-agent-to-borrower",
+      "name": "76- Map Agent to Borrower",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$$4a4685ca-ba41-4787-baf8-40503c41171b",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "query": "mutation{\n    mapAgentToBorrower(\n    input: { agentId: \"99091\" }\n  ) {\n    status\n  }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "77---get-agent-invite-by-id-query",
+      "name": "77 - Get Agent Invite By Id Query",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "query {\n  getAgentInviteById(agentInviteId: \"3fa85f64-5717-4562-b3fc-2c963f66afa6\") {\n    id\n    type\n    attributes {\n      guid\n      agent {\n        firstName\n        lastName\n        email\n        title\n        brokerageName\n        officePhone\n        mobilePhone\n        address1\n        address2\n        city\n        state\n        zip\n        website\n        mlsAssociationId\n        mlsAgentId\n        teId\n        legacyRealtorId\n        images {\n          headshot {\n            full\n            small\n            medium\n          }\n          branding {\n            full\n            small\n            medium\n          }\n        }\n      }\n      loanOfficer {\n        id\n        company\n      }\n      createdDate\n      createdBy\n      updatedDate\n      updatedBy\n      expirationDate\n      invitorType\n      invitorConsumerId\n      status\n      agentId\n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "78---create-agent-from-invite-mutation",
+      "name": "78 - Create Agent From Invite Mutation",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n  createAgentFromInvite(\n    input: {\n      agentInviteId: \"3fa85f64-5717-4562-b3fc-2c963f66afa6\"\n    }\n  ) {\n    type\n    id\n    attributes {\n      firstName\n      lastName\n      loginEmail\n      oktaId\n    }\n  }\n}\n"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "79---rate-homes-create-lead",
+      "name": "79 - Rate Homes Create Lead",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "body": {
+        "query": "mutation {\n    createRateHomesLead(rateHomesLeadRequest :{\n        firstName: \"Andy\",\n        lastName: \"America\",\n        email: \"qa-bns-2107a@yopmail\",\n        phoneNumber: \"905-997-2011\",\n        zipCode: \"95630\",\n        city: \"Mountian View\",\n        state: \"CA\"\n    }){\n        status\n    }\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "testloanofficer",
+      "name": "TestLoanOfficer",
+      "method": "GET",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "read-only"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "testfileupload",
+      "name": "TestFileUpload",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$${{$guid}}",
+        "Content-Type": "multipart/form-data"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    },
+    {
+      "id": "hmac-hash",
+      "name": "HMAC Hash",
+      "method": "POST",
+      "endpoint": "{{gateway}}",
+      "tags": [
+        "api"
+      ],
+      "headers": {
+        "X-GR-FSP-TENANT-ID": "gri",
+        "X-Request-ID": "$$5ed0ea52-0611-4135-96fb-0acace444ad3",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "query": "{\n    getHmacHash(\n        input : \"qa-bns-1201c@yopmail.com\"\n)\n}"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 5000
+      }
+    }
+  ]
+}

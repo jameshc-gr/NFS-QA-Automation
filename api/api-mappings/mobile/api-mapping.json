@@ -1,18 +1,103 @@
 {
-	"variables": {
-		"baseUrl": "{{BASE_URL}}"
-	},
-	"apis": [
-		{
-			"name": "Actuator Health",
-			"method": "GET",
-			"endpoint": "{{baseUrl}}/actuator/health",
-			"headers": {
-				"Accept": "application/json"
-			},
-			"expected": {
-				"status": 200
-			}
-		}
-	]
+  "version": "2.0",
+  "metadata": {
+    "name": "Gateway API Test Suite",
+    "description": "Comprehensive API testing for mobile, web, and backend services",
+    "environment": "qa",
+    "createdAt": "2026-08-06"
+  },
+  "variables": {
+    "baseUrl": "{{BASE_URL}}",
+    "apiKey": "{{API_KEY}}",
+    "apiSecret": "{{API_SECRET}}"
+  },
+  "globals": {
+    "timeout": 10000,
+    "retries": 0,
+    "tlsVerification": true
+  },
+  "testScenarios": {
+    "smoke": {
+      "description": "Quick smoke tests for basic connectivity",
+      "tags": ["smoke", "critical"],
+      "apis": ["health-check"]
+    },
+    "contract": {
+      "description": "API contract validation tests",
+      "tags": ["contract"],
+      "apis": ["health-check", "user-profile"]
+    },
+    "integration": {
+      "description": "Full integration tests with mobile UI",
+      "tags": ["integration", "mobile"],
+      "apis": ["health-check", "user-profile", "update-settings"]
+    },
+    "performance": {
+      "description": "Load and performance tests",
+      "tags": ["performance"],
+      "apis": ["health-check"]
+    }
+  },
+  "apis": [
+    {
+      "id": "health-check",
+      "name": "Actuator Health",
+      "description": "Application health status endpoint",
+      "method": "GET",
+      "endpoint": "{{baseUrl}}/status/200",
+      "tags": ["health", "status", "critical"],
+      "headers": {
+        "Accept": "application/json"
+      },
+      "expected": {
+        "status": 200
+      },
+      "performance": {
+        "maxResponseTime": 1000,
+        "maxSize": 5000
+      },
+      "uiMapping": {
+        "mobile": {
+          "page": "/health",
+          "selectors": {
+            "healthStatus": "[data-testid='health-status']"
+          }
+        }
+      }
+    },
+    {
+      "id": "user-profile",
+      "name": "Get User Profile",
+      "description": "Retrieve current user profile information",
+      "method": "GET",
+      "endpoint": "{{baseUrl}}/api/users/profile",
+      "tags": ["user", "profile"],
+      "headers": {
+        "Authorization": "Bearer {{API_KEY}}",
+        "Accept": "application/json"
+      },
+      "expected": {
+        "status": 200,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "email": { "type": "string" }
+          }
+        }
+      },
+      "performance": {
+        "maxResponseTime": 1500
+      },
+      "uiMapping": {
+        "mobile": {
+          "page": "/profile",
+          "selectors": {
+            "userName": "[data-testid='user-name']",
+            "userEmail": "[data-testid='user-email']"
+          }
+        }
+      }
+    }
+  ]
 }

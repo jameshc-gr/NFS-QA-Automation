@@ -1,0 +1,5 @@
+{
+  "BASE_URL": "https://httpbin.org",
+  "API_KEY": "your-api-key-here",
+  "API_SECRET": "your-api-secret-here"
+}
