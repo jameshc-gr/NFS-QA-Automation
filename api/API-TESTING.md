@@ -228,7 +228,7 @@ API_TOKEN="Bearer my-token" npm run postman:runner:smoke
 - Notifications (2 cases)
 - Information & legal (3 cases)
 
-For detailed test case reference, see [tests/TEST-CASES-REFERENCE.md](tests/TEST-CASES-REFERENCE.md).
+For detailed test case reference, see [tests/mobile/TEST-CASES-REFERENCE.md](tests/mobile/TEST-CASES-REFERENCE.md).
 
 ---
 
@@ -521,7 +521,7 @@ jobs:
 
 ## Documentation
 
-- [tests/TEST-CASES-REFERENCE.md](tests/TEST-CASES-REFERENCE.md) - All 50 test cases
+- [tests/mobile/TEST-CASES-REFERENCE.md](tests/mobile/TEST-CASES-REFERENCE.md) - All 50 test cases
 - [MOBILE-UI-VERIFICATION.md](MOBILE-UI-VERIFICATION.md) - Mobile UI verification guide
 - [README.md](README.md) - API folder guide
-- [tests/test-cases.csv](tests/test-cases.csv) - Test cases in CSV format
+- [tests/mobile/test-cases.csv](tests/mobile/test-cases.csv) - Test cases in CSV format

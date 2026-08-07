@@ -833,6 +833,6 @@ npm run test:api:performance
 
 - [API-TESTING.md](./API-TESTING.md) - Complete API testing guide
 - [README.md](./README.md) - API testing quick start
-- [tests/TEST-CASES-REFERENCE.md](./tests/TEST-CASES-REFERENCE.md) - All 50 test cases
-- [tests/test-cases.csv](./tests/test-cases.csv) - Test cases in CSV format
+- [tests/mobile/TEST-CASES-REFERENCE.md](./tests/mobile/TEST-CASES-REFERENCE.md) - All 50 test cases
+- [tests/mobile/test-cases.csv](./tests/mobile/test-cases.csv) - Test cases in CSV format
 - [../mobile/README.md](../mobile/README.md) - Mobile testing setup

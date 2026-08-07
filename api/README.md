@@ -23,7 +23,7 @@ npm run test:api:report
 For complete API testing guide, see:
 - **[API-TESTING.md](API-TESTING.md)** - Setup, running tests, token management, troubleshooting
 - **[MOBILE-UI-VERIFICATION.md](MOBILE-UI-VERIFICATION.md)** - Mobile verification procedures (6 verification categories, patterns)
-- **[tests/TEST-CASES-REFERENCE.md](tests/TEST-CASES-REFERENCE.md)** - All 50 test cases with execution strategy
+- **[tests/mobile/TEST-CASES-REFERENCE.md](tests/mobile/TEST-CASES-REFERENCE.md)** - All 50 test cases with execution strategy
 
 ## Test Cases
 

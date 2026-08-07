@@ -30,6 +30,16 @@ ios:
       environment: stage
       bundleId: com.guaranteedrate.superapp.stage
       appPath: test-data/mobile-app/gri/ios/30.3/stage/GRI Stage.app
+    stage-ipa:
+      source: ipa
+      environment: stage
+      bundleId: com.guaranteedrate.superapp.stage
+      ipaPath: test-data/mobile-app/gri/ios/Rate-Stage.ipa
+    stage-testflight:
+      source: testflight
+      environment: stage
+      bundleId: com.guaranteedrate.superapp.stage
+      deviceName: iPhone 17
 
 verification:
   email: guerrillamail

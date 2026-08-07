@@ -54,6 +54,7 @@
     "test:mobile:ios:create-account:stage-xcode": "MOBILE_IOS_BUILD=stage-xcode npm run test:mobile:ios:create-account",
     "test:mobile:ios:create-account:prod-xcode": "MOBILE_IOS_BUILD=prod-xcode npm run test:mobile:ios:create-account",
     "build:mobile:ios": "MOBILE_PLATFORM=ios ts-node scripts/build-ios-app.ts",
+    "download:ios:stage-ipa": "ts-node scripts/download-ios-stage-ipa.ts",
     "test:mobile:ios:create-account:qa-ipa": "MOBILE_IOS_BUILD=qa-ipa npm run test:mobile:ios:create-account",
     "test:mobile:ios:create-account:stage-ipa": "MOBILE_IOS_BUILD=stage-ipa npm run test:mobile:ios:create-account",
     "test:mobile:ios:create-account:qa-testflight": "MOBILE_IOS_BUILD=qa-testflight npm run test:mobile:ios:create-account",
