@@ -4,13 +4,13 @@ This folder is the canonical home for all agent assets in this repository.
 
 ## Folder Structure
 
-- `agents/`: agent mode definitions (`*.agent.md`)
+- `agents/`: agent mode definitions (`*.agent.md`) and supporting sub-folders
+  - `test_generator/`: code-based generator module and prompt
+  - `failure_analyzer/`: failure categorization design notes
+  - `self-healing-agent/`: locator/wait healing design notes
+  - `coverage_analyzer/`: requirement coverage analysis notes
 - `prompts/`: reusable prompt entrypoints (`*.prompt.md`)
 - `skills/`: domain skills (`*/SKILL.md`)
-- `test_generator/`: code-based generator module and prompt
-- `failure_analyzer/`: failure categorization design notes
-- `self_healing/`: locator/wait healing design notes
-- `coverage_analyzer/`: requirement coverage analysis notes
 
 ## Repository Path Convention
 

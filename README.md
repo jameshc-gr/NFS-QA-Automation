@@ -10,7 +10,6 @@ The repository now supports a layered architecture for hybrid migration and AI-a
 - `mobile/`: WebdriverIO + Appium scaffolding for native Android, iOS simulator, and iOS real-device/TestFlight coverage, with config-driven build selection per environment
 - `api/`: API client wrappers, schema contracts, and API tests
 - `ai/`: agents for test generation, failure analysis, self-healing, and coverage analysis
-- `core/`: shared cross-layer utilities
 
 Playwright specs live under `tests/projects/`. The active UI suites are:
 
@@ -618,7 +617,7 @@ Most specs in [tests/projects/student-loan-refi](tests/projects/student-loan-ref
 - [scripts/fetch-android-app.ts](scripts/fetch-android-app.ts) fetches and publishes Android artifacts.
 - [scripts/setup-firebase-session.ts](scripts/setup-firebase-session.ts) and [scripts/download-firebase-build.ts](scripts/download-firebase-build.ts) download builds from the App Distribution web UI when there is no API access.
 - [scripts/generate_tests.js](scripts/generate_tests.js) is a legacy generator that still targets root-level spec files.
-- [scripts/generate-test.js](scripts/generate-test.js) is the new CLI for generated specs in `tests/projects/student-loan-refi/generated`.
+- [scripts/generate-test.js](scripts/generate-test.js) is the new CLI that creates generated specs under `tests/projects/student-loan-refi/generated/` on demand.
 - [playwright.config.ts](playwright.config.ts) defines retries, reporters, project-scoped reports, and run artifacts under `test-results/`.
 - [AGENTS.md](AGENTS.md) and [ai/jobs/skills/playwright-framework-context/SKILL.md](ai/jobs/skills/playwright-framework-context/SKILL.md) contain the repo guidance used by agents.
 - [ai/jobs/readme-agents.md](ai/jobs/readme-agents.md) is the canonical guide for writing and using agents, prompts, and skills.

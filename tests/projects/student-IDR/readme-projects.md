@@ -40,7 +40,7 @@ npx playwright test tests/projects/student-IDR --project=chromium --project=fire
 
 Profiles live in [test-data/student-IDR/student-IDR.yml](../../../test-data/student-IDR/student-IDR.yml). Each `SCN-XXX` override block is loaded automatically when a spec calls `loadProfile('SCN-XXX')`.
 
-The final execution-oriented case matrix, including profile data references and expected results, is maintained in [test-data/student-IDR/04_final_test_cases_with_data.csv](../../../test-data/student-IDR/04_final_test_cases_with_data.csv). The Jira-style execution report is [docs/student-IDR-test-execution-report-2026-07-27.md](../../../test-results/student-IDR-test-execution-report-2026-07-27.md).
+The final execution-oriented case matrix, including profile data references and expected results, is maintained in [test-data/student-IDR/04_final_test_cases_with_data.csv](../../../test-data/student-IDR/04_final_test_cases_with_data.csv). The Jira-style execution report is [test-results/student-IDR-test-execution-report-2026-07-28.md](../../../test-results/student-IDR-test-execution-report-2026-07-28.md).
 
 ### Unique credentials per run
 
