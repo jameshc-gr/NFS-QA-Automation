@@ -18,10 +18,12 @@ export class AuthPage extends BasePage {
   private readonly loginTab = this.byText('Log in');
   private readonly createAccountTab = this.byText('Create account');
   private readonly emailCandidates = this.platform === 'ios'
-    ? ['~log_in.field.email']
+    // "log_in.field.email" is shared by the label, the input, and the error
+    // text, so a bare accessibility id can resolve to the wrong node.
+    ? ['//XCUIElementTypeTextField[@name="log_in.field.email"]']
     : [this.byInputLabel('Email')];
   private readonly passwordCandidates = this.platform === 'ios'
-    ? ['~log_in.field.password']
+    ? ['//XCUIElementTypeSecureTextField[@name="log_in.field.password"]|//XCUIElementTypeTextField[@name="log_in.field.password"]']
     : [this.byInputLabel('Password')];
   private readonly loginButtonCandidates = this.platform === 'ios'
     ? ['~log_in.button.log_in']
@@ -34,10 +36,12 @@ export class AuthPage extends BasePage {
         `//*[contains(@text, "Log in")]`
       ];
   private readonly logoutButton = this.byText('Log out');
+  // Bare accessibility ids are ambiguous here: the label, the input, and the
+  // error text all share the same "*.field.code" id, so filter by element type.
   private readonly emailCodeInputCandidates = this.platform === 'ios'
     ? [
-        '~confirm_email.field.code',
-        '//XCUIElementTypeTextField[contains(@name, "confirm_email") and contains(@name, ".field.code")]'
+        '//XCUIElementTypeTextField[contains(@name, "confirm_email") and contains(@name, ".field.code")]',
+        '//XCUIElementTypeTextField[contains(@name, "log_in") and contains(@name, ".field.code")]'
       ]
     : [
         this.byInputLabel('6-digit code'),
@@ -46,8 +50,6 @@ export class AuthPage extends BasePage {
       ];
   private readonly phoneCodeInputCandidates = this.platform === 'ios'
     ? [
-        '~verify_sms_number.field.code',
-        '~confirm_phone.field.code',
         '//XCUIElementTypeTextField[contains(@name, "verify_sms_number") and contains(@name, ".field.code")]',
         '//XCUIElementTypeTextField[contains(@name, "confirm_phone") and contains(@name, ".field.code")]'
       ]
@@ -59,6 +61,7 @@ export class AuthPage extends BasePage {
   private readonly emailVerifyButtonCandidates = this.platform === 'ios'
     ? [
         '~confirm_email.button.verify',
+        '~log_in.button.verify',
         '//XCUIElementTypeButton[contains(@name, "verify") or @label="Verify"]'
       ]
     : [this.byText('Verify')];
@@ -71,10 +74,10 @@ export class AuthPage extends BasePage {
       ]
     : [this.byText('Verify'), this.byText('Continue')];
   private readonly emailVerificationPrompt = this.platform === 'ios'
-    ? '//XCUIElementTypeStaticText[@name="Email verification"]'
+    ? '//XCUIElementTypeStaticText[@name="Email verification" or @name="Verify it\u2019s you"]'
     : this.byText('Email verification');
   private readonly emailCodeSentPrompt = this.platform === 'ios'
-    ? '//XCUIElementTypeStaticText[contains(@name, "code we sent to your email")]'
+    ? '//XCUIElementTypeStaticText[contains(@name, "code we sent to your email") or contains(@name, "code we sent")]'
     : `//android.widget.TextView[contains(@text, "code we sent to your email")]`;
   private readonly smsVerificationPrompt = this.platform === 'ios'
     ? '//XCUIElementTypeStaticText[@name="Phone verification"]'
@@ -88,8 +91,7 @@ export class AuthPage extends BasePage {
     : `//android.widget.TextView[@text="6-digit code" or contains(@text, "digit code")]`;
   private readonly phoneInputCandidates = this.platform === 'ios'
     ? [
-        '~confirm_phone.field.phone_number',
-        '~confirm_phone.field.phone',
+        '//XCUIElementTypeTextField[contains(@name, "confirm_phone") and (contains(@name, "phone_number") or contains(@name, "phone"))]',
         '//XCUIElementTypeTextField[contains(@name, "phone")]'
       ]
     : [
@@ -538,7 +540,7 @@ export class AuthPage extends BasePage {
           return await promptForVerificationCode(channel);
         }
 
-        if (provider === 'guerrillamail') {
+        if (provider === 'guerrillamail' || provider === 'yopmail') {
           const mailbox = this.extractMailboxFromAccountEmail();
           return await getVerificationCode(channel, {
             provider,

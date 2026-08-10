@@ -101,55 +101,55 @@ export abstract class BasePage {
   }
 
   /**
-   * Enters text with real key events. Appium's setValue/addValue map to
-   * setText on Android, which replaces the whole field on every call, so the
-   * app's Compose validation never sees per-keystroke changes. Keys are sent
-   * one at a time because sending them in a single batch drops characters.
+   * Enters text once. On iOS this verifies the result instead of trusting a
+   * single `clearValue()`/`addValue()` pass, because iOS AutoFill/Keychain
+   * suggestions can race with the clear and leave stale text (e.g. a
+   * previous run's email domain) concatenated with the new value; a mismatch
+   * retries with a fresh tap + clear + type. On Android, key events are sent
+   * one at a time because Compose fields treat `setValue` as a full replace
+   * and skip validation.
    */
   protected async type(selector: string | any, value: string): Promise<void> {
     const element = await this.waitForVisible(selector);
 
-    // iOS offers an "Automatic Strong Password" cover view on secure fields,
-    // which setValue leaves in place. Real key events replace it.
     if (this.platform === 'ios') {
-      for (let attempt = 0; attempt < 2; attempt += 1) {
-        await this.tap(element);
-        await element.clearValue().catch(() => {});
-        await browser.pause(200);
-        await element.addValue(value);
-        await browser.pause(400);
-
-        if (await this.hasValue(element, value)) {
-          return;
-        }
-      }
-
-      await element.setValue(value);
-      await browser.pause(200);
+      await this.typeIOSWithVerification(element, value);
       return;
     }
 
-    for (let attempt = 0; attempt < 2; attempt += 1) {
-      await this.tap(element);
-      await element.clearValue();
-      await browser.pause(200);
+    await this.tap(element);
+    await element.clearValue();
+    await browser.pause(200);
 
-      for (const character of value) {
-        await browser.keys([character]);
-        await browser.pause(80);
-      }
-
-      await browser.pause(300);
-
-      if (await this.hasValue(element, value)) {
-        return;
-      }
+    for (const character of value) {
+      await browser.keys([character]);
+      await browser.pause(80);
     }
 
-    // Last resort so a flaky keystroke does not fail the whole run.
-    await element.clearValue();
-    await element.setValue(value);
-    await browser.pause(200);
+    await browser.pause(300);
+  }
+
+  private async typeIOSWithVerification(element: any, value: string, maxAttempts = 3): Promise<void> {
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      await this.tap(element);
+      await browser.pause(200);
+      await element.clearValue().catch(() => {});
+      await browser.pause(200);
+      await element.addValue(value);
+      await browser.pause(400);
+
+      const actual = String((await element.getValue().catch(() => '')) || '');
+      if (actual === value || this.isMaskedMatch(actual, value)) {
+        return;
+      }
+
+      console.warn(
+        `[BasePage.type] iOS field value mismatch on attempt ${attempt}/${maxAttempts}: `
+          + `expected "${value}", got "${actual}". Retrying with a fresh clear.`
+      );
+    }
+
+    throw new Error(`Unable to type "${value}" into the iOS field after ${maxAttempts} attempts.`);
   }
 
   /** Masked fields only expose bullets, so fall back to comparing length. */
@@ -161,6 +161,11 @@ export abstract class BasePage {
     }
 
     return current === expected;
+  }
+
+  /** Secure text fields only expose bullets, so compare length instead of content. */
+  private isMaskedMatch(actual: string, expected: string): boolean {
+    return actual.length > 0 && /^[\u2022*]+$/.test(actual) && actual.length === expected.length;
   }
 
   /**
