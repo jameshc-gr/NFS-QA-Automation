@@ -25,6 +25,11 @@ ios:
       environment: qa
       bundleId: com.guaranteedrate.superapp.qa
       appPath: test-data/mobile-app/gri/ios/30.3/qa/GRI QA.app
+    dev-simulator:
+      source: simulator
+      environment: dev
+      bundleId: com.guaranteedrate.superapp.dev
+      appPath: test-data/mobile-app/gri/ios/30.3/dev/GRI QA.app
     stage-simulator:
       source: simulator
       environment: stage

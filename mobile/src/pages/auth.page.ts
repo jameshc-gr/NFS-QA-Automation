@@ -27,15 +27,18 @@ export class AuthPage extends BasePage {
     : [this.byInputLabel('Password')];
   private readonly loginButtonCandidates = this.platform === 'ios'
     ? ['~log_in.button.log_in']
+    // The submit button's label is not always "Log in" — it renders as "Go!"
+    // in some builds/states, sharing the same clickable-row pattern as "Log in".
     : [
-        `//android.widget.ScrollView//android.view.View[.//android.widget.TextView[@text="Log in"] and .//android.widget.Button and @clickable="true"]`,
-        `//android.widget.ScrollView//android.widget.Button[.//android.widget.TextView[@text="Log in"]]`,
+        `//android.widget.ScrollView//android.view.View[(.//android.widget.TextView[@text="Log in"] or .//android.widget.TextView[@text="Go!"]) and .//android.widget.Button and @clickable="true"]`,
+        `//android.widget.ScrollView//android.widget.Button[.//android.widget.TextView[@text="Log in"] or .//android.widget.TextView[@text="Go!"]]`,
+        `//android.widget.TextView[@text="Go!"]/..`,
         `//android.widget.TextView[@text="Log in"]/..`,
-        `//android.widget.Button[.//*[@text="Log in"]]`,
+        `//android.widget.Button[.//*[@text="Log in"] or .//*[@text="Go!"]]`,
+        `//*[contains(@text, "Go!") and @clickable="true"]`,
         `//*[contains(@text, "Log in") and @clickable="true"]`,
         `//*[contains(@text, "Log in")]`
       ];
-  private readonly logoutButton = this.byText('Log out');
   // Bare accessibility ids are ambiguous here: the label, the input, and the
   // error text all share the same "*.field.code" id, so filter by element type.
   private readonly emailCodeInputCandidates = this.platform === 'ios'
@@ -152,9 +155,42 @@ export class AuthPage extends BasePage {
         `//*[contains(@content-desc, "close") or @text="X" or @text="✕" or @text="×"]`,
         `//android.widget.TextView[@text="X"]/..`
       ];
+  // Post-login app-store-style rating prompt ("Are you enjoying Rate app?"),
+  // seen blocking the home-screen check on both platforms.
+  private readonly ratingSurveyPrompt = this.platform === 'ios'
+    ? '//XCUIElementTypeStaticText[contains(@name, "enjoying")]'
+    : `//android.widget.TextView[contains(@text, "enjoying")]`;
+  private readonly ratingSurveyDismissCandidates = this.platform === 'ios'
+    ? ['~No', '//XCUIElementTypeButton[@name="No" or @label="No"]']
+    : [`//android.widget.TextView[@text="No"]`, `//*[contains(@text, "No") and @clickable="true"]`];
   private readonly homeIndicatorCandidates = this.platform === 'ios'
     ? ['~bottom_navigation.button.home']
     : ['//*[contains(@content-desc, "bottom_navigation.button.home")]', this.byText('Home')];
+  private readonly profileIconCandidates = this.platform === 'ios'
+    ? ['~ic_contact_person']
+    // Compose renders the top-nav profile icon as an anonymous, unlabeled
+    // View with no content-desc/resource-id, positioned right after the
+    // "Hi <Name>" greeting text.
+    : [`//android.widget.TextView[starts-with(@text, "Hi ")]/following-sibling::android.view.View[1]`];
+  // Tapping the profile icon opens a menu list (not a "My profile" page);
+  // "Settings" is a row in that list, and "Log out" then sits in the
+  // Settings page's own top-right nav bar — no scrolling needed for it.
+  private readonly settingsMenuItemCandidates = this.platform === 'ios'
+    ? ['~Settings, Customize your experience']
+    : [
+        `//android.widget.TextView[@text="Settings"]/..`,
+        `//*[contains(@text, "Settings") and @clickable="true"]`
+      ];
+  private readonly logoutLinkCandidates = this.platform === 'ios'
+    ? [
+        '~Log out',
+        '//XCUIElementTypeStaticText[@name="Log out"]',
+        '//XCUIElementTypeButton[@name="Log out" or @label="Log out"]'
+      ]
+    : [
+        `//android.widget.TextView[@text="Log out"]`,
+        `//*[contains(@text, "Log out") and @clickable="true"]`
+      ];
   private readonly faceIdContinueButtonCandidates = this.platform === 'ios'
     ? [
         '~Continue',
@@ -173,12 +209,60 @@ export class AuthPage extends BasePage {
   async login(email: string, password: string): Promise<void> {
     await this.typeAny(this.emailCandidates, email);
     await this.typeAny(this.passwordCandidates, password);
+    // The soft keyboard's "Go!" IME action can cover/intercept the submit
+    // button's on-screen area on Android, causing tapAny to hit the wrong
+    // element (e.g. the "Log in" tab instead of the submit button).
+    if (this.platform === 'android') {
+      await this.hideKeyboard();
+      // The submit button lives in a lazily-rendered ScrollView and can be
+      // absent from the tree until scrolled into view; without this, the
+      // short poll below falls back to the ambiguous "Log in" tab instead.
+      const specificLoginButtonCandidates = this.loginButtonCandidates.slice(0, 2);
+      const deadline = Date.now() + 10000;
+      while (Date.now() < deadline && !(await this.isDisplayed(...specificLoginButtonCandidates))) {
+        await this.scrollDown();
+      }
+      if (!(await this.isDisplayed(...specificLoginButtonCandidates))) {
+        await browser.saveScreenshot(path.resolve(process.cwd(), 'mobile/.builds/android-login-button-missing.png')).catch(() => {});
+        const source = await browser.getPageSource().catch(() => '');
+        writeFileSync(path.resolve(process.cwd(), 'mobile/.builds/android-login-button-missing.xml'), source);
+        console.log('[Diagnostics] Specific login button candidates not found; dumped android-login-button-missing.{png,xml}');
+      }
+    }
     await this.tapAny(this.loginButtonCandidates);
     await this.waitForLoginSubmission();
   }
 
+  /** Real navigation path: Home > profile icon (top right) > menu list > Settings > Log out (top-right of Settings). */
   async logout(): Promise<void> {
-    await this.tap(this.logoutButton);
+    await this.tapAny(this.profileIconCandidates);
+    await this.tapAny(this.settingsMenuItemCandidates);
+    await this.tapAny(this.logoutLinkCandidates);
+  }
+
+  /**
+   * The shared login account is always on yopmail.com regardless of MOBILE_ENV
+   * (unlike create-user, whose mailbox domain follows the env), so resolve the
+   * provider from the account's real domain instead of the env-based mapping.
+   */
+  async completeLoginVerification(loginEmail: string): Promise<boolean> {
+    const domain = loginEmail.split('@')[1]?.toLowerCase() || '';
+    const domainProvider: Partial<Record<string, EmailVerificationProvider>> = {
+      'yopmail.com': 'yopmail',
+      'sharklasers.com': 'guerrillamail',
+      'guerrillamailblock.com': 'guerrillamail',
+      'grr.la': 'guerrillamail',
+      'pokemail.net': 'guerrillamail',
+      'spam4.me': 'guerrillamail'
+    };
+    const previousOverride = this.buildEmailProviderOverride;
+    this.buildEmailProviderOverride = domainProvider[domain] || previousOverride;
+
+    try {
+      return await this.completeVerificationIfPresent();
+    } finally {
+      this.buildEmailProviderOverride = previousOverride;
+    }
   }
 
   async completeVerificationIfPresent(): Promise<boolean> {
@@ -271,12 +355,25 @@ export class AuthPage extends BasePage {
     }
   }
 
+  async dismissRatingSurveyIfPresent(): Promise<void> {
+    if (!(await this.isDisplayed(this.ratingSurveyPrompt))) {
+      return;
+    }
+
+    console.log('[Modal] "Are you enjoying Rate app?" survey shown — dismissing.');
+    await this.tapAny(this.ratingSurveyDismissCandidates);
+    await browser.pause(1000);
+  }
+
   async waitForHomeScreen(timeoutMs = 20000): Promise<boolean> {
     const deadline = Date.now() + timeoutMs;
     while (Date.now() < deadline) {
       if (await this.isDisplayed(...this.homeIndicatorCandidates)) {
         return true;
       }
+
+      await this.dismissLoanOfficerModalIfPresent();
+      await this.dismissRatingSurveyIfPresent();
       await browser.pause(500);
     }
 

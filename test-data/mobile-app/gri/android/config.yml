@@ -2,7 +2,7 @@
 # The loaded YAML will automatically decrypt any values formatted as ENC(...)
 # NOTE: this file is loaded for BOTH iOS and Android (see authRoot in mobile/src/utils/mobile-auth.ts).
 
-# Select with MOBILE_ENV=prod|qa (defaults to defaultEnvironment below).
+# Select with MOBILE_ENV=prod|qa|stage|dev (defaults to defaultEnvironment below).
 defaultEnvironment: prod
 
 android:
@@ -25,7 +25,7 @@ android:
         # Console label; "398" (buildVersion alone) also matches.
         release: "1.48-prod (398)"
         webUrl: https://console.firebase.google.com/u/0/project/rate---prod/appdistribution/app/android:com.guaranteedrate.superapp/releases
-    # QA/dev line. Emails go to the Outlook mailbox (MOBILE_ENV=qa).
+    # QA/dev line. Emails go to the Outlook mailbox (MOBILE_ENV=qa|dev).
     qa:
       source: firebase-web
       environment: qa
@@ -33,6 +33,22 @@ android:
       firebase:
         release: latest
         webUrl: https://console.firebase.google.com/u/0/project/rate---qa/appdistribution/app/android:com.guaranteedrate.superapp.qa/releases
+    # Stage line. Emails go to the Outlook mailbox (MOBILE_ENV=stage).
+    stage:
+      source: firebase-web
+      environment: stage
+      appPackage: com.guaranteedrate.superapp.stage
+      firebase:
+        release: latest
+        webUrl: https://console.firebase.google.com/u/0/project/rate---qa/appdistribution/app/android:com.guaranteedrate.superapp.stage/releases
+    # Dev line. Emails go to the Outlook mailbox (MOBILE_ENV=dev).
+    dev:
+      source: firebase-web
+      environment: dev
+      appPackage: com.guaranteedrate.superapp.dev
+      firebase:
+        release: latest
+        webUrl: https://console.firebase.google.com/u/0/project/rate---qa/appdistribution/app/android:com.guaranteedrate.superapp.dev/releases
     # Fallback to an apk already on disk.
     prod-local:
       source: local
@@ -44,6 +60,16 @@ android:
       environment: qa
       appPackage: com.guaranteedrate.superapp.qa
       appPath: test-data/mobile-app/gri/android/1.43/qa/app.apk
+    stage-local:
+      source: local
+      environment: stage
+      appPackage: com.guaranteedrate.superapp.stage
+      appPath: test-data/mobile-app/gri/android/1.43/stage/app.apk
+    dev-local:
+      source: local
+      environment: dev
+      appPackage: com.guaranteedrate.superapp.dev
+      appPath: test-data/mobile-app/gri/android/1.43/dev/app.apk
 
 environments:
   # Play Store / App Store builds. Signup only accepts tagged addresses, and the
@@ -57,7 +83,7 @@ environments:
       domain: sharklasers.com
       tag: "--ra"
 
-  # QA/dev builds route all signup mail to the shared v3test@rate.com mailbox,
+  # QA/dev/stage builds route all signup mail to the shared v3test@rate.com mailbox,
   # so codes are read over Microsoft Graph instead.
   qa:
     verification:
@@ -70,6 +96,26 @@ environments:
     outlook:
       email: v3test@rate.com
       folder: Inbox
+
+  # Dev/stage builds do not route to Outlook; codes are read directly from a
+  # fresh yopmail.com mailbox.
+  dev:
+    verification:
+      email: yopmail
+      phone: google-voice
+    createEmail:
+      prefix: my-rateapp-auto
+      domain: yopmail.com
+      tag: ""
+
+  stage:
+    verification:
+      email: yopmail
+      phone: google-voice
+    createEmail:
+      prefix: my-rateapp-auto
+      domain: yopmail.com
+      tag: ""
 
 verification:
   email: guerrillamail

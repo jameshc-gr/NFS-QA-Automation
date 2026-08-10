@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import path from 'node:path';
 
 import { AuthPage } from '../../src/pages/auth.page';
 import { getAutomationAccount } from '../../src/utils/mobile-auth';
@@ -11,7 +12,13 @@ describe('Android login and logout flow', () => {
 
     await auth.openLogin();
     await auth.login(email, password);
-    await auth.completeVerificationIfPresent();
+    await auth.completeLoginVerification(email);
+
+    const reachedHome = await auth.waitForHomeScreen();
+    await browser.saveScreenshot(path.resolve(process.cwd(), 'mobile/.builds/android-login-proof.png'));
+    assert.equal(reachedHome, true, 'App should land on the home screen after login.');
+
+    await auth.logout();
 
     const loginLabel = await $('//*[contains(@text, "Log in")]');
     const passwordField = await $('//*[contains(@text, "Password")]');

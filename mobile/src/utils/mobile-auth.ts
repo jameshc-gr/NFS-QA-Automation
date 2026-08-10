@@ -66,7 +66,7 @@ interface RuntimeConfig {
   };
 }
 
-export type EmailVerificationProvider = 'guerrillamail' | 'outlook';
+export type EmailVerificationProvider = 'guerrillamail' | 'yopmail' | 'outlook';
 
 const DEFAULT_LOGIN_CONFIG: LoginConfig = {
   emailPrefix: 'my-rateapp-automation-jc',
@@ -117,7 +117,12 @@ export function getMobileEnvironment(): string {
 }
 
 export function expectedEmailVerificationProvider(environment = getMobileEnvironment()): EmailVerificationProvider {
-  return String(environment).toLowerCase() === 'prod' ? 'guerrillamail' : 'outlook';
+  const env = String(environment).toLowerCase();
+  if (env === 'prod') {
+    return 'guerrillamail';
+  }
+  // Dev/stage builds use the same disposable mailbox channel as legacy QA.
+  return env === 'qa' ? 'outlook' : 'yopmail';
 }
 
 function getEnvironmentConfig(): EnvironmentConfig {
@@ -171,13 +176,36 @@ function assertCreateUserEmailPolicy(environment: string, email: string): void {
         + `Received "${email}" under MOBILE_ENV=${environment}.`
     );
   }
+
+  if (normalizedEnv === 'dev' || normalizedEnv === 'stage') {
+    if (domain !== 'yopmail.com') {
+      throw new Error(
+        `Create-user email policy violation: dev/stage create-user runs must use yopmail.com. `
+          + `Received "${email}" under MOBILE_ENV=${environment}.`
+      );
+    }
+  }
+
+  if (normalizedEnv === 'qa' && domain !== 'rate.com') {
+    throw new Error(
+      `Create-user email policy violation: QA create-user runs must use a rate.com address routed to Outlook. `
+        + `Received "${email}" under MOBILE_ENV=${environment}.`
+    );
+  }
 }
 
 export function getAutomationAccount(accountKey: LoginAccountKey): { email: string; password: string } {
   if (accountKey === 'login') {
+    const environment = getMobileEnvironment();
+    const isProd = String(environment).toLowerCase() === 'prod';
+    const nonProdLoginEmail = process.env.MOBILE_NON_PROD_LOGIN_EMAIL || 'myaccount-suapp-jc0015@yopmail.com';
+    const nonProdPassword = process.env.MOBILE_NON_PROD_LOGIN_PASSWORD || 'Test123!';
+
     return {
-      email: loginConfig.loginEmail || formatAutomationEmail(loginConfig.createEmailStart || 1),
-      password: loginConfig.password,
+      email: isProd
+        ? (loginConfig.loginEmail || formatAutomationEmail(loginConfig.createEmailStart || 1))
+        : nonProdLoginEmail,
+      password: isProd ? loginConfig.password : nonProdPassword,
     };
   }
 
