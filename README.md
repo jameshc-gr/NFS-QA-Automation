@@ -402,6 +402,44 @@ Both flows complete email verification, SMS verification, dismiss the
 "working with someone from Rate?" modal, and assert the app lands on the home
 screen.
 
+### Mobile login-logout (verified end to end)
+
+Logs in with the shared login account, completes MFA if the app challenges it,
+asserts the home screen is reached, then logs out via the real in-app path
+(profile icon top-right > Settings > Log out) and asserts the login screen is
+shown again. A screenshot proving the home screen was reached is saved to
+`mobile/.builds/{ios,android}-login-proof.png`.
+
+```bash
+npm run test:mobile:ios:login-logout:qa
+npm run test:mobile:ios:login-logout:stage
+npm run test:mobile:ios:login-logout:prod
+
+npm run test:mobile:android:login-logout:qa
+npm run test:mobile:android:login-logout:prod
+```
+
+**Only these five combinations are currently available.** iOS `dev`, Android
+`stage`, and Android `dev` do not have a working build (see "Known build gaps"
+below) — skip them until a real build exists.
+
+The shared login account is `login.yml`'s `loginEmail`/`password`. On PROD it's
+`my-rateapp-jc0020--ra@yopmail.com` / `Test123!`; if login starts failing with a
+real "email or password is incorrect" error (not a typing bug — check the
+screenshot/page source first), the account may need to be rotated again.
+
+#### Known build gaps (skip until fixed)
+
+- **iOS dev**: `test-data/mobile-app/gri/ios/config.yml`'s `dev-simulator` entry
+  points at a `.app` that is actually a renamed copy of the QA build (its
+  `CFBundleIdentifier` is still `com.guaranteedrate.superapp.qa`), so it fails
+  to launch under the declared `com.guaranteedrate.superapp.dev` bundle id. No
+  real dev-scheme iOS build exists yet.
+- **Android stage / dev**: both use `source: firebase-web` and require a saved
+  Google session (`mobile/.auth/firebase-session.json`) that has expired. Fix
+  with a human re-login (never automate Google auth); verify with
+  `npx ts-node scripts/check-firebase-access.ts` first.
+
 ### Web suites
 
 Run the student-loan-refi suite with Chromium:
