@@ -24,6 +24,9 @@ test-data/mobile-app/gri/ios/*/*/*.ipa
 test-data/mobile-app/gri/android/*.apk
 test-data/mobile-app/gri/android/*/*/*.apk
 test-data/mobile-app/gri/android/*/*/*.aab
+# Firebase build artifacts (not extracted, just the raw downloads)
+test-data/mobile-app/gri/android/firebase/*.apk
+test-data/mobile-app/gri/android/firebase/*.aab
 
 # Service account keys for Firebase App Distribution downloads
 *-service-account.json
