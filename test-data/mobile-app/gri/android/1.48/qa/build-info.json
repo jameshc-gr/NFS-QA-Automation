@@ -1,0 +1,13 @@
+{
+  "version": "1.48",
+  "versionName": "1.48-qa",
+  "versionCode": "6381",
+  "environment": "qa",
+  "appPackage": "com.guaranteedrate.superapp.qa",
+  "build": "qa",
+  "source": "firebase-web",
+  "artifact": "app.apk",
+  "firebaseWebUrl": "https://console.firebase.google.com/u/0/project/rate---qa/appdistribution/app/android:com.guaranteedrate.superapp.qa/releases",
+  "firebaseRelease": "1.48-qa (6381)",
+  "publishedAt": "2026-08-11T22:05:48.923Z"
+}

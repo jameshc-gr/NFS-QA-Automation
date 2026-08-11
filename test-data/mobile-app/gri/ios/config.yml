@@ -9,6 +9,7 @@ ios:
     root: /Users/jameshc/iOS 
     folderPrefix: SuperApp-iOS
     projectName: SuperApp.xcodeproj
+    gitUrl: https://github.com/Guaranteed-Rate/SuperApp-iOS.git
   builds:
     prod-simulator:
       source: simulator
@@ -34,7 +35,7 @@ ios:
       source: simulator
       environment: stage
       bundleId: com.guaranteedrate.superapp.stage
-      appPath: test-data/mobile-app/gri/ios/30.3/stage/GRI Stage.app
+      appPath: test-data/mobile-app/gri/ios/30.0/stage/GRI Stage.app
     stage-ipa:
       source: ipa
       environment: stage

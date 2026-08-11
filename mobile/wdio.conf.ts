@@ -48,7 +48,11 @@ export const config = {
     ]
   ],
   before: async () => {
-    await browser.setTimeout({ implicit: 3000, pageLoad: 30000, script: 30000 });
+    try {
+      await browser.setTimeout({ implicit: 3000, pageLoad: 30000 });
+    } catch (e) {
+      console.log('  Note: setTimeout not fully supported by Appium');
+    }
   },
   capabilities: [resolveMobileCapabilities()]
 } as any;

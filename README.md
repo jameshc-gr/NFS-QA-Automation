@@ -373,6 +373,59 @@ MOBILE_IOS_BUILD=stage-ipa npm run test:mobile:ios:create-account
 npm run test:mobile:ios:create-account:qa-testflight
 ```
 
+### iOS Build Download & Management
+
+A complete iOS build download and management system is available for downloading SuperApp-iOS builds directly from GitHub releases. This provides centralized build management with support for QA, Stage, and PROD environments.
+
+**Key Features:**
+- Download pre-built releases from GitHub
+- Automatic extraction (.ipa, .zip, .tar.gz, .tar support)
+- Build versioning and cleanup utilities
+- Metadata tracking for all downloads
+- Multi-environment support (QA/Stage/PROD)
+- Centralized storage at `/Users/jameshc/iOS`
+
+**Quick Start:**
+
+```bash
+# See what builds are available on GitHub
+npm run ios:list-releases
+
+# Download a specific QA build
+npm run ios:download-build:qa -- --download v30.3-qa
+
+# Download Stage build
+npm run ios:download-build:stage -- --download v30.3-stage
+
+# List local builds
+npm run ios:list-builds
+
+# Select a build for use
+npm run ios:build-manager -- --checkout 30.3-build1
+
+# Clean up old builds (keep 3 newest)
+npm run ios:build-manager -- --cleanup 3
+
+# Clone/fetch the repository to a specific version
+npm run ios:clone -- --clone release-30.3
+```
+
+**Available npm Scripts:**
+- `npm run ios:build-manager` - Full build manager CLI
+- `npm run ios:list-builds` - Display locally downloaded builds
+- `npm run ios:list-releases` - Show available GitHub releases
+- `npm run ios:clone` - Clone or update the SuperApp-iOS repository
+- `npm run ios:download-build:qa` - Download QA build from GitHub
+- `npm run ios:download-build:stage` - Download Stage build from GitHub
+- `npm run ios:download-build:prod` - Download Prod build from GitHub
+
+**Builds are stored with naming convention:** `SuperApp-iOS-VERSION-buildNUM` (e.g., `SuperApp-iOS-30.3-build1`)
+
+**Complete documentation:**
+- [docs/iOS-BUILD-DOWNLOAD-QUICKREF.md](docs/iOS-BUILD-DOWNLOAD-QUICKREF.md) - Quick reference and common commands
+- [docs/iOS-BUILD-DOWNLOAD.md](docs/iOS-BUILD-DOWNLOAD.md) - Comprehensive guide with workflows and troubleshooting
+- [docs/iOS-BUILD-DOWNLOAD-IMPLEMENTATION.md](docs/iOS-BUILD-DOWNLOAD-IMPLEMENTATION.md) - Implementation details and architecture
+
 ## Running Tests
 
 ### Mobile create-user (verified end to end)

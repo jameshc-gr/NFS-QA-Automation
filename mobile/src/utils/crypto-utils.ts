@@ -2,8 +2,18 @@ import crypto from 'node:crypto';
 
 const ALGORITHM = 'aes-256-gcm';
 
+const DEFAULT_FALLBACK_KEY = 'default-webautomation-secret-key-32';
+
 function getSecretKey(): Buffer {
-  const rawKey = process.env.CONFIG_ENCRYPTION_KEY || 'default-webautomation-secret-key-32';
+  const rawKey = process.env.CONFIG_ENCRYPTION_KEY;
+  if (!rawKey) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      '\n[SECURITY WARNING] CONFIG_ENCRYPTION_KEY is not set. Using the default fallback key, which provides NO real protection.\n' +
+        'Set a strong, unique CONFIG_ENCRYPTION_KEY environment variable and re-encrypt all secrets.\n'
+    );
+    return crypto.createHash('sha256').update(DEFAULT_FALLBACK_KEY).digest();
+  }
   return crypto.createHash('sha256').update(rawKey).digest();
 }
 
