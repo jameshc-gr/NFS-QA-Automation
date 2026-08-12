@@ -15,6 +15,10 @@ This folder is the canonical home for all agent assets in this repository.
   - `test-data-engineer/`: Compliant test data, password rules & domain tagging
   - `test-plan-generation/`: Requirement & story to test specification workflow
   - `bug-report-writing/`: RCA, failure classification & Jira bug reporting
+  - `visual-regression-testing/`: Screenshot baselines, dynamic element masking & diff comparison
+  - `accessibility-testing/`: Automated WCAG 2.1 A/AA auditing with `axe-core`
+  - `performance-testing/`: Web Vitals metrics, SLA verification & k6 load scenarios
+  - `flaky-test-management/`: Flaky test detection, isolation, memory tracking & auto-healing
   - `test-discovery/`: Spec discovery & narrowing
   - `test-execution/`: Focused execution runner
   - `test-summary/`: Test output diagnosis & triage

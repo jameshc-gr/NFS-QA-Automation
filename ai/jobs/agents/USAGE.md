@@ -21,6 +21,10 @@ This document explains how to use the agent hierarchy, skills, and persistent me
 - `test-data-engineer`: Secure, environment-compliant test data generation, realistic human names, `--ra` tag rules, and password validation checks.
 - `test-plan-generation`: Transforming requirements and Jira tickets into reviewable Markdown specifications.
 - `bug-report-writing`: Root cause analysis, failure categorization, and standardized Jira bug reports ([SLF]/[FAL] format).
+- `visual-regression-testing`: Screenshot baselines (`toHaveScreenshot`), dynamic element masking, and diff tolerance.
+- `accessibility-testing`: Automated WCAG 2.1 A/AA auditing using `axe-core` and `@axe-core/playwright`.
+- `performance-testing`: Client Web Vitals, API response time SLAs, and k6 load testing scenarios.
+- `flaky-test-management`: Isolating, diagnosing, memory-tracking, and auto-healing intermittent test failures.
 - `test-discovery`, `test-execution`, `test-summary`: Spec discovery, focused runner, and failure summary skills.
 
 **Memory**

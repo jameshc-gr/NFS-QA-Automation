@@ -29,6 +29,10 @@ All agent framework assets are centralized under `ai/jobs`:
   - `test-data-engineer`: Environment-aware account strategy & password/name compliance
   - `test-plan-generation`: Requirements & stories to structured test specifications
   - `bug-report-writing`: Root cause analysis, defect categorization & Jira bug reporting
+  - `visual-regression-testing`: Screenshot baselines, dynamic element masking & diff comparison
+  - `accessibility-testing`: Automated WCAG 2.1 A/AA auditing with `axe-core`
+  - `performance-testing`: Web Vitals metrics, SLA verification & k6 load scenarios
+  - `flaky-test-management`: Flaky test detection, isolation, memory tracking & auto-healing
   - `test-discovery`, `test-execution`, `test-summary`: Spec discovery, runner & triage skills
 
 ### End-to-End Agent Flow

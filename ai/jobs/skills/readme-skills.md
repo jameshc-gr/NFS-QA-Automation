@@ -12,6 +12,10 @@ Skills are compact, reusable operating procedures that equip AI coding agents wi
 | `test-data-engineer` | Data | Environment-aware account strategy, name/password rule compliance, and email/phone tagging |
 | `test-plan-generation` | Planning | Requirements and Jira stories to structured, reviewable Markdown test specifications |
 | `bug-report-writing` | Reporting | Root cause analysis, defect categorization, and standard Jira bug report formatting |
+| `visual-regression-testing` | Visual | Screenshot baseline comparisons (`toHaveScreenshot`), dynamic element masking, and diff tolerance |
+| `accessibility-testing` | Accessibility | Automated WCAG 2.1 A/AA compliance auditing with `axe-core` and `@axe-core/playwright` |
+| `performance-testing` | Performance | Web Vitals metrics, network response time SLAs, and k6 backend load testing scenarios |
+| `flaky-test-management` | Quality | Diagnosing, isolating, auto-healing, and quarantining intermittent test failures |
 | `test-discovery` | Discovery | Spec discovery and narrowing before execution |
 | `test-execution` | Execution | Safe, focused test execution runner |
 | `test-summary` | Summary | Test output diagnosis, failure categorization, and triage |
