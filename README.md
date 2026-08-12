@@ -22,7 +22,14 @@ All agent framework assets are centralized under `ai/jobs`:
 
 - `ai/jobs/agents`: agent mode files (`*.agent.md`)
 - `ai/jobs/prompts`: user-facing prompts (`*.prompt.md`)
-- `ai/jobs/skills`: reusable operating skills (`*/SKILL.md`)
+- `ai/jobs/skills`: reusable QA domain skills (`*/SKILL.md`)
+  - `playwright-framework-context`: Living framework architecture & conventions
+  - `api-testing`: Postman auto-extraction, contract testing & schema validation
+  - `mobile-testing`: Android/iOS Appium/WDIO, build routing & OTP channels
+  - `test-data-engineer`: Environment-aware account strategy & password/name compliance
+  - `test-plan-generation`: Requirements & stories to structured test specifications
+  - `bug-report-writing`: Root cause analysis, defect categorization & Jira bug reporting
+  - `test-discovery`, `test-execution`, `test-summary`: Spec discovery, runner & triage skills
 
 ### End-to-End Agent Flow
 
@@ -33,12 +40,12 @@ flowchart TD
 	C --> D[Test Execution Skill]
 	D --> E[Test Summary Skill]
 	E --> F{Pass?}
-	F -->|No| G[Test Healer Agent]
+	F -->|No| G[Test Healer Agent / Bug Report Skill]
 	G --> D
 	F -->|Yes| H[Report + Commit]
 
-	B -->|No, New Scenarios| I[Test Planner Agent]
-	I --> J[Plan in specs/]
+	B -->|No, New Scenarios| I[Test Plan Generation Skill]
+	I --> J[Plan in specs/ or ai/tests/]
 	J --> K[Test Generator Agent]
 	K --> L[Tests in tests/projects/.../generated]
 	L --> D

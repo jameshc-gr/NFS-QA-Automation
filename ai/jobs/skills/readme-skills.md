@@ -1,8 +1,22 @@
-# Skill Authoring Guide
+# QA Skills Directory
 
-Skills are compact, reusable operating procedures for recurring tasks.
+Skills are compact, reusable operating procedures that equip AI coding agents with expert testing domain knowledge.
 
-## Naming
+## Core QA Skills
+
+| Skill | Category | Description |
+| --- | --- | --- |
+| `playwright-framework-context` | Web E2E | Living framework architecture, profile mappings, locator strategy, and conventions |
+| `api-testing` | API | Postman collection auto-extraction, contract testing, gateway config loading, and schema validation |
+| `mobile-testing` | Mobile | WebdriverIO + Appium for Android & iOS, build routing, OTP channels, and Compose/XCUITest locators |
+| `test-data-engineer` | Data | Environment-aware account strategy, name/password rule compliance, and email/phone tagging |
+| `test-plan-generation` | Planning | Requirements and Jira stories to structured, reviewable Markdown test specifications |
+| `bug-report-writing` | Reporting | Root cause analysis, defect categorization, and standard Jira bug report formatting |
+| `test-discovery` | Discovery | Spec discovery and narrowing before execution |
+| `test-execution` | Execution | Safe, focused test execution runner |
+| `test-summary` | Summary | Test output diagnosis, failure categorization, and triage |
+
+## Naming & Location
 
 - Folder: `ai/jobs/skills/<skill-name>/`
 - File: `SKILL.md`

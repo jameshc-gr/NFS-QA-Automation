@@ -4,13 +4,20 @@ This folder is the canonical home for all agent assets in this repository.
 
 ## Folder Structure
 
-- `agents/`: agent mode definitions (`*.agent.md`) and supporting sub-folders
-  - `test_generator/`: code-based generator module and prompt
-  - `failure_analyzer/`: failure categorization design notes
-  - `self-healing-agent/`: locator/wait healing design notes
-  - `coverage_analyzer/`: requirement coverage analysis notes
+- `agents/`: Copilot agent definitions (`*.agent.md`)
+  - `playwright_agents/`: core web agents (`playwright-test-orchestrator`, `playwright-test-planner`, `playwright-test-generator`, `playwright-test-healer`)
+  - `mobile-test-generator.agent.md`: dedicated mobile test generator agent
 - `prompts/`: reusable prompt entrypoints (`*.prompt.md`)
-- `skills/`: domain skills (`*/SKILL.md`)
+- `skills/`: QA skills directory (`*/SKILL.md`)
+  - `playwright-framework-context/`: Web E2E architecture & conventions
+  - `api-testing/`: Postman auto-extraction, contract testing & schema validation
+  - `mobile-testing/`: Android/iOS Appium/WDIO, build routing & OTP verification
+  - `test-data-engineer/`: Compliant test data, password rules & domain tagging
+  - `test-plan-generation/`: Requirement & story to test specification workflow
+  - `bug-report-writing/`: RCA, failure classification & Jira bug reporting
+  - `test-discovery/`: Spec discovery & narrowing
+  - `test-execution/`: Focused execution runner
+  - `test-summary/`: Test output diagnosis & triage
 
 ## Repository Path Convention
 
