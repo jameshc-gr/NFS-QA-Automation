@@ -13,7 +13,8 @@ tools:
   - playwright-test/test_debug
   - playwright-test/test_list
   - playwright-test/test_run
-model: Claude Sonnet 4.6
+model: claude-3.5-sonnet
+# High-Reasoning Model: claude-3.5-sonnet / gpt-4o (Tier 1 - Required for Deep Trace Analysis, Root Cause Diagnosis & Self-Healing Locators)
 mcp-servers:
   playwright-test:
     type: stdio

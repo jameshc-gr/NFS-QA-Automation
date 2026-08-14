@@ -2,6 +2,8 @@
 name: api-testing
 description: 'API testing procedures, Postman collection & environment auto-extraction, contract testing, JSON schema validation, gateway config loading, and auth token management.'
 argument-hint: 'Execute or design API tests'
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 2/3 - Fast JSON Parsing & Contract Checking)
 ---
 
 # API Testing Skill

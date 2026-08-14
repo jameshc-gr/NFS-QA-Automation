@@ -2,6 +2,8 @@
 name: test-data-engineer
 description: 'Secure, environment-aware test data generation and account management across Web, Mobile, and API testing.'
 argument-hint: 'Generate or resolve test data'
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 3 - Fast Data Formatting & Validation Rule Enforcement)
 ---
 
 # Test Data Engineer Skill

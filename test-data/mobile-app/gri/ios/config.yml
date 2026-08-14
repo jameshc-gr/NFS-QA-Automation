@@ -26,6 +26,11 @@ ios:
       environment: qa
       bundleId: com.guaranteedrate.superapp.qa
       appPath: test-data/mobile-app/gri/ios/30.3/qa/GRI QA.app
+    qa-30.0-simulator:
+      source: simulator
+      environment: qa
+      bundleId: com.guaranteedrate.superapp.qa
+      appPath: test-data/mobile-app/gri/ios/30.0/qa/GRI QA.app
     dev-simulator:
       source: simulator
       environment: dev
@@ -70,8 +75,8 @@ googleVoice:
       resendAttempts: 2
 
 outlook:
-  email: "" # or "ENC(...)"
-  password: "" # or "ENC(...)"
+  email: "ENC(56f947f02dd2488d8df2560d:ef9a25cb75c558840360801afe9daea5:a2ce4bb4204f78dd58640437184b3710838dbe61c6f5117806a6)"
+  password: "ENC(7f9185b4d791118fe4361fdf:9bde743826b99df3da7aec1c4b0ae85c:b79f7cb0be599a472f352b6a932e)"
   tenantId: "common"
   clientId: "" # or "ENC(...)"
   clientSecret: "" # or "ENC(...)"

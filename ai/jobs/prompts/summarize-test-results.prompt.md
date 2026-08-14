@@ -3,6 +3,8 @@ description: "Summarize Playwright test output, isolate the likely failure, and 
 name: "Summarize Test Results"
 argument-hint: "[test output | report path]"
 agent: "playwright-test-orchestrator"
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 3 - Fast Log Parsing & Summary)
 ---
 Summarize the provided Playwright results.
 

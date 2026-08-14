@@ -72,50 +72,54 @@ android:
       appPath: test-data/mobile-app/gri/android/1.43/dev/app.apk
 
 environments:
-  # Play Store / App Store builds. Signup only accepts tagged addresses, and the
-  # code lands in the Guerrilla Mail inbox.
+  # Play Store / App Store builds. Signup uses a tagged pokemail address, and
+  # the code lands in the Guerrilla Mail inbox for that address.
   prod:
     verification:
       email: guerrillamail
       phone: google-voice
     createEmail:
-      prefix: my-rateapp-auto
-      domain: sharklasers.com
+      prefix: my-rateapp-auto-jc
+      domain: pokemail.net
       tag: "--ra"
 
-  # QA/dev/stage builds route all signup mail to the shared v3test@rate.com mailbox,
-  # so codes are read over Microsoft Graph instead.
+  # QA/dev/stage builds route create-user verification to the shared
+  # v3test@rate.com mailbox, so codes are read over Microsoft Graph.
   qa:
     verification:
       email: outlook
       phone: google-voice
     createEmail:
-      prefix: v3test+auto
-      domain: rate.com
+      prefix: my-rateapp-auto-jc
+      domain: pokemail.net
       tag: ""
     outlook:
       email: v3test@rate.com
       folder: Inbox
 
-  # Dev/stage builds do not route to Outlook; codes are read directly from a
-  # fresh yopmail.com mailbox.
   dev:
     verification:
-      email: yopmail
+      email: outlook
       phone: google-voice
     createEmail:
-      prefix: my-rateapp-auto
-      domain: yopmail.com
+      prefix: my-rateapp-auto-jc
+      domain: pokemail.net
       tag: ""
+    outlook:
+      email: v3test@rate.com
+      folder: Inbox
 
   stage:
     verification:
-      email: yopmail
+      email: outlook
       phone: google-voice
     createEmail:
-      prefix: my-rateapp-auto
-      domain: yopmail.com
+      prefix: my-rateapp-auto-jc
+      domain: pokemail.net
       tag: ""
+    outlook:
+      email: v3test@rate.com
+      folder: Inbox
 
 verification:
   email: guerrillamail
@@ -147,8 +151,8 @@ googleVoice:
     #   resendAttempts: 2
 
 outlook:
-  email: "" # or "ENC(...)"
-  password: "" # or "ENC(...)"
+  email: "ENC(56f947f02dd2488d8df2560d:ef9a25cb75c558840360801afe9daea5:a2ce4bb4204f78dd58640437184b3710838dbe61c6f5117806a6)"
+  password: "ENC(7f9185b4d791118fe4361fdf:9bde743826b99df3da7aec1c4b0ae85c:b79f7cb0be599a472f352b6a932e)"
   tenantId: "common"
   clientId: "" # or "ENC(...)"
   clientSecret: "" # or "ENC(...)"

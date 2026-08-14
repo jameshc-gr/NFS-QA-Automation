@@ -2,6 +2,8 @@
 name: test-plan-generation
 description: 'Transform requirements, Jira tickets, or user stories into structured, reviewable test plans and test case specifications.'
 argument-hint: 'Generate test plans and test specifications'
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 2 - Efficient Requirements Extraction & Spec Formatting)
 ---
 
 # Test Plan Generation Skill

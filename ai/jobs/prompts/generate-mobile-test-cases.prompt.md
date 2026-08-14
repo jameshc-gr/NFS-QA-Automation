@@ -3,6 +3,8 @@ name: "Generate Mobile Test Cases"
 description: "Create review-first mobile test case Markdown files, then generate WDIO TypeScript specs after approval."
 argument-hint: "[feature|screen] [platform=android|ios] [count] [phase=plan|implement] [target-folder]"
 agent: "mobile-test-generator"
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 2 - Efficient 2-Phase Markdown & WDIO Code Generation)
 ---
 Generate mobile tests using a two-phase workflow.
 

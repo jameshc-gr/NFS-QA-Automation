@@ -1,9 +1,9 @@
 emailPrefix: my-rateapp-jc
-emailDomain: yopmail.com
+emailDomain: pokemail.net
 password: Test123!
-loginEmail: my-rateapp-jc0020--ra@yopmail.com
-createEmailPrefix: my-rateapp-auto
-createEmailDomain: sharklasers.com
+loginEmail: my-rateapp-jc0020--ra@pokemail.net
+createEmailPrefix: my-rateapp-auto-jc
+createEmailDomain: pokemail.net
 createEmailStart: 1
 accounts:
   createUser: 483923

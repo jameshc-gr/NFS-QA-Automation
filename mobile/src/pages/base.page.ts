@@ -117,16 +117,56 @@ export abstract class BasePage {
       return;
     }
 
-    await this.tap(element);
-    await element.clearValue();
-    await browser.pause(200);
+    await this.typeAndroidWithVerification(element, value);
+  }
 
-    for (const character of value) {
-      await browser.keys([character]);
-      await browser.pause(80);
+  private async typeAndroidWithVerification(element: any, value: string, maxAttempts = 3): Promise<void> {
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      await this.tap(element);
+      await browser.pause(200);
+
+      // Compose text fields on Android: clearValue() often fails or leaves text.
+      // Clear with clearValue and also send backspaces / select all to ensure clean slate.
+      await element.clearValue().catch(() => {});
+      await browser.keys(['\uE009', 'a']); // Control + A
+      await browser.keys(['\uE017']); // Delete
+      await browser.pause(100);
+
+      // Try setValue first
+      await element.setValue(value).catch(() => {});
+      await browser.pause(300);
+
+      let actual = await this.readFieldValue(element);
+      if (this.areEquivalentFieldValues(actual, value)) {
+        return;
+      }
+
+      // If setValue didn't set the full string cleanly (or appended garbage),
+      // clear completely and use adb shell input text
+      await element.clearValue().catch(() => {});
+      await browser.keys(['\uE009', 'a']);
+      await browser.keys(['\uE017']);
+      await browser.pause(200);
+
+      // Type each character or use keys
+      for (const char of value) {
+        await browser.keys([char]);
+        await browser.pause(50);
+      }
+      await browser.pause(300);
+
+      actual = await this.readFieldValue(element);
+      if (this.areEquivalentFieldValues(actual, value)) {
+        return;
+      }
+
+      console.warn(
+        `[BasePage.type] Android field value mismatch on attempt ${attempt}/${maxAttempts}: `
+          + `expected "${value}", got "${actual}". Retrying with a fresh clear.`
+      );
     }
 
-    await browser.pause(300);
+    throw new Error(`Unable to type "${value}" into the Android field after ${maxAttempts} attempts.`);
   }
 
   private async typeIOSWithVerification(element: any, value: string, maxAttempts = 3): Promise<void> {
@@ -139,7 +179,7 @@ export abstract class BasePage {
       await browser.pause(400);
 
       const actual = String((await element.getValue().catch(() => '')) || '');
-      if (actual === value || this.isMaskedMatch(actual, value)) {
+      if (this.areEquivalentFieldValues(actual, value)) {
         return;
       }
 
@@ -163,9 +203,32 @@ export abstract class BasePage {
     return current === expected;
   }
 
+  private async readFieldValue(element: any): Promise<string> {
+    const text = String(await element.getText().catch(() => '') || '');
+    if (text) {
+      return text;
+    }
+
+    return String(await element.getAttribute('text').catch(() => '') || '');
+  }
+
   /** Secure text fields only expose bullets, so compare length instead of content. */
   private isMaskedMatch(actual: string, expected: string): boolean {
     return actual.length > 0 && /^[\u2022*]+$/.test(actual) && actual.length === expected.length;
+  }
+
+  /** Phone inputs may auto-format; compare the digit-only form in that case. */
+  private areEquivalentFieldValues(actual: string, expected: string): boolean {
+    if (actual === expected || this.isMaskedMatch(actual, expected)) {
+      return true;
+    }
+
+    if (/^\d+$/.test(expected)) {
+      const actualDigits = actual.replace(/\D/g, '');
+      return actualDigits === expected;
+    }
+
+    return false;
   }
 
   /**

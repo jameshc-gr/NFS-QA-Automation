@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 
 import { AuthPage } from '../../src/pages/auth.page';
 import { UserPage } from '../../src/pages/user.page';
-import { getAutomationAccount } from '../../src/utils/mobile-auth';
+import { getAutomationAccount, getMobileEnvironment, recordCreatedAccount } from '../../src/utils/mobile-auth';
 import { warmUpEmailInboxIfNeeded } from '../../src/utils/verification-service';
 
 describe('Android create user flow with Guerrilla Mail and Google Voice verification', () => {
@@ -18,6 +18,7 @@ describe('Android create user flow with Guerrilla Mail and Google Voice verifica
 
     await warmUpEmailInboxIfNeeded(email.split('@')[0]);
 
+    await auth.waitForAuthScreenReady();
     await auth.openCreateAccount();
     await user.createUser({
       firstName: process.env.MOBILE_TEST_FIRST_NAME || 'John',
@@ -32,6 +33,8 @@ describe('Android create user flow with Guerrilla Mail and Google Voice verifica
       googleVoiceProfile,
       phoneNumber,
     });
+
+    recordCreatedAccount({ email, password }, getMobileEnvironment());
 
     console.log('[Test] All verifications completed, verifying post-signup state...');
 

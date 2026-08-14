@@ -24,6 +24,12 @@ export interface GoogleVoiceOptions {
   excludeCodes?: string[];
   maxAgeMs?: number;
   singleCheck?: boolean;
+  // When set, a candidate code is only accepted if the message preview text
+  // differs from this baseline — proof a genuinely new message rendered,
+  // instead of trusting a fuzzy relative-time string that can misjudge a
+  // multi-hour-old message (with a long-running conversation history full of
+  // past codes) as "fresh".
+  baselinePreviewText?: string;
 }
 
 export function extractCodeFromText(text: string): string | null {
@@ -44,6 +50,67 @@ export function extractCodeFromText(text: string): string | null {
 
   const match = cleanText.match(/\b\d{6}\b/);
   return match?.[0] || null;
+}
+
+export async function peekLatestGoogleVoicePreview(options: GoogleVoiceOptions = {}): Promise<string> {
+  const sessionPath = path.resolve(process.cwd(), options.sessionPath || process.env.GV_SESSION_PATH || 'mobile/.auth/gv-session.json');
+  const userDataDir = sessionPath.endsWith('.json')
+    ? sessionPath.replace(/\.json$/, '-user-data')
+    : `${sessionPath}-user-data`;
+
+  if (!existsSync(sessionPath) && !existsSync(userDataDir)) {
+    return '';
+  }
+
+  const launchOptions = {
+    headless: options.headless ?? true,
+    ignoreDefaultArgs: ['--enable-automation'],
+    args: [
+      '--disable-blink-features=AutomationControlled',
+      '--no-sandbox',
+      '--no-first-run',
+      '--no-default-browser-check',
+      '--disable-restore-session-state',
+      '--disable-session-crashed-bubble',
+      '--disable-infobars',
+    ],
+    viewport: { width: 1280, height: 720 },
+    locale: 'en-US',
+    timezoneId: 'America/New_York',
+  };
+
+  const context = await chromium.launchPersistentContext(userDataDir, {
+    ...launchOptions,
+    channel: 'chrome',
+  }).catch(() => chromium.launchPersistentContext(userDataDir, launchOptions));
+
+  const page = context.pages()[0] || await context.newPage();
+  const pages = context.pages();
+  for (let i = 1; i < pages.length; i += 1) {
+    await pages[i].close().catch(() => {});
+  }
+
+  try {
+    await page.goto('https://voice.google.com/u/0/messages', { waitUntil: 'domcontentloaded', timeout: 60000 })
+      .catch(() => page.goto('https://voice.google.com/messages', { waitUntil: 'domcontentloaded', timeout: 60000 }));
+
+    if (page.url().includes('accounts.google.com')) {
+      return '';
+    }
+
+    const latestThread = page.locator('gv-message-thread-list-item').first();
+    if (await latestThread.count().catch(() => 0)) {
+      await latestThread.click();
+      await page.waitForTimeout(500);
+      return await latestThread.innerText().catch(() => '');
+    }
+
+    return '';
+  } catch {
+    return '';
+  } finally {
+    await context.close().catch(() => {});
+  }
 }
 
 export async function fetchGoogleVoiceSmsCode(options: GoogleVoiceOptions = {}): Promise<string> {
@@ -124,9 +191,10 @@ export async function fetchGoogleVoiceSmsCode(options: GoogleVoiceOptions = {}):
 
     const excludeCodes = options.excludeCodes || [];
     const maxAgeMs = options.maxAgeMs || 180000; // 3 minutes max age
+    const baselinePreviewText = options.baselinePreviewText;
 
     if (options.singleCheck) {
-      const latestCode = await getRecentSmsCodeFromPage(page, excludeCodes, maxAgeMs, false);
+      const latestCode = await getRecentSmsCodeFromPage(page, excludeCodes, maxAgeMs, false, baselinePreviewText);
       if (latestCode) {
         return latestCode;
       }
@@ -137,7 +205,7 @@ export async function fetchGoogleVoiceSmsCode(options: GoogleVoiceOptions = {}):
     const deadline = Date.now() + timeoutMs;
 
     while (Date.now() < deadline) {
-      const code = await getRecentSmsCodeFromPage(page, excludeCodes, maxAgeMs, true);
+      const code = await getRecentSmsCodeFromPage(page, excludeCodes, maxAgeMs, true, baselinePreviewText);
       if (code) {
         return code;
       }
@@ -146,8 +214,10 @@ export async function fetchGoogleVoiceSmsCode(options: GoogleVoiceOptions = {}):
       await page.waitForTimeout(pollIntervalMs);
     }
 
-    // Last resort: take the newest thread's code regardless of its rendered timestamp.
-    const latestCode = await getRecentSmsCodeFromPage(page, excludeCodes, maxAgeMs, false);
+    // Last resort: take the newest thread's code regardless of its rendered timestamp,
+    // but still require it to differ from the baseline when one was provided —
+    // otherwise this would just keep re-returning the same stale message.
+    const latestCode = await getRecentSmsCodeFromPage(page, excludeCodes, maxAgeMs, false, baselinePreviewText);
     if (latestCode) {
       console.log(`[Google Voice] Freshness window elapsed; using latest message code ${latestCode}`);
       return latestCode;
@@ -182,7 +252,8 @@ async function getRecentSmsCodeFromPage(
   page: any,
   excludeCodes: string[],
   maxAgeMs: number,
-  enforceFreshness: boolean
+  enforceFreshness: boolean,
+  baselinePreviewText?: string
 ): Promise<string | null> {
   // Google Voice sorts the left conversation pane newest-first.
   const latestThread = page.locator('gv-message-thread-list-item').first();
@@ -191,6 +262,10 @@ async function getRecentSmsCodeFromPage(
     await page.waitForTimeout(500);
 
     const previewText = await latestThread.innerText().catch(() => '');
+    if (isSameAsBaseline(previewText, baselinePreviewText)) {
+      return null;
+    }
+
     const previewCode = extractLatestCodeFromText(previewText, excludeCodes);
     if (previewCode) {
       if (!enforceFreshness || isRecentMessageText(previewText, maxAgeMs)) {
@@ -202,9 +277,18 @@ async function getRecentSmsCodeFromPage(
     }
 
     // Fallback to opened thread details if the list preview does not contain
-    // an eligible code (for example, very long SMS previews).
+    // an eligible code (for example, very long SMS previews). gv-thread-details
+    // renders the ENTIRE conversation history with this sender, which can span
+    // many past test runs' codes — only look at the tail (the newest message)
+    // so an excluded/rejected code never causes an old historical code to be
+    // picked up by accident.
     const threadDetails = page.locator('gv-thread-details').first();
-    const detailsText = await threadDetails.innerText().catch(() => '');
+    const fullDetailsText = await threadDetails.innerText().catch(() => '');
+    const detailsText = fullDetailsText.slice(-500);
+    if (isSameAsBaseline(detailsText, baselinePreviewText)) {
+      return null;
+    }
+
     const detailCode = extractLatestCodeFromText(detailsText, excludeCodes);
     if (detailCode && (!enforceFreshness || isRecentMessageText(detailsText, maxAgeMs))) {
       return detailCode;
@@ -212,6 +296,17 @@ async function getRecentSmsCodeFromPage(
   }
 
   return null;
+}
+
+/** A baseline was captured before submitting the phone number; if the tail of
+ * the current text still matches it, no genuinely new message has arrived. */
+function isSameAsBaseline(currentText: string, baselinePreviewText?: string): boolean {
+  if (!baselinePreviewText) {
+    return false;
+  }
+
+  const baselineTail = baselinePreviewText.trim().slice(-200);
+  return currentText.trim().slice(-200) === baselineTail;
 }
 
 function isRecentMessageText(text: string, maxAgeMs: number): boolean {

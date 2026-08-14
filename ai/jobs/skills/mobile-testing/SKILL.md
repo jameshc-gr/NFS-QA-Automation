@@ -2,11 +2,18 @@
 name: mobile-testing
 description: 'Mobile automation procedures for WebdriverIO + Appium across Android (emulator/device) and iOS (simulator/real-device/TestFlight), including build routing, OTP verification, and Compose/XCUITest locator strategies.'
 argument-hint: 'Execute or design mobile UI tests'
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 2 - Appium Session & Build Routing)
 ---
 
 # Mobile Testing Skill
 
 Use this skill for all native Android and iOS test automation using WebdriverIO + Appium.
+
+**Canonical, permanent rules: [docs/mobile-testing-rules.md](../../../docs/mobile-testing-rules.md).**
+Follow it exactly for email formats, verification routing, account
+recording/reuse, and the page-verbiage/readiness/genuine-new-message rules —
+do not relax or reinterpret it.
 
 ## When to Use
 - Running or creating Android or iOS automation specs

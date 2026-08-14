@@ -2,6 +2,8 @@
 name: playwright-framework-context
 description: 'Living framework context for this Playwright repo. Use when you need the current test mechanics, profile mapping, locator strategy, timing conventions, or agent workflow guidance.'
 argument-hint: 'Initialize the repo context'
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 3 - Fast Framework Context Summary)
 ---
 
 # Playwright Framework Context

@@ -2,6 +2,8 @@
 name: test-discovery
 description: 'Find the relevant Playwright spec files in tests/ for a requested flow, profile, or regression.'
 argument-hint: 'Discover the best test files'
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 3 - Fast File & Spec Search)
 ---
 
 # Test Discovery

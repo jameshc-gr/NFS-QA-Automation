@@ -98,7 +98,18 @@
     "typecheck:mobile": "tsc -p mobile/tsconfig.json --noEmit",
     "generate:test": "node scripts/generate-test.js",
     "organize-reports": "node scripts/organize-reports.js",
-    "posttest": "npm run organize-reports"
+    "posttest": "npm run organize-reports",
+    "appium:start": "appium --relaxed-security",
+    "wdio:codegen": "npx wdio codegen mobile/wdio.conf.ts",
+    "record:android": "MOBILE_PLATFORM=android npm run appium:start",
+    "record:ios": "MOBILE_PLATFORM=ios npm run appium:start",
+    "save-created-account": "node scripts/save-created-account.ts",
+    "test:mobile:android:forgot:qa": "MOBILE_PLATFORM=android MOBILE_ENV=qa MOBILE_ANDROID_BUILD=qa MOBILE_SPECS=tests/android/forgot-password.spec.ts wdio run mobile/wdio.conf.ts",
+    "test:mobile:android:forgot:stage": "MOBILE_PLATFORM=android MOBILE_ENV=stage MOBILE_ANDROID_BUILD=stage MOBILE_SPECS=tests/android/forgot-password.spec.ts wdio run mobile/wdio.conf.ts",
+    "test:mobile:android:forgot:prod": "MOBILE_PLATFORM=android MOBILE_ENV=prod MOBILE_ANDROID_BUILD=prod MOBILE_SPECS=tests/android/forgot-password.spec.ts wdio run mobile/wdio.conf.ts",
+    "test:mobile:ios:forgot:qa": "MOBILE_PLATFORM=ios MOBILE_ENV=qa MOBILE_IOS_BUILD=qa-simulator MOBILE_SPECS=tests/ios/forgot-password.spec.ts wdio run mobile/wdio.conf.ts",
+    "test:mobile:ios:forgot:stage": "MOBILE_PLATFORM=ios MOBILE_ENV=stage MOBILE_IOS_BUILD=stage-simulator MOBILE_SPECS=tests/ios/forgot-password.spec.ts wdio run mobile/wdio.conf.ts",
+    "test:mobile:ios:forgot:prod": "MOBILE_PLATFORM=ios MOBILE_ENV=prod MOBILE_IOS_BUILD=prod-simulator MOBILE_SPECS=tests/ios/forgot-password.spec.ts wdio run mobile/wdio.conf.ts"
   },
   "keywords": [],
   "author": "",
@@ -127,7 +138,6 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.57.0",
-    "easy-yopmail": "5.2.2",
     "langchain": "^1.5.2",
     "yaml": "^2.8.1",
     "zod": "^3.25.76"

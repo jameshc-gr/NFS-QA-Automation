@@ -35,6 +35,10 @@ All agent framework assets are centralized under `ai/jobs`:
   - `flaky-test-management`: Flaky test detection, isolation, memory tracking & auto-healing
   - `test-discovery`, `test-execution`, `test-summary`: Spec discovery, runner & triage skills
 
+### AI Model Economics & Token Optimization
+- **Tier 2/3 Economical Defaults (`gpt-4o-mini` / `claude-3.5-haiku` / `gemini-2.0-flash`)**: Configured for 90%+ of workflow steps (Orchestration, Planning, Test Generation, Prompts, Discovery, Execution, Data Engineering, Reporting) to save ~95% token cost compared to flagship models.
+- **Tier 1 Reasoning (`claude-3.5-sonnet` / `gpt-4o`)**: Assigned exclusively to `playwright-test-healer` agent and `flaky-test-management` skill where deep failure trace analysis and self-healing logic are required.
+
 ### End-to-End Agent Flow
 
 ```mermaid
@@ -433,13 +437,20 @@ npm run ios:clone -- --clone release-30.3
 **Builds are stored with naming convention:** `SuperApp-iOS-VERSION-buildNUM` (e.g., `SuperApp-iOS-30.3-build1`)
 
 **Complete documentation:**
-- [docs/iOS-BUILD-DOWNLOAD-QUICKREF.md](docs/iOS-BUILD-DOWNLOAD-QUICKREF.md) - Quick reference and common commands
-- [docs/iOS-BUILD-DOWNLOAD.md](docs/iOS-BUILD-DOWNLOAD.md) - Comprehensive guide with workflows and troubleshooting
-- [docs/iOS-BUILD-DOWNLOAD-IMPLEMENTATION.md](docs/iOS-BUILD-DOWNLOAD-IMPLEMENTATION.md) - Implementation details and architecture
+- [mobile/docs/iOS-BUILD-DOWNLOAD-QUICKREF.md](mobile/docs/iOS-BUILD-DOWNLOAD-QUICKREF.md) - Quick reference and common commands
+- [mobile/docs/iOS-BUILD-DOWNLOAD.md](mobile/docs/iOS-BUILD-DOWNLOAD.md) - Comprehensive guide with workflows and troubleshooting
+- [mobile/docs/iOS-BUILD-DOWNLOAD-IMPLEMENTATION.md](mobile/docs/iOS-BUILD-DOWNLOAD-IMPLEMENTATION.md) - Implementation details and architecture
 
 ## Running Tests
 
-### Mobile create-user (verified end to end)
+### Mobile create-user (verified end to end, all supported environments)
+
+**Canonical, permanent rules for all mobile testing live in
+[docs/mobile-testing-rules.md](docs/mobile-testing-rules.md).** They cover
+email formats per environment, dynamic email-verification routing, the
+create-account verification pass/fail handling logic, account recording and
+reuse, and the page-verbiage/readiness/genuine-new-message rules below. Do not
+change that document's rules without explicit approval.
 
 Mobile uses WebdriverIO, not Playwright — `npm test` will not run these. Spec
 paths in `MOBILE_SPECS` are relative to `mobile/`, and `wdio` needs `npx`.
@@ -453,6 +464,10 @@ npm run test:mobile:android:create-user
 
 # Android, QA build -> Outlook v3test@rate.com + Google Voice
 npm run test:mobile:android:create-user:qa
+
+# iOS, Stage build -> Outlook v3test@rate.com + Google Voice
+MOBILE_PLATFORM=ios MOBILE_ENV=stage MOBILE_IOS_BUILD=stage-simulator \
+  MOBILE_SPECS="tests/ios/create-user.spec.ts" npx wdio run mobile/wdio.conf.ts
 ```
 
 Equivalent explicit form:
@@ -462,9 +477,37 @@ MOBILE_PLATFORM=ios MOBILE_ENV=prod MOBILE_SPECS="tests/ios/create-user.spec.ts"
   npx wdio run mobile/wdio.conf.ts
 ```
 
-Both flows complete email verification, SMS verification, dismiss the
-"working with someone from Rate?" modal, and assert the app lands on the home
-screen.
+Both flows complete email verification, SMS verification (when the
+account/build requires it — some skip straight to the post-signup modal),
+dismiss the "working with someone from Rate?" modal, and assert the app lands
+on the home screen.
+
+**Permanent rule — page verbiage must be asserted before every step
+transition.** `AuthPage.assertPageVerbiage()` gates auth screen → email
+verification → (phone entry → phone code, when required) → home screen inside
+the single shared `completeAllVerifications()` used by every environment
+(prod and non-prod alike), so this check is never optional or env-specific. It
+throws immediately with a labeled error (and dumps the page source to
+`mobile/.builds/page-verbiage-<step>-screen.xml`) instead of silently typing
+into a stale/wrong screen. Any new mobile step added to the create-user or
+login-logout flow must call this before proceeding.
+
+**Permanent rule — treat SMS/email retrieval as needing proof of a genuinely
+new message, not a fuzzy timestamp guess.** Google Voice's conversation
+threads accumulate every past test run's OTP codes; matching the "last"
+6-digit number in the full thread history (or trusting a relative-time string
+like "3m ago") can and does return a stale-but-different code every retry.
+`fetchGoogleVoiceSmsCode` only reads the tail of the thread transcript and
+requires a `baselinePreviewText` snapshot to differ before accepting a code —
+capture that baseline with `peekLatestGoogleVoicePreview()` immediately before
+the action that triggers a new SMS/email send.
+
+**Permanent rule — wait for genuine app readiness, not a fixed pause.** A cold
+app start (especially right after `adb shell pm clear` or a fresh install) can
+sit on the splash screen 20s+, longer than a normal element-wait timeout.
+Always call `AuthPage.waitForAuthScreenReady()` (polls up to 60s for either
+auth tab) before the first interaction in any new mobile spec — never assume
+a short fixed `browser.pause()` is enough.
 
 ### Mobile login-logout (verified end to end)
 
@@ -483,26 +526,71 @@ npm run test:mobile:android:login-logout:qa
 npm run test:mobile:android:login-logout:prod
 ```
 
-**Only these five combinations are currently available.** iOS `dev`, Android
-`stage`, and Android `dev` do not have a working build (see "Known build gaps"
-below) — skip them until a real build exists.
-
 The shared login account is `login.yml`'s `loginEmail`/`password`. On PROD it's
 `my-rateapp-jc0020--ra@yopmail.com` / `Test123!`; if login starts failing with a
 real "email or password is incorrect" error (not a typing bug — check the
 screenshot/page source first), the account may need to be rotated again.
 
-#### Known build gaps (skip until fixed)
+### Mobile forgot password reset (verified end to end)
 
+Complete end-to-end password reset flow: creates a fresh account, completes email verification,
+initiates forgot password, receives and enters reset password email code, enters new password,
+and logs in with the new credentials. Covers both email and SMS reset paths (SMS is currently
+skipped due to backend phone number persistence issue).
+
+```bash
+# Android QA (Outlook email)
+npm run test:mobile:android:forgot:qa
+
+# Android Prod (Guerrilla Mail email)
+MOBILE_ANDROID_APP_PATH="test-data/mobile-app/gri/android/1.48/prod/app.apk" npm run test:mobile:android:forgot:prod
+
+# iOS QA (Outlook email)
+MOBILE_IOS_APP_PATH="test-data/mobile-app/gri/ios/GRI QA.app" npm run test:mobile:ios:forgot:qa
+
+# iOS Prod (Guerrilla Mail email)
+MOBILE_IOS_APP_PATH="test-data/mobile-app/gri/ios/30.3/prod/Rate.app" npm run test:mobile:ios:forgot:prod
+```
+
+Email providers vary by environment:
+- **QA environments**: Outlook (outlook.cloud.microsoft.com) with Okta SSO
+- **Prod environment**: Guerrilla Mail (pokemail.net) with direct API access
+
+Both providers support subject line filtering to distinguish between create-account emails ("Verify your email")
+and password-reset emails ("Reset password"). The verification service threads `subjectMustContain` through
+all email provider implementations for reliable email matching.
+
+### Supported environment/platform matrix (verified 2026-08-14, permanent)
+
+| Platform | Environment | Build | create-user | forgot-password |
+| --- | --- | --- | --- | --- |
+| Android | QA | `qa-local` | ✅ verified green | ✅ verified green |
+| Android | Prod | `prod-local` | ✅ verified green | ✅ verified green |
+| iOS | QA | `qa-simulator` | ✅ verified green | ✅ verified green |
+| iOS | Stage | `stage-simulator` | ✅ verified green | — |
+| iOS | Prod | `prod-simulator` | ✅ verified green | ✅ verified green |
+| Android | Stage / Dev | — | ❌ **skip, no build exists** | ❌ **skip, no build exists** |
+| iOS | Dev | — | ❌ **skip, mismatched bundle id** | ❌ **skip, mismatched bundle id** |
+
+#### Known build gaps (permanently skip until a real build exists)
+
+- **Android stage / dev**: no apk exists on disk at all —
+  `test-data/mobile-app/gri/android/1.43/{stage,dev}/app.apk` are both
+  missing (only `qa` and `prod` apks are actually present). `firebase-web`
+  downloads also depend on a saved Google session
+  (`mobile/.auth/firebase-session.json`) that can expire; re-check with
+  `npx ts-node scripts/check-firebase-access.ts` before assuming a code
+  regression, but the missing local apks are the primary blocker.
 - **iOS dev**: `test-data/mobile-app/gri/ios/config.yml`'s `dev-simulator` entry
   points at a `.app` that is actually a renamed copy of the QA build (its
   `CFBundleIdentifier` is still `com.guaranteedrate.superapp.qa`), so it fails
   to launch under the declared `com.guaranteedrate.superapp.dev` bundle id. No
   real dev-scheme iOS build exists yet.
-- **Android stage / dev**: both use `source: firebase-web` and require a saved
-  Google session (`mobile/.auth/firebase-session.json`) that has expired. Fix
-  with a human re-login (never automate Google auth); verify with
-  `npx ts-node scripts/check-firebase-access.ts` first.
+
+Do not keep retrying these two combinations expecting a different result —
+they require a real build artifact from the app team, not a test/code fix.
+
+
 
 ### Web suites
 

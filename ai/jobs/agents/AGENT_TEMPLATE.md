@@ -5,7 +5,10 @@ tools:
   - search
   - read
   - execute
-model: Claude Sonnet 4.6
+model: gpt-4o-mini
+# Economical Model Options:
+# Tier 2/3 (Default): gpt-4o-mini | claude-3.5-haiku | gemini-2.0-flash (Planning, Discovery, Code Generation)
+# Tier 1 (Complex Debugging Only): claude-3.5-sonnet | gpt-4o (Self-Healing, Failure Diagnosis)
 ---
 
 You are the Example Agent.

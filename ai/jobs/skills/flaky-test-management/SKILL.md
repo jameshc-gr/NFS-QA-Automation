@@ -2,6 +2,8 @@
 name: flaky-test-management
 description: 'Identify, isolate, diagnose, and repair flaky tests across Web, Mobile, and API suites using memory tracking and resilient auto-healing strategies.'
 argument-hint: 'Diagnose and quarantine flaky tests'
+model: claude-3.5-sonnet
+# High-Reasoning Model: claude-3.5-sonnet / gpt-4o (Tier 1 - Required for Race Condition Isolation & Self-Healing Logic)
 ---
 
 # Flaky Test Management Skill

@@ -850,7 +850,7 @@ test('P001 - Entry Level Graduate', async ({ page }) => {
    - Comprehensive project documentation
    - Suitable for Confluence/Wiki publication
    - Includes product questions, recommendations
-   - Location: `docs/rate-wealth-documentation.md`
+   - Location: `docs/rate-wealth/rate-wealth-documentation.md`
 
 ### Data Conventions
 

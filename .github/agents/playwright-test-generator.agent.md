@@ -22,7 +22,8 @@ tools:
   - playwright-test/generator_read_log
   - playwright-test/generator_setup_page
   - playwright-test/generator_write_test
-model: Claude Sonnet 4.6
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 2 - High-Speed Code Generation; escalate to claude-3.5-sonnet for complex multi-page flows)
 mcp-servers:
   playwright-test:
     type: stdio

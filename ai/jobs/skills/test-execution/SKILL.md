@@ -2,6 +2,8 @@
 name: test-execution
 description: 'Run Playwright tests with the right browser, profile, and command shape; prefer narrow runs and clear commands.'
 argument-hint: 'Execute the selected tests'
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 3 - Fast Command Selection & Trigger)
 ---
 
 # Test Execution

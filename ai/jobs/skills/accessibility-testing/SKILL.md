@@ -2,6 +2,8 @@
 name: accessibility-testing
 description: 'Automated accessibility auditing using axe-core and @axe-core/playwright to enforce WCAG 2.1 AA compliance, ARIA standards, and color contrast.'
 argument-hint: 'Audit page accessibility compliance'
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 3 - Fast Axe Violation Parsing)
 ---
 
 # Accessibility Testing Skill

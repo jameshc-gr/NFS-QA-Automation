@@ -129,7 +129,7 @@ Each downloaded build includes `build-metadata.json`:
 
 ### 6. Documentation Created
 
-#### Primary Documentation: `docs/iOS-BUILD-DOWNLOAD.md`
+#### Primary Documentation: `mobile/docs/iOS-BUILD-DOWNLOAD.md`
 Comprehensive guide covering:
 - Architecture overview
 - Folder naming convention
@@ -143,7 +143,7 @@ Comprehensive guide covering:
 - Environment variables
 - Recommended practices
 
-#### Quick Reference: `docs/iOS-BUILD-DOWNLOAD-QUICKREF.md`
+#### Quick Reference: `mobile/docs/iOS-BUILD-DOWNLOAD-QUICKREF.md`
 Fast reference including:
 - Installation & setup info
 - Essential commands
@@ -248,8 +248,8 @@ Scripts have been tested and verified functional:
 ### Created:
 - `scripts/ios-build-manager.ts` - Build management script
 - `scripts/ios-release-downloader.ts` - Release downloader script
-- `docs/iOS-BUILD-DOWNLOAD.md` - Comprehensive documentation
-- `docs/iOS-BUILD-DOWNLOAD-QUICKREF.md` - Quick reference guide
+- `mobile/docs/iOS-BUILD-DOWNLOAD.md` - Comprehensive documentation
+- `mobile/docs/iOS-BUILD-DOWNLOAD-QUICKREF.md` - Quick reference guide
 
 ### Modified:
 - `package.json` - Added iOS build management npm scripts
@@ -258,7 +258,7 @@ Scripts have been tested and verified functional:
 
 ## Next Steps for Users
 
-1. **Review Documentation**: Read `docs/iOS-BUILD-DOWNLOAD-QUICKREF.md` for quick start
+1. **Review Documentation**: Read `mobile/docs/iOS-BUILD-DOWNLOAD-QUICKREF.md` for quick start
 2. **Try Commands**: `npm run ios:list-releases` to see what's available
 3. **Download Builds**: Use `npm run ios:download-build:qa -- --download v30.3-qa`
 4. **Run Tests**: Integrate downloaded builds into test workflows
@@ -275,7 +275,7 @@ Scripts have been tested and verified functional:
 ## Support & Troubleshooting
 
 For issues:
-1. Check `docs/iOS-BUILD-DOWNLOAD.md` Troubleshooting section
+1. Check `mobile/docs/iOS-BUILD-DOWNLOAD.md` Troubleshooting section
 2. Verify config in `test-data/mobile-app/gri/ios/config.yml`
 3. Test with: `npm run ios:build-manager -- --info`
 4. Check repo location: `ls -la /Users/jameshc/iOS`

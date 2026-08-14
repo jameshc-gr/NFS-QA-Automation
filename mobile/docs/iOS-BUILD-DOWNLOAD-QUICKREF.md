@@ -77,7 +77,7 @@ MOBILE_IOS_BUILD=qa-simulator npm run test:mobile:ios:login-logout
 
 - **GitHub Repo**: https://github.com/Guaranteed-Rate/SuperApp-iOS
 - **Config File**: `test-data/mobile-app/gri/ios/config.yml`
-- **Documentation**: `docs/iOS-BUILD-DOWNLOAD.md`
+- **Documentation**: `mobile/docs/iOS-BUILD-DOWNLOAD.md`
 - **Scripts Location**: `scripts/ios-build-manager.ts` and `scripts/ios-release-downloader.ts`
 
 ## Typical Workflow
@@ -88,4 +88,4 @@ MOBILE_IOS_BUILD=qa-simulator npm run test:mobile:ios:login-logout
 4. Run tests: `MOBILE_IOS_REPO_VERSION=30.3 npm run test:mobile:ios:create-account:qa-xcode`
 5. Cleanup: `npm run ios:build-manager -- --cleanup 3`
 
-See `docs/iOS-BUILD-DOWNLOAD.md` for full documentation.
+See `mobile/docs/iOS-BUILD-DOWNLOAD.md` for full documentation.

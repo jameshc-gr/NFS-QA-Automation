@@ -4,6 +4,8 @@ name: "Playwright Test Orchestrator"
 argument-hint: "Coordinate a test workflow"
 tools: [agent, read, search, execute, todo]
 agents: [playwright-test-planner, playwright-test-generator, playwright-test-healer]
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 2/3 - Fast & Token-Efficient for Orchestration & Routing)
 ---
 
 You are the coordinator for the Playwright test workflow in this repo.

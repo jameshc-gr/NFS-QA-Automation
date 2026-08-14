@@ -2,6 +2,8 @@
 name: performance-testing
 description: 'Performance benchmarking, Web Vitals monitoring (LCP, CLS, FID/INP), network response SLAs, and k6 load testing strategies.'
 argument-hint: 'Audit performance metrics or load SLAs'
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 3 - Fast Metric Evaluation & SLA Check)
 ---
 
 # Performance Testing Skill

@@ -1,5 +1,5 @@
 import readline from 'node:readline';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import YAML from 'yaml';
 import { decryptObjectSecrets } from './crypto-utils';
@@ -34,7 +34,7 @@ interface RuntimeConfig {
   defaultEnvironment?: string;
   environments?: Record<string, EnvironmentConfig>;
   verification: {
-    email: 'manual' | 'yopmail' | 'guerrillamail' | 'outlook';
+    email: 'manual' | 'guerrillamail' | 'outlook';
     phone: 'manual' | 'google-voice';
     phoneNumber: string;
     provider?: string;
@@ -66,14 +66,21 @@ interface RuntimeConfig {
   };
 }
 
-export type EmailVerificationProvider = 'guerrillamail' | 'yopmail' | 'outlook';
+export type EmailVerificationProvider = 'guerrillamail' | 'outlook';
+
+interface CreatedAccountRecord {
+  email: string;
+  password: string;
+  environment: string;
+  createdAt: string;
+}
 
 const DEFAULT_LOGIN_CONFIG: LoginConfig = {
   emailPrefix: 'my-rateapp-automation-jc',
-  emailDomain: 'yopmail.com',
+  emailDomain: 'pokemail.net',
   password: 'Test123!',
-  loginEmail: 'my-rateapp-automation-jc030@yopmail.com',
-  createEmailPrefix: 'my-rateapp-auto',
+  loginEmail: 'my-rateapp-jc000001--ra@pokemail.net',
+  createEmailPrefix: 'my-rateapp-auto-jc',
   createEmailStart: 1,
   accounts: {
     createUser: 1,
@@ -109,8 +116,112 @@ function loadYamlFile<T>(filePath: string, fallback: T): T {
 }
 
 const authRoot = path.resolve(process.cwd(), 'test-data/mobile-app/gri/android');
+const createdAccountsPath = path.resolve(process.cwd(), 'test-data/mobile-app/created-accounts.json');
+const testResultsAccountsPath = path.resolve(process.cwd(), 'test-results/mobile-app-accounts.json');
+const testResultsRecentPath = path.resolve(process.cwd(), 'test-results/recent-created-accounts.json');
 const loginConfig = loadYamlFile<LoginConfig>(path.join(authRoot, 'login.yml'), DEFAULT_LOGIN_CONFIG);
 const runtimeConfig = loadYamlFile<RuntimeConfig>(path.join(authRoot, 'config.yml'), DEFAULT_RUNTIME_CONFIG);
+
+function loadCreatedAccounts(): CreatedAccountRecord[] {
+  if (!existsSync(createdAccountsPath)) {
+    return [];
+  }
+
+  try {
+    const raw = readFileSync(createdAccountsPath, 'utf8');
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed
+      .filter((item) => item && typeof item.email === 'string' && typeof item.password === 'string')
+      .map((item) => ({
+        email: String(item.email).trim(),
+        password: String(item.password),
+        environment: String(item.environment || ''),
+        createdAt: String(item.createdAt || ''),
+      }));
+  } catch {
+    return [];
+  }
+}
+
+function writeCreatedAccounts(records: CreatedAccountRecord[]): void {
+  mkdirSync(path.dirname(createdAccountsPath), { recursive: true });
+  writeFileSync(createdAccountsPath, `${JSON.stringify(records, null, 2)}\n`, 'utf8');
+}
+
+function appendToTestResults(entry: CreatedAccountRecord): void {
+  try {
+    mkdirSync(path.dirname(testResultsAccountsPath), { recursive: true });
+    let all: CreatedAccountRecord[] = [];
+    if (existsSync(testResultsAccountsPath)) {
+      try {
+        all = JSON.parse(readFileSync(testResultsAccountsPath, 'utf8')) || [];
+        if (!Array.isArray(all)) all = [];
+      } catch {
+        all = [];
+      }
+    }
+
+    all.push(entry);
+    writeFileSync(testResultsAccountsPath, `${JSON.stringify(all, null, 2)}\n`, 'utf8');
+
+    // Also write a recent-N file for quick access (keep last 20)
+    const recent = all.slice(-20).reverse();
+    writeFileSync(testResultsRecentPath, `${JSON.stringify(recent, null, 2)}\n`, 'utf8');
+  } catch (err) {
+    // Do not throw from a recording helper — just log
+    // eslint-disable-next-line no-console
+    console.error('[recordCreatedAccount] Failed to append to test-results:', err);
+  }
+}
+
+export function recordCreatedAccount(account: { email: string; password: string }, environment = getMobileEnvironment()): void {
+  const email = String(account.email || '').trim().toLowerCase();
+  const password = String(account.password || '');
+  if (!email || !password) {
+    return;
+  }
+
+  const existing = loadCreatedAccounts().filter((entry) => entry.email !== email);
+  existing.push({
+    email,
+    password,
+    environment,
+    createdAt: new Date().toISOString(),
+  });
+
+  writeCreatedAccounts(existing);
+  // Also append to test-results so each run gets a consolidated file
+  try {
+    const last = existing[existing.length - 1];
+    appendToTestResults(last);
+  } catch (err) {
+    // swallow
+  }
+}
+
+export function getRandomCreatedAccount(environment = getMobileEnvironment()): { email: string; password: string } | null {
+  const all = loadCreatedAccounts();
+  if (!all.length) {
+    return null;
+  }
+
+  const normalized = String(environment || '').toLowerCase();
+  const envPool = all.filter((entry) => entry.environment && entry.environment.toLowerCase() === normalized);
+  const source = envPool.length ? envPool : all;
+  // Prefer the most recently created account — older test accounts are more
+  // likely to have been purged/expired by the backend and would otherwise
+  // fail with "we don't recognize this email" on password-reset flows.
+  const newest = [...source].sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))[0];
+
+  return {
+    email: newest.email,
+    password: newest.password,
+  };
+}
 
 export function getMobileEnvironment(): string {
   return process.env.MOBILE_ENV || runtimeConfig.defaultEnvironment || 'prod';
@@ -121,8 +232,8 @@ export function expectedEmailVerificationProvider(environment = getMobileEnviron
   if (env === 'prod') {
     return 'guerrillamail';
   }
-  // Dev/stage builds use the same disposable mailbox channel as legacy QA.
-  return env === 'qa' ? 'outlook' : 'yopmail';
+  // Dev/qa/stage create-user verification is redirected to Outlook v3test.
+  return 'outlook';
 }
 
 function getEnvironmentConfig(): EnvironmentConfig {
@@ -154,6 +265,7 @@ function assertCreateUserEmailPolicy(environment: string, email: string): void {
   const normalizedEmail = String(email || '').toLowerCase();
   const domain = normalizedEmail.split('@')[1] || '';
   const hasRateTag = normalizedEmail.includes('--ra@');
+  const expectedDomain = 'pokemail.net';
 
   if (normalizedEnv === 'prod') {
     if (!hasRateTag) {
@@ -162,10 +274,10 @@ function assertCreateUserEmailPolicy(environment: string, email: string): void {
       );
     }
 
-    if (domain === 'yopmail.com') {
+    if (domain !== expectedDomain) {
       throw new Error(
-        `Create-user email policy violation: yopmail.com is restricted to non-prod environments. `
-          + `Use the prod create-email channel with --ra tagging instead.`
+        `Create-user email policy violation: production runs must use ${expectedDomain}. `
+          + `Received "${email}" under MOBILE_ENV=${environment}.`
       );
     }
   }
@@ -177,20 +289,13 @@ function assertCreateUserEmailPolicy(environment: string, email: string): void {
     );
   }
 
-  if (normalizedEnv === 'dev' || normalizedEnv === 'stage') {
-    if (domain !== 'yopmail.com') {
+  if (normalizedEnv === 'dev' || normalizedEnv === 'stage' || normalizedEnv === 'qa') {
+    if (domain !== expectedDomain) {
       throw new Error(
-        `Create-user email policy violation: dev/stage create-user runs must use yopmail.com. `
+        `Create-user email policy violation: non-prod create-user runs must use ${expectedDomain}. `
           + `Received "${email}" under MOBILE_ENV=${environment}.`
       );
     }
-  }
-
-  if (normalizedEnv === 'qa' && domain !== 'rate.com') {
-    throw new Error(
-      `Create-user email policy violation: QA create-user runs must use a rate.com address routed to Outlook. `
-        + `Received "${email}" under MOBILE_ENV=${environment}.`
-    );
   }
 }
 
@@ -198,7 +303,19 @@ export function getAutomationAccount(accountKey: LoginAccountKey): { email: stri
   if (accountKey === 'login') {
     const environment = getMobileEnvironment();
     const isProd = String(environment).toLowerCase() === 'prod';
-    const nonProdLoginEmail = process.env.MOBILE_NON_PROD_LOGIN_EMAIL || 'myaccount-suapp-jc0015@yopmail.com';
+
+    // Fixed fixture accounts (prod and non-prod) periodically stop working
+    // (rotated/expired/never registered), so prefer a real account previously
+    // created by create-user (rule: record every created account and reuse
+    // them for login-only testing) unless the caller explicitly opts out.
+    if (process.env.MOBILE_LOGIN_USE_CREATED_ACCOUNT !== 'false') {
+      const reusable = getRandomCreatedAccount(environment);
+      if (reusable) {
+        return reusable;
+      }
+    }
+
+    const nonProdLoginEmail = process.env.MOBILE_NON_PROD_LOGIN_EMAIL || 'my-rateapp-jc0015@pokemail.net';
     const nonProdPassword = process.env.MOBILE_NON_PROD_LOGIN_PASSWORD || 'Test123!';
 
     return {
@@ -236,6 +353,7 @@ export function getVerificationConfig(): RuntimeConfig {
   const environment = getMobileEnvironment();
   const expectedEmailProvider = expectedEmailVerificationProvider(environment);
   const mergedVerification = { ...runtimeConfig.verification, ...environmentConfig.verification };
+  const mergedOutlook = { ...runtimeConfig.outlook, ...environmentConfig.outlook };
 
   if (mergedVerification.email !== expectedEmailProvider) {
     console.warn(
@@ -250,7 +368,7 @@ export function getVerificationConfig(): RuntimeConfig {
       ...mergedVerification,
       email: expectedEmailProvider,
     },
-    outlook: { ...runtimeConfig.outlook, ...environmentConfig.outlook },
+    outlook: mergedOutlook,
   };
 }
 
@@ -300,12 +418,19 @@ export async function promptForVerificationCode(channel: 'email' | 'phone'): Pro
     terminal: process.stdin.isTTY
   });
 
+  const config = getVerificationConfig();
+  const outlookMailbox = config.outlook?.email || 'v3test@rate.com';
+  const outlookWebUrl = process.env.OUTLOOK_WEB_URL || `https://outlook.cloud.microsoft/mail/${outlookMailbox}/`;
+
   const verificationHint =
     channel === 'phone'
       ? `phone ${runtimeConfig.verification.phoneNumber} via ${runtimeConfig.verification.provider}`
-      : 'email inbox';
+      : `Outlook inbox (${outlookMailbox})`;
 
   console.log(`\n[VERIFICATION REQUIRED] Enter the ${channel} verification code from ${verificationHint}:`);
+  if (channel === 'email') {
+    console.log(`[VERIFICATION REQUIRED] Open Outlook web: ${outlookWebUrl}`);
+  }
   console.log('Waiting for input from stdin...\n');
 
   return await new Promise<string>((resolve, reject) => {

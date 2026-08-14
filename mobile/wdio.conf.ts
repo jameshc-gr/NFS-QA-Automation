@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { existsSync, cpSync } from 'node:fs';
 
 import { resolveMobileCapabilities, resolveMobilePlatform } from './src/config/mobile.config';
 
@@ -6,6 +7,7 @@ const androidSdkRoot = process.env.ANDROID_SDK_ROOT || process.env.ANDROID_HOME 
 process.env.ANDROID_HOME = androidSdkRoot;
 process.env.ANDROID_SDK_ROOT = androidSdkRoot;
 process.env.JAVA_HOME = process.env.JAVA_HOME || '/Applications/Android Studio.app/Contents/jbr/Contents/Home';
+process.env.PATH = `${path.join(androidSdkRoot, 'platform-tools')}:${path.join(androidSdkRoot, 'emulator')}:${process.env.PATH}`;
 
 const platform = resolveMobilePlatform();
 const iosMode = platform === 'ios' ? String(process.env.MOBILE_IOS_MODE || 'simulator').toLowerCase() : '';
@@ -16,7 +18,38 @@ const specs = process.env.MOBILE_SPECS
   ? process.env.MOBILE_SPECS.split(',').map((spec) => spec.trim()).filter(Boolean)
   : defaultSpecs;
 
+// Android + iOS suites both drive the same shared Outlook/Google Voice
+// Chromium profiles by default. Running them in parallel then races to open
+// the same persistent profile directory ("Opening in existing browser
+// session"). Give each platform its own copy, seeded from the shared
+// session the first time it's needed, so parallel runs never collide.
+function isolateSharedBrowserSession(envVar: string, defaultRelPath: string): void {
+  if (process.env[envVar]) {
+    return; // caller already chose an explicit path
+  }
+
+  const sharedPath = path.resolve(process.cwd(), defaultRelPath);
+  const sharedUserDataDir = sharedPath.replace(/\.json$/, '-user-data');
+  const platformPath = sharedPath.replace(/\.json$/, `-${platform}.json`);
+  const platformUserDataDir = platformPath.replace(/\.json$/, '-user-data');
+
+  if (!existsSync(platformPath) && existsSync(sharedPath)) {
+    cpSync(sharedPath, platformPath);
+  }
+  if (!existsSync(platformUserDataDir) && existsSync(sharedUserDataDir)) {
+    cpSync(sharedUserDataDir, platformUserDataDir, { recursive: true });
+  }
+
+  process.env[envVar] = path.relative(process.cwd(), platformPath);
+}
+
+isolateSharedBrowserSession('OUTLOOK_SESSION_PATH', 'mobile/.auth/outlook-session.json');
+isolateSharedBrowserSession('GV_SESSION_PATH', 'mobile/.auth/gv-session.json');
+
 const logLevel = process.env.MOBILE_LOG_LEVEL || 'info';
+// Allows running Android + iOS suites in parallel: each needs its own Appium
+// server, since the default service always binds to port 4723.
+const appiumPort = Number(process.env.MOBILE_APPIUM_PORT || 4723);
 
 export const config = {
   runner: 'local',
@@ -36,13 +69,15 @@ export const config = {
     timeout: 900000
   },
   reporters: ['spec'],
+  port: appiumPort,
   services: [
     [
       'appium',
       {
         command: 'appium',
         args: {
-          relaxedSecurity: true
+          relaxedSecurity: true,
+          port: appiumPort
         }
       }
     ]

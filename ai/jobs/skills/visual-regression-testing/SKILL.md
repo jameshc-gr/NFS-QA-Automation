@@ -2,6 +2,8 @@
 name: visual-regression-testing
 description: 'Visual regression testing patterns, screenshot baseline comparison, dynamic element masking, and threshold management using Playwright and WebdriverIO.'
 argument-hint: 'Execute or design visual regression tests'
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 2/3 - Fast Masking & Diff Evaluation)
 ---
 
 # Visual Regression Testing Skill

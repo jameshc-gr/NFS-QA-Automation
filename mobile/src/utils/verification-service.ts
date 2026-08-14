@@ -1,26 +1,31 @@
 import { fetchGoogleVoiceSmsCode } from './verification/google-voice';
-import { fetchYopmailCode, warmUpYopmailInbox } from './verification/yopmail';
 import { fetchGuerrillaMailCode } from './verification/guerrilla-mail';
 import { fetchOutlookCodeGraph } from './verification/outlook';
 import { getVerificationConfig, getMobileEnvironment, resolveGoogleVoiceProfile } from './mobile-auth';
 
-export type VerificationProvider = 'google-voice' | 'yopmail' | 'guerrillamail' | 'outlook' | 'manual';
+export type VerificationProvider = 'google-voice' | 'guerrillamail' | 'outlook' | 'manual';
 
 export interface GetVerificationCodeOptions {
   provider?: VerificationProvider;
   googleVoiceProfile?: string;
   mailbox?: string;
+  domain?: string;
   email?: string;
   password?: string;
   tenantId?: string;
   clientId?: string;
   clientSecret?: string;
+  titleMustContain?: string;
+  subjectMustContain?: string;
   timeoutMs?: number;
   // Codes already tried and rejected by the app; the provider should keep
   // waiting for a code that isn't one of these.
   excludeCodes?: string[];
   // For Google Voice, read once from the latest thread without waiting/polling.
   singleCheck?: boolean;
+  // For Google Voice, only accept a code whose message preview differs from
+  // this baseline, proving a genuinely new message arrived.
+  baselinePreviewText?: string;
 }
 
 export async function getVerificationCode(
@@ -30,7 +35,7 @@ export async function getVerificationCode(
   const config = getVerificationConfig();
   const provider = options.provider
     || (channel === 'phone' ? config.verification.phone : config.verification.email)
-    || (channel === 'phone' ? 'google-voice' : 'yopmail');
+    || (channel === 'phone' ? 'google-voice' : 'guerrillamail');
 
   const source = describeVerificationSource(channel, provider, config, options);
   console.log(`[Verification] env=${getMobileEnvironment()} channel=${channel} source=${source}`);
@@ -61,7 +66,7 @@ function describeVerificationSource(
     const mailbox = options.email || config.outlook?.email || '(unset)';
     return `outlook:${mailbox}${config.outlook?.folder ? `/${config.outlook.folder}` : ''}`;
   }
-  if (provider === 'guerrillamail' || provider === 'yopmail') {
+  if (provider === 'guerrillamail') {
     return `${provider}:${options.mailbox || '(unset)'}`;
   }
   if (provider === 'google-voice') {
@@ -87,18 +92,9 @@ async function retrieveCode(
         pollIntervalMs: profile.pollIntervalMs,
         excludeCodes: options.excludeCodes,
         singleCheck: options.singleCheck,
+        baselinePreviewText: options.baselinePreviewText,
       });
       }
-
-    case 'yopmail':
-      if (!options.mailbox) {
-        throw new Error('Yopmail verification requires a mailbox name option.');
-      }
-      return await fetchYopmailCode({
-        mailbox: options.mailbox,
-        timeoutMs: options.timeoutMs,
-        excludeCodes: options.excludeCodes,
-      });
 
     case 'guerrillamail':
       if (!options.mailbox) {
@@ -106,8 +102,10 @@ async function retrieveCode(
       }
       return await fetchGuerrillaMailCode({
         mailbox: options.mailbox,
+        domain: options.domain,
         timeoutMs: options.timeoutMs,
         excludeCodes: options.excludeCodes,
+        subjectMustContain: options.subjectMustContain,
       });
 
     case 'outlook':
@@ -117,6 +115,8 @@ async function retrieveCode(
         tenantId: options.tenantId || config.outlook?.tenantId,
         clientId: options.clientId || config.outlook?.clientId,
         clientSecret: options.clientSecret || config.outlook?.clientSecret,
+        titleMustContain: options.titleMustContain,
+        subjectMustContain: options.subjectMustContain,
         folder: config.outlook?.folder,
         timeoutMs: options.timeoutMs,
         excludeCodes: options.excludeCodes,
@@ -127,11 +127,7 @@ async function retrieveCode(
   }
 }
 
-// Kept for backwards compatibility; easy-yopmail reads mail via HTTP and
-// does not need the inbox opened in a browser first.
+// Kept for backwards compatibility with older spec call sites.
 export async function warmUpEmailInboxIfNeeded(mailbox: string): Promise<void> {
-  const config = getVerificationConfig();
-  if (config.verification.email === 'yopmail') {
-    await warmUpYopmailInbox(mailbox);
-  }
+  void mailbox;
 }

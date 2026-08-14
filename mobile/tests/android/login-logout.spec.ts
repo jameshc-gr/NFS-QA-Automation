@@ -10,6 +10,7 @@ describe('Android login and logout flow', () => {
     const { email, password } = getAutomationAccount('login');
     process.env.MOBILE_LOGIN_EMAIL = email;
 
+    await auth.waitForAuthScreenReady();
     await auth.openLogin();
     await auth.login(email, password);
     await auth.completeLoginVerification(email);

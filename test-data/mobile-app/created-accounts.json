@@ -1,0 +1,170 @@
+[
+  {
+    "email": "my-rateapp-auto-jc562210--ra@pokemail.net",
+    "password": "Test123!",
+    "environment": "prod",
+    "createdAt": "2026-08-12T19:18:30.620Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc563857--ra@pokemail.net",
+    "password": "Test123!",
+    "environment": "prod",
+    "createdAt": "2026-08-12T19:46:26.022Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc565328--ra@pokemail.net",
+    "password": "Test123!",
+    "environment": "prod",
+    "createdAt": "2026-08-12T20:10:35.892Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc565823@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-12T20:18:54.422Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc578851@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-12T23:55:52.215Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc579106@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-13T00:01:21.495Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc644431--ra@pokemail.net",
+    "password": "Test123!",
+    "environment": "prod",
+    "createdAt": "2026-08-13T18:09:59.697Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc644668--ra@pokemail.net",
+    "password": "Test123!",
+    "environment": "prod",
+    "createdAt": "2026-08-13T18:13:25.932Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc644866@pokemail.net",
+    "password": "Test123!",
+    "environment": "stage",
+    "createdAt": "2026-08-13T18:16:59.208Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc648003@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-13T19:10:42.925Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc726908@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-14T17:04:04.283Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc727154@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-14T17:07:31.507Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc727552@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-14T17:14:17.845Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc727857@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-14T17:19:46.474Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc728225@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-14T17:25:44.068Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc728568@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-14T17:31:51.686Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc728954@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-14T17:37:45.919Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc729255@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-14T17:42:43.728Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc729647@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-14T17:49:24.114Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc730047@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-14T17:56:08.255Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc730389@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-14T18:01:51.597Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc730730--ra@pokemail.net",
+    "password": "Test123!",
+    "environment": "prod",
+    "createdAt": "2026-08-14T18:07:20.892Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc730945--ra@pokemail.net",
+    "password": "Test123!",
+    "environment": "prod",
+    "createdAt": "2026-08-14T18:11:28.023Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc732274--ra@pokemail.net",
+    "password": "Test123!",
+    "environment": "prod",
+    "createdAt": "2026-08-14T18:32:54.805Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc732904--ra@pokemail.net",
+    "password": "Test123!",
+    "environment": "prod",
+    "createdAt": "2026-08-14T18:43:12.576Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc733179--ra@pokemail.net",
+    "password": "Test123!",
+    "environment": "prod",
+    "createdAt": "2026-08-14T18:48:04.753Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc733551@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-14T18:54:27.330Z"
+  },
+  {
+    "email": "my-rateapp-auto-jc733820@pokemail.net",
+    "password": "Test123!",
+    "environment": "qa",
+    "createdAt": "2026-08-14T18:58:21.748Z"
+  }
+]

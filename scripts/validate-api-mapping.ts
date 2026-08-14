@@ -165,7 +165,7 @@ async function main() {
     console.log('━'.repeat(60));
 
     // Write JSON report
-    const reportPath = path.resolve('api-validation-report.json');
+    const reportPath = path.resolve('test-results/api-validation-report.json');
     await fs.writeFile(reportPath, JSON.stringify(results, null, 2));
     console.log(`\n📄 Full report saved to: ${reportPath}\n`);
 

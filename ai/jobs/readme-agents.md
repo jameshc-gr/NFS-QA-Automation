@@ -70,11 +70,25 @@ Two-phase execution:
 1. `plan`: generate or refine one `.md` test case per file in `ai/tests/mobile/`.
 2. `implement`: generate `.ts` WDIO specs from approved `.md` files into `mobile/tests/android/generated/`.
 
+## AI Model Economics & Token Optimization
+
+To maximize token efficiency and minimize execution costs, agents and skills specify targeted AI model tiers:
+
+| Agent / Skill Asset | Assigned Model | Model Tier | Rationale & Token Economics |
+| --- | --- | --- | --- |
+| `playwright-test-orchestrator` | `gpt-4o-mini` | Tier 2/3 | High-speed routing & skill selection (~95% cheaper than Tier 1) |
+| `playwright-test-planner` | `gpt-4o-mini` | Tier 2 | Fast DOM inspection and test scenario drafting |
+| `playwright-test-generator` | `gpt-4o-mini` | Tier 2 | Fast Playwright code generation; escalate to Sonnet only for complex flows |
+| `playwright-test-healer` | `claude-3.5-sonnet` | Tier 1 | Deep failure trace analysis, root cause diagnosis & self-healing locators |
+| `mobile-test-generator` | `gpt-4o-mini` | Tier 2 | Efficient 2-phase Markdown planning & WDIO code generation |
+| Operational Skills (12 skills) | `gpt-4o-mini` | Tier 2/3 | High-speed, cost-effective execution for discovery, parsing & formatting |
+| `flaky-test-management` skill | `claude-3.5-sonnet` | Tier 1 | Deep race condition isolation and self-healing logic |
+
 ## How To Write A Skill
 
 Create `ai/jobs/skills/<skill-name>/SKILL.md` with:
 
-- YAML frontmatter: `name`, `description`, `argument-hint`
+- YAML frontmatter: `name`, `description`, `argument-hint`, `model`
 - `When to Use`
 - `Inputs`
 - `Procedure` (short ordered steps)

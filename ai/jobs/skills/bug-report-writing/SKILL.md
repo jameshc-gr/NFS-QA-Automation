@@ -2,6 +2,8 @@
 name: bug-report-writing
 description: 'Root cause analysis, failure categorization, and standardized Jira bug report generation.'
 argument-hint: 'Draft a bug report from test failure'
+model: gpt-4o-mini
+# Economical Model: gpt-4o-mini / claude-3.5-haiku / gemini-2.0-flash (Tier 3 - Fast Defect Formatting & Log Structuring)
 ---
 
 # Bug Report Writing Skill

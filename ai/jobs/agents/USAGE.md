@@ -40,6 +40,10 @@ This document explains how to use the agent hierarchy, skills, and persistent me
 3. **Execute**: Use `test-discovery` and `test-execution` skills (or `playwright-test-orchestrator`) to run narrow specs.
 4. **Heal / Report**: On failure, use `bug-report-writing` skill and `playwright-test-healer` agent to diagnose root causes and patch locators.
 
+**Token Economics & Model Tiers**
+- **Tier 2/3 Economical Default (`gpt-4o-mini` / `claude-3.5-haiku` / `gemini-2.0-flash`)**: Configured for 90%+ of workflow steps (Orchestration, Planning, Generation, Prompts, Discovery, Execution, Summary, Data Engineering). Achieves ~95% token cost savings vs Tier 1 models.
+- **Tier 1 Reasoning (`claude-3.5-sonnet` / `gpt-4o`)**: Assigned exclusively to `playwright-test-healer` agent and `flaky-test-management` skill where complex root cause analysis and self-healing logic are required.
+
 **Safety & Guardrails**
 - Run narrow spec files first before executing full suites.
 - Never hardcode credentials; rely on `test-data-engineer` guidelines and environment configuration loaders.

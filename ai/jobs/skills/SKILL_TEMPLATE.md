@@ -2,6 +2,10 @@
 name: example-skill
 description: "One-line purpose of this skill"
 argument-hint: "What the caller should provide"
+model: gpt-4o-mini
+# Economical Model Options:
+# Tier 2/3 (Default): gpt-4o-mini | claude-3.5-haiku | gemini-2.0-flash (Fast, Low Token Cost)
+# Tier 1 (Complex Reasoning): claude-3.5-sonnet | gpt-4o (Deep Diagnosis & Healing)
 ---
 
 # Example Skill
