@@ -121,7 +121,7 @@ test.describe('API → Mobile UI Integration', () => {
         // Assert status
         expect(res.status()).toBe(api.expected.status);
       } finally {
-        await ctx.close();
+        await ctx.dispose();
       }
     }
 
@@ -156,7 +156,7 @@ test.describe('API → Mobile UI Integration', () => {
         console.log(`  ✓ Status field: ${body.status}`);
       }
     } finally {
-      await ctx.close();
+      await ctx.dispose();
     }
   });
 
@@ -183,7 +183,7 @@ test.describe('API → Mobile UI Integration', () => {
       expect(res.status()).toBe(api.expected.status);
       healthResponse = await res.json();
     } finally {
-      await ctx.close();
+      await ctx.dispose();
     }
 
     console.log(`\n🔍 Testing Mobile UI with API response...`);
@@ -256,7 +256,7 @@ test.describe('API → Mobile UI Integration', () => {
           timestamp: new Date().toISOString(),
         });
       } finally {
-        await ctx.close();
+        await ctx.dispose();
       }
     }
 

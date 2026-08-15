@@ -15,24 +15,11 @@ function parseProfileArg(): string | undefined {
   return process.env.MOBILE_GV_PROFILE;
 }
 
-function parseTargetArg(): string | undefined {
-  const args = process.argv.slice(2);
-  for (let i = 0; i < args.length; i += 1) {
-    if (args[i] === '--target' && args[i + 1]) {
-      return args[i + 1];
-    }
-  }
-  return undefined;
-}
-
 async function waitForEnter(): Promise<void> {
-  if (!process.stdin.isTTY) {
-    return;
-  }
-
+  if (!process.stdin.isTTY) return;
   await new Promise<void>((resolve) => {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-    rl.question('Press Enter once the Google Voice inbox is visible in the browser... ', () => {
+    rl.question('Press Enter once the Firebase App Distribution page is visible in the browser... ', () => {
       rl.close();
       resolve();
     });
@@ -41,26 +28,19 @@ async function waitForEnter(): Promise<void> {
 
 async function main(): Promise<void> {
   const profileName = parseProfileArg();
-  const target = parseTargetArg() || process.env.SESSION_TARGET || 'gv';
-
   const profile = resolveGoogleVoiceProfile(profileName);
-  // Allow alternate targets: 'gv' (Google Voice) or 'firebase'
-  const baseSessionRel = target === 'firebase'
-    ? profile.sessionPath.replace(/gv-session/, 'firebase-session')
-    : profile.sessionPath;
 
-  const sessionPath = path.resolve(process.cwd(), process.env.GV_SESSION_PATH || baseSessionRel);
-  const userDataDir = sessionPath.endsWith('.json')
-    ? sessionPath.replace(/\.json$/, '-user-data')
-    : `${sessionPath}-user-data`;
+  const baseSessionRel = profile.sessionPath.replace(/gv-session/, 'firebase-session');
+  const sessionPath = path.resolve(process.cwd(), process.env.FIREBASE_SESSION_PATH || baseSessionRel);
+  const userDataDir = sessionPath.endsWith('.json') ? sessionPath.replace(/\.json$/, '-user-data') : `${sessionPath}-user-data`;
 
   mkdirSync(path.dirname(sessionPath), { recursive: true });
   mkdirSync(userDataDir, { recursive: true });
 
-  console.log(`[gv-session] profile: ${profile.name}`);
-  console.log(`[gv-session] target file: ${sessionPath}`);
-  console.log(`[gv-session] user data dir: ${userDataDir}`);
-  console.log('[gv-session] launching headed Chrome (persistent profile)...');
+  console.log(`[firebase-session] profile: ${profile.name}`);
+  console.log(`[firebase-session] target file: ${sessionPath}`);
+  console.log(`[firebase-session] user data dir: ${userDataDir}`);
+  console.log('[firebase-session] launching headed Chrome (persistent profile)...');
 
   const launchOptions = {
     headless: false,
@@ -86,18 +66,13 @@ async function main(): Promise<void> {
 
   const page = context.pages()[0] || await context.newPage();
   const pages = context.pages();
-  for (let i = 1; i < pages.length; i += 1) {
-    await pages[i].close().catch(() => {});
-  }
+  for (let i = 1; i < pages.length; i += 1) await pages[i].close().catch(() => {});
 
   try {
-    await page.goto('https://voice.google.com/u/0/messages', {
-      waitUntil: 'domcontentloaded',
-      timeout: 120000,
-    }).catch(() => page.goto('https://voice.google.com/messages', { waitUntil: 'domcontentloaded', timeout: 120000 }));
+    await page.goto('https://console.firebase.google.com/', { waitUntil: 'domcontentloaded', timeout: 120000 });
 
-    console.log('[gv-session] sign in manually (including 2FA) in the opened browser.');
-    console.log('[gv-session] do not close the browser window until prompted.');
+    console.log('[firebase-session] sign in manually (including 2FA) in the opened browser.');
+    console.log('[firebase-session] do not close the browser window until prompted.');
     await waitForEnter();
 
     if (page.url().includes('accounts.google.com')) {
@@ -105,13 +80,13 @@ async function main(): Promise<void> {
     }
 
     await context.storageState({ path: sessionPath });
-    console.log(`[gv-session] session saved to ${sessionPath} and persistent profile saved to ${userDataDir}`);
+    console.log(`[firebase-session] session saved to ${sessionPath} and persistent profile saved to ${userDataDir}`);
   } finally {
     await context.close().catch(() => {});
   }
 }
 
 main().catch((error) => {
-  console.error('[gv-session] failed:', error instanceof Error ? error.message : error);
+  console.error('[firebase-session] failed:', error instanceof Error ? error.message : error);
   process.exitCode = 1;
 });

@@ -70,13 +70,40 @@ async function main(): Promise<void> {
     throw new Error(`Build "${buildName}" needs firebase.webUrl in ${CONFIG_PATH}.`);
   }
 
-  const sessionPath = path.resolve(
-    process.cwd(),
-    process.env.GV_SESSION_PATH || 'mobile/.auth/gv-session.json'
-  );
+  // Make Firebase downloads opt-in. If `FORCE_FIREBASE_DOWNLOAD=1` or
+  // `FIREBASE_SESSION_PATH` is provided, attempt a web download. Otherwise
+  // fall back to using a locally-provided APK/AAB from the artifact root.
+  const forceFirebase = process.env.FORCE_FIREBASE_DOWNLOAD === '1';
+  const explicitSession = process.env.FIREBASE_SESSION_PATH || '';
+
+  function findLocalApk(root: string): string | null {
+    const abs = path.resolve(process.cwd(), root);
+    if (!existsSync(abs)) return null;
+    const files = require('node:fs').readdirSync(abs);
+    for (const f of files) {
+      if (f.endsWith('.apk') || f.endsWith('.aab')) return path.join(abs, f);
+    }
+    return null;
+  }
+
+  if (!forceFirebase && !explicitSession) {
+    // Try local artifact fallback
+    const local = findLocalApk(path.join(artifactRoot, 'firebase')) || findLocalApk(artifactRoot);
+    if (local) {
+      console.log(`[firebase] using local APK/AAB fallback: ${local}`);
+      if (resultPath) {
+        mkdirSync(path.dirname(path.resolve(process.cwd(), resultPath)), { recursive: true });
+        writeFileSync(path.resolve(process.cwd(), resultPath), JSON.stringify({ path: local }, null, 2));
+      }
+      return;
+    }
+    throw new Error('Firebase download not enabled and no local APK/AAB found in artifact roots. Set FORCE_FIREBASE_DOWNLOAD=1 or provide FIREBASE_SESSION_PATH to enable web download.');
+  }
+
+  const sessionPath = path.resolve(process.cwd(), explicitSession || '');
   const userDataDir = sessionPath.replace(/\.json$/, '-user-data');
   if (!existsSync(userDataDir)) {
-    throw new Error(`No Google browser profile at ${userDataDir}. Run "npm run setup:gv-session" first.`);
+    throw new Error(`No Google browser profile at ${userDataDir}. Run "npm run setup:firebase-session" first.`);
   }
 
   // Work on a copy so a concurrent test run keeps its lock on the real profile.

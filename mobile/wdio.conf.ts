@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { existsSync, cpSync } from 'node:fs';
+import { existsSync, cpSync, writeFileSync, mkdirSync } from 'node:fs';
 
 import { resolveMobileCapabilities, resolveMobilePlatform } from './src/config/mobile.config';
 
@@ -68,7 +68,13 @@ export const config = {
     // poll an inbox need far more headroom than the usual UI test.
     timeout: 900000
   },
-  reporters: ['spec'],
+  // Add Allure reporter and configure output per date/project/run (respect RUN_ID)
+  reporters: [
+    'spec',
+    ['allure', {
+      outputDir: path.join(process.cwd(), 'test-results', (new Date()).toISOString().slice(0,10), process.env.TEST_PROJECT || 'mobile', process.env.RUN_ID || 'run', 'allure-results')
+    }]
+  ],
   port: appiumPort,
   services: [
     [
@@ -87,6 +93,31 @@ export const config = {
       await browser.setTimeout({ implicit: 3000, pageLoad: 30000 });
     } catch (e) {
       console.log('  Note: setTimeout not fully supported by Appium');
+    }
+  },
+  afterTest: async (test: any, context: any, { error, result, duration, passed, retries }: any) => {
+    try {
+      const date = (new Date()).toISOString().slice(0,10);
+      const project = process.env.TEST_PROJECT || 'mobile';
+      const runStamp = process.env.RUN_ID || new Date().toISOString().replace(/[:.]/g,'-');
+      const destDir = path.join(process.cwd(), 'test-results', date, project, runStamp, 'screenshots');
+      if (!existsSync(destDir)) mkdirSync(destDir, { recursive: true });
+      if (!passed) {
+        const png = await browser.takeScreenshot();
+        const filename = `${test.title.replace(/[^a-z0-9]+/gi,'_')}.png`;
+        writeFileSync(path.join(destDir, filename), Buffer.from(png, 'base64'));
+        // attach to allure if available
+        try { // eslint-disable-next-line @typescript-eslint/no-var-requires
+          const allure = require('@wdio/allure-reporter').default;
+          if (allure && allure.addAttachment) {
+            allure.addAttachment('screenshot', Buffer.from(png, 'base64'), 'image/png');
+          }
+        } catch (e) {
+          // ignore if allure reporter not present at runtime
+        }
+      }
+    } catch (err) {
+      console.warn('afterTest screenshot hook failed', err);
     }
   },
   capabilities: [resolveMobileCapabilities()]

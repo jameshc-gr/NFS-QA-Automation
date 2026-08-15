@@ -13,8 +13,8 @@ const yyyy = String(now.getFullYear());
 const HH = String(now.getHours()).padStart(2, '0');
 const MM = String(now.getMinutes()).padStart(2, '0');
 const SS = String(now.getSeconds()).padStart(2, '0');
-const runDate = `${mm}${dd}${yyyy}`;
-const runStamp = `${runDate}-${HH}-${MM}-${SS}`;
+const runDate = `${yyyy}-${mm}-${dd}`;
+const runStamp = process.env.RUN_ID || `${runDate}-${HH}-${MM}-${SS}`;
 const testProject = process.env.TEST_PROJECT || 'student-loan-refi';
 const testSuiteDir = process.env.TEST_SUITE_DIR || 'tests';
 
@@ -45,20 +45,23 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [
-    [
-      'html',
-      {
+  reporter: (() => {
+    const base = [
+      ['html', {
         outputFolder: `./test-results/${runDate}/reports/${testProject}/test-report-${runStamp}`,
         open: 'never'
-      }
-    ]
-    ,
-    [
-      './scripts/playwright-date-type-reporter.js',
-      {}
-    ]
-  ],
+      }],
+      ['./scripts/playwright-date-type-reporter.js', {}]
+    ];
+    try {
+      require.resolve('allure-playwright');
+      base.splice(1, 0, ['allure-playwright', { outputFolder: `./test-results/${runDate}/allure/${testProject}/${runStamp}` }]);
+    } catch (e) {
+      // allure-playwright not installed; skip adding it so local dry-runs succeed
+      // Users who want Allure should install `allure-playwright` as a devDependency.
+    }
+    return base;
+  })(),
   use: {
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
