@@ -83,6 +83,15 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] }
     },
     {
+      name: 'solution-finder',
+      testDir: './tests/projects/solution-finder',
+      use: {
+        ...devices['Desktop Chrome'],
+        headless: false,
+        baseURL: process.env.SOLUTION_FINDER_BASE_URL || undefined
+      }
+    },
+    {
       name: 'api-tests',
       testDir: './api/tests',
       use: {

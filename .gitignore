@@ -7,6 +7,9 @@ node_modules/
 /playwright/.cache/
 /playwright/.auth/
 
+# Local Playwright MCP snapshots and logs
+.playwright-mcp/
+
 # Environment variables (contains sensitive test data)
 .env
 .env.local
@@ -34,3 +37,7 @@ test-data/mobile-app/gri/android/firebase/*.aab
 # Saved browser sessions for verification-code retrieval (Google Voice / Outlook+Okta)
 mobile/.auth/
 mobile/.builds/
+
+# Local Solution Finder loan extraction artifacts
+test-data/solution-finder/*
+!test-data/solution-finder/dashboard-auth.yml

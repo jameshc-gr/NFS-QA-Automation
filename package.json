@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
+    "extract:rtl-patched-data": "ts-node scripts/extract-rtl-patched-data.ts",
     "test:api": "playwright test --project=api-tests",
     "test:api:headed": "playwright test --project=api-tests --headed",
     "test:api:report": "playwright show-report",
@@ -95,6 +96,9 @@
     "test:ineligible": "TEST_PROJECT=student-loan-refi npx playwright test tests/projects/student-loan-refi/LK_IN*.spec.ts",
     "test:project:student-loan-refi": "TEST_PROJECT=student-loan-refi npx playwright test tests/projects/student-loan-refi",
     "test:project:student-IDR": "TEST_PROJECT=student-IDR npx playwright test tests/projects/student-IDR",
+    "test:project:solution-finder": "TEST_PROJECT=solution-finder npx playwright test --project=solution-finder",
+    "setup:solution-finder-dashboard-auth": "ts-node scripts/setup-solution-finder-dashboard-auth.ts",
+    "extract:rtl-patched-data": "ts-node scripts/extract-rtl-patched-data.ts",
     "typecheck": "tsc --noEmit",
     "typecheck:mobile": "tsc -p mobile/tsconfig.json --noEmit",
     "generate:test": "node scripts/generate-test.js",
