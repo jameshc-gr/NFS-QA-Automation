@@ -1,0 +1,578 @@
+[
+  {
+    "email": "alex.single.mstlpedn-536a6d.w27.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlpedn-536a6d",
+    "workerIndex": 27,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-14T23:51:32.791Z"
+  },
+  {
+    "email": "marcus.older.mstlq0lp-2261b2.w28.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlq0lp-2261b2",
+    "workerIndex": 28,
+    "testTitle": "Student IDR - SCN-002 - Marcus older IBR high income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-002.spec.ts",
+    "createdAt": "2026-08-14T23:52:01.097Z"
+  },
+  {
+    "email": "elena.low.mstlq1gb-6b918d.w29.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlq1gb-6b918d",
+    "workerIndex": 29,
+    "testTitle": "Student IDR - SCN-003 - Elena low income RAP",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-003.spec.ts",
+    "createdAt": "2026-08-14T23:52:02.138Z"
+  },
+  {
+    "email": "priya.paye.mstlq1pq-e84da6.w30.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlq1pq-e84da6",
+    "workerIndex": 30,
+    "testTitle": "Student IDR - SCN-004 - Priya PAYE mapping",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-004.spec.ts",
+    "createdAt": "2026-08-14T23:52:02.534Z"
+  },
+  {
+    "email": "jordan.noloans.mstlqawt-7952d7.w31.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlqawt-7952d7",
+    "workerIndex": 31,
+    "testTitle": "Student IDR - SCN-005 - Jordan no loans",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-005.spec.ts",
+    "createdAt": "2026-08-14T23:52:14.436Z"
+  },
+  {
+    "email": "sam.verylow.mstlqb2r-d470cc.w32.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlqb2r-d470cc",
+    "workerIndex": 32,
+    "testTitle": "Student IDR - SCN-006 - Sam very low income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-006.spec.ts",
+    "createdAt": "2026-08-14T23:52:14.808Z"
+  },
+  {
+    "email": "casey.veryhigh.mstlqb8r-22b2b8.w33.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlqb8r-22b2b8",
+    "workerIndex": 33,
+    "testTitle": "Student IDR - SCN-007 - Casey very high debt",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-007.spec.ts",
+    "createdAt": "2026-08-14T23:52:15.090Z"
+  },
+  {
+    "email": "taylor.longforbearance.mstlqh4c-0ca0dc.w34.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlqh4c-0ca0dc",
+    "workerIndex": 34,
+    "testTitle": "Student IDR - SCN-008 - Taylor long forbearance",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-008.spec.ts",
+    "createdAt": "2026-08-14T23:52:22.439Z"
+  },
+  {
+    "email": "avery.marriedjoint.mstlqm8m-2ba840.w35.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlqm8m-2ba840",
+    "workerIndex": 35,
+    "testTitle": "Student IDR - SCN-009 - Avery married joint both borrowers",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-009.spec.ts",
+    "createdAt": "2026-08-14T23:52:29.074Z"
+  },
+  {
+    "email": "blake.marriedseparate.mstlqn4t-c83e59.w36.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlqn4t-c83e59",
+    "workerIndex": 36,
+    "testTitle": "Student IDR - SCN-010 - Blake married separate applicant debt",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-010.spec.ts",
+    "createdAt": "2026-08-14T23:52:30.261Z"
+  },
+  {
+    "email": "chris.marriedjointnosavings.mstlqvlh-f2529d.w37.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlqvlh-f2529d",
+    "workerIndex": 37,
+    "testTitle": "Student IDR - SCN-011 - Chris married joint spouse no savings",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-011.spec.ts",
+    "createdAt": "2026-08-14T23:52:41.228Z"
+  },
+  {
+    "email": "dana.paidoff.mstlqw3w-b19757.w38.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlqw3w-b19757",
+    "workerIndex": 38,
+    "testTitle": "Student IDR - SCN-012 - Dana paid off early",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-012.spec.ts",
+    "createdAt": "2026-08-14T23:52:41.881Z"
+  },
+  {
+    "email": "elliot.pslf.mstlqwxu-888f03.w39.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlqwxu-888f03",
+    "workerIndex": 39,
+    "testTitle": "Student IDR - SCN-013 - Elliot PSLF attested",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-013.spec.ts",
+    "createdAt": "2026-08-14T23:52:42.984Z"
+  },
+  {
+    "email": "frank.highreturn.mstlr1be-cb9c36.w40.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlr1be-cb9c36",
+    "workerIndex": 40,
+    "testTitle": "Student IDR - SCN-014 - Frank high return sensitivity",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-014.spec.ts",
+    "createdAt": "2026-08-14T23:52:48.653Z"
+  },
+  {
+    "email": "grace.zerosavings.mstlr7q8-e0e471.w41.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlr7q8-e0e471",
+    "workerIndex": 41,
+    "testTitle": "Student IDR - SCN-015 - Grace zero savings",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-015.spec.ts",
+    "createdAt": "2026-08-14T23:52:56.956Z"
+  },
+  {
+    "email": "john.plaid.mstlrg5a-26c561.w44.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlrg5a-26c561",
+    "workerIndex": 44,
+    "testTitle": "Student IDR - SCN-019 - Asset Plaid linked both spouses",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-019.spec.ts",
+    "createdAt": "2026-08-14T23:53:07.823Z"
+  },
+  {
+    "email": "alex.excluded.mstlrco0-b4a86b.w43.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstlrco0-b4a86b",
+    "workerIndex": 43,
+    "testTitle": "Student IDR - SCN-020 - Asset excluded from tax bomb calc",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-020.spec.ts",
+    "createdAt": "2026-08-14T23:53:14.095Z"
+  },
+  {
+    "email": "alex.single.mstm3a5d-6587d9.w27.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm3a5d-6587d9",
+    "workerIndex": 27,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-15T00:02:20.028Z"
+  },
+  {
+    "email": "marcus.older.mstm3kjz-519155.w28.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm3kjz-519155",
+    "workerIndex": 28,
+    "testTitle": "Student IDR - SCN-002 - Marcus older IBR high income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-002.spec.ts",
+    "createdAt": "2026-08-15T00:02:33.412Z"
+  },
+  {
+    "email": "elena.low.mstm3scd-7c82d8.w29.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm3scd-7c82d8",
+    "workerIndex": 29,
+    "testTitle": "Student IDR - SCN-003 - Elena low income RAP",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-003.spec.ts",
+    "createdAt": "2026-08-15T00:02:43.469Z"
+  },
+  {
+    "email": "priya.paye.mstm40ne-caeb1e.w30.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm40ne-caeb1e",
+    "workerIndex": 30,
+    "testTitle": "Student IDR - SCN-004 - Priya PAYE mapping",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-004.spec.ts",
+    "createdAt": "2026-08-15T00:02:54.324Z"
+  },
+  {
+    "email": "jordan.noloans.mstm40zr-a70ef0.w31.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm40zr-a70ef0",
+    "workerIndex": 31,
+    "testTitle": "Student IDR - SCN-005 - Jordan no loans",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-005.spec.ts",
+    "createdAt": "2026-08-15T00:02:54.777Z"
+  },
+  {
+    "email": "sam.verylow.mstm4187-627da2.w32.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm4187-627da2",
+    "workerIndex": 32,
+    "testTitle": "Student IDR - SCN-006 - Sam very low income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-006.spec.ts",
+    "createdAt": "2026-08-15T00:02:55.212Z"
+  },
+  {
+    "email": "casey.veryhigh.mstm4212-0b79a4.w33.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm4212-0b79a4",
+    "workerIndex": 33,
+    "testTitle": "Student IDR - SCN-007 - Casey very high debt",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-007.spec.ts",
+    "createdAt": "2026-08-15T00:02:56.060Z"
+  },
+  {
+    "email": "taylor.longforbearance.mstm45ex-6fedaf.w34.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm45ex-6fedaf",
+    "workerIndex": 34,
+    "testTitle": "Student IDR - SCN-008 - Taylor long forbearance",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-008.spec.ts",
+    "createdAt": "2026-08-15T00:03:00.592Z"
+  },
+  {
+    "email": "avery.marriedjoint.mstm4ex6-242a0b.w35.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm4ex6-242a0b",
+    "workerIndex": 35,
+    "testTitle": "Student IDR - SCN-009 - Avery married joint both borrowers",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-009.spec.ts",
+    "createdAt": "2026-08-15T00:03:12.782Z"
+  },
+  {
+    "email": "blake.marriedseparate.mstm4m4y-c9ad40.w36.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm4m4y-c9ad40",
+    "workerIndex": 36,
+    "testTitle": "Student IDR - SCN-010 - Blake married separate applicant debt",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-010.spec.ts",
+    "createdAt": "2026-08-15T00:03:22.129Z"
+  },
+  {
+    "email": "chris.marriedjointnosavings.mstm4n2x-cef8a9.w37.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm4n2x-cef8a9",
+    "workerIndex": 37,
+    "testTitle": "Student IDR - SCN-011 - Chris married joint spouse no savings",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-011.spec.ts",
+    "createdAt": "2026-08-15T00:03:23.432Z"
+  },
+  {
+    "email": "dana.paidoff.mstm4npl-e13442.w38.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm4npl-e13442",
+    "workerIndex": 38,
+    "testTitle": "Student IDR - SCN-012 - Dana paid off early",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-012.spec.ts",
+    "createdAt": "2026-08-15T00:03:24.260Z"
+  },
+  {
+    "email": "elliot.pslf.mstm4oav-64717c.w39.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm4oav-64717c",
+    "workerIndex": 39,
+    "testTitle": "Student IDR - SCN-013 - Elliot PSLF attested",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-013.spec.ts",
+    "createdAt": "2026-08-15T00:03:24.985Z"
+  },
+  {
+    "email": "frank.highreturn.mstm4qnp-89dd3c.w40.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm4qnp-89dd3c",
+    "workerIndex": 40,
+    "testTitle": "Student IDR - SCN-014 - Frank high return sensitivity",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-014.spec.ts",
+    "createdAt": "2026-08-15T00:03:28.061Z"
+  },
+  {
+    "email": "grace.zerosavings.mstm4v4d-2598f2.w41.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm4v4d-2598f2",
+    "workerIndex": 41,
+    "testTitle": "Student IDR - SCN-015 - Grace zero savings",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-015.spec.ts",
+    "createdAt": "2026-08-15T00:03:33.755Z"
+  },
+  {
+    "email": "john.plaid.mstm57tp-70434b.w42.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm57tp-70434b",
+    "workerIndex": 42,
+    "testTitle": "Student IDR - SCN-019 - Asset Plaid linked both spouses",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-019.spec.ts",
+    "createdAt": "2026-08-15T00:03:53.422Z"
+  },
+  {
+    "email": "alex.excluded.mstm5bfs-13147e.w45.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstm5bfs-13147e",
+    "workerIndex": 45,
+    "testTitle": "Student IDR - SCN-020 - Asset excluded from tax bomb calc",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-020.spec.ts",
+    "createdAt": "2026-08-15T00:03:55.028Z"
+  },
+  {
+    "email": "test-scn-001.mstnhshq-11cb32.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mstnhshq-11cb32",
+    "workerIndex": 0,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-15T00:41:36.770Z"
+  },
+  {
+    "email": "test-scn-001.mt0lfhbc-576e70.w27.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0lfhbc-576e70",
+    "workerIndex": 27,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T21:18:14.734Z"
+  },
+  {
+    "email": "test-scn-002.mt0lfq3x-11ccd4.w28.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0lfq3x-11ccd4",
+    "workerIndex": 28,
+    "testTitle": "Student IDR - SCN-002 - Marcus older IBR high income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-002.spec.ts",
+    "createdAt": "2026-08-19T21:18:24.636Z"
+  },
+  {
+    "email": "test-scn-003.mt0lg4uf-c7d9d8.w29.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0lg4uf-c7d9d8",
+    "workerIndex": 29,
+    "testTitle": "Student IDR - SCN-003 - Elena low income RAP",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-003.spec.ts",
+    "createdAt": "2026-08-19T21:18:44.251Z"
+  },
+  {
+    "email": "test-scn-001.mt0lgkb2-f3d26f.w1.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0lgkb2-f3d26f",
+    "workerIndex": 1,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T21:19:05.188Z"
+  },
+  {
+    "email": "test-scn-001.mt0lgkax-034fd3.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0lgkax-034fd3",
+    "workerIndex": 0,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T21:19:05.386Z"
+  },
+  {
+    "email": "test-scn-001.mt0lgkax-0c0d12.w2.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0lgkax-0c0d12",
+    "workerIndex": 2,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T21:19:06.040Z"
+  },
+  {
+    "email": "test-scn-001.mt0lyaia-6c96d8.w1.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0lyaia-6c96d8",
+    "workerIndex": 1,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T21:32:52.073Z"
+  },
+  {
+    "email": "test-scn-001.mt0lyaia-03d9e9.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0lyaia-03d9e9",
+    "workerIndex": 0,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T21:32:53.857Z"
+  },
+  {
+    "email": "test-scn-001.mt0lyahr-78ae31.w2.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0lyahr-78ae31",
+    "workerIndex": 2,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T21:32:54.108Z"
+  },
+  {
+    "email": "test-scn-005.mt0nabgi-067e5b.w49.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nabgi-067e5b",
+    "workerIndex": 49,
+    "testTitle": "Student IDR - SCN-005 - Jordan no loans",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-005.spec.ts",
+    "createdAt": "2026-08-19T22:10:14.180Z"
+  },
+  {
+    "email": "test-scn-002.mt0naat1-950a9b.w46.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0naat1-950a9b",
+    "workerIndex": 46,
+    "testTitle": "Student IDR - SCN-002 - Marcus older IBR high income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-002.spec.ts",
+    "createdAt": "2026-08-19T22:10:14.276Z"
+  },
+  {
+    "email": "test-scn-006.mt0naw7i-324231.w50.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0naw7i-324231",
+    "workerIndex": 50,
+    "testTitle": "Student IDR - SCN-006 - Sam very low income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-006.spec.ts",
+    "createdAt": "2026-08-19T22:10:41.752Z"
+  },
+  {
+    "email": "test-scn-007.mt0nb2d0-8b7fa0.w51.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nb2d0-8b7fa0",
+    "workerIndex": 51,
+    "testTitle": "Student IDR - SCN-007 - Casey very high debt",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-007.spec.ts",
+    "createdAt": "2026-08-19T22:10:46.999Z"
+  },
+  {
+    "email": "test-scn-009.mt0nb2u9-e07771.w53.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nb2u9-e07771",
+    "workerIndex": 53,
+    "testTitle": "Student IDR - SCN-009 - Avery married joint both borrowers",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-009.spec.ts",
+    "createdAt": "2026-08-19T22:10:47.037Z"
+  },
+  {
+    "email": "test-scn-008.mt0nb2or-625ee3.w52.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nb2or-625ee3",
+    "workerIndex": 52,
+    "testTitle": "Student IDR - SCN-008 - Taylor long forbearance",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-008.spec.ts",
+    "createdAt": "2026-08-19T22:10:47.147Z"
+  },
+  {
+    "email": "test-scn-010.mt0nb34r-8e0c17.w54.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nb34r-8e0c17",
+    "workerIndex": 54,
+    "testTitle": "Student IDR - SCN-010 - Blake married separate applicant debt",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-010.spec.ts",
+    "createdAt": "2026-08-19T22:10:47.976Z"
+  },
+  {
+    "email": "test-scn-011.mt0nb6cy-891086.w55.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nb6cy-891086",
+    "workerIndex": 55,
+    "testTitle": "Student IDR - SCN-011 - Chris married joint spouse no savings",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-011.spec.ts",
+    "createdAt": "2026-08-19T22:10:53.804Z"
+  },
+  {
+    "email": "test-scn-012.mt0nbnm6-c4e7db.w56.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nbnm6-c4e7db",
+    "workerIndex": 56,
+    "testTitle": "Student IDR - SCN-012 - Dana paid off early",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-012.spec.ts",
+    "createdAt": "2026-08-19T22:11:17.943Z"
+  },
+  {
+    "email": "test-scn-013.mt0nbu0i-3d45f9.w57.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nbu0i-3d45f9",
+    "workerIndex": 57,
+    "testTitle": "Student IDR - SCN-013 - Elliot PSLF attested",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-013.spec.ts",
+    "createdAt": "2026-08-19T22:11:24.521Z"
+  },
+  {
+    "email": "test-scn-014.mt0nbu0m-592fdb.w58.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nbu0m-592fdb",
+    "workerIndex": 58,
+    "testTitle": "Student IDR - SCN-014 - Frank high return sensitivity",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-014.spec.ts",
+    "createdAt": "2026-08-19T22:11:24.747Z"
+  },
+  {
+    "email": "test-scn-019.mt0nbu4a-f004a0.w60.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nbu4a-f004a0",
+    "workerIndex": 60,
+    "testTitle": "Student IDR - SCN-019 - Asset Plaid linked both spouses",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-019.spec.ts",
+    "createdAt": "2026-08-19T22:11:34.735Z"
+  },
+  {
+    "email": "test-scn-020.mt0ncbdw-e9d16b.w63.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0ncbdw-e9d16b",
+    "workerIndex": 63,
+    "testTitle": "Student IDR - SCN-020 - Asset excluded from tax bomb calc",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-020.spec.ts",
+    "createdAt": "2026-08-19T22:11:45.886Z"
+  },
+  {
+    "email": "test-scn-001.mt0nqlxd-48a531.w1.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nqlxd-48a531",
+    "workerIndex": 1,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T22:22:53.901Z"
+  },
+  {
+    "email": "test-scn-001.mt0nqlx0-1265af.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nqlx0-1265af",
+    "workerIndex": 0,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T22:22:53.964Z"
+  },
+  {
+    "email": "test-scn-001.mt0nqlx4-f06d05.w2.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nqlx4-f06d05",
+    "workerIndex": 2,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T22:22:54.657Z"
+  },
+  {
+    "email": "test-scn-001.mt0nsf7n-3fc88b.w2.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nsf7n-3fc88b",
+    "workerIndex": 2,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T22:24:18.668Z"
+  },
+  {
+    "email": "test-scn-001.mt0nsf7n-38a99f.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nsf7n-38a99f",
+    "workerIndex": 0,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T22:24:19.787Z"
+  },
+  {
+    "email": "test-scn-001.mt0nsf7n-f15020.w1.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0nsf7n-f15020",
+    "workerIndex": 1,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T22:24:20.370Z"
+  },
+  {
+    "email": "test-scn-001.mt0p06ut-0a58f5.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mt0p06ut-0a58f5",
+    "workerIndex": 0,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-08-19T22:58:19.710Z"
+  }
+]

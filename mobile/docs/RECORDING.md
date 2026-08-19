@@ -42,7 +42,7 @@ Recording workflow (native apps)
 3. Run WDIO codegen: `npx wdio codegen mobile/wdio.conf.ts`.
    - The codegen tool will open an interactive REPL that records actions and prints WebDriver commands.
    - Interact with the app on the device. The recorder will emit corresponding commands which you can copy.
-4. Save the recorded commands into a new spec under `tests/android/` or `tests/ios/`.
+4. Save the recorded commands into a new spec under `mobile/tests/android/` or `mobile/tests/ios/`.
 5. Replace brittle selectors with `accessibility id` or stable resource-ids.
 6. Run the test via the repo scripts, e.g.:
 
@@ -80,7 +80,7 @@ describe('Recorded login flow', () => {
 ```
 
 Where to store recordings
-- Put new specs under `tests/android/` or `tests/ios/` and add corresponding `MOBILE_SPECS` environment usage if needed.
+- Put new specs under `mobile/tests/android/` or `mobile/tests/ios/`. In commands, pass the path relative to `mobile/`, such as `MOBILE_SPECS=tests/android/my-recorded.spec.ts`.
 
 Next steps
 - Record a short (1–2 minute) scenario and paste the generated commands here or open a PR and I can help convert it into a repo-compatible spec and Page Object.

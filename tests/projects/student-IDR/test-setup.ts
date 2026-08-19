@@ -117,12 +117,36 @@ async function getFirstVisibleLocator(candidates: Locator[], timeoutMs = 5000) {
 }
 
 export async function clickWhenEnabled(locator: Locator, timeoutMs = 10000) {
-  await locator.waitFor({ state: 'visible', timeout: timeoutMs });
-  await locator.evaluate((el) => {
-    const button = el as HTMLButtonElement;
-    return !button.disabled;
-  }).catch(() => false);
-  await locator.click({ timeout: timeoutMs });
+  // Wait for visibility first, then poll until the element is enabled.
+  await locator.waitFor({ state: 'visible', timeout: timeoutMs }).catch(() => null);
+  const start = Date.now();
+  const pollInterval = 100;
+  while (Date.now() - start < timeoutMs) {
+    const enabled = await locator.evaluate((el) => {
+      const btn = el as HTMLButtonElement;
+      return !btn.disabled;
+    }).catch(() => false);
+    if (enabled) {
+      // Click with remaining timeout budget.
+      const remaining = Math.max(1000, timeoutMs - (Date.now() - start));
+      await locator.click({ timeout: remaining }).catch((err) => { throw err; });
+      return;
+    }
+    await new Promise((r) => setTimeout(r, pollInterval));
+  }
+
+  // On timeout, attempt to save a small screenshot for debugging then throw.
+  try {
+    const outDir = path.resolve(process.cwd(), 'test-results');
+    if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
+    const filename = `click-when-enabled-failure-${randomBytes(4).toString('hex')}.png`;
+    const outPath = path.join(outDir, filename);
+    await locator.screenshot({ path: outPath }).catch(() => null);
+  } catch (e) {
+    // ignore screenshot errors
+  }
+
+  throw new Error('Timeout waiting for locator to become enabled before click');
 }
 
 export async function recoverAssetsPageIfRefreshFails(page: Page) {
@@ -331,24 +355,84 @@ export async function selectDropdown(page: Page, labelRegex: RegExp, value: stri
 
 async function selectDate(page: Page, labelRegex: RegExp, value: string) {
   if (!value) return;
-  const input = page.locator('input[type="date"]').first();
+  // Prefer native date input, then labeled input, placeholder input, then textbox.
+  const inputDate = page.locator('input[type="date"]').first();
   const byLabel = page.getByLabel(labelRegex).first();
   const byPlaceholder = page.locator('input[placeholder*="date" i]').first();
+  const textInput = page.getByRole('textbox').filter({ hasText: labelRegex }).first();
 
-  let target: Locator = input;
-  if (!(await input.isVisible().catch(() => false))) {
-    if (await byLabel.isVisible().catch(() => false)) {
-      target = byLabel;
-    } else if (await byPlaceholder.isVisible().catch(() => false)) {
-      target = byPlaceholder;
-    } else {
-      target = page.getByRole('textbox').filter({ hasText: labelRegex }).first();
+  let target: Locator | null = null;
+  if (await inputDate.isVisible().catch(() => false)) target = inputDate;
+  else if (await byLabel.isVisible().catch(() => false)) target = byLabel;
+  else if (await byPlaceholder.isVisible().catch(() => false)) target = byPlaceholder;
+  else if (await textInput.isVisible().catch(() => false)) target = textInput;
+  if (!target) return;
+
+  const normalizeToIso = (raw: string) => {
+    const s = String(raw).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+    // Accept M/D/YY, M/D/YYYY, MM/DD/YY, MM/DD/YYYY with separators / - .
+    const us = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$/);
+    if (us) {
+      let mo = us[1].padStart(2, '0');
+      let day = us[2].padStart(2, '0');
+      let yr = us[3];
+      if (yr.length === 2) {
+        const n = Number(yr);
+        yr = String(n <= 49 ? 2000 + n : 1900 + n);
+      }
+      return `${yr}-${mo}-${day}`;
+    }
+    // Detect DD/MM/YYYY where day>12
+    const eu = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);
+    if (eu) {
+      const d = Number(eu[1]);
+      const m = Number(eu[2]);
+      if (d > 12 && m <= 12) {
+        return `${eu[3]}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      }
+    }
+    // Fallback to Date parsing
+    const parsed = new Date(s);
+    if (!isNaN(parsed.getTime())) {
+      const yr = parsed.getFullYear();
+      const mo = String(parsed.getMonth() + 1).padStart(2, '0');
+      const day = String(parsed.getDate()).padStart(2, '0');
+      return `${yr}-${mo}-${day}`;
+    }
+    return s;
+  };
+
+  const iso = normalizeToIso(value);
+
+  // If native date input, set via native setter to avoid masking issues
+  const tag = await target.evaluate((el) => (el as HTMLElement).tagName.toLowerCase()).catch(() => 'input');
+  if (tag === 'input') {
+    const type = await target.getAttribute('type').catch(() => 'text');
+    if (type === 'date') {
+      await target.evaluate((el, v) => {
+        const input = el as HTMLInputElement;
+        const nativeSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+        if (nativeSetter) nativeSetter.call(input, v);
+        else input.value = v;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      }, iso).catch(() => null);
+      return;
     }
   }
 
-  if (await target.isVisible().catch(() => false)) {
-    const isoDate = value.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$1-$2');
-    await target.fill(isoDate).catch(() => target.fill(value));
+  // For text inputs that may have masking, use resilientFill which handles native setter fallback.
+  // Try to derive a selector for resilientFill: prefer name attribute, then id, otherwise fallback to direct fill.
+  const selector = await target.evaluate((el) => (el as HTMLInputElement).getAttribute('name') || (el as HTMLElement).id || '').catch(() => '');
+  if (selector) {
+    // If selector looks like an id, prefix with '#'
+    const resolved = selector.startsWith('#') || selector.startsWith('.') || selector.startsWith('input') ? selector : `input[name="${selector}"]`;
+    await resilientFill(page, resolved, iso).catch(async () => {
+      await target.fill(iso).catch(() => null);
+    });
+  } else {
+    await target.fill(iso).catch(() => null);
   }
 }
 
@@ -1102,7 +1186,7 @@ async function fillAssets(page: Page) {
   await clickWhenEnabled(continueButton, 15000);
 }
 
-const EMAIL_REGISTRY_DIR = path.resolve(process.cwd(), 'test-results');
+const EMAIL_REGISTRY_DIR = path.resolve(process.cwd(), 'test-data', 'student-idr');
 const EMAIL_REGISTRY_FILE = path.join(EMAIL_REGISTRY_DIR, 'student-IDR-emails.json');
 
 interface EmailRegistryEntry {

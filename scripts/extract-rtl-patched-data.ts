@@ -23,7 +23,7 @@ const dashboardBaseUrl =
   "https://one-loan-dashboard.dev.saas.rate.com";
 const cxFieldPairPattern =
   /:fieldName\s+"(CX\.[^"]+)",\s*:stringValue\s+"((?:\\.|[^"])*)"/g;
-const dashboardAuthPath = resolve("test-data/solution-finder/dashboard-auth.yml");
+const dashboardAuthPath = resolve("test-data/one-loan-rtl/dashboard-auth.yml");
 const signInTimeoutMs = Number(process.env.ONE_LOAN_SIGNIN_TIMEOUT_MS ?? 180000);
 
 let activeContext: BrowserContext | undefined;
@@ -459,7 +459,7 @@ async function main(): Promise<void> {
       }
     }
 
-    const outputDirectory = resolve("test-data/solution-finder");
+    const outputDirectory = resolve("test-data/one-loan-rtl");
     const baseName = `loan-${loanNumber}-rtl-patches`;
     const outputPath = resolve(outputDirectory, `${baseName}.yml`);
     const entries = [...cxAssignments, ...fieldDataAssignments, ...nonCxAssignments];

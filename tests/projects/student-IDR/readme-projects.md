@@ -48,7 +48,7 @@ To avoid duplicate-account conflicts in QA, every call to `runIdrFlow` generates
 
 - Format: `<base-local>.<run-id>.w<worker>.<counter>@<domain>`
 - `run-id` is a timestamp + random suffix generated once per worker process, so separate test runs never reuse the same email sequence.
-- Generated credentials are appended to `test-results/student-IDR-emails.json` for audit and overlap protection.
+- Generated credentials are appended to `test-data/student-idr/student-IDR-emails.json` for audit and overlap protection.
 
 ### Login fallback
 

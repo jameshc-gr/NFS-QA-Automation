@@ -18,7 +18,7 @@ class DateTypeReporter {
       const dd = String(now.getDate()).padStart(2, '0');
       const date = `${yyyy}-${mm}-${dd}`;
 
-      const testProject = process.env.TEST_PROJECT || 'misc';
+      const testProject = (process.env.TEST_PROJECT || 'misc').toLowerCase();
       const dir = path.join(process.cwd(), 'test-results', date, testProject);
       fs.mkdirSync(dir, { recursive: true });
 

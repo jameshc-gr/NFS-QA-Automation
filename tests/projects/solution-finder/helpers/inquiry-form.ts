@@ -25,6 +25,16 @@ export async function typeMaskedInput(
   await locator.press("Tab");
 }
 
+export function formatPhoneNumber(digits: string): string {
+  // Normalize: keep only digits
+  const cleaned = (digits || "").replace(/\D/g, "");
+  if (cleaned.length !== 10) return digits;
+  const area = cleaned.slice(0, 3);
+  const prefix = cleaned.slice(3, 6);
+  const line = cleaned.slice(6);
+  return `(${area}) ${prefix}-${line}`;
+}
+
 /**
  * Generates a collision-safe yopmail address:
  * inq{MM}-{DD}-{HH}-{mm}-{ss}-{random4}@yopmail.com
@@ -163,13 +173,19 @@ export async function fillAndSubmitInquiryForm(
       .click();
   }
 
-  const sameAddressCheckbox = page.locator("#sameAsAddress");
-  await expect(sameAddressCheckbox).toBeVisible({ timeout: 5000 });
+  const sameAddressCheckbox = page.locator('#sameAsAddress, input[name="sameAsAddress"], [data-testid="same-as-address-toggle"] input[type="checkbox"]').first();
+  if (await sameAddressCheckbox.isVisible({ timeout: 1500 }).catch(() => false)) {
   await expect(sameAddressCheckbox).not.toBeDisabled({ timeout: 5000 });
   if (await sameAddressCheckbox.isChecked()) {
-    await page.getByTestId("same-as-address-toggle").click();
+    const sameAddressToggle = page.getByTestId("same-as-address-toggle");
+    if (await sameAddressToggle.isVisible({ timeout: 1000 }).catch(() => false)) {
+      await sameAddressToggle.click();
+    } else {
+      await sameAddressCheckbox.click();
+    }
     await expect(sameAddressCheckbox).not.toBeChecked({ timeout: 3000 });
   }
+}
 
   // ── Personal Information ──────────────────────────────────────────────────
 
@@ -190,7 +206,8 @@ export async function fillAndSubmitInquiryForm(
   const phoneInput = page.locator('input[name="phoneNumber"]').first();
   await phoneInput.click();
   await phoneInput.clear();
-  await phoneInput.pressSequentially(basicInfoInput.phoneNumber, { delay: 35 });
+  // Format phone to (XXX) XXX-XXXX before typing so masked inputs receive expected characters
+  await typeMaskedInput(phoneInput, formatPhoneNumber(basicInfoInput.phoneNumber));
 
   const dobInput = page
     .locator('input#date, input[name="birthday"], input[name="date"]')

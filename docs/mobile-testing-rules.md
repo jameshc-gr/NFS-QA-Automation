@@ -124,6 +124,26 @@ combination fails, troubleshoot and rerun until it passes (or is confirmed to
 be a permanently-skipped combination per rule 7) before considering the
 report final.
 
+## 9. Permanent change-control for future additions
+
+Before adding or changing any mobile test, provider, environment route,
+locator strategy, account rule, retry behavior, or verification step:
+
+1. Read this document first and identify the rule being affected.
+2. Update this document before or in the same change as the implementation.
+3. Update the affected spec(s) under `mobile/tests/android/` or
+  `mobile/tests/ios/` and the shared page/provider code when applicable.
+4. Update [readme.md](../readme.md),
+  [AGENTS.md](../AGENTS.md), or the mobile testing skill when the workflow,
+  command, location, or agent behavior changes.
+5. Run the narrowest affected test, then the relevant platform/environment
+  matrix. Record the result under `test-results/`.
+6. Do not remove, weaken, or silently reinterpret an existing rule. Any
+  exception requires explicit user approval and must be documented here.
+
+This document remains the source of truth for all future mobile development,
+test generation, test healing, and test execution.
+
 ## Additional standing rules (established during hardening, also permanent)
 
 - **Page verbiage must be asserted before every step transition** in the

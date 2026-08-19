@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
 import { defineConfig, devices } from '@playwright/test';
+import { existsSync, readFileSync } from 'fs';
+import { resolve } from 'path';
 
 dotenv.config();
 
@@ -17,6 +19,29 @@ const runDate = `${yyyy}-${mm}-${dd}`;
 const runStamp = process.env.RUN_ID || `${runDate}-${HH}-${MM}-${SS}`;
 const testProject = process.env.TEST_PROJECT || 'student-loan-refi';
 const testSuiteDir = process.env.TEST_SUITE_DIR || 'tests';
+
+function resolveSolutionFinderBaseUrl(): string | undefined {
+  const fromEnv =
+    process.env.SOLUTION_FINDER_BASE_URL ||
+    process.env.BASE_URL_QA ||
+    process.env.ONE_LOAN_DASHBOARD_BASE_URL;
+  if (fromEnv) return fromEnv;
+
+  // Fallback to locally saved dashboard auth config when env vars are not set.
+  const authConfigPath = resolve(process.cwd(), 'test-data/one-loan-rtl/dashboard-auth.yml');
+  if (!existsSync(authConfigPath)) return undefined;
+
+  try {
+    const content = readFileSync(authConfigPath, 'utf8');
+    const match = content.match(/^baseUrl:\s*["']?([^"'\n]+)["']?\s*$/m);
+    return match?.[1]?.trim() || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+const solutionFinderBaseUrl = resolveSolutionFinderBaseUrl();
+const testTimeoutMs = testProject === 'solution-finder' ? 4 * 60 * 1000 : 30 * 1000;
 
 function buildApiHeaders() {
   const headers: Record<string, string> = {};
@@ -40,7 +65,8 @@ function buildApiHeaders() {
 
 export default defineConfig({
   testDir: `./${testSuiteDir}`,
-  outputDir: `./test-results/${runDate}/runs`,
+  outputDir: `./test-results/${runDate}/${testProject}/runs`,
+  timeout: testTimeoutMs,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -48,14 +74,14 @@ export default defineConfig({
   reporter: (() => {
     const base = [
       ['html', {
-        outputFolder: `./test-results/${runDate}/reports/${testProject}/test-report-${runStamp}`,
+        outputFolder: `./test-results/${runDate}/${testProject}/reports/test-report-${runStamp}`,
         open: 'never'
       }],
       ['./scripts/playwright-date-type-reporter.js', {}]
     ];
     try {
       require.resolve('allure-playwright');
-      base.splice(1, 0, ['allure-playwright', { outputFolder: `./test-results/${runDate}/allure/${testProject}/${runStamp}` }]);
+      base.splice(1, 0, ['allure-playwright', { outputFolder: `./test-results/${runDate}/${testProject}/allure-results/${runStamp}` }]);
     } catch (e) {
       // allure-playwright not installed; skip adding it so local dry-runs succeed
       // Users who want Allure should install `allure-playwright` as a devDependency.
@@ -64,8 +90,8 @@ export default defineConfig({
   })(),
   use: {
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
+    screenshot: 'on',
+    video: 'on',
     actionTimeout: 30000,
     navigationTimeout: 90000
   },
@@ -88,7 +114,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         headless: false,
-        baseURL: process.env.SOLUTION_FINDER_BASE_URL || undefined
+        baseURL: solutionFinderBaseUrl
       }
     },
     {

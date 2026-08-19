@@ -66,11 +66,11 @@ At runtime, the framework also appends a sequential per-worker number to every e
 ## Generated credentials and counters
 
 - `student-IDR-counters/`: per-worker counter files used by the email-generation helper to allocate unique email suffixes. Each file is named `email-counter-worker-<N>.txt` and contains a single integer representing the next counter value for that worker.
-- Run artifacts containing generated credentials are written to `test-results/student-IDR-emails.json`. This file lists the generated `email`, `password`, `runId`, `workerIndex`, `testTitle`, `testFile`, and `createdAt` timestamp for each generated account.
+- Run artifacts containing generated credentials are written to `test-data/student-idr/student-IDR-emails.json`. This file lists the generated `email`, `password`, `runId`, `workerIndex`, `testTitle`, `testFile`, and `createdAt` timestamp for each generated account.
 
 Usage summary:
 1. Tests read and update `student-IDR-counters/email-counter-worker-<N>.txt` to reserve a unique suffix for worker `N`.
-2. The email helper writes the generated credential to `test-results/student-IDR-emails.json` for traceability and post-run analysis.
+2. The email helper writes the generated credential to `test-data/student-idr/student-IDR-emails.json` for traceability and post-run analysis.
 3. Counters are kept in `test-data/` because they are small, shareable artifacts that may persist across runs.
 
 Maintenance:

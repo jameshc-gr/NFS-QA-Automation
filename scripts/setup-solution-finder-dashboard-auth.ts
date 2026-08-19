@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { encryptSecret } from '../mobile/src/utils/crypto-utils';
 
-const outputPath = resolve('test-data/solution-finder/dashboard-auth.yml');
+const outputPath = resolve('test-data/one-loan-rtl/dashboard-auth.yml');
 
 async function readHidden(prompt: string): Promise<string> {
   if (!process.stdin.isTTY || !process.stdin.setRawMode) {
@@ -54,7 +54,7 @@ async function main(): Promise<void> {
     throw new Error('Login and password are required.');
   }
 
-  mkdirSync(resolve('test-data/solution-finder'), { recursive: true });
+  mkdirSync(resolve('test-data/one-loan-rtl'), { recursive: true });
   writeFileSync(
     outputPath,
     [

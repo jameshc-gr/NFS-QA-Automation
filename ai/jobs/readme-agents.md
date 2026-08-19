@@ -7,6 +7,7 @@ This folder is the canonical home for all agent assets in this repository.
 - `agents/`: Copilot agent definitions (`*.agent.md`)
   - `playwright_agents/`: core web agents (`playwright-test-orchestrator`, `playwright-test-planner`, `playwright-test-generator`, `playwright-test-healer`)
   - `mobile-test-generator.agent.md`: dedicated mobile test generator agent
+  - `doc-memory-sync.agent.md`: post-change documentation and repository-memory synchronization agent
 - `prompts/`: reusable prompt entrypoints (`*.prompt.md`)
 - `skills/`: QA skills directory (`*/SKILL.md`)
   - `playwright-framework-context/`: Web E2E architecture & conventions

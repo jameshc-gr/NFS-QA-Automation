@@ -66,6 +66,7 @@ flowchart TD
 2. Run the narrowest possible test first (single spec, single browser).
 3. Use healer only after reproducing failures in a focused run.
 4. Generate new tests into `tests/projects/<project>/generated/`.
+5. After validated behavior changes, run `doc-memory-sync` (`ai/jobs/agents/doc-memory-sync.agent.md`) to update `readme.md` and `/memories/repo/webautomation.md`.
 
 ### How To Write Skills
 
@@ -107,7 +108,9 @@ The old `test-data/student-loan-refi/profiles.json` file has been removed.
 
 Reporting and run artifacts
 
-- Run artifacts (generated credentials, Playwright reports, screenshots, traces) are stored under `test-results/` and are not intended to be committed.
+- Run artifacts (generated credentials, Playwright reports, screenshots, videos, and traces) are stored under `test-results/` and are not intended to be committed.
+- Playwright runs always capture a screenshot and video for each test. HTML reports are written to `test-results/YYYY-MM-DD/<project>/reports/test-report-<run-id>/`.
+- Use `npm test` or a `test:*` Playwright script so the date/project/run folder and HTML report are created consistently.
 - A helper `scripts/organize-reports.js` moves stray human-written reports into `test-results/YYYY-MM-DD/<project>/`.
 - The Playwright run is configured with a custom reporter that writes a Markdown summary into `test-results/YYYY-MM-DD/<TEST_PROJECT>/` (set `TEST_PROJECT` when running to classify the output).
 
@@ -453,6 +456,11 @@ create-account verification pass/fail handling logic, account recording and
 reuse, and the page-verbiage/readiness/genuine-new-message rules below. Do not
 change that document's rules without explicit approval.
 
+Any future mobile test, verification route, locator, retry behavior, or
+environment addition must update that canonical document and the affected
+specs/docs in the same change, then be validated and reported under
+`test-results/`.
+
 Mobile uses WebdriverIO, not Playwright — `npm test` will not run these. Spec
 paths in `MOBILE_SPECS` are relative to `mobile/`, and `wdio` needs `npx`.
 
@@ -597,22 +605,37 @@ they require a real build artifact from the app team, not a test/code fix.
 
 #### Solution Finder
 
-Falcon and Solution Finder are separate products. `BASE_URL_QA` is reserved for
-Falcon. Solution Finder tests use only `SOLUTION_FINDER_BASE_URL`, which must be
-set to the Solution Finder QA application URL:
+Solution Finder tests navigate to `/inquiry/intake?playwright=true`, so they
+require a valid web `baseURL`.
+
+Use `SOLUTION_FINDER_BASE_URL` explicitly when possible. If it is unset,
+Playwright falls back to `BASE_URL_QA`.
+
+Validated working endpoint on this repo (2026-08-19):
+
+```bash
+export SOLUTION_FINDER_BASE_URL=https://falcon.qa.fsp.rate.com
+```
+
+Then run:
 
 ```bash
 npm run test:project:solution-finder
 ```
 
-This suite contains 20 Chromium specs under
+This suite contains 20 specs under the dedicated Playwright project
+`solution-finder` (including the project-specific browser settings) in
 [tests/projects/solution-finder](tests/projects/solution-finder). The tests
 submit live inquiries and should be run intentionally against the Solution
-Finder QA endpoint. Do not point this suite at Falcon.
+Finder QA endpoint.
+
+If you see `Cannot navigate to invalid URL`, the base URL was not resolved.
+If you see `page not found` at the OneLoan Dashboard host, that host is for
+the extractor only, not the inquiry intake UI.
 
 The RTL loan-data extractor is:
 [scripts/extract-rtl-patched-data.ts](scripts/extract-rtl-patched-data.ts).
-It writes loan-specific files under `test-data/solution-finder/`; those files
+It writes loan-specific files under `test-data/one-loan-rtl/`; those files
 remain local-only. To configure optional dashboard sign-in, set a strong local
 `CONFIG_ENCRYPTION_KEY` and run:
 
@@ -620,7 +643,7 @@ remain local-only. To configure optional dashboard sign-in, set a strong local
 npm run setup:solution-finder-dashboard-auth
 ```
 
-The command writes `test-data/solution-finder/dashboard-auth.yml` with AES-GCM
+The command writes `test-data/one-loan-rtl/dashboard-auth.yml` with AES-GCM
 `ENC(...)` values for login and password. That file is trackable, but the
 extractor rejects it unless both credentials are encrypted. Never commit the
 encryption key or plaintext credentials. MFA can still be completed manually
@@ -631,30 +654,6 @@ Run the extractor with:
 ```bash
 npm run extract:rtl-patched-data
 ```
-
-It asks two questions — `1. What env? (ex. gri)` and `2. What Loan#?` — then signs
-in, walks every Field Data page, reads the Transactions tab, writes the YAML, and
-closes the browser. Answer both up front to run it unattended:
-
-```bash
-ONE_LOAN_ENV=gri ONE_LOAN_NUMBER=265163565DEV npm run extract:rtl-patched-data
-```
-
-Output is one file per loan, `test-data/solution-finder/loan-<LOAN#>-rtl-patches.yml`,
-containing `[FIELD] = "value"` lines: the `CX.*` pairs patched by RTL first, then
-every Field Data pair, then the remaining `create-loan`/`patch-loan` values.
-Re-running the same loan overwrites that loan's file only; other loans are kept.
-
-The browser session is saved to `playwright/.auth/one-loan-dashboard`, so only the
-first run signs in. Okta drops the loan hash on the way back and lands on `#/home`,
-so the extractor re-opens the loan route itself. If an MFA step ever appears,
-complete it in the headed browser; the run continues on its own.
-
-Extractor environment variables:
-
-- `ONE_LOAN_ENV` / `ONE_LOAN_NUMBER`: skip the prompts
-- `ONE_LOAN_TENANT`: tenant override; defaults to `<env>-dev`
-- `ONE_LOAN_SIGNIN_TIMEOUT_MS`: how long to wait for the dashboard (default 180000)
 
 The extractor targets the separate OneLoan dashboard at
 `https://one-loan-dashboard.dev.saas.rate.com` by default. Override it with

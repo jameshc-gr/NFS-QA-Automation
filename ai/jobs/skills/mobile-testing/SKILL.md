@@ -15,6 +15,11 @@ Follow it exactly for email formats, verification routing, account
 recording/reuse, and the page-verbiage/readiness/genuine-new-message rules —
 do not relax or reinterpret it.
 
+For every future mobile rule or test addition, update the canonical rules
+document, affected `mobile/tests/{android,ios}` specs, and relevant README or
+skill guidance in the same change. Run the narrowest affected test and record
+the result under `test-results/`.
+
 ## When to Use
 - Running or creating Android or iOS automation specs
 - Downloading or managing mobile app builds (Firebase App Distribution, iOS Xcode/IPA/simulator)
@@ -25,7 +30,7 @@ do not relax or reinterpret it.
 - Platform: `MOBILE_PLATFORM=android` or `MOBILE_PLATFORM=ios`
 - Environment: `MOBILE_ENV=prod` or `MOBILE_ENV=qa` (default `qa`)
 - Build target: `MOBILE_ANDROID_BUILD` or `MOBILE_IOS_BUILD` (defined in `test-data/mobile-app/gri/<platform>/config.yml`)
-- Spec file: `MOBILE_SPECS` path relative to `mobile/` (e.g. `tests/ios/create-user.spec.ts`)
+- Spec file: `MOBILE_SPECS` path relative to `mobile/` (e.g. `tests/ios/create-user.spec.ts`, which resolves to `mobile/tests/ios/create-user.spec.ts`)
 
 ## Procedure
 1. **Pre-flight & Verification Checks**:
@@ -50,6 +55,6 @@ do not relax or reinterpret it.
 - Verification log (OTP channel, provider used, time to receive code)
 
 ## Guardrails
-- **Spec paths MUST be relative to `mobile/`** (e.g., `tests/ios/...`, NOT `mobile/tests/ios/...`).
+- **All mobile specs MUST live under `mobile/tests/android/` or `mobile/tests/ios/`.** `MOBILE_SPECS` values remain relative to `mobile/` (e.g. `tests/ios/...`, which resolves to `mobile/tests/ios/...`).
 - **Do NOT use Yopmail for create-account signups** — it is blocked by reCAPTCHA Enterprise quota. Use Guerrilla Mail (`--ra` tag) for PROD, Outlook (`v3test@rate.com`) for QA.
 - Never write to or push to the iOS source repository `/Users/jameshc/iOS` — it is read-only for automation.
