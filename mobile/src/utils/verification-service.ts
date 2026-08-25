@@ -3,7 +3,7 @@ import { fetchGuerrillaMailCode } from './verification/guerrilla-mail';
 import { fetchOutlookCodeGraph } from './verification/outlook';
 import { getVerificationConfig, getMobileEnvironment, resolveGoogleVoiceProfile } from './mobile-auth';
 
-export type VerificationProvider = 'google-voice' | 'guerrillamail' | 'outlook' | 'manual';
+export type VerificationProvider = 'google-voice' | 'guerrillamail' | 'outlook' | 'manual' | 'mock';
 
 export interface GetVerificationCodeOptions {
   provider?: VerificationProvider;
@@ -28,14 +28,37 @@ export interface GetVerificationCodeOptions {
   baselinePreviewText?: string;
 }
 
+function isVerificationMockEnabled(): boolean {
+  return (process.env.MOBILE_VERIFICATION_MODE || '').toLowerCase() === 'mock';
+}
+
+function resolveMockCode(channel: 'email' | 'phone', options: GetVerificationCodeOptions): string {
+  const envCode = channel === 'email'
+    ? process.env.MOBILE_MOCK_EMAIL_CODE
+    : process.env.MOBILE_MOCK_SMS_CODE;
+  if (envCode) {
+    return envCode;
+  }
+  // Exclude any codes the caller has already tried so remediation/retry loops can
+  // simulate a fresh code arriving.
+  const base = channel === 'email' ? '123456' : '654321';
+  if (options.excludeCodes?.includes(base)) {
+    const alternative = channel === 'email' ? '111111' : '999999';
+    return alternative;
+  }
+  return base;
+}
+
 export async function getVerificationCode(
   channel: 'email' | 'phone',
   options: GetVerificationCodeOptions = {}
 ): Promise<string> {
   const config = getVerificationConfig();
-  const provider = options.provider
+  const requestedProvider = options.provider
     || (channel === 'phone' ? config.verification.phone : config.verification.email)
     || (channel === 'phone' ? 'google-voice' : 'guerrillamail');
+
+  const provider: VerificationProvider = isVerificationMockEnabled() ? 'mock' : requestedProvider;
 
   const source = describeVerificationSource(channel, provider, config, options);
   console.log(`[Verification] env=${getMobileEnvironment()} channel=${channel} source=${source}`);
@@ -62,6 +85,9 @@ function describeVerificationSource(
   config: ReturnType<typeof getVerificationConfig>,
   options: GetVerificationCodeOptions
 ): string {
+  if (provider === 'mock') {
+    return `mock:${channel}`;
+  }
   if (provider === 'outlook') {
     const mailbox = options.email || config.outlook?.email || '(unset)';
     return `outlook:${mailbox}${config.outlook?.folder ? `/${config.outlook.folder}` : ''}`;
@@ -82,6 +108,9 @@ async function retrieveCode(
   options: GetVerificationCodeOptions
 ): Promise<string> {
   switch (provider) {
+    case 'mock':
+      return resolveMockCode(channel, options);
+
     case 'google-voice':
       {
       const profile = resolveGoogleVoiceProfile(options.googleVoiceProfile);

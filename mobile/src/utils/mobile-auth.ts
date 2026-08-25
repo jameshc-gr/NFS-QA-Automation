@@ -223,6 +223,31 @@ export function getRandomCreatedAccount(environment = getMobileEnvironment()): {
   };
 }
 
+/**
+ * Returns multiple recorded accounts for an environment, newest first, so
+ * callers can retry login across a small pool when the single newest account
+ * turns out to be purged/expired by the backend (a documented, expected
+ * occurrence for accounts more than a few days old).
+ */
+export function getCreatedAccountCandidates(
+  environment = getMobileEnvironment(),
+  limit = 5
+): Array<{ email: string; password: string }> {
+  const all = loadCreatedAccounts();
+  if (!all.length) {
+    return [];
+  }
+
+  const normalized = String(environment || '').toLowerCase();
+  const envPool = all.filter((entry) => entry.environment && entry.environment.toLowerCase() === normalized);
+  const source = envPool.length ? envPool : all;
+
+  return [...source]
+    .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
+    .slice(0, limit)
+    .map((entry) => ({ email: entry.email, password: entry.password }));
+}
+
 export function getMobileEnvironment(): string {
   return process.env.MOBILE_ENV || runtimeConfig.defaultEnvironment || 'prod';
 }

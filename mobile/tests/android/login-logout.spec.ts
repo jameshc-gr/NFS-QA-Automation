@@ -2,18 +2,15 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 
 import { AuthPage } from '../../src/pages/auth.page';
-import { getAutomationAccount } from '../../src/utils/mobile-auth';
+import { getAutomationAccount, getMobileEnvironment } from '../../src/utils/mobile-auth';
 
 describe('Android login and logout flow', () => {
   it('logs in and logs out', async () => {
     const auth = new AuthPage();
-    const { email, password } = getAutomationAccount('login');
-    process.env.MOBILE_LOGIN_EMAIL = email;
+    const fallback = getAutomationAccount('login');
 
     await auth.waitForAuthScreenReady();
-    await auth.openLogin();
-    await auth.login(email, password);
-    await auth.completeLoginVerification(email);
+    const { email } = await auth.loginWithAccountRetry(getMobileEnvironment(), fallback);
 
     const reachedHome = await auth.waitForHomeScreen();
     await browser.saveScreenshot(path.resolve(process.cwd(), 'mobile/.builds/android-login-proof.png'));

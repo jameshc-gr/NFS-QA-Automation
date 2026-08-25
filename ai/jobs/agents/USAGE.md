@@ -12,12 +12,15 @@ This document explains how to use the agent hierarchy, skills, and persistent me
 - `playwright-test-planner`: Converts feature requests and user stories into structured test plans in `specs/`.
 - `playwright-test-generator`: Translates test specs into clean Playwright tests under `tests/projects/`.
 - `playwright-test-healer`: Diagnoses failures and repairs broken locators or timing issues.
-- `mobile-test-generator`: Dedicated 2-phase agent for mobile test case planning (`ai/tests/mobile/`) and WDIO spec generation (`mobile/tests/`).
+- `mobile-test-orchestrator`: Coordinates WebdriverIO + Appium mobile test discovery, pre-flight validation, execution, and self-healing.
+- `mobile-test-generator`: Generates mobile Markdown plans and WDIO specs in a single pass, then validates with focused dry-runs.
+- `mobile-test-healer`: Diagnoses and repairs failing mobile tests using the `mobile-triage` skill and selector registry.
 
 **Core QA Skills**
 - `playwright-framework-context`: Framework mechanics, profile mappings, locator rules, and conventions.
 - `api-testing`: Postman collection auto-extraction, contract testing, gateway config loading, and schema validation.
 - `mobile-testing`: Appium/WDIO execution for Android & iOS, build selection, and OTP channels (Guerrilla Mail, Outlook, Google Voice).
+- `mobile-triage`: Extract concise diagnostic bundles from mobile test failures and classify root causes without loading full logs into context.
 - `test-data-engineer`: Secure, environment-compliant test data generation, realistic human names, `--ra` tag rules, and password validation checks.
 - `test-plan-generation`: Transforming requirements and Jira tickets into reviewable Markdown specifications.
 - `bug-report-writing`: Root cause analysis, failure categorization, and standardized Jira bug reports ([SLF]/[FAL] format).
