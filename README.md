@@ -28,6 +28,7 @@ All agent framework assets are centralized under `ai/jobs`:
   - `api-testing`: Postman auto-extraction, contract testing & schema validation
   - `mobile-testing`: Android/iOS Appium/WDIO, build routing & OTP channels
   - `mobile-triage`: Mobile test failure diagnosis & remediation (selector, timing, app crash, infra)
+  - `playwright-triage`: Playwright test failure diagnosis & remediation (selector, timing, assertion, data, app, infra)
   - `test-data-engineer`: Environment-aware account strategy & password/name compliance
   - `test-plan-generation`: Requirements & stories to structured test specifications
   - `bug-report-writing`: Root cause analysis, defect categorization & Jira bug reporting
@@ -1113,6 +1114,92 @@ node scripts/generate-test.js --jira PROJ-123 --summary "new no-offer validation
 ```
 
 See [docs/agents/test-generator-agent.md](docs/agents/test-generator-agent.md) for details.
+
+## Playwright Autonomy Framework & Self-Healing
+
+Playwright tests now have autonomous agents and supporting infrastructure aligned with the mobile testing autonomy framework:
+
+### Architecture Improvements
+
+1. **Autonomy Tiers** — Documented in [AGENTS.md](AGENTS.md):
+   - **Tier 0** (Read & Diagnose): Agents read, search, capture logs/screenshots — never ask
+   - **Tier 1** (Additive Test Development): Create test plans, generate specs, run focused tests — ask only on business rule contradiction
+   - **Tier 2** (Self-Healing & Refactor): Fix selectors, update config — ask only on major ambiguity
+   - **Tier 3** (Critical / Architectural): Change canonical rules, add auth providers — always ask
+
+2. **Playwright Pre-Flight Health Check** — `scripts/playwright-preflight.ts`:
+   - Validates Node.js, dependencies, browsers, configuration, environment before running tests
+   - Catches setup errors early, saving iteration time
+   - Run with: `npm run preflight:playwright`
+
+3. **Playwright Triage Skill** — `ai/jobs/skills/playwright-triage/SKILL.md`:
+   - Structured failure classification (selector, timing, assertion, test data, app state, infrastructure)
+   - Remediation patterns for each failure class
+   - Agents can autonomously triage and apply fixes under Tier 2
+
+4. **Orchestrator & Healer Agents** — `ai/jobs/agents/playwright_agents/`:
+   - `playwright-test-orchestrator.agent.md` (updated): Discovers specs, manages execution, reports results
+   - `playwright-test-healer.agent.md` (existing): Diagnoses failures, applies healing logic, retries autonomously
+   - Agents operate within autonomy tier boundaries; no context-switching
+
+5. **Selector Registry** — `web/student-loan-refi/selectors/student-loan-refi.selectors.ts`:
+   - Centralized, typed selectors with fallback candidates (primary + 3-4 fallbacks)
+   - Enables platform-specific customization and easier maintenance
+   - Agents can update registry when selectors change (Tier 2)
+
+6. **Step-Level Checkpoints** — `web/utils/step-checkpoint.ts`:
+   - Wraps each test step with automatic name logging and validation
+   - Step-level diagnostics on failure (not generic "line X" messages)
+   - Automatic screenshot capture on failure
+
+7. **Memory Tracking** — `web/utils/memory.ts`:
+   - `memory/playwright-locator-history.json`: Selector changes applied
+   - `memory/playwright-flaky-tests.json`: Intermittent failure patterns
+   - `memory/playwright-healing-history.json`: Timeline of all fixes
+   - Agents avoid re-fixing the same issue; learn from past changes
+
+### Key Improvements
+
+1. **No More Questions** (Within Tier 1-2)
+   - Agent checks autonomy tier → Proceeds with reasonable assumption
+   - Old: "Chromium or Firefox?" → New: Defaults to Chromium unless specified
+   - Saves 3-5 back-and-forth questions per run
+
+2. **Structured Failure Diagnosis**
+   - Failures classified automatically (selector/timing/assertion/data/app/infra)
+   - Specific remediation applied for each class
+   - Memory tracks what fixes were applied (avoid re-fixing)
+
+3. **Economical Model Usage**
+   - Orchestrator: `gpt-4o-mini` (fast, cheap, routing)
+   - Healer: `claude-3.5-sonnet` (only when needed)
+   - ~40-70% token savings vs flagship models
+
+4. **Selector Resilience**
+   - Multiple candidates per selector (primary + fallbacks)
+   - Healer tries all candidates before failing
+   - Persistent registry enables future-proof selectors
+
+### Validation Results
+
+All changes aligned with mobile framework:
+- Selector registry ready for test integration
+- Step checkpoints ready for adoption in new tests
+- Memory tracking validated on mobile tests
+- Pre-flight checks passing
+
+### How to Use Playwright Agents Autonomously
+
+1. Pre-flight check: `npm run preflight:playwright`
+2. Run test with orchestrator: Just ask "Test address page on Chromium"
+3. On failure: Healer diagnoses and fixes automatically
+4. Review learnings: Check `memory/playwright-*.json` files
+
+### Known Limitations
+
+- Selector registry currently documents Student Loan Refi flows; extend for other projects
+- Step checkpoints require manual integration into existing tests
+- Memory files persist in session but are project-aware (not globally shared)
 
 ## Troubleshooting
 
