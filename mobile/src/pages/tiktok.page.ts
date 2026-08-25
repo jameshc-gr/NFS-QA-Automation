@@ -53,12 +53,12 @@ export class TikTokPage extends BasePage {
    */
   async findAndClickWellnessBanner(): Promise<void> {
     const candidates = this.wellnessChecklistBannerCandidates;
-    let banner: WebdriverIO.Element | null = null;
+    let banner: any = null;
 
     for (const candidate of candidates) {
       try {
         const element = $(candidate);
-        if (await element.isDisplayed({ wait: 3000 }).catch(() => false)) {
+        if (await element.isDisplayed().catch(() => false)) {
           banner = element;
           try {
             const bannerName = await element.getAttribute('name');
@@ -120,7 +120,7 @@ export class TikTokPage extends BasePage {
       async () => {
         try {
           const feedContainer = $(this.tiktokFeedContainer);
-          return await feedContainer.isDisplayed({ wait: 2000 }).catch(() => false);
+          return await feedContainer.isDisplayed().catch(() => false);
         } catch {
           return false;
         }
@@ -195,7 +195,7 @@ export class TikTokPage extends BasePage {
   async captureNetworkRequests(): Promise<string[]> {
     try {
       // Get all network requests
-      const requests = await browser.getNetworkRequests?.() || [];
+      const requests = (await (browser as any).getNetworkRequests?.()) || [];
       console.log(`[TikTok] captureNetworkRequests: Found ${requests.length} total requests`);
       
       const urls: string[] = [];
@@ -218,7 +218,7 @@ export class TikTokPage extends BasePage {
 
       console.log(`[TikTok] captureNetworkRequests: Extracted ${urls.length} TikTok URLs`);
       return urls;
-    } catch (error) {
+    } catch (error: any) {
       console.log(`[TikTok] Network request capture not available (${error?.message}), will use alternative method`);
       return [];
     }
@@ -234,13 +234,13 @@ export class TikTokPage extends BasePage {
     try {
       // First, try to get available contexts and switch to WebView if available
       try {
-        const contexts = await browser.getContexts?.() || [];
-        console.log(`[TikTok] Available contexts: ${contexts.join(', ')}`);
+        const contexts: any = (await (browser as any).getContexts?.()) || [];
+        console.log(`[TikTok] Available contexts: ${Array.isArray(contexts) ? contexts.join(', ') : ''}`);
         
-        const webviewContext = contexts.find((c: string) => c.toLowerCase().includes('webview'));
+        const webviewContext = Array.isArray(contexts) ? contexts.find((c: any) => String(c).toLowerCase().includes('webview')) : null;
         if (webviewContext) {
           console.log(`[TikTok] Switching to WebView context: ${webviewContext}`);
-          await browser.switchContext?.(webviewContext);
+          await (browser as any).switchContext?.(webviewContext);
           console.log(`[TikTok] Successfully switched to WebView context`);
           
           // Try to execute JavaScript in WebView to extract URLs
@@ -260,14 +260,14 @@ export class TikTokPage extends BasePage {
             if (Array.isArray(pageUrls)) {
               urls.push(...pageUrls);
             }
-          } catch (jsError) {
+          } catch (jsError: any) {
             console.log(`[TikTok] JavaScript execution failed: ${jsError?.message}`);
           }
           
           // Switch back to native context
-          await browser.switchContext?.('NATIVE_APP');
+          await (browser as any).switchContext?.('NATIVE_APP');
         }
-      } catch (contextError) {
+      } catch (contextError: any) {
         console.log(`[TikTok] Could not use WebView context: ${contextError?.message}`);
       }
       
@@ -320,7 +320,7 @@ export class TikTokPage extends BasePage {
   async hasMoreVideos(): Promise<boolean> {
     try {
       const feedContainer = $(this.tiktokFeedContainer);
-      return await feedContainer.isDisplayed({ wait: 2000 }).catch(() => false);
+      return await feedContainer.isDisplayed().catch(() => false);
     } catch {
       return false;
     }
@@ -335,7 +335,7 @@ export class TikTokPage extends BasePage {
     for (const candidate of candidates) {
       try {
         const closeButton = $(candidate);
-        if (await closeButton.isDisplayed({ wait: 1000 }).catch(() => false)) {
+        if (await closeButton.isDisplayed().catch(() => false)) {
           await closeButton.click();
           console.log(`[TikTok] Closed feed using selector: ${candidate}`);
           return;

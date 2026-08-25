@@ -104,7 +104,7 @@ describe('Android - TikTok Feed URL Collection (MSAM-7880)', () => {
       try {
         // Scroll down to find wellness banner
         const size = await browser.getWindowSize();
-        await browser.executeScript('mobile: swipeGesture', {
+        await browser.execute('mobile: swipeGesture', {
           left: Math.floor(size.width * 0.5),
           top: Math.floor(size.height * 0.7),
           width: Math.floor(size.width * 0.5),
@@ -120,7 +120,8 @@ describe('Android - TikTok Feed URL Collection (MSAM-7880)', () => {
         let clicked = false;
         try {
           const tiktokElements = await $$('//android.widget.FrameLayout[@content-desc*="tiktok" i] | //android.view.View[@content-desc*="tiktok" i] | //android.widget.Button[@content-desc*="tiktok" i]');
-          if (tiktokElements.length > 0) {
+          const count = Array.isArray(tiktokElements) ? tiktokElements.length : await (tiktokElements as any).length;
+          if (count > 0) {
             await tiktokElements[0].click();
             console.log('  ✓ Clicked TikTok icon');
             clicked = true;

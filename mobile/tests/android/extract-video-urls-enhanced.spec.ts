@@ -42,7 +42,7 @@ describe('Android Video Feed URL Extraction - Enhanced', function () {
     const size = await browser.getWindowSize();
     for (let i = 0; i < 3; i++) {
       try {
-        await browser.executeScript('mobile: swipeGesture', {
+        await browser.execute('mobile: swipeGesture', {
           left: Math.floor(size.width * 0.5),
           top: Math.floor(size.height * 0.7),
           width: Math.floor(size.width * 0.5),
@@ -135,7 +135,7 @@ describe('Android Video Feed URL Extraction - Enhanced', function () {
     // Method C: Capture network requests (if available)
     try {
       console.log('\n  Method C: Checking network interceptor...');
-      const networkRequests = await browser.getNetworkRequests?.() || [];
+      const networkRequests = (await (browser as any).getNetworkRequests?.()) || [];
       const videoRequests = networkRequests.filter((req: any) => 
         (req.url || '').includes('youtube') || 
         (req.url || '').includes('vimeo') || 

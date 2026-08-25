@@ -45,6 +45,8 @@
     "setup:outlook-session": "ts-node scripts/setup-outlook-session.ts",
     "verify:gv-session": "ts-node scripts/verify-gv-session.ts",
     "verify:firebase-access": "ts-node scripts/check-firebase-access.ts",
+    "mobile:preflight": "ts-node scripts/mobile-preflight.ts",
+    "sanity:mobile": "ts-node scripts/sanity-mobile-framework.ts",
     "download:firebase-build": "ts-node scripts/download-firebase-build.ts",
     "test:mobile:android:create-user": "MOBILE_PLATFORM=android MOBILE_ENV=prod MOBILE_ANDROID_BUILD=prod MOBILE_SPECS=tests/android/create-user.spec.ts wdio run mobile/wdio.conf.ts",
     "test:mobile:android:create-user:qa": "MOBILE_PLATFORM=android MOBILE_ENV=qa MOBILE_ANDROID_BUILD=qa MOBILE_SPECS=tests/android/create-user.spec.ts wdio run mobile/wdio.conf.ts",
@@ -151,5 +153,8 @@
     "langchain": "^1.5.2",
     "yaml": "^2.8.1",
     "zod": "^3.25.76"
+  },
+  "overrides": {
+    "undici": "^8.10.0"
   }
 }

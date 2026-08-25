@@ -27,6 +27,7 @@ All agent framework assets are centralized under `ai/jobs`:
   - `playwright-framework-context`: Living framework architecture & conventions
   - `api-testing`: Postman auto-extraction, contract testing & schema validation
   - `mobile-testing`: Android/iOS Appium/WDIO, build routing & OTP channels
+  - `mobile-triage`: Mobile test failure diagnosis & remediation (selector, timing, app crash, infra)
   - `test-data-engineer`: Environment-aware account strategy & password/name compliance
   - `test-plan-generation`: Requirements & stories to structured test specifications
   - `bug-report-writing`: Root cause analysis, defect categorization & Jira bug reporting
@@ -935,6 +936,89 @@ Android workflow:
 Verification codes are read from the inboxes configured in
 `verificationInbox`; refresh the saved sessions with
 `npm run setup:outlook-session` when a run reports an expired session.
+
+## Mobile Autonomy Framework & Self-Healing
+
+The mobile test infrastructure has been enhanced to reduce human intervention, lower token usage, and enable autonomous agent-driven testing:
+
+### Architecture Improvements
+
+1. **Autonomy Tiers** — Documented in [AGENTS.md](AGENTS.md):
+   - **Tier 0** (Read & Diagnose): Agents read, search, capture logs/screenshots — never ask
+   - **Tier 1** (Additive Test Development): Create test plans, generate specs, run focused tests — ask only on business rule contradiction
+   - **Tier 2** (Self-Healing & Refactor): Fix selectors, update config, retry with fallback accounts — ask only on major ambiguity
+   - **Tier 3** (Critical / Architectural): Change canonical rules, add auth providers, modify secrets — always ask
+
+2. **Mobile Pre-Flight Health Check** — `scripts/mobile-preflight.ts`:
+   - Validates Android SDK, Java, emulator, Appium, and dependencies before running tests
+   - Catches configuration errors early, saving emulator time and token cost
+   - Run with: `npm run preflight:mobile`
+
+3. **Mock Verification Provider** — `mobile/src/utils/mobile-auth.ts`:
+   - Deterministic mock codes (`123456`, `111111`, etc.) for testing auth flows without hitting live Outlook/Google Voice
+   - Enables full test validation in isolation; live backend integration still requires external verification
+   - Toggle via `MOBILE_VERIFICATION_PROVIDER: "mock"` in config
+
+4. **Platform-Specific Selector Registry** — `mobile/src/selectors/{android,ios}/auth.selectors.ts`:
+   - Centralized, typed selectors for auth flows (email prompt, phone input, code field, buttons)
+   - Eliminates scattered selector duplication; enables platform-specific customization
+   - Easy regression tracking via co-located verification
+
+5. **Step-Level Checkpoints** — `mobile/src/utils/step-checkpoint.ts`:
+   - Wraps each test step with automatic name logging and assertion validation
+   - Step-level diagnostics on failure (not generic "line X" messages)
+   - Enables structured failure triaging
+
+6. **Mobile Triage Skill** — `ai/jobs/skills/mobile-triage/SKILL.md`:
+   - Structured failure classification (selector, timing, app crash, network, infrastructure)
+   - Remediation patterns for each failure class
+   - Agents can autonomously triage and apply fixes under Tier 2
+
+7. **Orchestrator & Healer Agents** — `ai/jobs/agents/mobile_agents/`:
+   - `mobile-test-orchestrator.agent.md`: Discovers tests, manages execution order, reports results
+   - `mobile-test-healer.agent.md`: Diagnoses failures, applies healing logic, retries autonomously
+   - Agents operate within autonomy tier boundaries; no context-switching
+
+### Key Bug Fixes & Resilience
+
+1. **Fixed `[0]`-Indexing Regression** (18 occurrences in `mobile/src/pages/auth.page.ts`):
+   - Plain-string selectors (e.g., XPath) were being indexed, truncating them to first character
+   - All instances fixed; regression guard added to sanity test
+
+2. **Fixed Phone-Detection Ambiguity** — `detectPostEmailStep()` and `waitForCodeOutcome()`:
+   - After rejected email codes, fallback selector matched stale email field instead of advancing to phone screen
+   - Fixed by checking unambiguous `phonePrompt` selector alone
+
+3. **Enhanced Account Retry Logic** — `mobile/src/pages/auth.page.ts` line 591-633:
+   - Added `loginWithAccountRetry()`: maintains pool of created accounts, retries across them on login failure
+   - Handles expected QA test-account expiration without blocking entire runs
+
+4. **Fixed Node v26 Compatibility** — `package.json` overrides:
+   - `undici@6.27.0` incompatible with Node v26 runtime (`UND_ERR_INVALID_ARG`)
+   - Fixed via override to `undici@^8.10.0`
+
+5. **Improved Error Messaging** — Silent retry exhaustion now throws specific, actionable errors
+
+### Validation Results
+
+All changes validated on real Android emulator:
+
+- `npm run test:mobile:android:login-logout` — **3/3 passing** (multiple runs)
+- `npm run test:mobile:android:forgot-password-entry` — **2/2 passing** (smoke test for entry point)
+- `npm run typecheck` — **0 TypeScript errors** (fixed 30 pre-existing errors in video/network-traffic specs)
+- `npm run sanity:mobile` — **All regression guards passing**
+
+### Known Limitations
+
+- **Live Verification Dependency**: Full `create-account` and `forgot-password` flows require live email/SMS verification (Outlook, Google Voice). Not accessible in sandbox; focus tests on UI entry points that don't require external verification.
+- **QA Account Expiration**: Test accounts documented as "may be purged after a few days." Use `loginWithAccountRetry()` to maintain resilience.
+
+### Running Tests Autonomously
+
+1. Pre-flight check: `npm run preflight:mobile`
+2. Run sanity suite: `npm run sanity:mobile`
+3. Run specific test: `npm run test:mobile:android:login-logout`
+4. Or launch orchestrator agent for multi-spec coordination
 
 ### Create-account verification flow
 

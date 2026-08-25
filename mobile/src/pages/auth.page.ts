@@ -4,137 +4,22 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { BasePage } from './base.page';
 import { getVerificationCode } from '../utils/verification-service';
 import { peekLatestGoogleVoicePreview } from '../utils/verification/google-voice';
+import { stepCheckpoint, mustPassStep } from '../utils/step-checkpoint';
 import {
   expectedEmailVerificationProvider,
   type EmailVerificationProvider,
   getVerificationConfig,
   getMobileEnvironment,
+  getCreatedAccountCandidates,
   promptForVerificationCode,
   resolveGoogleVoiceProfile
 } from '../utils/mobile-auth';
+import { authSelectors } from '../selectors';
 
 export class AuthPage extends BasePage {
+  private readonly selectors = authSelectors();
   private readonly verificationConfig = getVerificationConfig();
   private buildEmailProviderOverride: EmailVerificationProvider | null = null;
-  private readonly loginTab = this.byText('Log in');
-  private readonly createAccountTab = this.byText('Create account');
-  private readonly emailCandidates = this.platform === 'ios'
-    // "log_in.field.email" is shared by the label, the input, and the error
-    // text, so a bare accessibility id can resolve to the wrong node.
-    ? ['//XCUIElementTypeTextField[@name="log_in.field.email"]']
-    : [this.byInputLabel('Email')];
-  private readonly passwordCandidates = this.platform === 'ios'
-    ? ['//XCUIElementTypeSecureTextField[@name="log_in.field.password"]|//XCUIElementTypeTextField[@name="log_in.field.password"]']
-    : [this.byInputLabel('Password')];
-  private readonly loginButtonCandidates = this.platform === 'ios'
-    ? ['~log_in.button.log_in']
-    // The submit button's label is not always "Log in" — it renders as "Go!"
-    // in some builds/states, sharing the same clickable-row pattern as "Log in".
-    : [
-        `//android.widget.ScrollView//android.view.View[(.//android.widget.TextView[@text="Log in"] or .//android.widget.TextView[@text="Go!"]) and .//android.widget.Button and @clickable="true"]`,
-        `//android.widget.ScrollView//android.widget.Button[.//android.widget.TextView[@text="Log in"] or .//android.widget.TextView[@text="Go!"]]`,
-        `//android.widget.TextView[@text="Go!"]/..`,
-        `//android.widget.TextView[@text="Log in"]/..`,
-        `//android.widget.Button[.//*[@text="Log in"] or .//*[@text="Go!"]]`,
-        `//*[contains(@text, "Go!") and @clickable="true"]`,
-        `//*[contains(@text, "Log in") and @clickable="true"]`,
-        `//*[contains(@text, "Log in")]`
-      ];
-  // Bare accessibility ids are ambiguous here: the label, the input, and the
-  // error text all share the same "*.field.code" id, so filter by element type.
-  private readonly emailCodeInputCandidates = this.platform === 'ios'
-    ? [
-        '//XCUIElementTypeTextField[contains(@name, "confirm_email") and contains(@name, ".field.code")]',
-        '//XCUIElementTypeTextField[contains(@name, "log_in") and contains(@name, ".field.code")]',
-        // Forgot-password flow uses its own accessibility id prefix (e.g.
-        // "forgot_password"/"reset_password"), so fall back to any field
-        // whose id still carries the shared ".field.code" suffix, then to
-        // any text field at all — safe here since callers only reach this
-        // selector after confirming we're on the code-entry screen by title.
-        '//XCUIElementTypeTextField[contains(@name, ".field.code")]',
-        '//XCUIElementTypeTextField'
-      ]
-    : [
-        this.byInputLabel('6-digit code'),
-        `//android.widget.EditText[contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'code') or contains(translate(@hint, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'code') or contains(translate(@content-desc, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'code')]`,
-        `//android.widget.EditText`
-      ];
-  private readonly phoneCodeInputCandidates = this.platform === 'ios'
-    ? [
-        '//XCUIElementTypeTextField[contains(@name, "verify_sms_number") and contains(@name, ".field.code")]',
-        '//XCUIElementTypeTextField[contains(@name, "confirm_phone") and contains(@name, ".field.code")]',
-        // Forgot-password SMS reset uses its own accessibility id prefix;
-        // fall back the same way as emailCodeInputCandidates above.
-        '//XCUIElementTypeTextField[contains(@name, ".field.code")]',
-        '//XCUIElementTypeTextField'
-      ]
-    : [
-        this.byInputLabel('6-digit code'),
-        `//android.widget.EditText[contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'code') or contains(translate(@hint, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'code') or contains(translate(@content-desc, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'code')]`,
-        `//android.widget.EditText`
-      ];
-  private readonly emailVerifyButtonCandidates = this.platform === 'ios'
-    ? [
-        '~confirm_email.button.verify',
-        '~log_in.button.verify',
-        '//XCUIElementTypeButton[contains(@name, "verify") or @label="Verify"]'
-      ]
-    : [this.byText('Verify')];
-  private readonly phoneCodeVerifyButtonCandidates = this.platform === 'ios'
-    ? [
-        '~verify_sms_number.button.verify',
-        '~confirm_phone.button.verify',
-        '~confirm_phone.button.continue',
-        '//XCUIElementTypeButton[contains(@name, "verify") or contains(@name, "continue") or @label="Verify" or @label="Continue"]'
-      ]
-    : [this.byText('Verify'), this.byText('Continue')];
-  private readonly emailVerificationPrompt = this.platform === 'ios'
-    ? '//XCUIElementTypeStaticText[@name="Email verification" or @name="Verify it\u2019s you"]'
-    : this.byText('Email verification');
-  // Forgot-password flow renders a different title ("Verification code via
-  // Email") than the create-user flow ("Email verification").
-  private readonly resetEmailCodeTitlePrompt = this.platform === 'ios'
-    ? '//XCUIElementTypeStaticText[@name="Verification code via Email"]'
-    : this.byText('Verification code via Email');
-  private readonly resetSmsCodeTitlePrompt = this.platform === 'ios'
-    ? '//XCUIElementTypeStaticText[@name="Verification code via SMS"]'
-    : this.byText('Verification code via SMS');
-  private readonly emailCodeSentPrompt = this.platform === 'ios'
-    ? '//XCUIElementTypeStaticText[contains(@name, "code we sent to your email") or contains(@name, "code we sent")]'
-    : `//android.widget.TextView[contains(@text, "code we sent to your email")]`;
-  private readonly smsVerificationPrompt = this.platform === 'ios'
-    ? '//XCUIElementTypeStaticText[@name="Phone verification"]'
-    : this.byText('Phone verification');
-  private readonly smsCodeSentPrompt = this.platform === 'ios'
-    ? '//XCUIElementTypeStaticText[contains(@name, "we texted") or contains(@name, "sent to your phone")]'
-    : `//android.widget.TextView[contains(@text, "we texted") or contains(@text, "sent to your phone")]`;
-  private readonly smsEnterCodePrompt = this.byText('Enter the 6-digit code we texted to your phone number at');
-  private readonly genericEnterCodePrompt = this.platform === 'ios'
-    ? '//XCUIElementTypeStaticText[contains(@name, "digit code")]'
-    : `//android.widget.TextView[@text="6-digit code" or contains(@text, "digit code")]`;
-  private readonly phoneInputCandidates = this.platform === 'ios'
-    ? [
-        '//XCUIElementTypeTextField[contains(@name, "confirm_phone") and (contains(@name, "phone_number") or contains(@name, "phone"))]',
-        '//XCUIElementTypeTextField[contains(@name, "phone")]'
-      ]
-    : [
-        `//android.widget.EditText[contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'phone') or contains(translate(@hint, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'phone') or contains(translate(@content-desc, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'phone')]`,
-        `//android.widget.EditText`
-      ];
-  private readonly continueButtonCandidates = this.platform === 'ios'
-    ? [
-        '~confirm_phone.button.continue',
-        '~confirm_phone.button.verify',
-        '//XCUIElementTypeButton[contains(@name, "continue") or contains(@name, "verify") or @label="Continue" or @label="Verify"]',
-        '~confirm_email.button.verify'
-      ]
-    : [
-        `//*[contains(@text, "Continue") and @clickable="true"]`,
-        `//android.widget.TextView[@text="Continue"]/..`,
-        `//*[contains(@text, "Next") and @clickable="true"]`,
-        `//android.widget.TextView[@text="Next"]/..`,
-        `//android.widget.TextView[@text="Verify"]/..`
-      ];
   private readonly resendButtonCandidates = this.platform === 'ios'
     ? [
         '~Resend code',
@@ -230,121 +115,6 @@ export class AuthPage extends BasePage {
         `//android.widget.TextView[@text="Log out"]`,
         `//*[contains(@text, "Log out") and @clickable="true"]`
       ];
-  private readonly faceIdContinueButtonCandidates = this.platform === 'ios'
-    ? [
-        '~Continue',
-        '//XCUIElementTypeButton[@name="Continue" or @label="Continue"]'
-      ]
-    : [this.byText('Continue')];
-  private readonly forgotPasswordLinkCandidates = this.platform === 'ios'
-    ? [
-        '~log_in.button.forgot_password',
-        '~Forgot password?',
-        '~Forgot password',
-        '//XCUIElementTypeButton[contains(@name, "Forgot") or contains(@label, "Forgot")]',
-        '//XCUIElementTypeStaticText[contains(@name, "Forgot") or contains(@label, "Forgot")]'
-      ]
-    : [
-        `//*[contains(@text, "Forgot password?") and @clickable="true"]`,
-        `//*[contains(@text, "Forgot password") and @clickable="true"]`,
-        `//android.widget.TextView[contains(@text, "Forgot password")]/..`,
-        `//android.widget.TextView[contains(@text, "Forgot password")]`,
-        `//*[contains(@content-desc, "forgot_password")]`
-      ];
-  private readonly resetEmailInputCandidates = this.platform === 'ios'
-    ? [
-        '//XCUIElementTypeTextField[contains(@name, "email") or contains(@name, "reset")]',
-        '//XCUIElementTypeTextField'
-      ]
-    : [
-        this.byInputLabel('Email'),
-        `//android.widget.EditText[contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'email') or contains(translate(@hint, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'email')]`,
-        `//android.widget.EditText`
-      ];
-  private readonly resetSubmitButtonCandidates = this.platform === 'ios'
-    ? [
-        '~Reset via email',
-        '~Reset via Email',
-        '~Send reset link',
-        '~Reset',
-        '//XCUIElementTypeButton[contains(@name, "Reset") or contains(@name, "Send") or @label="Reset via email" or @label="Send reset link" or @label="Reset" or @label="Continue"]'
-      ]
-    : [
-        this.byText('Reset via Email'),
-        this.byText('Reset via email'),
-        `//android.widget.TextView[contains(@text, "Reset via Email") or contains(@text, "Reset via email")]/..`,
-        `//android.widget.TextView[contains(@text, "Reset via Email") or contains(@text, "Reset via email")]`,
-        `//*[(contains(@text, "Reset via Email") or contains(@text, "Reset via email") or contains(@text, "Send reset link") or contains(@text, "Reset")) and @clickable="true"]`,
-        `//android.widget.Button[contains(@text, "Reset via Email") or contains(@text, "Reset via email") or contains(@text, "Reset")]`,
-        `//*[contains(@text, "Reset via Email") and @clickable="true"]`,
-        `//*[contains(@text, "Reset via email") and @clickable="true"]`
-      ];
-  private readonly resetViaSmsButtonCandidates = this.platform === 'ios'
-    ? [
-        '~Reset via SMS',
-        '~Reset via sms',
-        '//XCUIElementTypeButton[contains(@name, "SMS") or contains(@label, "SMS")]'
-      ]
-    : [
-        this.byText('Reset via SMS'),
-        this.byText('Reset via sms'),
-        `//android.widget.TextView[contains(@text, "Reset via SMS") or contains(@text, "Reset via sms")]/..`,
-        `//android.widget.TextView[contains(@text, "Reset via SMS") or contains(@text, "Reset via sms")]`,
-        `//*[(contains(@text, "Reset via SMS") or contains(@text, "Reset via sms")) and @clickable="true"]`,
-        `//android.widget.Button[contains(@text, "Reset via SMS") or contains(@text, "Reset via sms")]`
-      ];
-  private readonly newPasswordInputCandidates = this.platform === 'ios'
-    ? [
-        '//XCUIElementTypeSecureTextField[contains(@name, "new_password") or contains(@name, "password")]',
-        '//XCUIElementTypeSecureTextField[@name="password"]',
-        '//XCUIElementTypeSecureTextField[1]',
-        '//XCUIElementTypeTextField[contains(@name, "new_password") or contains(@name, "password")]',
-        '//XCUIElementTypeTextField[1]',
-        '//XCUIElementTypeSecureTextField',
-        'XCUIElementTypeSecureTextField'
-      ]
-    : [
-        this.byInputLabel('New password'),
-        this.byInputLabel('Password'),
-        `//android.widget.EditText[contains(translate(@hint, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'new') or contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'new')]`,
-        `(//android.widget.EditText)[1]`
-      ];
-  private readonly confirmPasswordInputCandidates = this.platform === 'ios'
-    ? [
-        '//XCUIElementTypeSecureTextField[contains(@name, "confirm_password") or contains(@name, "confirm")]',
-        '//XCUIElementTypeSecureTextField[2]',
-        '//XCUIElementTypeTextField[contains(@name, "confirm_password") or contains(@name, "confirm")]'
-      ]
-    : [
-        this.byInputLabel('Confirm password'),
-        `//android.widget.EditText[contains(translate(@hint, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'confirm') or contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'confirm')]`,
-        `(//android.widget.EditText)[2]`
-      ];
-  private readonly saveNewPasswordButtonCandidates = this.platform === 'ios'
-    ? [
-        '~Update password',
-        '~Update',
-        '~Save',
-        '~Set password',
-        '~Reset password',
-        '~Continue',
-        '//XCUIElementTypeButton[contains(@name, "Update") or contains(@name, "Save") or contains(@name, "Set") or contains(@name, "Reset") or contains(@name, "Continue") or @label="Update password" or @label="Save" or @label="Continue"]'
-      ]
-    : [
-        this.byText('Update password'),
-        `//android.widget.TextView[@text="Update password"]/..`,
-        `//android.widget.TextView[@text="Update password"]`,
-        this.byText('Update'),
-        this.byText('Save'),
-        this.byText('Set password'),
-        this.byText('Reset password'),
-        this.byText('Continue'),
-        `//android.widget.TextView[contains(@text, "Update password") or contains(@text, "Update") or contains(@text, "Save") or contains(@text, "Continue") or contains(@text, "Reset")]/..`,
-        `//android.widget.TextView[contains(@text, "Update password") or contains(@text, "Update") or contains(@text, "Save") or contains(@text, "Continue") or contains(@text, "Reset")]`,
-        `//*[(contains(@text, "Update password") or contains(@text, "Update") or contains(@text, "Save") or contains(@text, "Set password") or contains(@text, "Reset password") or contains(@text, "Continue") or contains(@text, "Submit")) and @clickable="true"]`,
-        `//android.widget.Button[contains(@text, "Update") or contains(@text, "Save") or contains(@text, "Continue") or contains(@text, "Reset")]`
-      ];
-
   private readonly backButtonCandidates = this.platform === 'ios'
     ? [
         '~navigation_top.button.back',
@@ -359,52 +129,124 @@ export class AuthPage extends BasePage {
       ];
 
   /**
+   * Resolves the first visible candidate from a selector list and returns a
+   * stable element reference. This keeps page-object methods short and moves
+   * selector fallback logic into the registry.
+   */
+  private async findAny(candidates: string[]): Promise<any> {
+    for (const candidate of candidates) {
+      const element = $(candidate);
+      try {
+        if (await element.isDisplayed()) {
+          return element;
+        }
+      } catch {
+        // candidate not ready; try the next one
+      }
+    }
+    throw new Error(`None of the candidate selectors were displayed: ${candidates.slice(0, 3).join(', ')}...`);
+  }
+
+  private async typeAnySelector(candidates: string[], value: string): Promise<void> {
+    const element = await this.findAny(candidates);
+    return this.type(element, value);
+  }
+
+  private async clearAnySelector(candidates: string[]): Promise<void> {
+    const element = await this.findAny(candidates);
+    await element.clearValue().catch(() => {});
+  }
+
+  private async tapAnySelector(candidates: string[]): Promise<void> {
+    const element = await this.findAny(candidates);
+    return this.tap(element);
+  }
+
+  private async isDisplayedSelector(candidates: string[]): Promise<boolean> {
+    for (const candidate of candidates) {
+      try {
+        if (await $(candidate).isDisplayed()) {
+          return true;
+        }
+      } catch {
+        // ignore
+      }
+    }
+    return false;
+  }
+
+  /**
    * Cold app starts (especially right after a data clear or fresh install)
    * can sit on the splash screen far longer than a warm relaunch, so this
    * waits generously for either auth tab instead of assuming a fixed delay.
    */
   async waitForAuthScreenReady(timeoutMs = 60000): Promise<void> {
-    const deadline = Date.now() + timeoutMs;
-    while (Date.now() < deadline) {
-      if (await this.isDisplayed(this.loginTab, this.createAccountTab)) {
-        return;
-      }
-      if (await this.isDisplayed(...this.backButtonCandidates)) {
-        await this.tapAny(this.backButtonCandidates).catch(() => {});
-        await browser.pause(1000);
-      }
-      await browser.pause(500);
-    }
+    const loginTabSelector = this.selectors.loginTab;
+    const createAccountTabSelector = this.selectors.createAccountTab;
 
-    await this.assertPageVerbiage('auth screen (Log in / Create account)', [
-      this.loginTab,
-      this.createAccountTab
-    ], 5000);
+    await mustPassStep({
+      name: 'Wait for auth screen',
+      action: async () => {
+        const deadline = Date.now() + timeoutMs;
+        while (Date.now() < deadline) {
+          try {
+            if (await $(loginTabSelector).isDisplayed() && await $(createAccountTabSelector).isDisplayed()) {
+              return;
+            }
+          } catch {
+            // not ready yet
+          }
+          if (await this.isDisplayed(...this.backButtonCandidates)) {
+            await this.tapAny(this.backButtonCandidates).catch(() => {});
+            await browser.pause(1000);
+          }
+          await browser.pause(500);
+        }
+        throw new Error('Auth screen tabs were not visible before timeout');
+      },
+      expectedState: async () => {
+        return (await $(loginTabSelector).isDisplayed().catch(() => false))
+          && (await $(createAccountTabSelector).isDisplayed().catch(() => false));
+      },
+      timeoutMs,
+    });
   }
 
   async openLogin(): Promise<void> {
-    await this.tap(this.loginTab);
+    await mustPassStep({
+      name: 'Open login tab',
+      action: async () => this.tap(this.selectors.loginTab),
+      expectedState: async () => $(this.selectors.loginTab).isSelected?.().catch(() => true) ?? true,
+    });
   }
 
   async openCreateAccount(): Promise<void> {
-    await this.tap(this.createAccountTab);
+    await mustPassStep({
+      name: 'Open create account tab',
+      action: async () => this.tap(this.selectors.createAccountTab),
+      expectedState: async () => $(this.selectors.createAccountTab).isSelected?.().catch(() => true) ?? true,
+    });
   }
 
   async openForgotPassword(): Promise<void> {
-    await this.tapAny(this.forgotPasswordLinkCandidates);
+    await mustPassStep({
+      name: 'Open forgot password',
+      action: async () => this.tapAnySelector(this.selectors.forgotPasswordLink),
+      expectedState: async () => this.isDisplayedSelector(this.selectors.resetEmailInput),
+    });
   }
 
   async submitForgotPasswordEmail(email: string): Promise<void> {
     await this.assertPageVerbiage('reset password screen', [
       this.byText('Reset your password'),
-      ...this.resetEmailInputCandidates
+      ...this.selectors.resetEmailInput
     ], 15000);
 
-    await this.typeAny(this.resetEmailInputCandidates, email);
+    await this.typeAny(this.selectors.resetEmailInput, email);
     if (this.platform === 'android') {
       await this.hideKeyboard();
     }
-    await this.tapAny(this.resetSubmitButtonCandidates);
+    await this.tapAny(this.selectors.resetSubmitButton);
 
     // Race the "email not recognized" error against actually reaching the code
     // screen — the generic EditText fallback in emailCodeInputCandidates would
@@ -417,7 +259,7 @@ export class AuthPage extends BasePage {
       );
     }
     if (outcome === 'timeout') {
-      await this.dumpScreenIfCandidatesMissing([this.emailVerificationPrompt], 'reset-email-verification-code-input');
+      await this.dumpScreenIfCandidatesMissing([this.selectors.emailVerificationPrompt], 'reset-email-verification-code-input');
       throw new Error('Expected to reach the reset email verification code screen but it never appeared.');
     }
   }
@@ -425,14 +267,14 @@ export class AuthPage extends BasePage {
   async submitForgotPasswordSms(email: string): Promise<void> {
     await this.assertPageVerbiage('reset password screen', [
       this.byText('Reset your password'),
-      ...this.resetEmailInputCandidates
+      ...this.selectors.resetEmailInput
     ], 15000);
 
-    await this.typeAny(this.resetEmailInputCandidates, email);
+    await this.typeAny(this.selectors.resetEmailInput, email);
     if (this.platform === 'android') {
       await this.hideKeyboard();
     }
-    await this.tapAny(this.resetViaSmsButtonCandidates);
+    await this.tapAny(this.selectors.resetViaSmsButton);
 
     const outcome = await this.raceEmailNotRecognizedVsCodeScreen(20000, 'sms');
     if (outcome === 'not-recognized') {
@@ -442,7 +284,7 @@ export class AuthPage extends BasePage {
       );
     }
     if (outcome === 'timeout') {
-      await this.dumpScreenIfCandidatesMissing([this.smsVerificationPrompt], 'reset-sms-verification-code-input');
+      await this.dumpScreenIfCandidatesMissing([this.selectors.smsVerificationPrompt], 'reset-sms-verification-code-input');
       throw new Error('Expected to reach the reset SMS verification code screen but it never appeared.');
     }
   }
@@ -453,8 +295,8 @@ export class AuthPage extends BasePage {
     channel: 'email' | 'sms' = 'email'
   ): Promise<'not-recognized' | 'code-screen' | 'timeout'> {
     const codeScreenSelectors = channel === 'sms'
-      ? [this.smsVerificationPrompt, this.smsCodeSentPrompt, this.resetSmsCodeTitlePrompt]
-      : [this.emailVerificationPrompt, this.emailCodeSentPrompt, this.resetEmailCodeTitlePrompt];
+      ? [this.selectors.smsVerificationPrompt, this.selectors.smsCodeSentPrompt, this.selectors.resetSmsCodeTitlePrompt]
+      : [this.selectors.emailVerificationPrompt, this.selectors.emailCodeSentPrompt, this.selectors.resetEmailCodeTitlePrompt];
 
     const deadline = Date.now() + timeoutMs;
     while (Date.now() < deadline) {
@@ -475,7 +317,7 @@ export class AuthPage extends BasePage {
     const emailTitleHint = email.trim().toLowerCase();
 
     console.log(`[Reset Email Verification] Waiting for verification code sent to ${email} (searching title for "reset password" and ${emailTitleHint})...`);
-    await this.findFirstDisplayedSelector(this.emailCodeInputCandidates, 20000);
+    await this.findFirstDisplayedSelector(this.selectors.emailCodeInput, 20000);
 
     // Keep retrying until a code is accepted. The test timeout (10 min) is the
     // ultimate guardrail, but we cap the loop slightly below it so we can fail
@@ -494,9 +336,9 @@ export class AuthPage extends BasePage {
       );
 
       console.log(`[Reset Email Verification] Entering code ${code}...`);
-      await this.clearAny(this.emailCodeInputCandidates);
-      await this.typeAny(this.emailCodeInputCandidates, code);
-      await this.tapAny(this.emailVerifyButtonCandidates);
+      await this.clearAny(this.selectors.emailCodeInput);
+      await this.typeAny(this.selectors.emailCodeInput, code);
+      await this.tapAny(this.selectors.emailVerifyButton);
 
       const outcome = await this.waitForCodeOutcome(15000, 'email');
       if (outcome === 'accepted') {
@@ -517,7 +359,7 @@ export class AuthPage extends BasePage {
       // Delete the rejected code from the input field as requested, then loop
       // to fetch a fresh code from a new verification email whose title
       // matches the account email address.
-      await this.clearAny(this.emailCodeInputCandidates);
+      await this.clearAny(this.selectors.emailCodeInput);
       await browser.pause(5000);
     }
 
@@ -572,12 +414,12 @@ export class AuthPage extends BasePage {
           }
         } else {
           // Android: Use existing logic
-          await this.clearAny(this.newPasswordInputCandidates);
-          await this.typeAny(this.newPasswordInputCandidates, password);
+          await this.clearAny(this.selectors.newPasswordInput);
+          await this.typeAny(this.selectors.newPasswordInput, password);
           
-          if (await this.isDisplayed(...this.confirmPasswordInputCandidates)) {
-            await this.clearAny(this.confirmPasswordInputCandidates);
-            await this.typeAny(this.confirmPasswordInputCandidates, password);
+          if (await this.isDisplayed(...this.selectors.confirmPasswordInput)) {
+            await this.clearAny(this.selectors.confirmPasswordInput);
+            await this.typeAny(this.selectors.confirmPasswordInput, password);
           }
         }
       } catch (e) {
@@ -595,7 +437,7 @@ export class AuthPage extends BasePage {
       await browser.pause(500);
       console.log(`[Reset Password] Tapping Update button...`);
       try {
-        await this.tapAny(this.saveNewPasswordButtonCandidates);
+        await this.tapAny(this.selectors.saveNewPasswordButton);
       } catch (e) {
         console.log(`[Reset Password] Button tap failed: ${e}`);
         continue;
@@ -651,8 +493,8 @@ export class AuthPage extends BasePage {
   }
 
   async login(email: string, password: string): Promise<void> {
-    await this.typeAny(this.emailCandidates, email);
-    await this.typeAny(this.passwordCandidates, password);
+    await this.typeAny(this.selectors.emailInput, email);
+    await this.typeAny(this.selectors.passwordInput, password);
     // The soft keyboard's "Go!" IME action can cover/intercept the submit
     // button's on-screen area on Android, causing tapAny to hit the wrong
     // element (e.g. the "Log in" tab instead of the submit button).
@@ -661,7 +503,7 @@ export class AuthPage extends BasePage {
       // The submit button lives in a lazily-rendered ScrollView and can be
       // absent from the tree until scrolled into view; without this, the
       // short poll below falls back to the ambiguous "Log in" tab instead.
-      const specificLoginButtonCandidates = this.loginButtonCandidates.slice(0, 2);
+      const specificLoginButtonCandidates = this.selectors.loginButton.slice(0, 2);
       const deadline = Date.now() + 10000;
       while (Date.now() < deadline && !(await this.isDisplayed(...specificLoginButtonCandidates))) {
         await this.scrollDown();
@@ -673,8 +515,59 @@ export class AuthPage extends BasePage {
         console.log('[Diagnostics] Specific login button candidates not found; dumped android-login-button-missing.{png,xml}');
       }
     }
-    await this.tapAny(this.loginButtonCandidates);
+    await this.tapAny(this.selectors.loginButton);
     await this.waitForLoginSubmission();
+  }
+
+  /**
+   * Logs in using recorded created-user accounts, newest first, retrying
+   * across the pool when an account is rejected with an invalid-credential
+   * error. Recorded accounts older than a few days are documented as likely
+   * purged/expired by the backend, so a single-account attempt can flake for
+   * reasons unrelated to the test/framework itself. Returns the account that
+   * ultimately succeeded so the caller can record follow-up actions (e.g.
+   * verification email lookups) against the same address.
+   */
+  async loginWithAccountRetry(
+    environment: string,
+    fallback: { email: string; password: string },
+    maxAttempts = 5
+  ): Promise<{ email: string; password: string }> {
+    const candidates = getCreatedAccountCandidates(environment, maxAttempts);
+    const pool = candidates.length ? candidates : [fallback];
+
+    let lastError: Error | undefined;
+    for (const [index, account] of pool.entries()) {
+      process.env.MOBILE_LOGIN_EMAIL = account.email;
+      process.env.MOBILE_TEST_EMAIL = account.email;
+
+      try {
+        await this.openLogin();
+        await this.login(account.email, account.password);
+        await this.completeLoginVerification(account.email);
+        if (index > 0) {
+          console.log(`[Login Retry] Succeeded with candidate #${index + 1}/${pool.length}: ${account.email}`);
+        }
+        return account;
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        const isCredentialError = /incorrect|invalid|do not recognize|don't recognize/i.test(lastError.message);
+        if (!isCredentialError) {
+          throw lastError;
+        }
+
+        console.warn(
+          `[Login Retry] Account ${account.email} rejected (${lastError.message}). ` +
+          `Trying next candidate (${index + 2}/${pool.length})...`
+        );
+
+        // Navigate back to the login tab in case the rejected attempt left
+        // the app on an error state, so the next candidate starts clean.
+        await this.openLogin().catch(() => {});
+      }
+    }
+
+    throw lastError || new Error(`No valid ${environment} login account was available after ${pool.length} attempt(s).`);
   }
 
   /** Real navigation path: Home > profile icon (top right) > menu list > Settings > Log out (top-right of Settings). */
@@ -683,11 +576,11 @@ export class AuthPage extends BasePage {
     await this.dismissLoanOfficerModalIfPresent();
     await this.dismissRatingSurveyIfPresent();
 
-    await this.tapAny(this.profileIconCandidates);
+    await this.tapAny(this.selectors.profileIcon);
     await browser.pause(1000);
-    await this.tapAny(this.settingsMenuItemCandidates);
+    await this.tapAny(this.selectors.settingsMenuItem);
     await browser.pause(1000);
-    await this.tapAny(this.logoutLinkCandidates);
+    await this.tapAny(this.selectors.logoutLink);
     await browser.pause(2000);
     console.log('[Logout] Logged out successfully.');
   }
@@ -715,7 +608,7 @@ export class AuthPage extends BasePage {
     }
 
     const code = await this.retrieveCodeWithResend(promptKind);
-    const candidates = promptKind === 'phone' ? this.phoneCodeInputCandidates : this.emailCodeInputCandidates;
+    const candidates = promptKind === 'phone' ? this.selectors.phoneCodeInput : this.selectors.emailCodeInput;
     await this.typeAny(candidates, code);
     await this.tapVerifyOrContinue();
     return true;
@@ -727,10 +620,10 @@ export class AuthPage extends BasePage {
 
     // STEP 1: Email verification - code typed in - verify button
     await this.assertPageVerbiage('email verification', [
-      this.emailVerificationPrompt,
-      this.emailCodeSentPrompt,
-      this.genericEnterCodePrompt,
-      ...this.emailCodeInputCandidates
+      this.selectors.emailVerificationPrompt,
+      this.selectors.emailCodeSentPrompt,
+      this.selectors.genericEnterCodePrompt,
+      ...this.selectors.emailCodeInput
     ]);
     await this.executeEmailVerificationStep(excludeCodesByChannel.email, options);
 
@@ -739,7 +632,7 @@ export class AuthPage extends BasePage {
     // rendered instead of assuming phone verification always runs.
     const postEmailStep = await this.detectPostEmailStep();
     if (postEmailStep === 'phone-entry') {
-      await this.assertPageVerbiage('phone number entry', [this.phonePrompt, ...this.phoneInputCandidates], 5000);
+      await this.assertPageVerbiage('phone number entry', [this.phonePrompt, ...this.selectors.phoneInput], 5000);
       const gvProfile = resolveGoogleVoiceProfile(options?.googleVoiceProfile);
       const phoneNumber = options?.phoneNumber || gvProfile.phoneNumber || this.verificationConfig.verification.phoneNumber || '6163200701';
 
@@ -755,10 +648,10 @@ export class AuthPage extends BasePage {
       await this.executePhoneNumberStep(phoneNumber);
 
       await this.assertPageVerbiage('phone code verification', [
-        this.smsVerificationPrompt,
-        this.smsCodeSentPrompt,
-        this.smsEnterCodePrompt,
-        ...this.phoneCodeInputCandidates
+        this.selectors.smsVerificationPrompt,
+        this.selectors.smsCodeSentPrompt,
+        this.selectors.smsEnterCodePrompt,
+        ...this.selectors.phoneCodeInput
       ], 5000);
       await this.executePhoneCodeVerificationStep(excludeCodesByChannel.phone, options, gvBaselinePreview);
     } else if (postEmailStep === 'post-signup') {
@@ -821,7 +714,12 @@ export class AuthPage extends BasePage {
   private async detectPostEmailStep(timeoutMs = 15000): Promise<'phone-entry' | 'post-signup' | 'unknown'> {
     const deadline = Date.now() + timeoutMs;
     while (Date.now() < deadline) {
-      if (await this.isDisplayed(this.phonePrompt, ...this.phoneInputCandidates)) {
+      // Only match the unambiguous "Phone number" prompt here, not the
+      // phoneInput candidate list — its last-resort fallback selector
+      // (`//android.widget.EditText`) also matches the still-visible email
+      // code field on a *rejected* code, which previously caused a false
+      // "phone-entry" detection while the app hadn't actually advanced.
+      if (await this.isDisplayed(this.phonePrompt)) {
         return 'phone-entry';
       }
       if (
@@ -923,11 +821,11 @@ export class AuthPage extends BasePage {
 
   private async completeFaceIdOnboarding(): Promise<void> {
     for (let step = 0; step < 5; step += 1) {
-      if (!(await this.isDisplayed(...this.faceIdContinueButtonCandidates))) {
+      if (!(await this.isDisplayed(...this.selectors.faceIdContinueButton))) {
         return;
       }
 
-      await this.tapAny(this.faceIdContinueButtonCandidates);
+      await this.tapAny(this.selectors.faceIdContinueButton);
       await browser.pause(1000);
     }
   }
@@ -936,7 +834,7 @@ export class AuthPage extends BasePage {
     excludeCodes: string[],
     options?: { googleVoiceProfile?: string }
   ): Promise<void> {
-    await this.findFirstDisplayedSelector(this.emailCodeInputCandidates, 20000);
+    await this.findFirstDisplayedSelector(this.selectors.emailCodeInput, 20000);
     const emailTitleHint = await this.resolveVerificationTitleEmailHint();
     console.log(`[Email Verification] Matching inbox emails with title hint: "${emailTitleHint || ''}"`);
 
@@ -948,9 +846,9 @@ export class AuthPage extends BasePage {
         excludeCodes,
         { emailTitleHint }
       );
-      await this.clearAny(this.emailCodeInputCandidates);
-      await this.typeAny(this.emailCodeInputCandidates, code);
-      await this.tapAny(this.emailVerifyButtonCandidates);
+      await this.clearAny(this.selectors.emailCodeInput);
+      await this.typeAny(this.selectors.emailCodeInput, code);
+      await this.tapAny(this.selectors.emailVerifyButton);
 
       const outcome = await this.waitForCodeOutcome(15000, 'email');
       if (outcome === 'accepted') {
@@ -962,6 +860,16 @@ export class AuthPage extends BasePage {
       excludeCodes.push(code);
 
       if (inlineMessage.includes('not valid') || inlineMessage.includes('invalid')) {
+        if (attempt >= maxRetries) {
+          // Previously this branch fell through the loop silently (no throw),
+          // leaving the caller to fail later with a generic "neither phone
+          // entry nor post-signup screen was detected" error that hid the
+          // real cause. Throw here with the specific, diagnosable reason.
+          throw new Error(
+            `Email verification code rejected repeatedly with an "invalid/not valid" inline message ` +
+            `(tried: ${excludeCodes.join(', ')}).`
+          );
+        }
         console.warn(
           `[Email Verification] Code ${code} marked invalid by inline validation. ` +
           `Re-checking inbox with title hint ${emailTitleHint || '(none)'} before resend.`
@@ -979,12 +887,12 @@ export class AuthPage extends BasePage {
   }
 
   private async executePhoneNumberStep(phoneNumber: string): Promise<void> {
-    await this.findFirstDisplayedSelector(this.phoneInputCandidates, 20000);
+    await this.findFirstDisplayedSelector(this.selectors.phoneInput, 20000);
 
     const cleanPhone = phoneNumber.replace(/\D/g, '') || '6163200701';
-    await this.clearAny(this.phoneInputCandidates);
-    await this.typeAny(this.phoneInputCandidates, cleanPhone);
-    await this.tapAny(this.continueButtonCandidates);
+    await this.clearAny(this.selectors.phoneInput);
+    await this.typeAny(this.selectors.phoneInput, cleanPhone);
+    await this.tapAny(this.selectors.continueButton);
 
     await browser.pause(3000);
   }
@@ -994,8 +902,8 @@ export class AuthPage extends BasePage {
     options?: { googleVoiceProfile?: string },
     gvBaselinePreview?: string
   ): Promise<void> {
-    await this.findFirstDisplayedSelector(this.phoneCodeInputCandidates, 20000);
-    await this.dumpScreenIfCandidatesMissing(this.phoneCodeInputCandidates, 'phone-code');
+    await this.findFirstDisplayedSelector(this.selectors.phoneCodeInput, 20000);
+    await this.dumpScreenIfCandidatesMissing(this.selectors.phoneCodeInput, 'phone-code');
 
     // Google Voice freshness fallback can still hand back a code the app
     // rejects, so allow a few resend cycles rather than failing immediately.
@@ -1028,10 +936,10 @@ export class AuthPage extends BasePage {
 
       // Google Voice retrieval can take minutes, so re-confirm the field is on screen
       // instead of letting typeAny fall back to a stale selector.
-      await this.findFirstDisplayedSelector(this.phoneCodeInputCandidates, 30000);
-      await this.clearAny(this.phoneCodeInputCandidates);
-      await this.typeAny(this.phoneCodeInputCandidates, code);
-      await this.tapAny(this.phoneCodeVerifyButtonCandidates);
+      await this.findFirstDisplayedSelector(this.selectors.phoneCodeInput, 30000);
+      await this.clearAny(this.selectors.phoneCodeInput);
+      await this.typeAny(this.selectors.phoneCodeInput, code);
+      await this.tapAny(this.selectors.phoneCodeVerifyButton);
       const outcome = await this.waitForCodeOutcome(20000, 'phone');
       if (outcome === 'accepted') {
         await browser.pause(2000);
@@ -1094,20 +1002,25 @@ export class AuthPage extends BasePage {
    */
   private async waitForCodeOutcome(timeoutMs: number, channel: 'email' | 'phone' = 'email'): Promise<'accepted' | 'rejected'> {
     const deadline = Date.now() + timeoutMs;
-    const candidates = channel === 'phone' ? this.phoneCodeInputCandidates : this.emailCodeInputCandidates;
+    const candidates = channel === 'phone' ? this.selectors.phoneCodeInput : this.selectors.emailCodeInput;
 
     while (Date.now() < deadline) {
       // If email verification has already advanced to the phone step, treat
       // this as accepted immediately instead of continuing to poll email code
       // selectors and triggering false retries.
+      //
+      // Deliberately excludes the phoneInput/phoneCodeInput candidate lists
+      // here — both end with a last-resort generic `//android.widget.EditText`
+      // fallback that also matches the still-visible (rejected) email code
+      // field, which previously caused this check to report "accepted"
+      // immediately after a genuinely rejected code, before any retry/rejection
+      // banner could ever be observed.
       if (
         channel === 'email' &&
         await this.isDisplayed(
-          this.smsVerificationPrompt,
-          this.smsCodeSentPrompt,
-          this.phonePrompt,
-          ...this.phoneInputCandidates,
-          ...this.phoneCodeInputCandidates
+          this.selectors.smsVerificationPrompt,
+          this.selectors.smsCodeSentPrompt,
+          this.phonePrompt
         )
       ) {
         return 'accepted';
@@ -1129,7 +1042,7 @@ export class AuthPage extends BasePage {
 
   /** Enters an already-retrieved verification code, replacing any leftover value, and submits it. */
   async submitVerificationCode(code: string, channel: 'email' | 'phone' = 'email'): Promise<void> {
-    const candidates = channel === 'phone' ? this.phoneCodeInputCandidates : this.emailCodeInputCandidates;
+    const candidates = channel === 'phone' ? this.selectors.phoneCodeInput : this.selectors.emailCodeInput;
     await this.clearAny(candidates);
     await this.typeAny(candidates, code);
     await this.tapVerifyOrContinue();
@@ -1137,16 +1050,16 @@ export class AuthPage extends BasePage {
 
   /** Enters the phone number used for SMS verification and continues. */
   async submitPhoneNumber(phoneNumber: string): Promise<void> {
-    await this.typeAny(this.phoneInputCandidates, phoneNumber);
-    await this.tapAny(this.continueButtonCandidates);
+    await this.typeAny(this.selectors.phoneInput, phoneNumber);
+    await this.tapAny(this.selectors.continueButton);
     await this.waitForCodePrompt(10000).catch(() => {});
   }
 
   private async tapVerifyOrContinue(): Promise<void> {
     try {
-      await this.tapAny(this.emailVerifyButtonCandidates);
+      await this.tapAny(this.selectors.emailVerifyButton);
     } catch {
-      await this.tapAny(this.continueButtonCandidates);
+      await this.tapAny(this.selectors.continueButton);
     }
   }
 
@@ -1160,7 +1073,7 @@ export class AuthPage extends BasePage {
       return 'phone-code';
     }
 
-    if (await this.isDisplayed(this.phonePrompt, ...this.phoneInputCandidates)) {
+    if (await this.isDisplayed(this.phonePrompt)) {
       return 'phone-input';
     }
 
@@ -1278,7 +1191,7 @@ export class AuthPage extends BasePage {
     const deadline = Date.now() + timeoutMs;
 
     while (Date.now() < deadline) {
-      if (await this.isDisplayed(this.phonePrompt, ...this.phoneInputCandidates)) {
+      if (await this.isDisplayed(this.phonePrompt)) {
         return true;
       }
 
@@ -1298,11 +1211,11 @@ export class AuthPage extends BasePage {
     while (Date.now() < deadline) {
       // Check the SMS screen first: both screens share the generic "6-digit
       // code" label, so the email branch would otherwise swallow it.
-      if (await this.isDisplayed(this.smsVerificationPrompt, this.smsCodeSentPrompt, this.smsEnterCodePrompt)) {
+      if (await this.isDisplayed(this.selectors.smsVerificationPrompt, this.selectors.smsCodeSentPrompt, this.selectors.smsEnterCodePrompt)) {
         return 'phone';
       }
 
-      if (await this.isDisplayed(this.emailVerificationPrompt, this.emailCodeSentPrompt, this.genericEnterCodePrompt)) {
+      if (await this.isDisplayed(this.selectors.emailVerificationPrompt, this.selectors.emailCodeSentPrompt, this.selectors.genericEnterCodePrompt)) {
         return 'email';
       }
 
@@ -1413,13 +1326,13 @@ export class AuthPage extends BasePage {
       // Check for login success (progressed to next screen)
       if (
         await this.isDisplayed(
-          ...this.emailVerifyButtonCandidates,
-          this.emailVerificationPrompt,
-          this.emailCodeSentPrompt,
-          this.smsVerificationPrompt,
-          this.smsCodeSentPrompt,
-          this.smsEnterCodePrompt,
-          this.genericEnterCodePrompt
+          ...this.selectors.emailVerifyButton,
+          this.selectors.emailVerificationPrompt,
+          this.selectors.emailCodeSentPrompt,
+          this.selectors.smsVerificationPrompt,
+          this.selectors.smsCodeSentPrompt,
+          this.selectors.smsEnterCodePrompt,
+          this.selectors.genericEnterCodePrompt
         )
       ) {
         return;

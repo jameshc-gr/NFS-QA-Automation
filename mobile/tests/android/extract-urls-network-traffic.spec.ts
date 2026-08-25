@@ -54,7 +54,7 @@ describe('Extract Video URLs via Network Traffic', function () {
       const size = await browser.getWindowSize();
       for (let i = 0; i < 3; i++) {
         try {
-          await browser.executeScript('mobile: swipeGesture', {
+          await browser.execute('mobile: swipeGesture', {
             left: Math.floor(size.width * 0.5),
             top: Math.floor(size.height * 0.7),
             width: Math.floor(size.width * 0.5),

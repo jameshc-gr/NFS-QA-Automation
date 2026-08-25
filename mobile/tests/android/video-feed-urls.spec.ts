@@ -42,7 +42,7 @@ describe('Android Video Feed URL Extraction (YouTube/Vimeo/Instagram)', function
         await authPage.login(email, password);
         await authPage.completeLoginVerification(email);
         console.log('✓ Logged in successfully');
-      } catch (loginError) {
+      } catch (loginError: any) {
         console.log(`  Note: Using existing session: ${loginError?.message?.substring(0, 50)}`);
       }
 
@@ -56,7 +56,7 @@ describe('Android Video Feed URL Extraction (YouTube/Vimeo/Instagram)', function
         for (let i = 0; i < scrollAttempts; i++) {
           try {
             // Use mobile: swipeGesture to scroll up (which scrolls the page down)
-            await browser.executeScript('mobile: swipeGesture', {
+            await browser.execute('mobile: swipeGesture', {
               left: Math.floor(size.width * 0.5),
               top: Math.floor(size.height * 0.7),
               width: Math.floor(size.width * 0.5),
@@ -65,12 +65,12 @@ describe('Android Video Feed URL Extraction (YouTube/Vimeo/Instagram)', function
               percent: 0.75
             });
             await browser.pause(500);
-          } catch (e) {
+          } catch (e: any) {
             console.log(`    Note: Swipe attempt ${i+1} - ${e?.message?.substring(0, 50)}`);
           }
         }
         console.log('  ✓ Scrolled down to wellness section');
-      } catch (e) {
+      } catch (e: any) {
         console.log(`  Note: Scroll failed: ${e?.message?.substring(0, 50)}`);
       }
 
@@ -86,12 +86,13 @@ describe('Android Video Feed URL Extraction (YouTube/Vimeo/Instagram)', function
       try {
         // Try to dismiss any popup dialogs first
         const dialogButtons = await $$('//*[contains(@text, "No")] | //*[contains(@text, "Yes")]');
-        if (dialogButtons.length > 0) {
+        const count = Array.isArray(dialogButtons) ? dialogButtons.length : await (dialogButtons as any).length;
+        if (count > 0) {
           console.log('  Dismissing popup dialog...');
           try {
             await dialogButtons[0].click(); // Click "No"
             await browser.pause(1000);
-          } catch (e) {
+          } catch (e: any) {
             console.log(`  Note: Could not click dialog button - ${e?.message?.substring(0, 50)}`);
           }
         }
@@ -122,7 +123,7 @@ describe('Android Video Feed URL Extraction (YouTube/Vimeo/Instagram)', function
         await browser.saveScreenshot(
           path.resolve(process.cwd(), 'mobile/.builds/android-video-feed-youtube-clicked.png')
         );
-      } catch (clickError) {
+      } catch (clickError: any) {
         console.log(`  Note: YouTube click failed - ${clickError?.message?.substring(0, 50)}`);
         console.log('  Will attempt URL extraction from current screen anyway');
       }
@@ -239,29 +240,29 @@ describe('Android Video Feed URL Extraction (YouTube/Vimeo/Instagram)', function
           console.log(`    Shell command attempted`);
           
           // Try to switch to WebView context and execute JavaScript
-          const availableContexts = await browser.getContexts?.() || ['NATIVE_APP'];
-          console.log(`    Available contexts: ${availableContexts.join(', ')}`);
+          const availableContexts: any = (await (browser as any).getContexts?.()) || ['NATIVE_APP'];
+          console.log(`    Available contexts: ${Array.isArray(availableContexts) ? availableContexts.join(', ') : ''}`);
           
           // Sometimes the WebView context is not immediately listed, try switching by index
-          if (availableContexts.length > 1) {
+          if (Array.isArray(availableContexts) && availableContexts.length > 1) {
             try {
-              const webviewCtx = availableContexts.find((c: string) => c.includes('WEBVIEW') || c.includes('webview'));
+              const webviewCtx = availableContexts.find((c: any) => String(c).includes('WEBVIEW') || String(c).includes('webview'));
               if (webviewCtx) {
-                await browser.switchContext?.(webviewCtx);
+                await (browser as any).switchContext?.(webviewCtx);
                 console.log(`    ✓ Switched to ${webviewCtx}`);
               }
-            } catch (switchError) {
+            } catch (switchError: any) {
               console.log(`    Note: Context switch failed - ${switchError?.message?.substring(0, 50)}`);
             }
           }
           
           // Try window handle switching for hybrid apps
           try {
-            const handles = await browser.getWindowHandles?.() as string[];
-            if (handles && handles.length > 1) {
+            const handles: any = (await (browser as any).getWindowHandles?.()) as string[];
+            if (Array.isArray(handles) && handles.length > 1) {
               console.log(`    Found ${handles.length} window handles, trying to switch...`);
-              await browser.switchToWindow?.(handles[1]);
-              const extractedUrls = await browser.execute(() => {
+              await (browser as any).switchToWindow?.(handles[1]);
+              const extractedUrls: any = await browser.execute(() => {
                 const urls: string[] = [];
                 document.querySelectorAll('iframe, a, video, [data-url], [href*="youtube"], [href*="vimeo"], [href*="instagram"]').forEach((el: any) => {
                   if (el.src) urls.push(el.src);
@@ -278,7 +279,7 @@ describe('Android Video Feed URL Extraction (YouTube/Vimeo/Instagram)', function
           } catch (handleError) {
             console.log(`    Note: Window handle switching unavailable`);
           }
-        } catch (pendoError) {
+        } catch (pendoError: any) {
           console.log(`    Pendo extraction not available: ${pendoError?.message?.substring(0, 50)}`);
         }
 
@@ -325,7 +326,7 @@ describe('Android Video Feed URL Extraction (YouTube/Vimeo/Instagram)', function
               }
             ]);
             await browser.pause(2000);
-          } catch (swipeError) {
+          } catch (swipeError: any) {
             console.log(`    ⚠️  Swipe failed: ${swipeError?.message?.substring(0, 50)}`);
             break;
           }

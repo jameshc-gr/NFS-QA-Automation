@@ -85,8 +85,8 @@ describe('iOS - TikTok Feed URL Collection (MSAM-7880)', () => {
           path.resolve(process.cwd(), 'mobile/.builds/02-scroll-0.png')
         );
         console.log('  ✓ Scroll 0: Screenshot and page source saved');
-      } catch (e) {
-        console.log(`  Error at scroll 0: ${e.message}`);
+      } catch (e: any) {
+        console.log(`  Error at scroll 0: ${e?.message}`);
       }
       
       // Scroll down once - the wellness banner appears after this scroll
@@ -120,8 +120,8 @@ describe('iOS - TikTok Feed URL Collection (MSAM-7880)', () => {
           path.resolve(process.cwd(), 'mobile/.builds/02-scroll-1.png')
         );
         console.log('  ✓ Scroll 1: Screenshot and page source saved - Wellness banner visible at this position');
-      } catch (e) {
-        console.log(`  Error during scroll: ${e.message}`);
+      } catch (e: any) {
+        console.log(`  Error during scroll: ${e?.message}`);
       }
       
       // Step 3: Click the TikTok icon in the wellness banner
@@ -133,11 +133,12 @@ describe('iOS - TikTok Feed URL Collection (MSAM-7880)', () => {
         
         // Find the wellness banner button (large composite button at y=225-350, width=370, height=125)
         const bannerButtons = await $$('//XCUIElementTypeButton[@width="370" and @height="125"]');
-        console.log(`  Found ${bannerButtons.length} wellness banner button(s)`);
+        const count = Array.isArray(bannerButtons) ? bannerButtons.length : await (bannerButtons as any).length;
+        console.log(`  Found ${count} wellness banner button(s)`);
         
         let tapped = false;
         
-        if (bannerButtons.length > 0) {
+        if (count > 0) {
           const bannerBtn = bannerButtons[0];
           const bannerLocation = await bannerBtn.getLocation();
           const bannerSize = await bannerBtn.getSize();
@@ -213,8 +214,8 @@ describe('iOS - TikTok Feed URL Collection (MSAM-7880)', () => {
         );
         console.log('  ✓ Screenshot saved after tap');
         
-      } catch (tapError) {
-        console.log(`  Error during tap attempt: ${tapError.message}`);
+      } catch (tapError: any) {
+        console.log(`  Error during tap attempt: ${tapError?.message}`);
       }
 
       // Step 4: Collect TikTok URLs from the app's embedded video configuration
