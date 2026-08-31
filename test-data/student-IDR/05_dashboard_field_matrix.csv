@@ -1,0 +1,67 @@
+Page/Section,Field_Name,Field_Type,Input_Placeholder,Required,Max_Length,Min_Value,Max_Value,Validation_Rule,Default_Value,Read_Only,Disabled_Condition,Related_Field,Notes
+Overview,Monthly Payment,Display,N/A,No,N/A,0,N/A,Currency format ($),Calculated,Yes,N/A,Total Outstanding Balance + Income + Plan,Recalculates when loans or income changes; triggers on add/remove loan
+Overview,Forgiveness Date,Display,N/A,No,N/A,N/A,N/A,Date format (MM/DD/YYYY),Calculated,Yes,N/A,Repayment Plan + Remaining Payments,N/A if no active plan; changes when loans/payment plan changes
+Overview,Tax Bomb Estimate,Display,N/A,No,N/A,0,N/A,Currency format ($),Calculated,Yes,N/A,Principal Forgiven + Tax Rate,Shows estimated tax liability on forgiveness; updates when total balance changes
+Overview,Total Outstanding Balance,Display,N/A,No,N/A,0,N/A,Currency format ($),Calculated,Yes,N/A,All Loans Section,Sum of all federal loan balances; updates immediately when loan added/removed
+Overview,Total Principal,Display,N/A,No,N/A,0,N/A,Currency format ($),Calculated,Yes,N/A,All Loans Section,Sum of all principal amounts; used for tax bomb calculation
+Overview,Total Accrued Interest,Display,N/A,No,N/A,0,N/A,Currency format ($),Calculated,Yes,N/A,All Loans Section,Sum of accrued interest across all loans
+Overview,Remaining Payments,Display,N/A,No,N/A,0,N/A,Integer,Calculated,Yes,N/A,Forgiveness Date,Months until forgiveness or N/A; updates when forgiveness timeline changes
+Overview,Savings Applied to Tax Bomb,Display,N/A,No,N/A,0,N/A,Currency format ($),Calculated,Yes,N/A,Total Assets Section,Sum of assets marked as included in tax bomb calculation
+Overview,Tax Liability After Savings,Display,N/A,No,N/A,0,N/A,Currency format ($),Calculated,Yes,N/A,Tax Bomb Estimate - Savings Applied,Net tax liability after subtracting saved assets
+Personal Data,First Name,Text Input,John,Yes,50,N/A,N/A,No leading/trailing spaces; no special chars,Empty,No,N/A,Last Name,Must match legal documents
+Personal Data,Last Name,Text Input,Doe,Yes,50,N/A,N/A,No leading/trailing spaces; no special chars,Empty,No,N/A,First Name,Must match legal documents
+Personal Data,Date of Birth,Date Input,MM/DD/YYYY,Yes,10,N/A,N/A,Valid date; age 18-75; past date only,Empty,No,N/A,Calculated Age,Used for repayment plan eligibility
+Personal Data,Email Address,Email Input,user@example.com,Yes,100,N/A,N/A,Valid email format; unique,Empty,No,N/A,N/A,Must be able to receive notifications
+Personal Data,Phone Number,Tel Input,(555) 123-4567,No,14,N/A,N/A,Valid US phone format optional; if provided 10+ digits,Empty,No,N/A,N/A,Used for account recovery
+Personal Data,Current Gross Annual Income,Number Input,$0,Yes,15,0,9999999,Non-negative integer; required for payment calc,0,No,N/A,Monthly Payment calculation,Income subject to IDR plan; changing triggers Overview recalc
+Personal Data,Spouse Income (if married),Number Input,$0,No,15,0,9999999,Non-negative integer; conditional required if Marital Status = Married,0,No,Marital Status != Married,Current Gross Annual Income,Only relevant for married filing jointly; affects household AGI
+Personal Data,Number of Family Members,Number Input,1,Yes,2,1,20,Integer 1-20; includes applicant,1,No,Marital Status != Single,Current Gross Annual Income,Affects poverty line calculation for household; impacts payment calc
+Personal Data,Marital Status,Select Dropdown,"Single, Married, Divorced, Widowed",Yes,N/A,N/A,N/A,One of: Single; Married; Divorced; Widowed,Single,No,N/A,Spouse Income; Family Members; Asset Owner,Determines filing status and spouse income requirement; shows/hides spouse sections
+Personal Data,Current Employment Status,Select Dropdown,"Employed, Self-Employed, Unemployed, Disabled, Retired, Student",Yes,N/A,N/A,N/A,One of listed values,Employed,No,N/A,N/A,Affects income verification requirements
+Personal Data,Home State,Select Dropdown,US State list,Yes,2,N/A,N/A,Valid US state abbreviation,Empty,No,N/A,N/A,Used for state-specific loan rules
+Personal Data,Current Monthly Federal Loan Payment,Number Input,$0,Yes,15,0,999999,Non-negative integer; matches loan servicer data,0,No,N/A,Total Outstanding Balance,Should match actual servicer statement or calculated monthly payment
+Personal Data,Repayment Plan,Select Dropdown,"IBR for New Borrowers, IBR for Old Borrowers, REPAYE, PAYE",Yes,N/A,N/A,N/A,One of active repayment plans (SAVE paused),IBR for New Borrowers,No,N/A,Monthly Payment + Forgiveness Date,Selection triggers payment and forgiveness timeline recalculation
+Personal Data,Pursuing PSLF,Toggle Checkbox,N/A,No,N/A,N/A,N/A,Boolean (on/off),Off,No,N/A,Forgiveness Date,When enabled; forgiveness at 120 months PSLF; when disabled uses plan default
+Loans,Federal Loans Table (Summary),Display Table,N/A,No,N/A,N/A,N/A,Table with Balance; APR; Principal; Accrued Int columns,0 rows,Yes,No loans added yet,Add Loan button,Displays all added federal loans with running totals
+Loans,Loan Entry - Balance,Currency Input,$10000,Yes (per row),15,0,9999999,Non-negative currency; current outstanding balance,Empty,No,Row with no data,Principal,Balance per federal loan; may be less than principal if paid down
+Loans,Loan Entry - APR,Percentage Input,5.5%,Yes (per row),5,0,20,Non-negative percentage; 0-20% range,Empty,No,Row with no data,Balance,Annual percentage rate for this loan; affects interest calculations
+Loans,Loan Entry - Principal,Currency Input,$12000,Yes (per row),15,0,9999999,Non-negative currency; original principal amount,Empty,No,Row with no data,Balance,Original principal borrowed; may be greater than current balance if paid down
+Loans,Loan Entry - Accrued Interest,Currency Input,$500,Yes (per row),15,0,9999999,Non-negative currency; capitalized interest amount,Empty,No,Row with no data,Balance,Interest already capitalized into principal
+Loans,Loan Type (optional),Select Dropdown,"Stafford, Plus, Perkins, Direct, Other",No,10,N/A,N/A,One of list or Other,Other,No,Row with no data,Balance,Informational; may affect forgiveness rules
+Loans,Servicer Name (optional),Text Input,Nelnet,No,50,N/A,N/A,Free text,Empty,No,Row with no data,Balance,Identification and reference
+Loans,Delete Loan Row,Button,N/A,N/A,N/A,N/A,N/A,N/A,N/A,No,N/A,Loan Balance field,Removes entire loan row; triggers Overview recalc immediately
+Loans,+ Add Another Loan,Button,N/A,N/A,N/A,N/A,N/A,N/A,N/A,No,N/A,N/A,Adds new empty loan row; user fills Balance/APR/Principal/Accrued Int
+Loans,Total Balance (calculated),Display,N/A,No,N/A,0,N/A,Currency format ($),Calculated,Yes,N/A,All Balance rows,Sum of all loan balances shown at table footer
+Loans,Average APR (calculated),Display,N/A,No,N/A,0,20,Percentage format (%),Calculated,Yes,N/A,All APR rows,Weighted average APR across all loans
+Loans,Total Principal (calculated),Display,N/A,No,N/A,0,N/A,Currency format ($),Calculated,Yes,N/A,All Principal rows,Sum of all principal amounts for tax bomb calc
+Loans,Total Accrued Interest (calculated),Display,N/A,No,N/A,0,N/A,Currency format ($),Calculated,Yes,N/A,All Accrued Int rows,Sum of all accrued interest amounts
+Assets,Financial Assets Table (Summary),Display Table,N/A,No,N/A,N/A,N/A,Table with Account Name; Type; Balance; Owner; Include in Tax Bomb columns,0 rows,Yes,No assets added yet,Add Asset button,Displays all added savings/investment accounts
+Assets,Asset Entry - Account Name,Text Input,Primary Savings,Yes (per row),50,N/A,N/A,Non-empty text; no special chars; unique per user,Empty,No,Row with no data,Balance,User-friendly name for savings account
+Assets,Asset Entry - Account Type,Select Dropdown,"Savings, Money Market, Investment, 529 Plan, HSA, Brokerage",Yes (per row),20,N/A,N/A,One of list,Empty,No,Row with no data,Account Name,Asset category for sorting and filtering
+Assets,Asset Entry - Financial Institution,Text Input,Chase Bank,Yes (per row),50,N/A,N/A,Free text; can match autocomplete or custom,Empty,No,Row with no data,Account Name,Bank/brokerage/provider name
+Assets,Asset Entry - Current Balance,Currency Input,$5000,Yes (per row),15,0,9999999,Non-negative currency,Empty,No,Row with no data,Account Name,Current balance of account; used for tax bomb savings calculation
+Assets,Asset Entry - Owner,Select Dropdown,"Self, Spouse, Joint (if Married)",Yes (per row),10,N/A,N/A,One of: Self; Spouse (married only); Joint (married only),Self,No,Row with no data; Marital Status = Single,Account Name,Allocates asset to applicant/spouse for tax planning; Joint shows only if married
+Assets,Include in Tax Bomb Calculation,Checkbox,N/A,No,N/A,N/A,N/A,Boolean (on/off); unchecked = excluded from savings offset,Checked (default),No,N/A,Current Balance,Toggle to include/exclude this asset from tax liability savings calculation
+Assets,Delete Asset Row,Button,N/A,N/A,N/A,N/A,N/A,N/A,N/A,No,N/A,Account Name field,Removes entire asset row; triggers tax bomb recalc if was included
+Assets,+ Add Another Asset,Button,N/A,N/A,N/A,N/A,N/A,N/A,N/A,No,N/A,N/A,Adds new empty asset row; user fills account details
+Assets,Total Assets (calculated),Display,N/A,No,N/A,0,N/A,Currency format ($),Calculated,Yes,N/A,All Balance rows,Sum of all asset balances shown at table footer
+Assets,Included in Tax Bomb Calc (calculated),Display,N/A,No,N/A,0,N/A,Currency format ($),Calculated,Yes,N/A,Rows where Include checkbox = true,Sum of only those assets marked for tax bomb calculation
+Assets,Excluded from Tax Bomb Calc (calculated),Display,N/A,No,N/A,0,N/A,Currency format ($),Calculated,Yes,N/A,Rows where Include checkbox = false,Sum of excluded assets (informational)
+Settings,Receive Email Notifications,Toggle Checkbox,N/A,No,N/A,N/A,N/A,Boolean (on/off),On,No,N/A,N/A,Default send to Email Address
+Settings,Receive SMS Notifications,Toggle Checkbox,N/A,No,N/A,N/A,N/A,Boolean (on/off),Off,No,Phone Number empty,Phone Number,Requires valid phone number
+Settings,Payment Frequency Preference,Select Radio,"Monthly, Quarterly, Annually",Yes,N/A,N/A,N/A,One of: Monthly; Quarterly; Annually,Monthly,No,N/A,Payment schedule display,Affects payment schedule display
+Settings,Calculation Currency,Select Radio,"USD, EUR, GBP, CAD",Yes,3,N/A,N/A,One of listed values,USD,No,N/A,All monetary displays,Formats all monetary displays; changes immediately
+Settings,Dark Mode Enable,Toggle Checkbox,N/A,No,N/A,N/A,N/A,Boolean (on/off),Off,No,N/A,N/A,Persistent theme preference
+Settings,Language Preference,Select Dropdown,"English, Spanish, French",Yes,2,N/A,N/A,One of listed values,English,No,N/A,N/A,Changes dashboard UI language
+Settings,Automatic Calculation Updates,Toggle Checkbox,N/A,No,N/A,N/A,N/A,Boolean (on/off); real-time vs. manual recalc,On,No,N/A,Manual Recalculate button,When Off; user clicks Recalculate manually
+Settings,Manual Recalculate Button,Button,N/A,N/A,N/A,N/A,N/A,N/A,N/A,No,Automatic Calculation Updates = On,Overview metrics,Triggers recalculation of all dependent fields when auto-calc disabled
+Scenarios,Active Scenario,Select Dropdown,Scenario name,Yes,N/A,N/A,N/A,One of saved scenarios or defaults,Default,No,N/A,All dashboard data,Loads specific loan/asset/income scenario and cascades to all sections
+Scenarios,Scenario Name,Text Input,My Scenario 1,No,100,N/A,N/A,Unique per user; no special chars,Empty,No,Editing mode only,N/A,Name for saving custom scenarios
+Scenarios,Save Scenario,Button,N/A,N/A,N/A,N/A,N/A,N/A,N/A,No,No changes made since load,All sections,Commits current state (loans; assets; income; settings) to named scenario
+Scenarios,Delete Scenario,Button,N/A,N/A,N/A,N/A,N/A,N/A,N/A,No,System scenarios only,Active Scenario,Removes saved custom scenario; cannot delete system defaults
+Scenarios,Scenario Description,Textarea,Optional description,No,500,N/A,N/A,Any text; optional metadata,Empty,No,Editing mode only,N/A,User-provided context for scenario
+Scenarios,Clone Scenario,Button,N/A,N/A,N/A,N/A,N/A,N/A,N/A,No,N/A,Active Scenario,Creates new scenario as copy of current
+Feedback,Feedback Message,Textarea,Tell us your experience...,Yes,1000,1,1000,Non-empty text; max 1000 chars,Empty,No,N/A,N/A,User feedback/bug reports
+Feedback,Feedback Category,Select Dropdown,"Bug, Feature Request, General Feedback, UI/UX",Yes,N/A,N/A,N/A,One of listed values,General Feedback,No,N/A,Feedback Message,Categorizes feedback for triage
+Feedback,Attachment (Optional),File Upload,Choose file...,No,5120,N/A,N/A,Max 5MB; image or PDF only,.none,No,N/A,Feedback Message,Screenshot or supporting document
+Feedback,Submit,Button,N/A,N/A,N/A,N/A,N/A,N/A,N/A,No,Message empty,Feedback Message,Submits feedback to support queue

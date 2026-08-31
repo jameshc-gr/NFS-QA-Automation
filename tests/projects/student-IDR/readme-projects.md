@@ -15,6 +15,9 @@ This Playwright suite covers the Income-Driven Repayment (IDR) / federal student
 
 - `test-setup.ts` — YAML profile loader, page helpers, and `runIdrFlow` orchestrator
 - `SCN-001.spec.ts` through `SCN-020.spec.ts` — one spec per scenario from `02_scenario_matrix.csv`
+- `DASHBOARD-COVERAGE.spec.ts` — dashboard Overview, Scenarios, Personal Data, Settings, and Feedback discovery checks
+- `DEPENDENT-CRUD.spec.ts` — dependent add/edit/delete/re-add lifecycle with boundary ages
+- `UI-FLOW-ASSETS-01.spec.ts` through `UI-FLOW-ASSETS-03.spec.ts` — legacy asset CRUD/Plaid checks pending route confirmation
 
 ## Running tests
 
@@ -54,7 +57,7 @@ To avoid duplicate-account conflicts in QA, every call to `runIdrFlow` generates
 
 If the welcome-page signup redirects to a login screen mid-run (meaning the account already exists for the generated email), the framework automatically enters the email and password that were just used and submits the login form. After login, if the app lands on `my.gr-dev.com/dashboard`, the framework navigates back to `/forgiveness/income` so the flow can continue.
 
-### Known execution blocker
+### Known execution blockers
 
 The standalone validation specs (`SCN-016`, `SCN-017`, `SCN-018`, `GLOBAL-06`, `GLOBAL-07`, and `UI-FLOW-04-welcome`) do not require a completed signup. The 2026-07-27 Chromium run reached `/forgiveness/assets` for a new applicant but the page transitioned to a permanent loading state when `Enter manually` was selected. This is tracked in the execution report as `IDR-001`; it prevents all full-flow tests from reaching dashboard.
 
@@ -63,3 +66,5 @@ If a QA run is redirected to authentication before Income, alternatives include:
 1. Record a `storageState` JSON with an authenticated session and point Playwright to it in `playwright.config.ts`.
 2. Supply existing OKTA credentials via environment variables and log in before each flow test.
 3. Use an API pre-step to create/authenticate the user and seed the session.
+
+The dashboard and dependent CRUD specs require the same authenticated flow. They intentionally fail when the dashboard route, section controls, or dependent delete action is unavailable, so missing coverage is not reported as a false pass. The legacy asset specs still target `/forgiveness/assets`; update them after confirming the current dashboard asset route and control labels.

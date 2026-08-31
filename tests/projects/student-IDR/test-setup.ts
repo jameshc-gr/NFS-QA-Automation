@@ -368,10 +368,13 @@ async function selectDate(page: Page, labelRegex: RegExp, value: string) {
   else if (await textInput.isVisible().catch(() => false)) target = textInput;
   if (!target) return;
 
-  const normalizeToIso = (raw: string) => {
+  const normalizeToUsFormat = (raw: string) => {
     const s = String(raw).trim();
-    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
-    // Accept M/D/YY, M/D/YYYY, MM/DD/YY, MM/DD/YYYY with separators / - .
+    
+    // Already MM/DD/YYYY format
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(s)) return s;
+    
+    // M/D/YY or M/D/YYYY format - normalize to MM/DD/YYYY
     const us = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$/);
     if (us) {
       let mo = us[1].padStart(2, '0');
@@ -381,59 +384,100 @@ async function selectDate(page: Page, labelRegex: RegExp, value: string) {
         const n = Number(yr);
         yr = String(n <= 49 ? 2000 + n : 1900 + n);
       }
-      return `${yr}-${mo}-${day}`;
+      return `${mo}/${day}/${yr}`;
     }
+    
+    // ISO format YYYY-MM-DD
+    const iso = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (iso) {
+      return `${iso[2]}/${iso[3]}/${iso[1]}`;
+    }
+    
     // Detect DD/MM/YYYY where day>12
     const eu = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);
     if (eu) {
       const d = Number(eu[1]);
       const m = Number(eu[2]);
       if (d > 12 && m <= 12) {
-        return `${eu[3]}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        return `${String(m).padStart(2, '0')}/${String(d).padStart(2, '0')}/${eu[3]}`;
       }
     }
+    
     // Fallback to Date parsing
     const parsed = new Date(s);
     if (!isNaN(parsed.getTime())) {
       const yr = parsed.getFullYear();
       const mo = String(parsed.getMonth() + 1).padStart(2, '0');
       const day = String(parsed.getDate()).padStart(2, '0');
-      return `${yr}-${mo}-${day}`;
+      return `${mo}/${day}/${yr}`;
     }
     return s;
   };
 
-  const iso = normalizeToIso(value);
+  const usFormat = normalizeToUsFormat(value);
 
-  // If native date input, set via native setter to avoid masking issues
-  const tag = await target.evaluate((el) => (el as HTMLElement).tagName.toLowerCase()).catch(() => 'input');
-  if (tag === 'input') {
-    const type = await target.getAttribute('type').catch(() => 'text');
-    if (type === 'date') {
+  // For date fields, use resilientFill with MM/DD/YYYY format
+  // This properly handles masked input libraries
+  const selector = await target.evaluate((el) => {
+    const input = el as HTMLInputElement;
+    return input.getAttribute('name') || (el as HTMLElement).id || '';
+  }).catch(() => '');
+
+  if (selector) {
+    const resolved = selector.startsWith('#') || selector.startsWith('.') || selector.startsWith('input') 
+      ? selector 
+      : `input[name="${selector}"]`;
+    
+    // Click to focus the field and clear any existing value
+    await target.click().catch(() => null);
+    await page.waitForTimeout(200);
+    
+    // Triple-click to select all, then type to replace
+    await target.evaluate((el) => {
+      const input = el as HTMLInputElement;
+      input.select();
+    }).catch(() => null);
+    
+    // Use keyboard to clear and type the date
+    await target.press('Control+A').catch(() => null);
+    await target.press('Delete').catch(() => null);
+    
+    // Wait a bit for field to clear
+    await page.waitForTimeout(100);
+    
+    // Try resilientFill first
+    await resilientFill(page, resolved, usFormat).catch(async () => {
+      // Fallback to direct value assignment if resilientFill fails
       await target.evaluate((el, v) => {
         const input = el as HTMLInputElement;
-        const nativeSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
-        if (nativeSetter) nativeSetter.call(input, v);
-        else input.value = v;
+        input.value = v;
         input.dispatchEvent(new Event('input', { bubbles: true }));
         input.dispatchEvent(new Event('change', { bubbles: true }));
-      }, iso).catch(() => null);
-      return;
-    }
-  }
-
-  // For text inputs that may have masking, use resilientFill which handles native setter fallback.
-  // Try to derive a selector for resilientFill: prefer name attribute, then id, otherwise fallback to direct fill.
-  const selector = await target.evaluate((el) => (el as HTMLInputElement).getAttribute('name') || (el as HTMLElement).id || '').catch(() => '');
-  if (selector) {
-    // If selector looks like an id, prefix with '#'
-    const resolved = selector.startsWith('#') || selector.startsWith('.') || selector.startsWith('input') ? selector : `input[name="${selector}"]`;
-    await resilientFill(page, resolved, iso).catch(async () => {
-      await target.fill(iso).catch(() => null);
+        input.dispatchEvent(new Event('blur', { bubbles: true }));
+      }, usFormat).catch(() => null);
     });
   } else {
-    await target.fill(iso).catch(() => null);
+    // Click to focus and clear
+    await target.click().catch(() => null);
+    await page.waitForTimeout(200);
+    await target.evaluate((el) => {
+      const input = el as HTMLInputElement;
+      input.select();
+    }).catch(() => null);
+    await target.press('Control+A').catch(() => null);
+    await target.press('Delete').catch(() => null);
+    await page.waitForTimeout(100);
+    
+    // Direct fill
+    await target.fill(usFormat).catch(() => null);
   }
+  
+  // Wait for any masked input library to process the value
+  await page.waitForTimeout(300);
+  
+  // Trigger blur to ensure any masking library completes and validation runs
+  await target.blur().catch(() => null);
+  await page.waitForTimeout(200);
 }
 
 export async function setCheckbox(page: Page, selector: string, checked: boolean) {
@@ -453,12 +497,16 @@ export async function fillWelcome(page: Page) {
   const password = getEnv('PASSWORD');
 
   await page.waitForSelector('input[name="firstName"]', { state: 'visible', timeout: 15000 });
+  
+  console.log('[fillWelcome] Filling form fields...');
+  console.log(`[fillWelcome] firstName: ${firstName}, lastName: ${lastName}, email: ${email}`);
   await page.fill('input[name="firstName"]', firstName);
   await page.fill('input[name="lastName"]', lastName);
   await page.fill('input[name="email"]', email);
   await page.fill('input[name="password"]', password);
 
   if (getEnv('TERMS_AGREEMENT') === 'true') {
+    console.log('[fillWelcome] Checking terms checkbox...');
     await page.check('#termsCheckbox');
   }
 
@@ -466,6 +514,7 @@ export async function fillWelcome(page: Page) {
   await continueButton.waitFor({ state: 'visible', timeout: 5000 }).catch(() => null);
 
   // Wait for the Continue button to become enabled after the form is filled.
+  console.log('[fillWelcome] Waiting for Continue button to be enabled...');
   try {
     await page.waitForFunction(
       () => {
@@ -474,75 +523,204 @@ export async function fillWelcome(page: Page) {
       },
       { timeout: 10000 }
     );
-  } catch {
-    // Continue anyway; the click will fail cleanly if still disabled.
+    console.log('[fillWelcome] Continue button is now enabled');
+  } catch (e) {
+    console.log('[fillWelcome] Timeout waiting for button to enable, checking current state...');
+    const isEnabled = await continueButton.isEnabled().catch(() => false);
+    console.log('[fillWelcome] Continue button enabled:', isEnabled);
+    
+    // Check for validation error messages
+    const errorMessages = await page.locator('[role="alert"], .error, [class*="error"]').allTextContents().catch(() => []);
+    if (errorMessages.length > 0) {
+      console.log('[fillWelcome] Form validation errors found:', errorMessages);
+    }
+    
+    if (!isEnabled) {
+      const pageContent = await page.content();
+      console.log('[fillWelcome] Page content length:', pageContent.length);
+      throw new Error('Continue button did not become enabled after form submission. Check form validation.');
+    }
   }
 
   if (await continueButton.isEnabled().catch(() => false)) {
-    await Promise.all([
-      page.waitForNavigation({ timeout: 30000 }).catch(() => null),
-      continueButton.click()
-    ]);
-    await page.waitForTimeout(3000);
+    console.log('[fillWelcome] Clicking Continue button...');
+    const urlBefore = page.url();
+    console.log(`[fillWelcome] URL before: ${urlBefore}`);
 
-    // If the environment redirects to a login screen, the account already
-    // exists for this email. Sign in with the credentials we just used so the
-    // flow can continue.
+    // Set up network error logging
+    const networkErrors: string[] = [];
+    const responseHandler = (response: Response) => {
+      if (!response.ok()) {
+        networkErrors.push(`${response.url()} - Status: ${response.status()}`);
+        console.log(`[fillWelcome] API Response Error: ${response.url()} - ${response.status()}`);
+      }
+    };
+    
+    page.on('response', responseHandler);
+
+    try {
+      // Try to wait for navigation with timeout
+      const navigationPromise = page.waitForNavigation({ timeout: 30000 }).catch(() => {
+        console.log('[fillWelcome] Navigation did not complete within 30 seconds');
+        return null;
+      });
+      
+      await continueButton.click();
+      console.log('[fillWelcome] Continue button clicked');
+      
+      // Wait for navigation to complete
+      await navigationPromise;
+      const urlAfter = page.url();
+      console.log(`[fillWelcome] URL after navigation: ${urlAfter}`);
+      
+      // Wait for page to settle
+      await page.waitForTimeout(3000);
+    } catch (error) {
+      console.log(`[fillWelcome] Error during form submission: ${error}`);
+      const currentUrl = page.url();
+      console.log(`[fillWelcome] Current URL after error: ${currentUrl}`);
+      if (networkErrors.length > 0) {
+        console.log('[fillWelcome] Network errors:', networkErrors);
+      }
+    } finally {
+      page.off('response', responseHandler);
+    }
+
+    // Handle login redirect if account already exists
     await handleLoginRedirect(page, email, password);
 
     // If we are still on the welcome page, the signup did not advance.
     // Give the app one more chance to settle before the next step fails.
     if (page.url().includes('/forgiveness/welcome')) {
+      console.log('[fillWelcome] Still on welcome page after initial attempt, waiting to retry...');
       await page.waitForTimeout(5000);
+      const urlBeforeRetry = page.url();
+      console.log(`[fillWelcome] URL before retry: ${urlBeforeRetry}`);
+      
       if (page.url().includes('/forgiveness/welcome') && await continueButton.isVisible().catch(() => false)) {
-        await Promise.all([
-          page.waitForNavigation({ timeout: 30000 }).catch(() => null),
-          continueButton.click()
-        ]);
-        await page.waitForTimeout(3000);
+        console.log('[fillWelcome] Button still visible, retrying Continue button click...');
+        try {
+          const retryNavigationPromise = page.waitForNavigation({ timeout: 30000 }).catch(() => {
+            console.log('[fillWelcome] Retry: Navigation did not complete');
+            return null;
+          });
+          
+          await continueButton.click();
+          console.log('[fillWelcome] Continue button clicked (retry)');
+          
+          await retryNavigationPromise;
+          const urlAfterRetry = page.url();
+          console.log(`[fillWelcome] URL after retry: ${urlAfterRetry}`);
+          
+          await page.waitForTimeout(3000);
+        } catch (retryError) {
+          console.log(`[fillWelcome] Error during retry: ${retryError}`);
+        }
+        
         await handleLoginRedirect(page, email, password);
+      } else if (!page.url().includes('/forgiveness/welcome')) {
+        console.log(`[fillWelcome] Page navigated away from welcome during wait: ${page.url()}`);
+      } else {
+        console.log('[fillWelcome] Continue button not visible or not on welcome page anymore');
+      }
+    }
+    
+    // Final check: ensure we've actually left the welcome page
+    if (page.url().includes('/forgiveness/welcome')) {
+      console.log('[fillWelcome] CRITICAL: Still on welcome page after all attempts!');
+      console.log('[fillWelcome] Checking for authentication or redirect errors...');
+      
+      // Wait a bit more for any redirects
+      await page.waitForTimeout(3000);
+      const finalUrl = page.url();
+      console.log(`[fillWelcome] Final URL: ${finalUrl}`);
+      
+      if (finalUrl.includes('/forgiveness/welcome')) {
+        console.log('[fillWelcome] ERROR: Failed to navigate away from welcome page');
+        // Take screenshot for debugging
+        try {
+          await page.screenshot({ path: 'welcome-page-stuck.png' });
+          console.log('[fillWelcome] Screenshot saved to welcome-page-stuck.png');
+        } catch (e) {
+          console.log('[fillWelcome] Could not take screenshot');
+        }
       }
     }
   }
 }
 
 async function ensureOnIncomePage(page: Page) {
-  if (page.url().includes('/forgiveness/income')) return;
+  console.log(`[ensureOnIncomePage] Current URL: ${page.url()}`);
+  
+  if (page.url().includes('/forgiveness/income')) {
+    console.log('[ensureOnIncomePage] Already on income page');
+    return;
+  }
 
   // The app sometimes lands on the bare /forgiveness route as a transient
   // shell while it decides where to route the user. Wait for it to settle.
   const url = page.url();
   if (url.replace(/\/$/, '').endsWith('/forgiveness')) {
+    console.log('[ensureOnIncomePage] On bare /forgiveness route, waiting for redirect...');
     await page.waitForTimeout(5000);
-    if (page.url().includes('/forgiveness/income')) return;
+    console.log(`[ensureOnIncomePage] After wait: ${page.url()}`);
+    if (page.url().includes('/forgiveness/income')) {
+      console.log('[ensureOnIncomePage] Successfully redirected to income page');
+      return;
+    }
   }
 
   // If we are still on welcome, the signup did not advance; try navigating to income directly.
   if (page.url().includes('/forgiveness/welcome')) {
-    await page.goto('https://student-loans.qa.fsp.rate.com/forgiveness/income').catch(() => null);
+    console.log('[ensureOnIncomePage] On welcome page, attempting direct navigation...');
+    try {
+      await page.goto('https://student-loans.qa.fsp.rate.com/forgiveness/income', { waitUntil: 'domcontentloaded' });
+      console.log(`[ensureOnIncomePage] After goto: ${page.url()}`);
+    } catch (error) {
+      console.log(`[ensureOnIncomePage] Goto error: ${error}`);
+    }
     await page.waitForTimeout(3000);
-    if (page.url().includes('/forgiveness/income')) return;
+    console.log(`[ensureOnIncomePage] After timeout: ${page.url()}`);
+    if (page.url().includes('/forgiveness/income')) {
+      console.log('[ensureOnIncomePage] Successfully navigated to income page');
+      return;
+    }
   }
 
   // If we landed on the Okta/login page, authentication is required.
   if (isLoginUrl(page.url())) {
+    console.log('[ensureOnIncomePage] On login page, attempting to handle login...');
     const email = getEnv('EMAIL');
     const password = getEnv('PASSWORD');
     if (email && password) {
       await handleLoginRedirect(page, email, password);
-      if (page.url().includes('/forgiveness/income')) return;
+      console.log(`[ensureOnIncomePage] After login: ${page.url()}`);
+      if (page.url().includes('/forgiveness/income')) {
+        console.log('[ensureOnIncomePage] Successfully authenticated and navigated to income');
+        return;
+      }
     }
   }
 
   // If we were redirected to my.gr-dev.com/dashboard or the bare /forgiveness
   // landing shell after login, navigate back to the forgiveness flow manually.
   if (page.url().includes('my.gr-dev.com') || page.url().includes('dashboard') || page.url().replace(/\/$/, '').endsWith('/forgiveness')) {
-    await page.goto('https://student-loans.qa.fsp.rate.com/forgiveness/income').catch(() => null);
+    console.log('[ensureOnIncomePage] On dashboard/my.gr-dev, redirecting back to income...');
+    try {
+      await page.goto('https://student-loans.qa.fsp.rate.com/forgiveness/income', { waitUntil: 'domcontentloaded' });
+      console.log(`[ensureOnIncomePage] After redirect goto: ${page.url()}`);
+    } catch (error) {
+      console.log(`[ensureOnIncomePage] Redirect goto error: ${error}`);
+    }
     await page.waitForTimeout(3000);
-    if (page.url().includes('/forgiveness/income')) return;
+    if (page.url().includes('/forgiveness/income')) {
+      console.log('[ensureOnIncomePage] Successfully redirected to income page');
+      return;
+    }
   }
 
   // If we still cannot reach the income page, the session is not authenticated.
+  console.log(`[ensureOnIncomePage] FAILED: Unable to reach income page. Current URL: ${page.url()}`);
   if (!page.url().includes('/forgiveness/income')) {
     throw new Error(
       'Authentication required: unable to reach /forgiveness/income. ' +
@@ -648,23 +826,30 @@ export async function fillIncome(page: Page) {
   }
 
   const continueButton = page.getByRole('button', { name: 'Continue' }).first();
+  
+  // Wait for the button to be enabled by polling its disabled attribute.
   await page.waitForFunction(
     () => {
-      const btn = document.querySelector('button[data-testid="button"]') as HTMLButtonElement | null;
-      return !!btn && !btn.disabled;
+      const buttons = document.querySelectorAll('button');
+      for (const btn of buttons) {
+        if (btn.textContent?.includes('Continue') && !btn.disabled) {
+          return true;
+        }
+      }
+      return false;
     },
-    { timeout: 10000 }
+    { timeout: 15000 }
   ).catch(() => null);
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(800);
 
   // Click Continue and wait for navigation. If we remain on the income page
   // (e.g. due to slow autocomplete validation), click once more.
   const incomeUrl = /\/forgiveness\/income/;
-  await continueButton.click();
+  await clickWhenEnabled(continueButton);
   await page.waitForURL(/\/forgiveness\/(federal|repayment|assets|partner-student-loans)/, { timeout: 45000 }).catch(() => null);
   if (incomeUrl.test(page.url())) {
     await page.waitForTimeout(1000);
-    await continueButton.click();
+    await clickWhenEnabled(continueButton);
     await page.waitForURL(/\/forgiveness\/(federal|repayment|assets|partner-student-loans)/, { timeout: 45000 }).catch(() => null);
   }
 }
@@ -1063,13 +1248,19 @@ export async function waitForPlaidLinkedAccounts(
 }
 
 export async function addManualAsset(page: Page, accountName: string, accountType: string, institution: string, balance: string, owner: string, includeTaxBomb: boolean) {
-  const addButton = page.getByRole('button', { name: /Enter manually|Add asset manually|Add manual account/i }).first();
+  const addButton = page.getByRole('button', { name: /Enter manually|Add asset manually|Add manual account|Add asset/i }).first();
   const accountNameInput = page.locator('input[name^="accountName-"]').first();
   let formVisible = await accountNameInput.isVisible().catch(() => false);
 
   if (!formVisible) {
+    console.log('[addManualAsset] Form not initially visible, waiting for Add button...');
     await addButton.waitFor({ state: 'visible', timeout: 30000 }).catch(() => null);
-    if (!(await addButton.isVisible().catch(() => false))) {
+    const addButtonVisible = await addButton.isVisible().catch(() => false);
+    console.log('[addManualAsset] Add button visible:', addButtonVisible);
+    if (!addButtonVisible) {
+      const pageHtml = await page.content().catch(() => '');
+      console.log('[addManualAsset] Page content length:', pageHtml.length);
+      console.log('[addManualAsset] Current URL:', page.url());
       throw new Error('Assets remained loading for 30 seconds; neither Enter manually nor the manual account form rendered.');
     }
 
