@@ -4957,5 +4957,788 @@
     "testTitle": "SEC-01.2: User payment data is isolated per user",
     "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
     "createdAt": "2026-08-31T19:55:43.969Z"
+  },
+  {
+    "email": "test-dependent-one.mtho24pt-d0787e.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mtho24pt-d0787e",
+    "workerIndex": 0,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T20:03:53.659Z"
+  },
+  {
+    "email": "test-dependent-one.mtho24pv-9fcb8d.w2.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mtho24pv-9fcb8d",
+    "workerIndex": 2,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T20:03:53.663Z"
+  },
+  {
+    "email": "test-dependent-one.mtho24pg-cb8a2b.w1.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mtho24pg-cb8a2b",
+    "workerIndex": 1,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T20:03:54.014Z"
+  },
+  {
+    "email": "test-dependent-one.mthr3cwf-ee9808.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr3cwf-ee9808",
+    "workerIndex": 0,
+    "testTitle": "SEC-01.1: User B cannot access User A dashboard via direct URL",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:28:50.609Z"
+  },
+  {
+    "email": "test-dependent-one.mthr3cwz-cadb4d.w2.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr3cwz-cadb4d",
+    "workerIndex": 2,
+    "testTitle": "SEC-01.3: User profile data isolation across sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:28:50.850Z"
+  },
+  {
+    "email": "test-dependent-one.mthr3cwy-b12d00.w6.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr3cwy-b12d00",
+    "workerIndex": 6,
+    "testTitle": "SEC-01.3: User profile data isolation across sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:28:51.152Z"
+  },
+  {
+    "email": "test-dependent-one.mthr3cw1-7f92cc.w5.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr3cw1-7f92cc",
+    "workerIndex": 5,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:28:51.364Z"
+  },
+  {
+    "email": "test-dependent-one.mthr3cwm-b21f7a.w4.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr3cwm-b21f7a",
+    "workerIndex": 4,
+    "testTitle": "SEC-01.1: User B cannot access User A dashboard via direct URL",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:28:51.695Z"
+  },
+  {
+    "email": "test-dependent-one.mthr42sv-1dc9f2.w7.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr42sv-1dc9f2",
+    "workerIndex": 7,
+    "testTitle": "SEC-01.4: User data consistency across multiple sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:29:23.694Z"
+  },
+  {
+    "email": "test-dependent-three.mthr3cwm-b21f7a.w4.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr3cwm-b21f7a",
+    "workerIndex": 4,
+    "testTitle": "SEC-01.1: User B cannot access User A dashboard via direct URL",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:29:43.918Z"
+  },
+  {
+    "email": "test-dependent-three.mthr3cw1-7f92cc.w5.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr3cw1-7f92cc",
+    "workerIndex": 5,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:29:44.391Z"
+  },
+  {
+    "email": "test-dependent-three.mthr3cwe-e1d453.w1.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr3cwe-e1d453",
+    "workerIndex": 1,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:29:44.764Z"
+  },
+  {
+    "email": "test-dependent-one.mthr3cwy-462a5f.w3.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr3cwy-462a5f",
+    "workerIndex": 3,
+    "testTitle": "SEC-01.4: User data consistency across multiple sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:29:46.821Z"
+  },
+  {
+    "email": "test-dependent-three.mthr3cwf-ee9808.w0.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr3cwf-ee9808",
+    "workerIndex": 0,
+    "testTitle": "SEC-01.1: User B cannot access User A dashboard via direct URL",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:29:47.628Z"
+  },
+  {
+    "email": "test-dependent-three.mthr3cwz-cadb4d.w2.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr3cwz-cadb4d",
+    "workerIndex": 2,
+    "testTitle": "SEC-01.3: User profile data isolation across sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:29:47.641Z"
+  },
+  {
+    "email": "test-dependent-one.mthr42sv-1dc9f2.w7.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr42sv-1dc9f2",
+    "workerIndex": 7,
+    "testTitle": "SEC-01.4: User data consistency across multiple sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:30:07.625Z"
+  },
+  {
+    "email": "test-dependent-one.mthr5p45-9b307b.w8.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr5p45-9b307b",
+    "workerIndex": 8,
+    "testTitle": "SEC-01.1: User B cannot access User A dashboard via direct URL",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:30:38.968Z"
+  },
+  {
+    "email": "test-dependent-one.mthr5pjl-c45dde.w9.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr5pjl-c45dde",
+    "workerIndex": 9,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:30:39.426Z"
+  },
+  {
+    "email": "test-dependent-one.mthr5py1-51c13b.w10.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr5py1-51c13b",
+    "workerIndex": 10,
+    "testTitle": "SEC-01.3: User profile data isolation across sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:30:40.003Z"
+  },
+  {
+    "email": "test-dependent-one.mthr5qrh-b171d2.w11.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr5qrh-b171d2",
+    "workerIndex": 11,
+    "testTitle": "SEC-01.4: User data consistency across multiple sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:30:41.023Z"
+  },
+  {
+    "email": "test-dependent-three.mthr5p45-9b307b.w8.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr5p45-9b307b",
+    "workerIndex": 8,
+    "testTitle": "SEC-01.1: User B cannot access User A dashboard via direct URL",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:31:20.492Z"
+  },
+  {
+    "email": "test-dependent-three.mthr5py1-51c13b.w10.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr5py1-51c13b",
+    "workerIndex": 10,
+    "testTitle": "SEC-01.3: User profile data isolation across sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:31:21.734Z"
+  },
+  {
+    "email": "test-dependent-three.mthr5pjl-c45dde.w9.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr5pjl-c45dde",
+    "workerIndex": 9,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:31:22.559Z"
+  },
+  {
+    "email": "test-dependent-one.mthr5qrh-b171d2.w11.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr5qrh-b171d2",
+    "workerIndex": 11,
+    "testTitle": "SEC-01.4: User data consistency across multiple sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:31:22.759Z"
+  },
+  {
+    "email": "test-dependent-one.mthr9neg-9ce676.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr9neg-9ce676",
+    "workerIndex": 0,
+    "testTitle": "SEC-02.1: Verify users cannot access other accounts via URL manipulation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:33:44.126Z"
+  },
+  {
+    "email": "test-scn-005.mthr9nf6-c5f983.w3.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr9nf6-c5f983",
+    "workerIndex": 3,
+    "testTitle": "SEC-02.4: Verify API response filtering per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:33:44.158Z"
+  },
+  {
+    "email": "test-dependent-one.mthr9ndg-db92ed.w5.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr9ndg-db92ed",
+    "workerIndex": 5,
+    "testTitle": "SEC-02.1: Verify users cannot access other accounts via URL manipulation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:33:44.312Z"
+  },
+  {
+    "email": "test-scn-010.mthr9nez-b3d5a3.w4.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr9nez-b3d5a3",
+    "workerIndex": 4,
+    "testTitle": "SEC-02.5: Verify ID enumeration prevention",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:33:44.350Z"
+  },
+  {
+    "email": "test-scn-003.mthr9ner-ba5081.w2.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr9ner-ba5081",
+    "workerIndex": 2,
+    "testTitle": "SEC-02.3: Verify session cookie isolation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:33:44.425Z"
+  },
+  {
+    "email": "test-scn-001.mthr9ndu-41ddb6.w6.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthr9ndu-41ddb6",
+    "workerIndex": 6,
+    "testTitle": "SEC-02.2: Verify loan data isolation between accounts",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:33:44.818Z"
+  },
+  {
+    "email": "test-scn-002.mthr9nea-191462.w1.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr9nea-191462",
+    "workerIndex": 1,
+    "testTitle": "SEC-02.2: Verify loan data isolation between accounts",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:34:28.882Z"
+  },
+  {
+    "email": "test-dependent-three.mthr9neg-9ce676.w0.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr9neg-9ce676",
+    "workerIndex": 0,
+    "testTitle": "SEC-02.1: Verify users cannot access other accounts via URL manipulation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:34:29.513Z"
+  },
+  {
+    "email": "test-scn-002.mthr9ndu-41ddb6.w6.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr9ndu-41ddb6",
+    "workerIndex": 6,
+    "testTitle": "SEC-02.2: Verify loan data isolation between accounts",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:34:30.899Z"
+  },
+  {
+    "email": "test-dependent-three.mthr9ndg-db92ed.w5.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr9ndg-db92ed",
+    "workerIndex": 5,
+    "testTitle": "SEC-02.1: Verify users cannot access other accounts via URL manipulation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:34:31.074Z"
+  },
+  {
+    "email": "test-scn-003.mthraq4y-c82c41.w7.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthraq4y-c82c41",
+    "workerIndex": 7,
+    "testTitle": "SEC-02.3: Verify session cookie isolation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:34:34.018Z"
+  },
+  {
+    "email": "test-scn-004.mthr9ner-ba5081.w2.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr9ner-ba5081",
+    "workerIndex": 2,
+    "testTitle": "SEC-02.3: Verify session cookie isolation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:34:39.106Z"
+  },
+  {
+    "email": "test-scn-005.mthrb74j-f6c63f.w8.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrb74j-f6c63f",
+    "workerIndex": 8,
+    "testTitle": "SEC-02.4: Verify API response filtering per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:34:55.828Z"
+  },
+  {
+    "email": "test-scn-010.mthrbpfz-ef654b.w9.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrbpfz-ef654b",
+    "workerIndex": 9,
+    "testTitle": "SEC-02.5: Verify ID enumeration prevention",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:35:19.609Z"
+  },
+  {
+    "email": "test-dependent-one.mthrbrc4-961b49.w10.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrbrc4-961b49",
+    "workerIndex": 10,
+    "testTitle": "SEC-02.1: Verify users cannot access other accounts via URL manipulation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:35:22.048Z"
+  },
+  {
+    "email": "test-scn-001.mthrbs63-f02e07.w11.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrbs63-f02e07",
+    "workerIndex": 11,
+    "testTitle": "SEC-02.2: Verify loan data isolation between accounts",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:35:22.760Z"
+  },
+  {
+    "email": "test-scn-003.mthrbti9-948550.w12.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrbti9-948550",
+    "workerIndex": 12,
+    "testTitle": "SEC-02.3: Verify session cookie isolation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:35:24.684Z"
+  },
+  {
+    "email": "test-scn-005.mthrbwgh-84d99f.w13.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrbwgh-84d99f",
+    "workerIndex": 13,
+    "testTitle": "SEC-02.4: Verify API response filtering per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:35:28.325Z"
+  },
+  {
+    "email": "test-scn-010.mthrc0zd-469e90.w14.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrc0zd-469e90",
+    "workerIndex": 14,
+    "testTitle": "SEC-02.5: Verify ID enumeration prevention",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:35:34.243Z"
+  },
+  {
+    "email": "test-scn-006.mthr9nf6-c5f983.w3.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthr9nf6-c5f983",
+    "workerIndex": 3,
+    "testTitle": "SEC-02.4: Verify API response filtering per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:35:35.684Z"
+  },
+  {
+    "email": "test-dependent-three.mthrbrc4-961b49.w10.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrbrc4-961b49",
+    "workerIndex": 10,
+    "testTitle": "SEC-02.1: Verify users cannot access other accounts via URL manipulation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:36:04.970Z"
+  },
+  {
+    "email": "test-scn-002.mthrbs63-f02e07.w11.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrbs63-f02e07",
+    "workerIndex": 11,
+    "testTitle": "SEC-02.2: Verify loan data isolation between accounts",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:36:05.091Z"
+  },
+  {
+    "email": "test-scn-004.mthrbti9-948550.w12.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrbti9-948550",
+    "workerIndex": 12,
+    "testTitle": "SEC-02.3: Verify session cookie isolation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:36:16.891Z"
+  },
+  {
+    "email": "test-scn-006.mthrbwgh-84d99f.w13.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrbwgh-84d99f",
+    "workerIndex": 13,
+    "testTitle": "SEC-02.4: Verify API response filtering per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T21:37:16.729Z"
+  },
+  {
+    "email": "test-dependent-one.mthrfmd3-3d7d2c.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrfmd3-3d7d2c",
+    "workerIndex": 0,
+    "testTitle": "SEC-01.1: User B cannot access User A dashboard via direct URL",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:38:22.238Z"
+  },
+  {
+    "email": "test-dependent-one.mthrfme7-3cc77e.w1.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrfme7-3cc77e",
+    "workerIndex": 1,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:38:22.242Z"
+  },
+  {
+    "email": "test-dependent-one.mthrfmcr-2037b6.w3.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrfmcr-2037b6",
+    "workerIndex": 3,
+    "testTitle": "SEC-01.4: User data consistency across multiple sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:38:22.304Z"
+  },
+  {
+    "email": "test-dependent-one.mthrfmdo-ec0550.w2.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrfmdo-ec0550",
+    "workerIndex": 2,
+    "testTitle": "SEC-01.3: User profile data isolation across sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:38:22.346Z"
+  },
+  {
+    "email": "test-dependent-one.mthrfmd6-20d244.w4.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrfmd6-20d244",
+    "workerIndex": 4,
+    "testTitle": "SEC-01.1: User B cannot access User A dashboard via direct URL",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:38:22.834Z"
+  },
+  {
+    "email": "test-dependent-one.mthrfmd9-650a4c.w6.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrfmd9-650a4c",
+    "workerIndex": 6,
+    "testTitle": "SEC-01.3: User profile data isolation across sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:38:23.114Z"
+  },
+  {
+    "email": "test-dependent-one.mthrfmdj-9c77bb.w5.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrfmdj-9c77bb",
+    "workerIndex": 5,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:38:23.478Z"
+  },
+  {
+    "email": "test-dependent-three.mthrfmd3-3d7d2c.w0.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrfmd3-3d7d2c",
+    "workerIndex": 0,
+    "testTitle": "SEC-01.1: User B cannot access User A dashboard via direct URL",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:39:04.773Z"
+  },
+  {
+    "email": "test-dependent-three.mthrfmdo-ec0550.w2.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrfmdo-ec0550",
+    "workerIndex": 2,
+    "testTitle": "SEC-01.3: User profile data isolation across sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:39:05.027Z"
+  },
+  {
+    "email": "test-dependent-one.mthrfmcr-2037b6.w3.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrfmcr-2037b6",
+    "workerIndex": 3,
+    "testTitle": "SEC-01.4: User data consistency across multiple sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:39:05.811Z"
+  },
+  {
+    "email": "test-dependent-three.mthrfme7-3cc77e.w1.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrfme7-3cc77e",
+    "workerIndex": 1,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:39:06.810Z"
+  },
+  {
+    "email": "test-dependent-three.mthrfmd6-20d244.w4.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrfmd6-20d244",
+    "workerIndex": 4,
+    "testTitle": "SEC-01.1: User B cannot access User A dashboard via direct URL",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:39:07.167Z"
+  },
+  {
+    "email": "test-dependent-three.mthrfmd9-650a4c.w6.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrfmd9-650a4c",
+    "workerIndex": 6,
+    "testTitle": "SEC-01.3: User profile data isolation across sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:39:07.307Z"
+  },
+  {
+    "email": "test-dependent-three.mthrfmdj-9c77bb.w5.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrfmdj-9c77bb",
+    "workerIndex": 5,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:39:08.399Z"
+  },
+  {
+    "email": "test-dependent-one.mthrhpa0-f2164a.w7.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrhpa0-f2164a",
+    "workerIndex": 7,
+    "testTitle": "SEC-01.4: User data consistency across multiple sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:39:59.331Z"
+  },
+  {
+    "email": "test-dependent-one.mthrhpek-d91bab.w8.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrhpek-d91bab",
+    "workerIndex": 8,
+    "testTitle": "SEC-01.1: User B cannot access User A dashboard via direct URL",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:39:59.364Z"
+  },
+  {
+    "email": "test-dependent-one.mthrhr9m-c46a35.w9.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrhr9m-c46a35",
+    "workerIndex": 9,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:40:01.544Z"
+  },
+  {
+    "email": "test-dependent-one.mthrhrbk-03381b.w10.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrhrbk-03381b",
+    "workerIndex": 10,
+    "testTitle": "SEC-01.3: User profile data isolation across sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:40:01.644Z"
+  },
+  {
+    "email": "test-dependent-one.mthrhrei-3c9bf0.w11.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthrhrei-3c9bf0",
+    "workerIndex": 11,
+    "testTitle": "SEC-01.4: User data consistency across multiple sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:40:01.765Z"
+  },
+  {
+    "email": "test-dependent-three.mthrhpek-d91bab.w8.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrhpek-d91bab",
+    "workerIndex": 8,
+    "testTitle": "SEC-01.1: User B cannot access User A dashboard via direct URL",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:40:41.862Z"
+  },
+  {
+    "email": "test-dependent-one.mthrhpa0-f2164a.w7.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrhpa0-f2164a",
+    "workerIndex": 7,
+    "testTitle": "SEC-01.4: User data consistency across multiple sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:40:43.674Z"
+  },
+  {
+    "email": "test-dependent-one.mthrhrei-3c9bf0.w11.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrhrei-3c9bf0",
+    "workerIndex": 11,
+    "testTitle": "SEC-01.4: User data consistency across multiple sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:40:43.740Z"
+  },
+  {
+    "email": "test-dependent-three.mthrhrbk-03381b.w10.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrhrbk-03381b",
+    "workerIndex": 10,
+    "testTitle": "SEC-01.3: User profile data isolation across sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:40:43.957Z"
+  },
+  {
+    "email": "test-dependent-three.mthrhr9m-c46a35.w9.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthrhr9m-c46a35",
+    "workerIndex": 9,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-08-31T21:40:44.246Z"
+  },
+  {
+    "email": "test-dependent-one.mthsm20z-7f4d22.w4.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthsm20z-7f4d22",
+    "workerIndex": 4,
+    "testTitle": "CBT-01: Data Isolation - Parallel User Access Control (Desktop)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:11:22.004Z"
+  },
+  {
+    "email": "test-dependent-one.mthsm229-ac860e.w6.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthsm229-ac860e",
+    "workerIndex": 6,
+    "testTitle": "CBT-03: UI Consistency Across Browsers",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:11:22.011Z"
+  },
+  {
+    "email": "test-dependent-one.mthsm22a-1f1f12.w5.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthsm22a-1f1f12",
+    "workerIndex": 5,
+    "testTitle": "CBT-02: Data Isolation - Mobile View (390x844 iPhone)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:11:22.629Z"
+  },
+  {
+    "email": "test-dependent-one.mthsm21c-f3c969.w2.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthsm21c-f3c969",
+    "workerIndex": 2,
+    "testTitle": "CBT-03: UI Consistency Across Browsers",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:11:22.712Z"
+  },
+  {
+    "email": "test-dependent-one.mthsm21t-f0ec7e.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthsm21t-f0ec7e",
+    "workerIndex": 0,
+    "testTitle": "CBT-01: Data Isolation - Parallel User Access Control (Desktop)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:11:22.781Z"
+  },
+  {
+    "email": "test-dependent-one.mthsm21h-30cc9d.w3.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthsm21h-30cc9d",
+    "workerIndex": 3,
+    "testTitle": "CBT-04: Payment Calculation Consistency (Dependent Impact)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:11:22.866Z"
+  },
+  {
+    "email": "test-dependent-one.mthsm222-7a98ca.w1.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthsm222-7a98ca",
+    "workerIndex": 1,
+    "testTitle": "CBT-02: Data Isolation - Mobile View (390x844 iPhone)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:11:22.991Z"
+  },
+  {
+    "email": "test-dependent-one.mthsmo06-57b10c.w7.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mthsmo06-57b10c",
+    "workerIndex": 7,
+    "testTitle": "CBT-04: Payment Calculation Consistency (Dependent Impact)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:11:50.242Z"
+  },
+  {
+    "email": "test-dependent-three.mthsm21h-30cc9d.w3.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthsm21h-30cc9d",
+    "workerIndex": 3,
+    "testTitle": "CBT-04: Payment Calculation Consistency (Dependent Impact)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:12:08.263Z"
+  },
+  {
+    "email": "test-dependent-one.mthsm21c-f3c969.w2.1.mthsm21c-f3c969.w2.2@yopmail.com",
+    "password": "SecurePass12312!",
+    "runId": "mthsm21c-f3c969",
+    "workerIndex": 2,
+    "testTitle": "CBT-03: UI Consistency Across Browsers",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:12:08.417Z"
+  },
+  {
+    "email": "test-dependent-three.mthsm21t-f0ec7e.w0.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthsm21t-f0ec7e",
+    "workerIndex": 0,
+    "testTitle": "CBT-01: Data Isolation - Parallel User Access Control (Desktop)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:12:09.453Z"
+  },
+  {
+    "email": "test-dependent-one.mthsm229-ac860e.w6.1.mthsm229-ac860e.w6.2@yopmail.com",
+    "password": "SecurePass12312!",
+    "runId": "mthsm229-ac860e",
+    "workerIndex": 6,
+    "testTitle": "CBT-03: UI Consistency Across Browsers",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:12:14.003Z"
+  },
+  {
+    "email": "test-dependent-three.mthsm20z-7f4d22.w4.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthsm20z-7f4d22",
+    "workerIndex": 4,
+    "testTitle": "CBT-01: Data Isolation - Parallel User Access Control (Desktop)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:12:15.580Z"
+  },
+  {
+    "email": "test-dependent-three.mthsm22a-1f1f12.w5.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthsm22a-1f1f12",
+    "workerIndex": 5,
+    "testTitle": "CBT-02: Data Isolation - Mobile View (390x844 iPhone)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:12:24.995Z"
+  },
+  {
+    "email": "test-dependent-three.mthsmo06-57b10c.w7.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mthsmo06-57b10c",
+    "workerIndex": 7,
+    "testTitle": "CBT-04: Payment Calculation Consistency (Dependent Impact)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-08-31T22:12:31.398Z"
   }
 ]

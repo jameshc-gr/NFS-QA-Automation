@@ -635,7 +635,7 @@ export async function fillWelcome(page: Page) {
     }
 
     // Handle login redirect if account already exists
-    await handleLoginAndMfa(page, email, password);
+    await handleLoginRedirect(page, email, password);
 
     // If we are still on the welcome page, the signup did not advance.
     // Give the app one more chance to settle before the next step fails.
@@ -673,7 +673,7 @@ export async function fillWelcome(page: Page) {
           console.log(`[fillWelcome] Error during retry: ${retryError}`);
         }
         
-        await handleLoginAndMfa(page, email, password);
+        await handleLoginRedirect(page, email, password);
       } else if (!page.url().includes('/forgiveness/welcome')) {
         console.log(`[fillWelcome] Page navigated away from welcome during wait: ${page.url()}`);
       } else {
@@ -749,7 +749,7 @@ async function ensureOnIncomePage(page: Page) {
     const email = getEnv('EMAIL');
     const password = getEnv('PASSWORD');
     if (email && password) {
-      await handleLoginAndMfa(page, email, password);
+      await handleLoginRedirect(page, email, password);
       console.log(`[ensureOnIncomePage] After login: ${page.url()}`);
       if (page.url().includes('/forgiveness/income')) {
         console.log('[ensureOnIncomePage] Successfully authenticated and navigated to income');
@@ -1830,7 +1830,7 @@ async function handleMfaSetup(page: Page, email: string) {
  */
 export async function handleLoginAndMfa(page: Page, email: string, password: string) {
   // First, try standard login
-  await handleLoginAndMfa(page, email, password);
+  await handleLoginRedirect(page, email, password);
   
   // Wait a moment for any redirects
   await page.waitForTimeout(3000);
@@ -1852,46 +1852,5 @@ export async function handleLoginAndMfa(page: Page, email: string, password: str
     console.log('ℹ️  Still on login screen, retrying...');
     await page.waitForTimeout(2000);
   }
-}
-
-
-/**
- * Handles post-MFA redirect back to IDR flow.
- * After user completes email and phone verification, this redirects to the IDR URL
- * and clicks login if needed to resume the application flow.
- */
-export async function handlePostMfaRedirect(page: Page) {
-  console.log('🔄 Handling post-MFA redirect...\n');
-  
-  const idrUrl = resolveTestUrl();
-  console.log(`📍 Redirecting to: ${idrUrl}`);
-  
-  try {
-    await page.goto(idrUrl, { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(2000);
-  } catch (error) {
-    console.log(`⚠️  Redirect error: ${error}`);
-  }
-  
-  // Look for login button (top right)
-  const loginBtn = page.getByRole('button', { name: /log in|sign in/i }).first();
-  const loginBtnVisible = await loginBtn.isVisible().catch(() => false);
-  
-  if (loginBtnVisible) {
-    console.log('🔐 Found login button - clicking to resume flow');
-    await loginBtn.click();
-    await page.waitForTimeout(2000);
-  }
-  
-  // Check if we reached the dashboard or welcome/income page
-  const currentUrl = page.url();
-  if (currentUrl.includes('/forgiveness/') || currentUrl.includes('dashboard')) {
-    console.log('✅ Successfully at IDR application page');
-  } else if (currentUrl.includes('/login') || currentUrl.includes('/auth')) {
-    console.log('⏳ Still on auth page, waiting for redirect...');
-    await page.waitForURL(/forgiveness|dashboard/, { timeout: 15000 }).catch(() => null);
-  }
-  
-  console.log('✅ Post-MFA redirect complete\n');
 }
 
