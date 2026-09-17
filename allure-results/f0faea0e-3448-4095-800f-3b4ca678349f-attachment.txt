@@ -1,0 +1,15 @@
+[fillWelcome] Filling form fields...
+[fillWelcome] firstName: Alex, lastName: Single, email: test-scn-001.mu2xjtmg-934be8.w0.1@yopmail.com
+[fillWelcome] Checking terms checkbox...
+[fillWelcome] Waiting for Continue button to be enabled...
+[fillWelcome] Continue button is now enabled
+[fillWelcome] Clicking Continue button...
+[fillWelcome] URL before: https://student-loans.qa.fsp.rate.com/forgiveness/welcome
+[fillWelcome] Continue button clicked
+[fillWelcome] API Response Error: https://cm.everesttech.net/cm/dd?d_uuid=88542338091388935199033775843357867529 - 302
+[fillWelcome] API Response Error: https://login.dev.rate.com/oauth2/aus1lsk5st100GteN1d7/v1/authorize?client_id=0oa107thd6tbS8ka61d8&redirect_uri=https%3A%2F%2Fstudent-loans.qa.fsp.rate.com%2Fapi%2Flogin&response_type=code&response_mode=query&scope=openid+offline_access&sessionToken=20111454Zo_ulWyt1E5tdZcuvEtHTxuOnOth6Y7EichUv_ypuCHR7LJ&state=gri-test-scn-001.mu2xjtmg-934be8.w0.1%40yopmail.com - 302
+[fillWelcome] API Response Error: https://student-loans.qa.fsp.rate.com/api/login?code=nJIKo6EmwmdC7-dMxEEfQcklw931P54q3RlbyNF71t8&state=gri-test-scn-001.mu2xjtmg-934be8.w0.1%40yopmail.com - 302
+[fillWelcome] URL after navigation: https://student-loans.qa.fsp.rate.com/forgiveness
+[fillWelcome] API Response Error: https://assets.adobedtm.com/extensions/EP31dbb9c60e404ba1aa6e746d49be6f29/AppMeasurement.min.js - 304
+[fillWelcome] API Response Error: https://assets.adobedtm.com/extensions/EP31dbb9c60e404ba1aa6e746d49be6f29/AppMeasurement_Module_ActivityMap.min.js - 304
+[fillWelcome] API Response Error: https://static-dev.rate.com/font-icons/font-files/font-icons.8493c306ac47fde26305.woff2 - 304

@@ -30,25 +30,32 @@ function parseYamlScalar(value: string) {
 }
 
 function loadProfileYaml(filePath: string) {
-  const content = readFileSync(filePath, 'utf8');
+  const content = readFileSync(filePath, "utf8");
   for (const line of content.split(/\r?\n/)) {
     const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-    const separatorIndex = line.indexOf(':');
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const separatorIndex = line.indexOf(":");
     if (separatorIndex < 0) continue;
     const key = line.slice(0, separatorIndex).trim();
     const rawValue = line.slice(separatorIndex + 1);
-    if (key) process.env[key] = parseYamlScalar(rawValue);
+    const isRuntimeSetting = ["TEST_ENV", "TEST_URL", "TEST_URL_QA", "TEST_URL_STAGE", "TEST_URL_PROD"].includes(key);
+    if (key && (!isRuntimeSetting || process.env[key] === undefined)) process.env[key] = parseYamlScalar(rawValue);
   }
 }
 
-const profileYamlPath = path.resolve(process.cwd(), 'test-data/student-IDR/student-IDR.yaml');
-const profileYmlPath = path.resolve(process.cwd(), 'test-data/student-IDR/student-IDR.yml');
+const profileYamlPath = path.resolve(process.cwd(), "test-data/student-IDR/student-IDR.yaml");
+const profileYmlPath = path.resolve(process.cwd(), "test-data/student-IDR/student-IDR.yml");
 loadProfileYaml(existsSync(profileYamlPath) ? profileYamlPath : profileYmlPath);
 
 const BASE_ENV = Object.fromEntries(
   PROFILE_KEYS.map((key) => [key, process.env[key]])
 ) as Record<string, string | undefined>;
+
+const selectedEnvironment = (process.env.TEST_ENV || "QA").trim().toUpperCase();
+const selectedEnvironmentUrl = process.env["TEST_URL_" + selectedEnvironment];
+if (selectedEnvironmentUrl && selectedEnvironment !== "QA") {
+  process.env.TEST_URL_QA = selectedEnvironmentUrl.replace(/\/forgiveness\/(welcome|income)(?:\/)?$/i, "/forgiveness/welcome");
+}
 
 // Profile values are cached per profile so parallel workers do not overwrite
 // each other's process.env state. The active profile is activated at test runtime.
@@ -95,15 +102,20 @@ export function setEnvValue(key: string, value: string) {
   activeProfileValues[key] = value;
 }
 
-function resolveTestUrl(profile?: string) {
-  const environmentName = process.env.TEST_ENV?.trim().toUpperCase();
-  if (environmentName) {
-    const envUrl = process.env[`TEST_URL_${environmentName}`]?.trim();
-    if (envUrl) return envUrl;
-  }
-  const sharedUrl = process.env.TEST_URL?.trim();
-  if (sharedUrl) return sharedUrl;
-  return process.env.TEST_URL_QA || 'https://student-loans.qa.fsp.rate.com/forgiveness/welcome';
+export function getTestUrl(route: "welcome" | "income" = "welcome") {
+  const environmentName = (process.env.TEST_ENV || "QA").trim().toUpperCase();
+  const configuredUrl = (process.env["TEST_URL_" + environmentName] || process.env.TEST_URL || "").trim();
+  const fallback = {
+    QA: "https://student-loans.qa.fsp.rate.com/forgiveness/welcome",
+    STAGE: "https://idr-stage.rate.com/forgiveness/welcome",
+    PROD: "https://student-loans.rate.com/forgiveness/welcome",
+  }[environmentName] || "https://student-loans.qa.fsp.rate.com/forgiveness/welcome";
+  const url = configuredUrl || fallback;
+  return url.replace(/\/forgiveness\/(welcome|income)(?:\/)?$/i, "/forgiveness/" + route);
+}
+
+function resolveTestUrl() {
+  return getTestUrl("welcome");
 }
 
 async function getFirstVisibleLocator(candidates: Locator[], timeoutMs = 5000) {
@@ -520,6 +532,12 @@ export async function setCheckbox(page: Page, selector: string, checked: boolean
 }
 
 export async function fillWelcome(page: Page) {
+  const testInfo = test.info();
+  const { email: generatedEmail, password: generatedPassword } = registerCredentials(getEnv("EMAIL"), getEnv("PASSWORD"), testInfo);
+  setEnvValue("EMAIL", generatedEmail);
+  setEnvValue("PASSWORD", generatedPassword);
+  process.env.EMAIL = generatedEmail;
+  process.env.PASSWORD = generatedPassword;
   await page.goto(resolveTestUrl());
   await page.locator('body').click();
   
@@ -634,8 +652,10 @@ export async function fillWelcome(page: Page) {
       page.off('response', responseHandler);
     }
 
-    // Handle login redirect if account already exists
-    await handleLoginAndMfa(page, email, password);
+    // Fresh Stage runs must never fall back to an existing-account login.
+    if (isLoginUrl(page.url())) {
+      throw new Error("Fresh signup redirected to login");
+    }
 
     // If we are still on the welcome page, the signup did not advance.
     // Give the app one more chance to settle before the next step fails.
@@ -673,7 +693,9 @@ export async function fillWelcome(page: Page) {
           console.log(`[fillWelcome] Error during retry: ${retryError}`);
         }
         
-        await handleLoginAndMfa(page, email, password);
+        if (isLoginUrl(page.url())) {
+          throw new Error("Fresh signup retry redirected to login");
+        }
       } else if (!page.url().includes('/forgiveness/welcome')) {
         console.log(`[fillWelcome] Page navigated away from welcome during wait: ${page.url()}`);
       } else {
@@ -707,82 +729,20 @@ export async function fillWelcome(page: Page) {
 
 async function ensureOnIncomePage(page: Page) {
   console.log(`[ensureOnIncomePage] Current URL: ${page.url()}`);
-  
-  if (page.url().includes('/forgiveness/income')) {
-    console.log('[ensureOnIncomePage] Already on income page');
-    return;
-  }
 
-  // The app sometimes lands on the bare /forgiveness route as a transient
-  // shell while it decides where to route the user. Wait for it to settle.
-  const url = page.url();
-  if (url.replace(/\/$/, '').endsWith('/forgiveness')) {
-    console.log('[ensureOnIncomePage] On bare /forgiveness route, waiting for redirect...');
-    await page.waitForTimeout(5000);
-    console.log(`[ensureOnIncomePage] After wait: ${page.url()}`);
-    if (page.url().includes('/forgiveness/income')) {
-      console.log('[ensureOnIncomePage] Successfully redirected to income page');
-      return;
-    }
-  }
+  if (page.url().includes("/forgiveness/income")) return;
 
-  // If we are still on welcome, the signup did not advance; try navigating to income directly.
-  if (page.url().includes('/forgiveness/welcome')) {
-    console.log('[ensureOnIncomePage] On welcome page, attempting direct navigation...');
-    try {
-      await page.goto('https://student-loans.qa.fsp.rate.com/forgiveness/income', { waitUntil: 'domcontentloaded' });
-      console.log(`[ensureOnIncomePage] After goto: ${page.url()}`);
-    } catch (error) {
-      console.log(`[ensureOnIncomePage] Goto error: ${error}`);
-    }
+  if (page.url().includes("/forgiveness/welcome") || page.url().replace(/\/$/, "").endsWith("/forgiveness") || page.url().includes("dashboard")) {
+    await page.goto(getTestUrl("income"), { waitUntil: "domcontentloaded" }).catch(() => null);
     await page.waitForTimeout(3000);
-    console.log(`[ensureOnIncomePage] After timeout: ${page.url()}`);
-    if (page.url().includes('/forgiveness/income')) {
-      console.log('[ensureOnIncomePage] Successfully navigated to income page');
-      return;
-    }
   }
 
-  // If we landed on the Okta/login page, authentication is required.
   if (isLoginUrl(page.url())) {
-    console.log('[ensureOnIncomePage] On login page, attempting to handle login...');
-    const email = getEnv('EMAIL');
-    const password = getEnv('PASSWORD');
-    if (email && password) {
-      await handleLoginAndMfa(page, email, password);
-      console.log(`[ensureOnIncomePage] After login: ${page.url()}`);
-      if (page.url().includes('/forgiveness/income')) {
-        console.log('[ensureOnIncomePage] Successfully authenticated and navigated to income');
-        return;
-      }
-    }
+    throw new Error("Stage flow reached a login page; fresh runs must not reuse existing credentials: " + page.url());
   }
 
-  // If we were redirected to my.gr-dev.com/dashboard or the bare /forgiveness
-  // landing shell after login, navigate back to the forgiveness flow manually.
-  if (page.url().includes('my.gr-dev.com') || page.url().includes('dashboard') || page.url().replace(/\/$/, '').endsWith('/forgiveness')) {
-    console.log('[ensureOnIncomePage] On dashboard/my.gr-dev, redirecting back to income...');
-    try {
-      await page.goto('https://student-loans.qa.fsp.rate.com/forgiveness/income', { waitUntil: 'domcontentloaded' });
-      console.log(`[ensureOnIncomePage] After redirect goto: ${page.url()}`);
-    } catch (error) {
-      console.log(`[ensureOnIncomePage] Redirect goto error: ${error}`);
-    }
-    await page.waitForTimeout(3000);
-    if (page.url().includes('/forgiveness/income')) {
-      console.log('[ensureOnIncomePage] Successfully redirected to income page');
-      return;
-    }
-  }
-
-  // If we still cannot reach the income page, the session is not authenticated.
-  console.log(`[ensureOnIncomePage] FAILED: Unable to reach income page. Current URL: ${page.url()}`);
-  if (!page.url().includes('/forgiveness/income')) {
-    throw new Error(
-      'Authentication required: unable to reach /forgiveness/income. ' +
-      'Current URL: ' + page.url() + '. ' +
-      'To run full IDR flow tests, supply a pre-authenticated storageState or existing-user credentials.'
-    );
+  if (!page.url().includes("/forgiveness/income")) {
+    throw new Error("Unable to reach the configured income page. Current URL: " + page.url());
   }
 }
 
@@ -1488,7 +1448,10 @@ function makeEmailUnique(email: string | undefined, workerIndex: number, counter
   if (!email) return '';
   const [localPart, domain] = email.split('@');
   if (!domain) return email;
-  return `${localPart}.${RUN_ID}.w${workerIndex}.${counter}@${domain}`;
+  const safePrefix = localPart.replace(/[^a-zA-Z0-9]/g, "").slice(0, 20) || "idrtest";
+  const runToken = RUN_ID.replace(/[^a-zA-Z0-9]/g, "").slice(-8) || "run";
+  const uniqueLocalPart = safePrefix + "." + runToken + ".w" + workerIndex + "." + counter;
+  return uniqueLocalPart + "@" + domain;
 }
 
 function makePasswordUnique(password: string | undefined, seq: number) {
@@ -1577,20 +1540,9 @@ async function handleLoginRedirect(page: Page, email: string, password: string) 
 }
 
 export async function runIdrFlow(page: Page, profile: string, options?: { testUrl?: string }) {
-  const testInfo = test.info();
-
   if (options?.testUrl) {
     process.env.TEST_URL = options.testUrl;
   }
-
-  // Ensure a unique email and password per test run to avoid duplicate-account
-  // conflicts in QA. Credentials are persisted in a registry so they can be
-  // reused if a login screen is encountered mid-run.
-  const { email, password } = registerCredentials(getEnv('EMAIL'), getEnv('PASSWORD'), testInfo);
-  setEnvValue('EMAIL', email);
-  setEnvValue('PASSWORD', password);
-  process.env.EMAIL = email;
-  process.env.PASSWORD = password;
 
   await fillWelcome(page);
   await fillIncome(page);
@@ -1830,7 +1782,7 @@ async function handleMfaSetup(page: Page, email: string) {
  */
 export async function handleLoginAndMfa(page: Page, email: string, password: string) {
   // First, try standard login
-  await handleLoginAndMfa(page, email, password);
+  await handleLoginRedirect(page, email, password);
   
   // Wait a moment for any redirects
   await page.waitForTimeout(3000);

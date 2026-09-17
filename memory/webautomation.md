@@ -423,3 +423,14 @@ Exit code: 0 (all operations successful)
 - **Recommendation**: Create a pre-authenticated Playwright storage state (`auth.json`) by performing one manual login + MFA and saving session state. Then run the full suite with `--use-storage-state=auth.json` to unblock dashboard and income flows.
 - **Dashboard tests**: Dashboard flows are covered in `tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts` but remain partially blocked by authentication; their test cases are enumerated in `test-data/student-IDR/03_test_cases.csv` (DASH-001..DASH-005).
 
+
+## 2026-09-15: Student IDR Stage Migration & Concurrency Control
+
+### Context & Requirements
+- **New Stage URL**: `https://idr-stage.rate.com/forgiveness/welcome` (and `/forgiveness/income`).
+- **Core Stage Rule**: In Stage, applications do not reach dashboard; completing the initial steps redirects forward to the next screen (`/forgiveness/income`, etc.).
+- **Account Policy**: Do NOT reuse old accounts because Okta prompts for MFA verification upon re-login. Always generate random fresh unique accounts per test execution.
+- **Email Formatting Fix**: Bounded email generation string to prevent exceeding Okta standard length limits (`testbase.<run8>.w<worker>.<counter>@yopmail.com`).
+- **Execution & Batching Rule**: Run 1 test first. If and only if it passes, run subsequent tests in batches with 5 workers (`--workers=5`).
+- **Dynamic Environment Support**: Configured `test-setup.ts` to dynamically resolve `TEST_ENV=QA|STAGE|PROD` and appropriately prioritize `TEST_URL_STAGE` without falling back to hardcoded QA URLs.
+- **Harness Fixes**: Eliminated recursive call stack exhaustion in `handleLoginAndMfa`, ensured fresh signups reject unexpected login redirects instead of getting stuck in infinite auth loops, and properly initialized `student-IDR.yml` profile loading so form fields are populated cleanly.

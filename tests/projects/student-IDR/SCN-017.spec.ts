@@ -16,5 +16,5 @@ test('Student IDR - SCN-017 - Existing user login link', async ({ page }) => {
   // Production runs should set EXISTING_USER_EMAIL and EXISTING_USER_PASSWORD
   // and complete Okta authentication before returning to the forgiveness flow.
   await loginLink.click();
-  await expect(page).toHaveURL(/okta\/login|my\.gr-dev\.com/);
+  await expect(page).toHaveURL(/okta\/login|my\.gr-dev\.com|login\.rate\.com|login\.dev\.rate\.com/);
 });

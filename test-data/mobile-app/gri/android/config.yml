@@ -22,8 +22,8 @@ android:
       environment: prod
       appPackage: com.guaranteedrate.superapp
       firebase:
-        # Console label; "398" (buildVersion alone) also matches.
-        release: "1.48-prod (398)"
+        # Play Store-matching PROD release.
+        release: "1.52-prod (404)"
         webUrl: https://console.firebase.google.com/u/0/project/rate---prod/appdistribution/app/android:com.guaranteedrate.superapp/releases
     # QA/dev line. Emails go to the Outlook mailbox (MOBILE_ENV=qa|dev).
     qa:

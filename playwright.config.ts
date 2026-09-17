@@ -63,8 +63,9 @@ function buildApiHeaders() {
   return headers;
 }
 
-// Enforce session limits for Student IDR tests to prevent security resets
-const studentIDRMaxWorkers = testProject === 'student-IDR' ? 3 : undefined;
+// The runner supplies the first-test gate and subsequent five-worker batch.
+const configuredWorkers = process.env.PLAYWRIGHT_WORKERS ? Number(process.env.PLAYWRIGHT_WORKERS) : undefined;
+const studentIDRMaxWorkers = testProject === 'student-IDR' ? (configuredWorkers || 5) : configuredWorkers;
 
 export default defineConfig({
   testDir: `./${testSuiteDir}`,

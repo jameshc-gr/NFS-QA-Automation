@@ -5740,5 +5740,743 @@
     "testTitle": "CBT-04: Payment Calculation Consistency (Dependent Impact)",
     "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
     "createdAt": "2026-08-31T22:12:31.398Z"
+  },
+  {
+    "email": "test-scn-001.mu2xjtmg-934be8.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2xjtmg-934be8",
+    "workerIndex": 0,
+    "testTitle": "DASH-001: Overview renders and exposes dashboard sections",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COVERAGE.spec.ts",
+    "createdAt": "2026-09-15T17:12:45.426Z"
+  },
+  {
+    "email": "test-dependent-one.mu2ym1mk-e010fa.w16.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ym1mk-e010fa",
+    "workerIndex": 16,
+    "testTitle": "CBT-01: Data Isolation - Parallel User Access Control (Desktop)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-09-15T17:42:28.132Z"
+  },
+  {
+    "email": "test-dependent-one.mu2ym25o-290631.w14.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ym25o-290631",
+    "workerIndex": 14,
+    "testTitle": "CBT-02: Data Isolation - Mobile View (390x844 iPhone)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-09-15T17:42:28.926Z"
+  },
+  {
+    "email": "test-dependent-one.mu2ym3fp-b9599d.w15.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ym3fp-b9599d",
+    "workerIndex": 15,
+    "testTitle": "CBT-03: UI Consistency Across Browsers",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-09-15T17:42:30.485Z"
+  },
+  {
+    "email": "test-dependent-one.mu2ym8sg-62554c.w17.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ym8sg-62554c",
+    "workerIndex": 17,
+    "testTitle": "CBT-04: Payment Calculation Consistency (Dependent Impact)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-09-15T17:42:37.947Z"
+  },
+  {
+    "email": "test-scn-001.mu2ym8v8-68d732.w18.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ym8v8-68d732",
+    "workerIndex": 18,
+    "testTitle": "DASH-100: Dashboard renders all main sections with proper hierarchy",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:42:38.072Z"
+  },
+  {
+    "email": "test-scn-001.mu2yma3a-08b116.w19.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2yma3a-08b116",
+    "workerIndex": 19,
+    "testTitle": "DASH-402: Add multiple loans to table",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:42:39.626Z"
+  },
+  {
+    "email": "test-scn-001.mu2ymg2q-8e489b.w20.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ymg2q-8e489b",
+    "workerIndex": 20,
+    "testTitle": "DASH-101: Dashboard responds to section tab clicks with smooth transitions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:42:47.374Z"
+  },
+  {
+    "email": "test-scn-001.mu2ymgt7-049563.w21.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ymgt7-049563",
+    "workerIndex": 21,
+    "testTitle": "DASH-403: Edit existing loan balance",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:42:48.370Z"
+  },
+  {
+    "email": "test-scn-001.mu2ymick-d39622.w22.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ymick-d39622",
+    "workerIndex": 22,
+    "testTitle": "DASH-801: Select scenario loads data",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:42:50.299Z"
+  },
+  {
+    "email": "test-scn-001.mu2ympaf-2239d4.w23.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ympaf-2239d4",
+    "workerIndex": 23,
+    "testTitle": "DASH-102: Dashboard header displays user name and logout option",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:42:59.331Z"
+  },
+  {
+    "email": "test-scn-001.mu2ympm0-36875b.w24.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ympm0-36875b",
+    "workerIndex": 24,
+    "testTitle": "DASH-404: Edit APR and verify calculation impact",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:42:59.729Z"
+  },
+  {
+    "email": "test-scn-001.mu2ymrz4-92ddbf.w25.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ymrz4-92ddbf",
+    "workerIndex": 25,
+    "testTitle": "DASH-802: Save new scenario",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:03.001Z"
+  },
+  {
+    "email": "test-scn-001.mu2ymxoq-9fa4d1.w26.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ymxoq-9fa4d1",
+    "workerIndex": 26,
+    "testTitle": "DASH-200: Overview displays key financial metrics",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:10.224Z"
+  },
+  {
+    "email": "test-scn-001.mu2ymyxn-278133.w27.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ymyxn-278133",
+    "workerIndex": 27,
+    "testTitle": "DASH-405: Delete single loan from table",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:11.854Z"
+  },
+  {
+    "email": "test-scn-001.mu2yn18r-1a3d6b.w28.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2yn18r-1a3d6b",
+    "workerIndex": 28,
+    "testTitle": "DASH-900: Loan CRUD updates all dependent sections",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:14.805Z"
+  },
+  {
+    "email": "test-scn-001.mu2yn59f-a66470.w29.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2yn59f-a66470",
+    "workerIndex": 29,
+    "testTitle": "DASH-201: Monthly payment recalculates when income changes",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:20.066Z"
+  },
+  {
+    "email": "test-scn-001.mu2yn7wj-2aae06.w30.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2yn7wj-2aae06",
+    "workerIndex": 30,
+    "testTitle": "DASH-407: Loan balance validation - rejects negative",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:23.427Z"
+  },
+  {
+    "email": "test-scn-001.mu2yn9xg-bd9970.w31.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2yn9xg-bd9970",
+    "workerIndex": 31,
+    "testTitle": "DASH-902: Personal data income change recalcs all metrics",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:26.072Z"
+  },
+  {
+    "email": "test-scn-001.mu2ync5j-c7d492.w32.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ync5j-c7d492",
+    "workerIndex": 32,
+    "testTitle": "DASH-202: Total balance updates when loan added",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:28.971Z"
+  },
+  {
+    "email": "test-scn-001.mu2ynhtm-954f0c.w33.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ynhtm-954f0c",
+    "workerIndex": 33,
+    "testTitle": "DASH-410: Loan totals calculate correctly in footer",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:36.314Z"
+  },
+  {
+    "email": "test-scn-001.mu2ynkad-0d7890.w34.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ynkad-0d7890",
+    "workerIndex": 34,
+    "testTitle": "DASH-903: Marital status change reveals/hides spouse sections",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:39.474Z"
+  },
+  {
+    "email": "test-scn-001.mu2ynldf-9a6acb.w35.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ynldf-9a6acb",
+    "workerIndex": 35,
+    "testTitle": "DASH-203: Total assets display updates when asset added",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:40.927Z"
+  },
+  {
+    "email": "test-scn-001.mu2ynrnh-31f556.w36.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ynrnh-31f556",
+    "workerIndex": 36,
+    "testTitle": "DASH-500: Assets table displays all columns",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:49.059Z"
+  },
+  {
+    "email": "test-scn-001.mu2ynt45-04a016.w37.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2ynt45-04a016",
+    "workerIndex": 37,
+    "testTitle": "DASH-204: Tax bomb estimate changes with principal total",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:50.954Z"
+  },
+  {
+    "email": "test-scn-001.mu2yntip-e50205.w38.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2yntip-e50205",
+    "workerIndex": 38,
+    "testTitle": "DASH-904: Scenario load cascades to all sections",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:43:51.466Z"
+  },
+  {
+    "email": "test-scn-001.mu2yo535-4467d1.w39.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu2yo535-4467d1",
+    "workerIndex": 39,
+    "testTitle": "DASH-401: Settings changes persist after save",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/DASHBOARD-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T17:44:06.411Z"
+  },
+  {
+    "email": "test-scn-001.mu34lc68-7f539f.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu34lc68-7f539f",
+    "workerIndex": 0,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-09-15T20:29:53.285Z"
+  },
+  {
+    "email": "test-scn-001.mu34ozxn-80a341.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu34ozxn-80a341",
+    "workerIndex": 0,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-09-15T20:32:44.068Z"
+  },
+  {
+    "email": "test-scn-001.mu34q07i-c35c17.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu34q07i-c35c17",
+    "workerIndex": 0,
+    "testTitle": "Student IDR - SCN-001 - Alex single moderate income",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SCN-001.spec.ts",
+    "createdAt": "2026-09-15T20:33:31.235Z"
+  },
+  {
+    "email": "",
+    "password": "",
+    "runId": "mu36eocv-6a8ffa",
+    "workerIndex": 15,
+    "testTitle": "CBT-01: Data Isolation - Parallel User Access Control (Desktop)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-09-15T21:20:41.266Z"
+  },
+  {
+    "email": "test-base.mu3739xx-141d07.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu3739xx-141d07",
+    "workerIndex": 0,
+    "testTitle": "ASSETS-DISCOVERY-001: Inspect Assets Page Structure",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/ASSETS-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T21:39:50.238Z"
+  },
+  {
+    "email": "test-base.mu3739xx-141d07.w0.1.mu3739xx-141d07.w0.2@yopmail.com",
+    "password": "SecurePass12312!",
+    "runId": "mu3739xx-141d07",
+    "workerIndex": 0,
+    "testTitle": "ASSETS-BOUNDARY-001: Add Single Asset Account",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/ASSETS-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T21:42:44.957Z"
+  },
+  {
+    "email": "test-base.mu3739xx-141d07.w0.1.mu3739xx-141d07.w0.2.mu3739xx-141d07.w0.3@yopmail.com",
+    "password": "SecurePass123123!",
+    "runId": "mu3739xx-141d07",
+    "workerIndex": 0,
+    "testTitle": "ASSETS-BOUNDARY-002: Add Multiple Asset Accounts",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/ASSETS-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T21:45:39.985Z"
+  },
+  {
+    "email": "testbase.yf307daf.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu37clyf-307daf",
+    "workerIndex": 0,
+    "testTitle": "ASSETS-DISCOVERY-001: Inspect Assets Page Structure",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/ASSETS-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T21:47:05.754Z"
+  },
+  {
+    "email": "testbase.8ye85547.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu37y98y-e85547",
+    "workerIndex": 0,
+    "testTitle": "VAL-DATE-001: Invalid date - month 33",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:03:55.970Z"
+  },
+  {
+    "email": "testbase8ye85547w01.8ye85547.w0.2@yopmail.com",
+    "password": "SecurePass12312!",
+    "runId": "mu37y98y-e85547",
+    "workerIndex": 0,
+    "testTitle": "VAL-DATE-002: Invalid date - day 44",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:04:12.514Z"
+  },
+  {
+    "email": "testbase8ye85547w018.8ye85547.w0.3@yopmail.com",
+    "password": "SecurePass123123!",
+    "runId": "mu37y98y-e85547",
+    "workerIndex": 0,
+    "testTitle": "VAL-DATE-003: CRITICAL - Invalid date 33/44/1111 (from complaint)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:04:26.310Z"
+  },
+  {
+    "email": "testbase8ye85547w018.8ye85547.w0.4@yopmail.com",
+    "password": "SecurePass1231234!",
+    "runId": "mu37y98y-e85547",
+    "workerIndex": 0,
+    "testTitle": "VAL-DATE-004: Invalid February 30th",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:04:38.918Z"
+  },
+  {
+    "email": "testbase8ye85547w018.8ye85547.w0.5@yopmail.com",
+    "password": "SecurePass12312345!",
+    "runId": "mu37y98y-e85547",
+    "workerIndex": 0,
+    "testTitle": "VAL-DATE-005: Invalid leap year - February 29 in 2025",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:04:53.509Z"
+  },
+  {
+    "email": "testbase8ye85547w018.8ye85547.w0.6@yopmail.com",
+    "password": "SecurePass123123456!",
+    "runId": "mu37y98y-e85547",
+    "workerIndex": 0,
+    "testTitle": "VAL-DATE-006: Valid leap year - February 29 in 2024",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:05:06.837Z"
+  },
+  {
+    "email": "testbase8ye85547w018.8ye85547.w0.7@yopmail.com",
+    "password": "SecurePass1231234567!",
+    "runId": "mu37y98y-e85547",
+    "workerIndex": 0,
+    "testTitle": "VAL-NUM-001: Negative AGI",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:05:29.022Z"
+  },
+  {
+    "email": "testbase8ye85547w018.8ye85547.w0.8@yopmail.com",
+    "password": "SecurePass12312345678!",
+    "runId": "mu37y98y-e85547",
+    "workerIndex": 0,
+    "testTitle": "VAL-NUM-002: Zero AGI",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:05:41.691Z"
+  },
+  {
+    "email": "testbase8ye85547w018.8ye85547.w0.9@yopmail.com",
+    "password": "SecurePass123123456789!",
+    "runId": "mu37y98y-e85547",
+    "workerIndex": 0,
+    "testTitle": "VAL-NUM-003: Extremely high AGI (999,999,999)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:05:52.403Z"
+  },
+  {
+    "email": "testbase8ye85547w018.8ye85547.w0.10@yopmail.com",
+    "password": "SecurePass12312345678910!",
+    "runId": "mu37y98y-e85547",
+    "workerIndex": 0,
+    "testTitle": "VAL-NUM-004: Negative loan balance",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:06:01.492Z"
+  },
+  {
+    "email": "testbase8ye85547w018.8ye85547.w0.11@yopmail.com",
+    "password": "SecurePass1231234567891011!",
+    "runId": "mu37y98y-e85547",
+    "workerIndex": 0,
+    "testTitle": "VAL-NUM-005: Negative interest rate",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:06:15.517Z"
+  },
+  {
+    "email": "testbase8ye85547w018.8ye85547.w0.12@yopmail.com",
+    "password": "SecurePass123123456789101112!",
+    "runId": "mu37y98y-e85547",
+    "workerIndex": 0,
+    "testTitle": "VAL-NUM-006: Interest rate > 100%",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:06:30.230Z"
+  },
+  {
+    "email": "testbase8ye85547w018.8ye85547.w0.13@yopmail.com",
+    "password": "SecurePass12312345678910111213!",
+    "runId": "mu37y98y-e85547",
+    "workerIndex": 0,
+    "testTitle": "VAL-NUM-007: Negative forbearance months",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:06:43.657Z"
+  },
+  {
+    "email": "testbase.cmf4260b.w1.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu3826cm-f4260b",
+    "workerIndex": 1,
+    "testTitle": "VAL-NUM-008: Forbearance very high (360 months)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:06:58.883Z"
+  },
+  {
+    "email": "testbase.l3260732.w2.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu382il3-260732",
+    "workerIndex": 2,
+    "testTitle": "VAL-NUM-009: Negative current monthly payment",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VALIDATION-BOUNDARY-TESTS.spec.ts",
+    "createdAt": "2026-09-15T22:07:15.363Z"
+  },
+  {
+    "email": "testbase.1v1f09dc.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu383i1v-1f09dc",
+    "workerIndex": 0,
+    "testTitle": "VERIFY: Check if UI prevents negative values in AGI field",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VERIFY-NEGATIVE-VALUES.spec.ts",
+    "createdAt": "2026-09-15T22:08:01.577Z"
+  },
+  {
+    "email": "testbase.kq3df7e4.w4.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu383wkq-3df7e4",
+    "workerIndex": 4,
+    "testTitle": "Check Loan Balance field: -25000 input",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VERIFY-UI-BEHAVIOR-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T22:08:21.057Z"
+  },
+  {
+    "email": "testbase.k5d9687a.w3.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu383wk5-d9687a",
+    "workerIndex": 3,
+    "testTitle": "Check Password field requirements",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VERIFY-UI-BEHAVIOR-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T22:08:21.081Z"
+  },
+  {
+    "email": "testbase.kjc96aa0.w2.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu383wkj-c96aa0",
+    "workerIndex": 2,
+    "testTitle": "Check AGI/Income field: -50000 input",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VERIFY-UI-BEHAVIOR-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T22:08:21.140Z"
+  },
+  {
+    "email": "testbasekq3df7e4w41.kq3df7e4.w4.2@yopmail.com",
+    "password": "SecurePass12312!",
+    "runId": "mu383wkq-3df7e4",
+    "workerIndex": 4,
+    "testTitle": "Inspect actual input types and masks",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/VERIFY-UI-BEHAVIOR-COMPREHENSIVE.spec.ts",
+    "createdAt": "2026-09-15T22:08:37.049Z"
+  },
+  {
+    "email": "testdependentone.y010b869.w3.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu385hy0-10b869",
+    "workerIndex": 3,
+    "testTitle": "CBT-04: Payment Calculation Consistency (Dependent Impact)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-09-15T22:09:33.152Z"
+  },
+  {
+    "email": "testdependentone.xe9aba13.w4.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu385hxe-9aba13",
+    "workerIndex": 4,
+    "testTitle": "SEC-01.1: User B cannot access User A dashboard via direct URL",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-09-15T22:09:33.223Z"
+  },
+  {
+    "email": "testdependentone.x6dbfa6f.w2.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu385hx6-dbfa6f",
+    "workerIndex": 2,
+    "testTitle": "CBT-03: UI Consistency Across Browsers",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-09-15T22:09:33.289Z"
+  },
+  {
+    "email": "testdependentone.x9ac2a5d.w1.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu385hx9-ac2a5d",
+    "workerIndex": 1,
+    "testTitle": "CBT-02: Data Isolation - Mobile View (390x844 iPhone)",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/CROSS-BROWSER-SECURITY.spec.ts",
+    "createdAt": "2026-09-15T22:09:33.435Z"
+  },
+  {
+    "email": "testdependentone.qq0b84ea.w5.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu386hqq-0b84ea",
+    "workerIndex": 5,
+    "testTitle": "SEC-01.2: User payment data is isolated per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-09-15T22:10:19.293Z"
+  },
+  {
+    "email": "testdependentone.v06dffa2.w6.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu386jv0-6dffa2",
+    "workerIndex": 6,
+    "testTitle": "SEC-01.3: User profile data isolation across sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-09-15T22:10:21.930Z"
+  },
+  {
+    "email": "testdependentone.xub1f2ee.w7.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu386jxu-b1f2ee",
+    "workerIndex": 7,
+    "testTitle": "SEC-01.4: User data consistency across multiple sessions",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-01-USER-ISOLATION.spec.ts",
+    "createdAt": "2026-09-15T22:10:22.313Z"
+  },
+  {
+    "email": "testdependentone.p9715389.w8.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu3873p9-715389",
+    "workerIndex": 8,
+    "testTitle": "SEC-02.1: Verify users cannot access other accounts via URL manipulation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-09-15T22:10:47.714Z"
+  },
+  {
+    "email": "testscn001.ul49588a.w9.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu387ful-49588a",
+    "workerIndex": 9,
+    "testTitle": "SEC-02.2: Verify loan data isolation between accounts",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-09-15T22:11:03.382Z"
+  },
+  {
+    "email": "testscn005.zef99561.w11.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu387ize-f99561",
+    "workerIndex": 11,
+    "testTitle": "SEC-02.4: Verify API response filtering per user",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-09-15T22:11:07.498Z"
+  },
+  {
+    "email": "testscn003.x293c78d.w10.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu387ix2-93c78d",
+    "workerIndex": 10,
+    "testTitle": "SEC-02.3: Verify session cookie isolation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-09-15T22:11:07.548Z"
+  },
+  {
+    "email": "testscn010.vae1ffec.w12.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu387jva-e1ffec",
+    "workerIndex": 12,
+    "testTitle": "SEC-02.5: Verify ID enumeration prevention",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-02-API-SECURITY.spec.ts",
+    "createdAt": "2026-09-15T22:11:08.567Z"
+  },
+  {
+    "email": "testscn020.urcf7549.w14.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu3880ur-cf7549",
+    "workerIndex": 14,
+    "testTitle": "SEC-03.2: Prevent permission escalation attempts",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-03-AUTHORIZATION.spec.ts",
+    "createdAt": "2026-09-15T22:11:30.590Z"
+  },
+  {
+    "email": "testbase.p29df295.w15.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu388lp2-9df295",
+    "workerIndex": 15,
+    "testTitle": "SEC-03.3: Verify sensitive operations require confirmation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-03-AUTHORIZATION.spec.ts",
+    "createdAt": "2026-09-15T22:11:57.684Z"
+  },
+  {
+    "email": "testbase.da7d9ed6.w16.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu388pda-7d9ed6",
+    "workerIndex": 16,
+    "testTitle": "SEC-03.5: Verify data access boundaries",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-03-AUTHORIZATION.spec.ts",
+    "createdAt": "2026-09-15T22:12:02.553Z"
+  },
+  {
+    "email": "testbase.ebb427b0.w17.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu388ueb-b427b0",
+    "workerIndex": 17,
+    "testTitle": "SEC-03.6: Verify admin function access control",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/SEC-03-AUTHORIZATION.spec.ts",
+    "createdAt": "2026-09-15T22:12:08.755Z"
+  },
+  {
+    "email": "testbase.4780b4b5.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu38wz47-80b4b5",
+    "workerIndex": 0,
+    "testTitle": "SAN-03: Income Step - Currency Input Masking and Injection Resistance",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/INPUT-SANITIZATION-SECURITY-AUDIT.spec.ts",
+    "createdAt": "2026-09-15T22:31:04.332Z"
+  },
+  {
+    "email": "testbase.4780b4b5.w0.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mu38wz47-80b4b5",
+    "workerIndex": 0,
+    "testTitle": "SAN-04: Income Step - Married Spouse Name Fields Sanitization",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/INPUT-SANITIZATION-SECURITY-AUDIT.spec.ts",
+    "createdAt": "2026-09-15T22:31:18.916Z"
+  },
+  {
+    "email": "testbase.4780b4b5.w0.3@yopmail.com",
+    "password": "SecurePass1233!",
+    "runId": "mu38wz47-80b4b5",
+    "workerIndex": 0,
+    "testTitle": "SAN-05: Federal Loans Step - Numeric and Percentage Input Validation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/INPUT-SANITIZATION-SECURITY-AUDIT.spec.ts",
+    "createdAt": "2026-09-15T22:31:35.782Z"
+  },
+  {
+    "email": "testbase.j63a876d.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu3900j6-3a876d",
+    "workerIndex": 0,
+    "testTitle": "SAN-03: Income Step - Currency Input Masking and Injection Resistance",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/INPUT-SANITIZATION-SECURITY-AUDIT.spec.ts",
+    "createdAt": "2026-09-15T22:33:25.259Z"
+  },
+  {
+    "email": "testbase.j63a876d.w0.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mu3900j6-3a876d",
+    "workerIndex": 0,
+    "testTitle": "SAN-04: Income Step - Married Spouse Name Fields Sanitization",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/INPUT-SANITIZATION-SECURITY-AUDIT.spec.ts",
+    "createdAt": "2026-09-15T22:33:37.575Z"
+  },
+  {
+    "email": "testbase.0fd13065.w1.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu390t0f-d13065",
+    "workerIndex": 1,
+    "testTitle": "SAN-05: Federal Loans Step - Numeric and Percentage Input Validation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/INPUT-SANITIZATION-SECURITY-AUDIT.spec.ts",
+    "createdAt": "2026-09-15T22:33:53.527Z"
+  },
+  {
+    "email": "testbase.ph1c9836.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu393jph-1c9836",
+    "workerIndex": 0,
+    "testTitle": "SAN-04: Income Step - Married Spouse Name Fields Sanitization",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/INPUT-SANITIZATION-SECURITY-AUDIT.spec.ts",
+    "createdAt": "2026-09-15T22:36:01.639Z"
+  },
+  {
+    "email": "testbase.sn056d86.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu394tsn-056d86",
+    "workerIndex": 0,
+    "testTitle": "SAN-05: Federal Loans Step - Numeric and Percentage Input Validation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/INPUT-SANITIZATION-SECURITY-AUDIT.spec.ts",
+    "createdAt": "2026-09-15T22:37:01.229Z"
+  },
+  {
+    "email": "testbase.rv6b04aa.w0.1@yopmail.com",
+    "password": "SecurePass1231!",
+    "runId": "mu395brv-6b04aa",
+    "workerIndex": 0,
+    "testTitle": "SAN-03: Income Step - Currency Input Masking and Injection Resistance",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/INPUT-SANITIZATION-SECURITY-AUDIT.spec.ts",
+    "createdAt": "2026-09-15T22:37:36.464Z"
+  },
+  {
+    "email": "testbase.rv6b04aa.w0.2@yopmail.com",
+    "password": "SecurePass1232!",
+    "runId": "mu395brv-6b04aa",
+    "workerIndex": 0,
+    "testTitle": "SAN-04: Income Step - Married Spouse Name Fields Sanitization",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/INPUT-SANITIZATION-SECURITY-AUDIT.spec.ts",
+    "createdAt": "2026-09-15T22:37:51.172Z"
+  },
+  {
+    "email": "testbase.rv6b04aa.w0.3@yopmail.com",
+    "password": "SecurePass1233!",
+    "runId": "mu395brv-6b04aa",
+    "workerIndex": 0,
+    "testTitle": "SAN-05: Federal Loans Step - Numeric and Percentage Input Validation",
+    "testFile": "/Users/jameshc/Automation/WebAutomation/tests/projects/student-IDR/INPUT-SANITIZATION-SECURITY-AUDIT.spec.ts",
+    "createdAt": "2026-09-15T22:38:04.762Z"
   }
 ]

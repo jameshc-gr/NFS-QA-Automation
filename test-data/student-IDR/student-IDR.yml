@@ -2,8 +2,8 @@
 # Source-of-truth profile file for tests/projects/student-IDR
 
 TEST_URL_QA: "https://student-loans.qa.fsp.rate.com/forgiveness/welcome"
-TEST_URL_STAGE: "https://student-loans-apply-stage.rate.com/forgiveness/welcome"
-TEST_URL_Prod: "https://student-loans.rate.com/forgiveness/welcome"
+TEST_URL_STAGE: "https://idr-stage.rate.com/forgiveness/income"
+TEST_URL_PROD: "https://student-loans.rate.com/forgiveness/welcome"
 
 TEST_ENV: "QA"
 

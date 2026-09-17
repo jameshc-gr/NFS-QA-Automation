@@ -1156,7 +1156,7 @@ export function resolveMobileCapabilities(): MobileCapabilities {
       process.env.MOBILE_APP_PACKAGE || android.build.appPackage || 'com.guaranteedrate.superapp.qa',
     'appium:appActivity':
       process.env.MOBILE_APP_ACTIVITY || android.build.appActivity || 'com.guaranteedrate.superapp.MainActivity',
-    'appium:noReset': false,
+    'appium:noReset': process.env.MOBILE_NO_RESET === 'true',
     'appium:autoGrantPermissions': true,
     // Verification specs pause for minutes while polling an inbox, and Appium
     // would otherwise drop the session after 60s without a command.

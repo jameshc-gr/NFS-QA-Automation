@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
-import { loadProfile } from './test-setup';
+import { getTestUrl, loadProfile } from './test-setup';
 
 test.setTimeout(120000);
 
 loadProfile('BASE');
 
 test('Student IDR - UI-FLOW-04 - Missing required fields on welcome', async ({ page }) => {
-  await page.goto(process.env.TEST_URL_QA || 'https://student-loans.qa.fsp.rate.com/forgiveness/welcome');
+  await page.goto(getTestUrl("welcome"));
 
   const continueButton = page.locator('button[data-testid="button"]').first();
   await expect(continueButton).toBeDisabled();

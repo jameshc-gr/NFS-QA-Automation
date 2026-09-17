@@ -100,7 +100,12 @@ async function main(): Promise<void> {
     throw new Error('Firebase download not enabled and no local APK/AAB found in artifact roots. Set FORCE_FIREBASE_DOWNLOAD=1 or provide FIREBASE_SESSION_PATH to enable web download.');
   }
 
-  const sessionPath = path.resolve(process.cwd(), explicitSession || '');
+  // Use the same profile as the Firebase access check by default. A dedicated
+  // Firebase session remains available through FIREBASE_SESSION_PATH.
+  const sessionPath = path.resolve(
+    process.cwd(),
+    explicitSession || process.env.GV_SESSION_PATH || 'mobile/.auth/gv-session.json'
+  );
   const userDataDir = sessionPath.replace(/\.json$/, '-user-data');
   if (!existsSync(userDataDir)) {
     throw new Error(`No Google browser profile at ${userDataDir}. Run "npm run setup:firebase-session" first.`);

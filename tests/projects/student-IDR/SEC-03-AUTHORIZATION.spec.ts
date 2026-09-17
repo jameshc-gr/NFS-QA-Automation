@@ -56,7 +56,7 @@ test.describe('SEC-03: Authorization & Permissions', () => {
       'Role elevation attempts'
     ];
     
-    let escal ationAttempts = 0;
+    let escalationAttempts = 0;
     let successfulEscalations = 0;
     
     // Try to modify localStorage
