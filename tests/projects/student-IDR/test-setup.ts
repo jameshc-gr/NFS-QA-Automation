@@ -181,7 +181,9 @@ export async function clickWhenEnabled(locator: Locator, timeoutMs = 10000, page
 
   // On timeout, attempt to save a small screenshot for debugging then throw.
   try {
-    const outDir = path.resolve(process.cwd(), 'test-results');
+    const d = new Date();
+    const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const outDir = path.resolve(process.cwd(), 'test-results', dateStr, 'student-IDR');
     if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
     const filename = `click-when-enabled-failure-${randomBytes(4).toString('hex')}.png`;
     const outPath = path.join(outDir, filename);
@@ -715,9 +717,13 @@ export async function fillWelcome(page: Page) {
       
       if (finalUrl.includes('/forgiveness/welcome')) {
         console.log('[fillWelcome] ERROR: Failed to navigate away from welcome page');
-        // Take screenshot for debugging
+        // Take screenshot for debugging into dated results folder
         try {
-          await page.screenshot({ path: 'welcome-page-stuck.png' });
+          const d = new Date();
+          const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+          const outDir = path.resolve(process.cwd(), 'test-results', dateStr, 'student-IDR');
+          if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+          await page.screenshot({ path: path.join(outDir, 'welcome-page-stuck.png') });
           console.log('[fillWelcome] Screenshot saved to welcome-page-stuck.png');
         } catch (e) {
           console.log('[fillWelcome] Could not take screenshot');

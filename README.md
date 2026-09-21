@@ -94,6 +94,19 @@ flowchart TD
 
 This repository includes Student Loan Refinance and Student IDR suites. Their profile sources are [test-data/student-loan-refi/student-loan-refi.yml](test-data/student-loan-refi/student-loan-refi.yml) and [test-data/student-IDR/student-IDR.yml](test-data/student-IDR/student-IDR.yml). The root `.env` file is a compatibility source for shared environment settings.
 
+### Student IDR Calculation & Matrix Testing
+The IDR suite contains a dedicated calculation and validation engine for verifying Income-Driven Repayment (IDR), Federal Poverty Line (FPL) deductions, tax bomb estimates, and sinking fund savings:
+- Test Data: [test-data/student-IDR/test_cases_automation.csv](test-data/student-IDR/test_cases_automation.csv) (50 comprehensive test scenarios)
+- Test Plan: [test-data/student-IDR/FILING-HOUSEHOLD-STATE-CALCULATION-TEST-PLAN.md](test-data/student-IDR/FILING-HOUSEHOLD-STATE-CALCULATION-TEST-PLAN.md)
+- Test Spec: [tests/projects/student-IDR/FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts](tests/projects/student-IDR/FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts)
+- Engine: [tests/projects/student-IDR/idr-calculator.ts](tests/projects/student-IDR/idr-calculator.ts)
+- Run Commands:
+  ```bash
+  npm run test:filing-calc          # Run Playwright test in Chromium
+  npm run test:filing-calc:runner   # Run standalone suite runner with summary report
+  ```
+- Latest Results: [test-data/student-IDR/FILING-HOUSEHOLD-STATE-CALCULATION-TEST-RESULTS.md](test-data/student-IDR/FILING-HOUSEHOLD-STATE-CALCULATION-TEST-RESULTS.md)
+
 ## Directory Conventions
 
 - Use repo-relative paths in docs and prompts (for example `tests/projects/...`), not leading slash paths like `/tests/...`.

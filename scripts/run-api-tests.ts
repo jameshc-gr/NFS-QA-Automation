@@ -332,7 +332,11 @@ async function main() {
     console.log('━'.repeat(60));
 
     // Write detailed report
-    const reportPath = path.resolve(`test-results/api-test-report-${Date.now()}.json`);
+    const reportPath = path.resolve(
+      'test-results',
+      new Date().toISOString().slice(0, 10),
+      `api-test-report-${Date.now()}.json`
+    );
     await fs.mkdir(path.dirname(reportPath), { recursive: true });
     await fs.writeFile(
       reportPath,

@@ -117,8 +117,20 @@ function loadYamlFile<T>(filePath: string, fallback: T): T {
 
 const authRoot = path.resolve(process.cwd(), 'test-data/mobile-app/gri/android');
 const createdAccountsPath = path.resolve(process.cwd(), 'test-data/mobile-app/created-accounts.json');
-const testResultsAccountsPath = path.resolve(process.cwd(), 'test-results/mobile-app-accounts.json');
-const testResultsRecentPath = path.resolve(process.cwd(), 'test-results/recent-created-accounts.json');
+
+// Use dated paths under test-results/ to match the new folder convention
+function _getDatedTestResultsPaths(): { accountsPath: string; recentPath: string } {
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const dateDir = path.resolve(process.cwd(), `test-results/${yyyy}-${mm}-${dd}`);
+  return {
+    accountsPath: path.join(dateDir, 'mobile-app-accounts.json'),
+    recentPath: path.join(dateDir, 'recent-created-accounts.json'),
+  };
+}
+
 const loginConfig = loadYamlFile<LoginConfig>(path.join(authRoot, 'login.yml'), DEFAULT_LOGIN_CONFIG);
 const runtimeConfig = loadYamlFile<RuntimeConfig>(path.join(authRoot, 'config.yml'), DEFAULT_RUNTIME_CONFIG);
 
@@ -153,12 +165,13 @@ function writeCreatedAccounts(records: CreatedAccountRecord[]): void {
 }
 
 function appendToTestResults(entry: CreatedAccountRecord): void {
+  const p = _getDatedTestResultsPaths();
   try {
-    mkdirSync(path.dirname(testResultsAccountsPath), { recursive: true });
+    mkdirSync(path.dirname(p.accountsPath), { recursive: true });
     let all: CreatedAccountRecord[] = [];
-    if (existsSync(testResultsAccountsPath)) {
+    if (existsSync(p.accountsPath)) {
       try {
-        all = JSON.parse(readFileSync(testResultsAccountsPath, 'utf8')) || [];
+        all = JSON.parse(readFileSync(p.accountsPath, 'utf8')) || [];
         if (!Array.isArray(all)) all = [];
       } catch {
         all = [];
@@ -166,11 +179,11 @@ function appendToTestResults(entry: CreatedAccountRecord): void {
     }
 
     all.push(entry);
-    writeFileSync(testResultsAccountsPath, `${JSON.stringify(all, null, 2)}\n`, 'utf8');
+    writeFileSync(p.accountsPath, `${JSON.stringify(all, null, 2)}\n`, 'utf8');
 
     // Also write a recent-N file for quick access (keep last 20)
     const recent = all.slice(-20).reverse();
-    writeFileSync(testResultsRecentPath, `${JSON.stringify(recent, null, 2)}\n`, 'utf8');
+    writeFileSync(p.recentPath, `${JSON.stringify(recent, null, 2)}\n`, 'utf8');
   } catch (err) {
     // Do not throw from a recording helper — just log
     // eslint-disable-next-line no-console

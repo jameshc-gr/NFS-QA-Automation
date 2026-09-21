@@ -403,9 +403,7 @@ report += `
 console.log(report);
 
 // Save report
-fs.writeFileSync(
-  '/Users/jameshc/Automation/WebAutomation/test-results/TAX-BOMB-ANALYSIS-REPORT.md',
-  report
-);
+const reportPath = path.join(process.cwd(), 'test-results', new Date().toISOString().slice(0, 10), 'TAX-BOMB-ANALYSIS-REPORT.md');
+fs.writeFileSync(reportPath, report);
 
-console.log('\n✓ Report saved to: test-results/TAX-BOMB-ANALYSIS-REPORT.md');
+console.log('\n✓ Report saved to: test-results/' + new Date().toISOString().slice(0, 10) + '/TAX-BOMB-ANALYSIS-REPORT.md');

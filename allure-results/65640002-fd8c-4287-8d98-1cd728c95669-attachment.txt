@@ -1,4 +1,0 @@
-
-===== APR FIELD TEST =====
-Testing if negative APR is accepted
-Found potential APR fields: 0

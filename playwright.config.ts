@@ -9,14 +9,9 @@ process.env.API_BASE_URL = process.env.API_BASE_URL || process.env.BASE_URL;
 process.env.API_BEARER_TOKEN = process.env.API_BEARER_TOKEN || process.env.API_TOKEN;
 
 const now = new Date();
-const mm = String(now.getMonth() + 1).padStart(2, '0');
-const dd = String(now.getDate()).padStart(2, '0');
-const yyyy = String(now.getFullYear());
-const HH = String(now.getHours()).padStart(2, '0');
-const MM = String(now.getMinutes()).padStart(2, '0');
-const SS = String(now.getSeconds()).padStart(2, '0');
-const runDate = `${yyyy}-${mm}-${dd}`;
-const runStamp = process.env.RUN_ID || `${runDate}-${HH}-${MM}-${SS}`;
+const runDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+const mmddyyhhmmss = String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0') + String(now.getFullYear()).slice(-2) + '_' + String(now.getHours()).padStart(2, '0') + String(now.getMinutes()).padStart(2, '0') + String(now.getSeconds()).padStart(2, '0');
+const runStamp = process.env.RUN_ID || `${runDate}-${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
 const testProject = process.env.TEST_PROJECT || 'student-loan-refi';
 const testSuiteDir = process.env.TEST_SUITE_DIR || 'tests';
 
@@ -85,7 +80,7 @@ export default defineConfig({
     ];
     try {
       require.resolve('allure-playwright');
-      base.splice(1, 0, ['allure-playwright', { outputFolder: `./test-results/${runDate}/${testProject}/allure-results/${runStamp}` }]);
+      base.splice(1, 0, ['allure-playwright', { outputFolder: `./test-results/allure/${mmddyyhhmmss}_${testProject}` }]);
     } catch (e) {
       // allure-playwright not installed; skip adding it so local dry-runs succeed
       // Users who want Allure should install `allure-playwright` as a devDependency.

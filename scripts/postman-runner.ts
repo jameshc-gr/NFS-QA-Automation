@@ -320,7 +320,11 @@ async function main() {
     }
 
     // Save report
-    const reportPath = path.resolve(`test-results/postman-test-report-${Date.now()}.json`);
+    const reportPath = path.resolve(
+      'test-results',
+      new Date().toISOString().slice(0, 10),
+      `postman-test-report-${Date.now()}.json`
+    );
     await fs.mkdir(path.dirname(reportPath), { recursive: true });
     await fs.writeFile(
       reportPath,

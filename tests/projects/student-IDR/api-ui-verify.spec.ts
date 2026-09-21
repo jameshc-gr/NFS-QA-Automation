@@ -261,7 +261,11 @@ test.describe('API → Mobile UI Integration', () => {
     }
 
     // Write report to file
-    const reportPath = path.resolve('test-results/api-validation-report.json');
+    const reportPath = path.resolve(
+      'test-results',
+      new Date().toISOString().slice(0, 10),
+      'api-validation-report.json'
+    );
     await fs.mkdir(path.dirname(reportPath), { recursive: true });
     await fs.writeFile(reportPath, JSON.stringify(results, null, 2));
 

@@ -72,7 +72,12 @@ export const config = {
   reporters: [
     'spec',
     ['allure', {
-      outputDir: path.join(process.cwd(), 'test-results', (new Date()).toISOString().slice(0,10), process.env.TEST_PROJECT || 'mobile', process.env.RUN_ID || 'run', 'allure-results')
+      outputDir: (() => {
+        const d = new Date();
+        const timestamp = String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + String(d.getFullYear()).slice(-2) + '_' + String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0') + String(d.getSeconds()).padStart(2, '0');
+        const project = process.env.TEST_PROJECT || 'mobile';
+        return path.join(process.cwd(), 'test-results', 'allure', `${timestamp}_${project}`);
+      })()
     }]
   ],
   port: appiumPort,

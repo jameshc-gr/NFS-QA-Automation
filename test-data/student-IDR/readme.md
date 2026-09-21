@@ -11,6 +11,9 @@ This directory contains the source-of-truth test data for the Student IDR (Incom
 | [02_scenario_matrix.csv](02_scenario_matrix.csv) | Persona scenarios driving the regression suite |
 | [03_test_cases.csv](03_test_cases.csv) | Detailed test intents and expected results |
 | [04_final_test_cases_with_data.csv](04_final_test_cases_with_data.csv) | Final executable case matrix with profile and input data references |
+| [test_cases_automation.csv](test_cases_automation.csv) | 50 comprehensive automated test cases for IDR calculation engine |
+| [FILING-HOUSEHOLD-STATE-CALCULATION-TEST-PLAN.md](FILING-HOUSEHOLD-STATE-CALCULATION-TEST-PLAN.md) | Test plan and formula specifications for filing, household & state calculation suite |
+| [FILING-HOUSEHOLD-STATE-CALCULATION-TEST-RESULTS.md](FILING-HOUSEHOLD-STATE-CALCULATION-TEST-RESULTS.md) | Test execution report covering all 50 scenarios with 100% pass rate |
 
 ## Profile structure
 
@@ -56,6 +59,7 @@ At runtime, the framework also appends a sequential per-worker number to every e
 | GLOBAL-06 | Invalid email format | [GLOBAL-06.spec.ts](../../tests/projects/student-IDR/GLOBAL-06.spec.ts) | Passing |
 | GLOBAL-07 | Terms checkbox unchecked | [GLOBAL-07.spec.ts](../../tests/projects/student-IDR/GLOBAL-07.spec.ts) | Passing |
 | UI-FLOW-04-welcome | Missing required fields on welcome | [UI-FLOW-04-welcome.spec.ts](../../tests/projects/student-IDR/UI-FLOW-04-welcome.spec.ts) | Passing |
+| FILING-HOUSEHOLD-STATE-CALCULATION | 50 CSV test cases (Filing status, household size, regional FPL, tax bomb & savings) | [FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts](../../tests/projects/student-IDR/FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts) | 50/50 Passing (100%) |
 
 ## Notes
 

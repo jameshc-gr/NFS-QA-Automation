@@ -36,6 +36,11 @@ Every agent-driven test workflow must validate the outcome of each step before a
 5. **Fix & Re-Test:** Apply the smallest safe remediation, re-run only the failed step, and only continue after success.
 6. **Report:** Emit a structured execution report with pass/fail per step, diagnostic bundle links, and any applied remediation.
 
+## Atlassian & Jira TWG Integration
+
+- For Jira ticket analysis, acceptance criteria extraction, PRD fetching, and duplicate defect detection, use the TWG skill family in [ai/jobs/skills/jira twg](ai/jobs/skills/jira twg).
+- Detailed agent operating workflows, command patterns, and autonomy tier boundaries are documented in [docs/agents/jira-twg-agent-guide.md](docs/agents/jira-twg-agent-guide.md).
+
 ## Canonical Locations
 
 - Agents: [ai/jobs/agents](ai/jobs/agents)

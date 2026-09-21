@@ -1,7 +1,7 @@
 import { chromium } from "@playwright/test";
 import type { BrowserContext, Locator, Page } from "@playwright/test";
 import { existsSync, mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { join, resolve } from "node:path";
 import { createInterface } from "node:readline/promises";
 import YAML from "yaml";
 import { decryptObjectSecrets } from "../mobile/src/utils/crypto-utils";
@@ -138,9 +138,18 @@ async function reportOktaMessage(page: Page): Promise<void> {
   }
 }
 
+function _getDatedResultsDir(): string {
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return resolve(`test-results/${yyyy}-${mm}-${dd}`);
+}
+
 async function reportSignInState(page: Page): Promise<string> {
-  const screenshotPath = resolve("test-results/rtl-extract-signin.png");
-  mkdirSync(resolve("test-results"), { recursive: true });
+  const dateDir = _getDatedResultsDir();
+  mkdirSync(dateDir, { recursive: true });
+  const screenshotPath = path.join(dateDir, "rtl-extract-signin.png");
   await page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => undefined);
   const heading = await page
     .locator("h1, h2")

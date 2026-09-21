@@ -27,7 +27,21 @@ interface MasterDataRow {
 
 // Parse CSV manually
 function loadMasterData(): MasterDataRow[] {
-  const csvPath = path.join(__dirname, '../../../test-results/MASTER-DATA.csv');
+  // Search for MASTER-DATA.csv under any dated folder in test-results/
+  const testResultsRoot = path.join(__dirname, '../../../test-results');
+  let csvPath: string | null = null;
+  if (fs.existsSync(testResultsRoot)) {
+    const dateFolders = fs.readdirSync(testResultsRoot).filter((f) => /^\d{4}-\d{2}-\d{2}$/.test(f));
+    for (const folder of dateFolders.sort().reverse()) {
+      const candidate = path.join(testResultsRoot, folder, 'MASTER-DATA.csv');
+      if (fs.existsSync(candidate)) {
+        csvPath = candidate;
+        break;
+      }
+    }
+  }
+  if (!csvPath) return [];
+  
   const fileContent = fs.readFileSync(csvPath, 'utf-8');
   const lines = fileContent.trim().split('\n');
   

@@ -14,12 +14,23 @@ export interface CreatedAccount {
   status?: string;
 }
 
-const ACCOUNTS_PATH = path.resolve(process.cwd(), 'test-results/mobile-app-accounts.json');
-const RECENT_PATH = path.resolve(process.cwd(), 'test-results/recent-created-accounts.json');
+// Use dated paths under test-results/ to match the new folder convention
+function _getDatedAccountPaths(): { accountsPath: string; recentPath: string } {
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const dateDir = path.resolve(process.cwd(), `test-results/${yyyy}-${mm}-${dd}`);
+  return {
+    accountsPath: path.join(dateDir, 'mobile-app-accounts.json'),
+    recentPath: path.join(dateDir, 'recent-created-accounts.json'),
+  };
+}
 
 function readAccounts(): CreatedAccount[] {
   try {
-    const raw = fs.readFileSync(ACCOUNTS_PATH, 'utf8');
+    const paths = _getDatedAccountPaths();
+    const raw = fs.readFileSync(paths.accountsPath, 'utf8');
     return JSON.parse(raw) as CreatedAccount[];
   } catch {
     return [];
@@ -27,14 +38,16 @@ function readAccounts(): CreatedAccount[] {
 }
 
 function writeAccounts(accounts: CreatedAccount[]): void {
-  fs.mkdirSync(path.dirname(ACCOUNTS_PATH), { recursive: true });
-  fs.writeFileSync(ACCOUNTS_PATH, JSON.stringify(accounts, null, 2));
+  const paths = _getDatedAccountPaths();
+  fs.mkdirSync(path.dirname(paths.accountsPath), { recursive: true });
+  fs.writeFileSync(paths.accountsPath, JSON.stringify(accounts, null, 2));
 }
 
 function writeRecent(accounts: CreatedAccount[], count: number): void {
-  fs.mkdirSync(path.dirname(RECENT_PATH), { recursive: true });
+  const paths = _getDatedAccountPaths();
+  fs.mkdirSync(path.dirname(paths.recentPath), { recursive: true });
   const recent = accounts.slice(-count).reverse();
-  fs.writeFileSync(RECENT_PATH, JSON.stringify(recent, null, 2));
+  fs.writeFileSync(paths.recentPath, JSON.stringify(recent, null, 2));
 }
 
 export function addCreatedAccount(entry: CreatedAccount, recentCount = Number(process.env.RECENT_ACCOUNTS_COUNT) || 10): void {
@@ -48,7 +61,8 @@ export function addCreatedAccount(entry: CreatedAccount, recentCount = Number(pr
 
 export function getRecentCreatedAccounts(count = Number(process.env.RECENT_ACCOUNTS_COUNT) || 10): CreatedAccount[] {
   try {
-    const raw = fs.readFileSync(RECENT_PATH, 'utf8');
+    const paths = _getDatedAccountPaths();
+    const raw = fs.readFileSync(paths.recentPath, 'utf8');
     const arr = JSON.parse(raw) as CreatedAccount[];
     return arr.slice(0, count);
   } catch {

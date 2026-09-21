@@ -14,12 +14,27 @@ This Playwright suite covers the Income-Driven Repayment (IDR) / federal student
 ## Files
 
 - `test-setup.ts` — YAML profile loader, page helpers, and `runIdrFlow` orchestrator
+- `idr-calculator.ts` — 150% FPL calculation engine, monthly payment formulas, tax bomb projections, and sinking fund savings evaluator
+- `FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts` — 50 comprehensive CSV test cases covering filing status (Separate vs Joint), household size, state variations (WA, CA, OR, AK, HI), income tiers, payment floors, tax bomb calculations, and sinking fund savings goals
 - `SCN-001.spec.ts` through `SCN-020.spec.ts` — one spec per scenario from `02_scenario_matrix.csv`
 - `DASHBOARD-COVERAGE.spec.ts` — dashboard Overview, Scenarios, Personal Data, Settings, and Feedback discovery checks
 - `DEPENDENT-CRUD.spec.ts` — dependent add/edit/delete/re-add lifecycle with boundary ages
 - `UI-FLOW-ASSETS-01.spec.ts` through `UI-FLOW-ASSETS-03.spec.ts` — legacy asset CRUD/Plaid checks pending route confirmation
 
 ## Running tests
+
+Run the filing, household size & state calculation suite (50 test scenarios):
+
+```bash
+# Playwright Chromium test execution
+npm run test:filing-calc
+
+# Standalone TypeScript runner with formatted summary
+npm run test:filing-calc:runner
+
+# Across browsers (Chromium, Firefox, WebKit)
+TEST_PROJECT=student-IDR node ./scripts/run-playwright.js tests/projects/student-IDR/FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts
+```
 
 Run the baseline single-applicant scenario:
 

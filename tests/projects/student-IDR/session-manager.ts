@@ -10,7 +10,26 @@ import path from 'node:path';
  */
 
 const MAX_CONCURRENT_SESSIONS = 3;
-const SESSION_LOG_PATH = path.resolve(process.cwd(), 'test-results/.session-tracker.json');
+
+function _getDatedSessionPath(): string {
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const dir = path.resolve(process.cwd(), `test-results/${yyyy}-${mm}-${dd}`);
+  if (!existsSync(dir)) writeFileSync(path.join(dir, '.'), ''); // force mkdir below
+  return path.join(dir, '.session-tracker.json');
+}
+
+// Lazily compute the session log path each time it's accessed so it follows the date-folder convention
+const getSessionLogPath = (): string => {
+  const p = _getDatedSessionPath();
+  if (!existsSync(path.dirname(p))) writeFileSync(path.join(path.dirname(p), '.'), '');
+  return p;
+};
+
+// DEPRECATED: Use `getSessionLogPath()` instead — kept for reference
+// const SESSION_LOG_PATH = path.resolve(process.cwd(), 'test-results/.session-tracker.json');
 
 interface SessionRecord {
   sessionId: string;
@@ -34,9 +53,10 @@ class SessionManager {
    * Load sessions from disk
    */
   private loadSessions(): void {
-    if (!existsSync(SESSION_LOG_PATH)) return;
+    const logPath = getSessionLogPath();
+    if (!existsSync(logPath)) return;
     try {
-      const data = JSON.parse(readFileSync(SESSION_LOG_PATH, 'utf8'));
+      const data = JSON.parse(readFileSync(logPath, 'utf8'));
       const now = Date.now();
       
       // Reload only recent sessions (within last hour)
@@ -59,7 +79,7 @@ class SessionManager {
   private saveSessions(): void {
     try {
       const data = Object.fromEntries(this.sessions);
-      writeFileSync(SESSION_LOG_PATH, JSON.stringify(data, null, 2));
+      writeFileSync(getSessionLogPath(), JSON.stringify(data, null, 2));
     } catch (e) {
       console.warn('Failed to save session tracker:', e);
     }

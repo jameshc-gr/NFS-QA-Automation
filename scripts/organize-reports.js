@@ -58,7 +58,40 @@ function run(){
   all.forEach(moveReport);
 }
 
+function warnOnLooseFiles(){
+  ensureDir(resultsDir);
+  const entries = fs.readdirSync(resultsDir, {withFileTypes: true});
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  const looseFiles = [];
+  
+  for (const entry of entries) {
+    // Skip dotfiles, date folders, and already-named project subdirs that look intentional
+    if (entry.name.startsWith('.')) continue;
+    if (dateRegex.test(entry.name)) continue;
+    
+    // Check if this looks like an orphaned file or unexpected directory
+    const fullPath = path.join(resultsDir, entry.name);
+    if (entry.isFile() && !entry.isDirectory()) {
+      looseFiles.push(`  [FILE] ${fullPath}`);
+    } else if (entry.isDirectory()) {
+      // Only warn on directories that aren't date-prefixed
+      looseFiles.push(`  [DIR] ${fullPath} - consider moving to a dated subfolder`);
+    }
+  }
+  
+  if (looseFiles.length > 0) {
+    console.log('⚠️  WARNING: Loose files found directly under test-results/ root. These should be moved to dated subfolders:');
+    looseFiles.forEach(f => console.log(f));
+    return true;
+  }
+  return false;
+}
+
 if(require.main === module){
+  const hadLoose = warnOnLooseFiles();
+  if (hadLoose) {
+    console.log('\nPlease move these to the appropriate dated/project subfolder or remove them.');
+  }
   run();
 }
 

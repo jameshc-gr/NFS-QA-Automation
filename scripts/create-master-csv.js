@@ -88,9 +88,9 @@ allScenarios.forEach(scenario => {
 });
 
 fs.writeFileSync(
-  '/Users/jameshc/Automation/WebAutomation/test-results/MASTER-DATA.csv',
-  csv
-);
+    path.join(process.cwd(), 'test-results', new Date().toISOString().slice(0, 10), 'MASTER-DATA.csv'),
+    csv
+  );
 
 console.log('✅ Master CSV created: MASTER-DATA.csv');
 console.log(`✅ Total scenarios: ${allScenarios.length}`);

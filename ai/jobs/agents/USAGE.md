@@ -30,6 +30,18 @@ This document explains how to use the agent hierarchy, skills, and persistent me
 - `flaky-test-management`: Isolating, diagnosing, memory-tracking, and auto-healing intermittent test failures.
 - `test-discovery`, `test-execution`, `test-summary`: Spec discovery, focused runner, and failure summary skills.
 
+**Atlassian & Jira TWG Skills**
+- Location: [ai/jobs/skills/jira twg](ai/jobs/skills/jira twg)
+- Complete Guide: [docs/agents/jira-twg-agent-guide.md](../../../docs/agents/jira-twg-agent-guide.md)
+- `twg`: Root command launcher and batching engine (`twg help`, `twg help describe`).
+- `twg-jira`: Authoritative Jira issue hydration, JQL querying, custom field discovery, transitions, and duplicate defect detection.
+- `twg-confluence`: Reading PRDs, architecture specifications, and CQL queries.
+- `twg-context-discovery`: Enterprise relationship graph linking Jira tickets, Confluence pages, PRs, and repos.
+- `twg-engineering-work`: Code search across indexed repos, PR status, and issue-to-PR tracing.
+- `twg-jira-resolve-merged-work`: Reconciling stale Jira tickets with merged PRs and commits (dry-run first).
+- `twg-artifacts`: Publishing standalone HTML test reports and summaries as Atlassian Artifacts.
+- `twg-status-rollups`: Engineering velocity, sprint progress, and release go/no-go readiness briefs.
+
 **Memory**
 - Location: `memory/` with JSON files:
   - `locator-history.json` — learned locator mappings.
