@@ -36,6 +36,14 @@ All agent framework assets are centralized under `ai/jobs`:
   - `performance-testing`: Web Vitals metrics, SLA verification & k6 load scenarios
   - `flaky-test-management`: Flaky test detection, isolation, memory tracking & auto-healing
   - `test-discovery`, `test-execution`, `test-summary`: Spec discovery, runner & triage skills
+  - `jira twg`: Atlassian enterprise context suite (14 skills for Jira workitems, JQL, Confluence PRDs, PR tracing, duplicate bug detection, Rovo search, and Artifact publishing)
+
+### Atlassian & Jira TWG Agent Skills
+The repository integrates the 14-skill **The Work Graph (TWG)** Atlassian suite under `ai/jobs/skills/jira twg/` powered by the `twg` CLI:
+- **Jira Operations (`twg-jira`, `twg-jira-resolve-merged-work`)**: Authoritative ticket hydration, JQL query runs, custom field discovery, safe workflow transitions, semantic duplicate bug detection, and sprint reconciliation.
+- **Knowledge & Enterprise Discovery (`twg-confluence`, `twg-agentic-search`, `twg-context-discovery`)**: PRD extraction, multi-source Rovo search across apps, and enterprise dependency mapping.
+- **Engineering & Reporting (`twg-engineering-work`, `twg-artifacts`, `twg-status-rollups`)**: Issue-to-PR tracing across repos, publishing standalone HTML test reports as Atlassian Artifacts, and release go/no-go readiness synthesis.
+- **Operating Guide & Playbooks**: Detailed instructions, 6 agent integration playbooks, autonomy tier boundaries, and token batching rules are in [docs/agents/jira-twg-agent-guide.md](docs/agents/jira-twg-agent-guide.md).
 
 ### AI Model Economics & Token Optimization
 - **Tier 2/3 Economical Defaults (`gpt-4o-mini` / `claude-3.5-haiku` / `gemini-2.0-flash`)**: Configured for 90%+ of workflow steps (Orchestration, Planning, Test Generation, Prompts, Discovery, Execution, Data Engineering, Reporting) to save ~95% token cost compared to flagship models.
@@ -107,6 +115,28 @@ The IDR suite contains a dedicated calculation and validation engine for verifyi
   ```
 - Latest Results: [test-data/student-IDR/FILING-HOUSEHOLD-STATE-CALCULATION-TEST-RESULTS.md](test-data/student-IDR/FILING-HOUSEHOLD-STATE-CALCULATION-TEST-RESULTS.md)
 
+### Data Retention & Zero-Value Persistence Testing (FAL-3672)
+To prevent and verify regression on [FAL-3672](https://rate.atlassian.net/browse/FAL-3672) ("Loan/financial field does not update when value is changed to 0"):
+- Test Plan: [specs/FAL-3672-DATA-RETENTION-TEST-PLAN.md](specs/FAL-3672-DATA-RETENTION-TEST-PLAN.md)
+- Test Spec: [tests/projects/student-IDR/DATA-RETENTION-ZERO-PERSISTENCE.spec.ts](tests/projects/student-IDR/DATA-RETENTION-ZERO-PERSISTENCE.spec.ts)
+- Run Command:
+  ```bash
+  npm run test:data-retention       # Run zero-value persistence suite in Chromium
+  ```
+
+### Loan Amortization, Interest Coverage & Tax Bomb Validity (FAL-3673)
+To prevent and verify regression on [FAL-3673](https://rate.atlassian.net/browse/FAL-3673) ("Overview incorrectly states that a $10 monthly payment will cover a $75,000 loan at 9% APR est payment of $634"):
+- Test Plan: [specs/FAL-3673-AMORTIZATION-TAX-BOMB-TEST-PLAN.md](specs/FAL-3673-AMORTIZATION-TAX-BOMB-TEST-PLAN.md)
+- Test Spec: [tests/projects/student-IDR/FAL-3673-AMORTIZATION-TAX-BOMB.spec.ts](tests/projects/student-IDR/FAL-3673-AMORTIZATION-TAX-BOMB.spec.ts)
+- Engine: [tests/projects/student-IDR/loan-amortization-calculator.ts](tests/projects/student-IDR/loan-amortization-calculator.ts)
+- Standalone Runner: `scripts/run-fal-3673-amortization-suite.ts`
+- Run Commands:
+  ```bash
+  npm run test:fal-3673             # Run Playwright test in Chromium
+  npm run test:fal-3673:runner      # Run standalone calculation & reporting runner
+  ```
+- Latest Results: [test-data/student-IDR/FAL-3673-AMORTIZATION-TEST-RESULTS.md](test-data/student-IDR/FAL-3673-AMORTIZATION-TEST-RESULTS.md)
+
 ## Directory Conventions
 
 - Use repo-relative paths in docs and prompts (for example `tests/projects/...`), not leading slash paths like `/tests/...`.
@@ -123,10 +153,16 @@ The old `test-data/student-loan-refi/profiles.json` file has been removed.
 Reporting and run artifacts
 
 - Run artifacts (generated credentials, Playwright reports, screenshots, videos, and traces) are stored under `test-results/` and are not intended to be committed.
-- Playwright runs always capture a screenshot and video for each test. HTML reports are written to `test-results/YYYY-MM-DD/<project>/reports/test-report-<run-id>/`.
+- Playwright runs always capture a screenshot and video for each test. HTML reports are written to `test-results/YYYY-MM-DD/<project>/runs/<run-id>/`.
+- Allure results are configured under `test-results/allure/<MMDDYY_HHmmss>_<project>/`.
+  - **Do not rename this option.** `allure-playwright` only honours `resultsDir`; using `outputFolder` or `outputDir`
+    is silently ignored and the reporter falls back to a loose `./allure-results/` folder in the repo root.
+    (`@wdio/allure-reporter` is the opposite — it uses `outputDir`.) See `playwright.config.ts` and `mobile/wdio.conf.ts`.
 - Use `npm test` or a `test:*` Playwright script so the date/project/run folder and HTML report are created consistently.
-- A helper `scripts/organize-reports.js` moves stray human-written reports into `test-results/YYYY-MM-DD/<project>/`.
+- A helper `scripts/organize-reports.js` moves stray human-written reports into `test-results/YYYY-MM-DD/<project>/`
+  and relocates any stray root `allure-results/` into `test-results/allure/` (runs automatically via the `posttest` hook).
 - The Playwright run is configured with a custom reporter that writes a Markdown summary into `test-results/YYYY-MM-DD/<TEST_PROJECT>/` (set `TEST_PROJECT` when running to classify the output).
+- All scripts that write test output (Excel consolidation, validation reports, dashboard HTML, etc.) use dated subfolders under `test-results/YYYY-MM-DD/` to keep artifacts organized by date.
 
 ## Setup
 
@@ -892,7 +928,7 @@ Most specs in [tests/projects/student-loan-refi](tests/projects/student-loan-ref
 - [AGENTS.md](AGENTS.md) and [ai/jobs/skills/playwright-framework-context/SKILL.md](ai/jobs/skills/playwright-framework-context/SKILL.md) contain the repo guidance used by agents.
 - [ai/jobs/readme-agents.md](ai/jobs/readme-agents.md) is the canonical guide for writing and using agents, prompts, and skills.
 - [test-data/mobile-app/gri/android/README.md](test-data/mobile-app/gri/android/README.md) and [test-data/mobile-app/gri/ios/README.md](test-data/mobile-app/gri/ios/README.md) document the per-platform build artifacts.
-- Reports and artifacts are written under `test-results/<MMDDYYYY>/` and grouped by `TEST_PROJECT`.
+- Reports and artifacts are written under `test-results/YYYY-MM-DD/` and grouped by `TEST_PROJECT`. Allure results live under `test-results/allure/`.
 
 ## Mobile Scaffold
 

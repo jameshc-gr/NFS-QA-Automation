@@ -87,12 +87,50 @@ function warnOnLooseFiles(){
   return false;
 }
 
+// Allure results must live under test-results/allure/. allure-playwright silently falls back
+// to a loose `./allure-results/` folder in the repo root whenever `resultsDir` is missing or
+// misconfigured, so relocate any stray folder instead of leaving it at the root.
+function sweepStrayAllureResults(){
+  const strayDir = path.join(workspace, 'allure-results');
+  if(!fs.existsSync(strayDir) || !fs.statSync(strayDir).isDirectory()) return false;
+
+  const entries = fs.readdirSync(strayDir).filter(e => e !== '.DS_Store');
+  if(entries.length === 0){
+    try { fs.rmdirSync(strayDir); } catch(e) { /* ignore */ }
+    console.log('Removed empty stray allure-results/ from repo root.');
+    return true;
+  }
+
+  const d = new Date();
+  const stamp = String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0') +
+    String(d.getFullYear()).slice(-2) + '_' + String(d.getHours()).padStart(2,'0') +
+    String(d.getMinutes()).padStart(2,'0') + String(d.getSeconds()).padStart(2,'0');
+  const project = process.env.TEST_PROJECT || 'playwright';
+  const destDir = path.join(resultsDir, 'allure', `${stamp}_${project}`);
+  ensureDir(destDir);
+
+  for(const entry of entries){
+    const src = path.join(strayDir, entry);
+    let dest = path.join(destDir, entry);
+    if(fs.existsSync(dest)){
+      const parsed = path.parse(entry);
+      dest = path.join(destDir, `${parsed.name}-${Date.now()}${parsed.ext}`);
+    }
+    fs.renameSync(src, dest);
+  }
+  try { fs.rmdirSync(strayDir); } catch(e) { /* ignore */ }
+
+  console.log(`Moved stray allure-results/ -> ${path.relative(workspace, destDir)}`);
+  return true;
+}
+
 if(require.main === module){
   const hadLoose = warnOnLooseFiles();
   if (hadLoose) {
     console.log('\nPlease move these to the appropriate dated/project subfolder or remove them.');
   }
+  sweepStrayAllureResults();
   run();
 }
 
-module.exports = { run };
+module.exports = { run, sweepStrayAllureResults };

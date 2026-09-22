@@ -19,6 +19,13 @@ Use the **Playwright Test Planner** AI agent to create comprehensive test plans:
 @playwright-test-planner Create a test plan for [feature/workflow]
 ```
 
+## Current Test Plans
+
+| Test Plan | Jira Ref | Target Area | Description | Test Spec |
+|---|---|---|---|---|
+| [FAL-3672-DATA-RETENTION-TEST-PLAN.md](FAL-3672-DATA-RETENTION-TEST-PLAN.md) | [FAL-3672](https://rate.atlassian.net/browse/FAL-3672) | Rate Wealth / Student IDR | Verifies data retention and persistence when numeric/financial fields are updated to 0 | `tests/projects/student-IDR/DATA-RETENTION-ZERO-PERSISTENCE.spec.ts` |
+| [FAL-3673-AMORTIZATION-TAX-BOMB-TEST-PLAN.md](FAL-3673-AMORTIZATION-TAX-BOMB-TEST-PLAN.md) | [FAL-3673](https://rate.atlassian.net/browse/FAL-3673) | Rate Wealth / Student IDR | Verifies loan amortization, interest coverage, asset offsets, and tax bomb validity (prevents false "will cover loan" when payment < interest) | `tests/projects/student-IDR/FAL-3673-AMORTIZATION-TAX-BOMB.spec.ts` |
+
 ## Plan-to-Test Workflow
 
 ```mermaid

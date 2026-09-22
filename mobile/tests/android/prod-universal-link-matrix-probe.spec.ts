@@ -1,6 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+// Generate dated results directory
+const now = new Date();
+const yyyy = now.getFullYear();
+const mm = String(now.getMonth() + 1).padStart(2, '0');
+const dd = String(now.getDate()).padStart(2, '0');
+
 const links = [
   { url: 'https://mobileapp.rate.com/accounts', landing: 'Accounts' },
   { url: 'https://mobileapp.rate.com/financial-wellness-landing', landing: 'Financial wellness' },
@@ -132,7 +138,7 @@ describe('Android PROD Universal Link matrix probe', () => {
       }
     }
 
-    const reportPath = path.resolve(process.cwd(), 'test-results/2026-09-08/mobile/android-universal-link-matrix.json');
+    const reportPath = path.resolve(process.cwd(), `test-results/${yyyy}-${mm}-${dd}/mobile/android-universal-link-matrix.json`);
     fs.mkdirSync(path.dirname(reportPath), { recursive: true });
     fs.writeFileSync(reportPath, `${JSON.stringify({ platform: 'android', links, results }, null, 2)}\n`);
   });

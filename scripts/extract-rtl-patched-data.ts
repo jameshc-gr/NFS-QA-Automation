@@ -1,7 +1,7 @@
 import { chromium } from "@playwright/test";
 import type { BrowserContext, Locator, Page } from "@playwright/test";
 import { existsSync, mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from "node:fs";
-import { join, resolve } from "node:path";
+import * as path from "node:path";
 import { createInterface } from "node:readline/promises";
 import YAML from "yaml";
 import { decryptObjectSecrets } from "../mobile/src/utils/crypto-utils";
@@ -23,7 +23,7 @@ const dashboardBaseUrl =
   "https://one-loan-dashboard.dev.saas.rate.com";
 const cxFieldPairPattern =
   /:fieldName\s+"(CX\.[^"]+)",\s*:stringValue\s+"((?:\\.|[^"])*)"/g;
-const dashboardAuthPath = resolve("test-data/one-loan-rtl/dashboard-auth.yml");
+const dashboardAuthPath = path.resolve("test-data/one-loan-rtl/dashboard-auth.yml");
 const signInTimeoutMs = Number(process.env.ONE_LOAN_SIGNIN_TIMEOUT_MS ?? 180000);
 
 let activeContext: BrowserContext | undefined;
@@ -79,7 +79,7 @@ function removeSupersededExtractions(
   const removed: string[] = [];
 
   for (const file of readdirSync(directory)) {
-    const candidate = resolve(directory, file);
+    const candidate = path.resolve(directory, file);
     if (candidate === keepPath || !duplicate.test(file)) continue;
     unlinkSync(candidate);
     removed.push(file);
@@ -143,7 +143,7 @@ function _getDatedResultsDir(): string {
   const yyyy = d.getFullYear();
   const mm = String(d.getMonth() + 1).padStart(2, "0");
   const dd = String(d.getDate()).padStart(2, "0");
-  return resolve(`test-results/${yyyy}-${mm}-${dd}`);
+  return path.resolve(`test-results/${yyyy}-${mm}-${dd}`);
 }
 
 async function reportSignInState(page: Page): Promise<string> {
@@ -395,7 +395,7 @@ async function main(): Promise<void> {
   const tenant = process.env.ONE_LOAN_TENANT ?? `${environment}-dev`;
   const dashboardAuth = loadDashboardAuth();
   const loanUrl = `${dashboardAuth?.baseUrl ?? dashboardBaseUrl}/?tenant=${encodeURIComponent(tenant)}&company=${encodeURIComponent(environment)}#/loan/${encodeURIComponent(loanNumber)}`;
-  const sessionDirectory = resolve("playwright/.auth/one-loan-dashboard");
+  const sessionDirectory = path.resolve("playwright/.auth/one-loan-dashboard");
   const context = await chromium.launchPersistentContext(sessionDirectory, {
     headless: false,
   });
@@ -468,9 +468,9 @@ async function main(): Promise<void> {
       }
     }
 
-    const outputDirectory = resolve("test-data/one-loan-rtl");
+    const outputDirectory = path.resolve("test-data/one-loan-rtl");
     const baseName = `loan-${loanNumber}-rtl-patches`;
-    const outputPath = resolve(outputDirectory, `${baseName}.yml`);
+    const outputPath = path.resolve(outputDirectory, `${baseName}.yml`);
     const entries = [...cxAssignments, ...fieldDataAssignments, ...nonCxAssignments];
     mkdirSync(outputDirectory, { recursive: true });
     writeFileSync(

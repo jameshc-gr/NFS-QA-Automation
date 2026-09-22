@@ -14,6 +14,9 @@ This directory contains the source-of-truth test data for the Student IDR (Incom
 | [test_cases_automation.csv](test_cases_automation.csv) | 50 comprehensive automated test cases for IDR calculation engine |
 | [FILING-HOUSEHOLD-STATE-CALCULATION-TEST-PLAN.md](FILING-HOUSEHOLD-STATE-CALCULATION-TEST-PLAN.md) | Test plan and formula specifications for filing, household & state calculation suite |
 | [FILING-HOUSEHOLD-STATE-CALCULATION-TEST-RESULTS.md](FILING-HOUSEHOLD-STATE-CALCULATION-TEST-RESULTS.md) | Test execution report covering all 50 scenarios with 100% pass rate |
+| [FAL-3672-DATA-RETENTION-TEST-PLAN.md](FAL-3672-DATA-RETENTION-TEST-PLAN.md) | Data retention & zero-value persistence test plan (reproducing & preventing FAL-3672) |
+| [FAL-3673-AMORTIZATION-TAX-BOMB-TEST-PLAN.md](FAL-3673-AMORTIZATION-TAX-BOMB-TEST-PLAN.md) | Loan amortization, interest coverage, asset offsets & tax bomb test plan (FAL-3673) |
+| [FAL-3673-AMORTIZATION-TEST-RESULTS.md](FAL-3673-AMORTIZATION-TEST-RESULTS.md) | Test execution report for FAL-3673 amortization & tax bomb suite |
 
 ## Profile structure
 
@@ -60,6 +63,8 @@ At runtime, the framework also appends a sequential per-worker number to every e
 | GLOBAL-07 | Terms checkbox unchecked | [GLOBAL-07.spec.ts](../../tests/projects/student-IDR/GLOBAL-07.spec.ts) | Passing |
 | UI-FLOW-04-welcome | Missing required fields on welcome | [UI-FLOW-04-welcome.spec.ts](../../tests/projects/student-IDR/UI-FLOW-04-welcome.spec.ts) | Passing |
 | FILING-HOUSEHOLD-STATE-CALCULATION | 50 CSV test cases (Filing status, household size, regional FPL, tax bomb & savings) | [FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts](../../tests/projects/student-IDR/FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts) | 50/50 Passing (100%) |
+| DATA-RETENTION-ZERO-PERSISTENCE | Zero-value data retention & persistence across reload/tabs (FAL-3672) | [DATA-RETENTION-ZERO-PERSISTENCE.spec.ts](../../tests/projects/student-IDR/DATA-RETENTION-ZERO-PERSISTENCE.spec.ts) | 7/7 Passing (100%) |
+| FAL-3673-AMORTIZATION-TAX-BOMB | Loan amortization, interest shortfall, asset offsets & tax bomb suite (FAL-3673) | [FAL-3673-AMORTIZATION-TAX-BOMB.spec.ts](../../tests/projects/student-IDR/FAL-3673-AMORTIZATION-TAX-BOMB.spec.ts) | 23/23 Passing (100%) |
 
 ## Notes
 

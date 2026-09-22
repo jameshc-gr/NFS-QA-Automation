@@ -15,13 +15,32 @@ This Playwright suite covers the Income-Driven Repayment (IDR) / federal student
 
 - `test-setup.ts` — YAML profile loader, page helpers, and `runIdrFlow` orchestrator
 - `idr-calculator.ts` — 150% FPL calculation engine, monthly payment formulas, tax bomb projections, and sinking fund savings evaluator
+- `loan-amortization-calculator.ts` — loan amortization simulation, negative amortization detector, interest coverage comparator, asset tax bomb offsets, and plan duration calculator
 - `FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts` — 50 comprehensive CSV test cases covering filing status (Separate vs Joint), household size, state variations (WA, CA, OR, AK, HI), income tiers, payment floors, tax bomb calculations, and sinking fund savings goals
+- `DATA-RETENTION-ZERO-PERSISTENCE.spec.ts` — zero-value data retention and persistence suite addressing defect [FAL-3672](https://rate.atlassian.net/browse/FAL-3672) across Personal Data, Loans, and Assets
+- `FAL-3673-AMORTIZATION-TAX-BOMB.spec.ts` — loan amortization, interest coverage, asset offsets, and tax bomb suite guarding against [FAL-3673](https://rate.atlassian.net/browse/FAL-3673)
 - `SCN-001.spec.ts` through `SCN-020.spec.ts` — one spec per scenario from `02_scenario_matrix.csv`
 - `DASHBOARD-COVERAGE.spec.ts` — dashboard Overview, Scenarios, Personal Data, Settings, and Feedback discovery checks
 - `DEPENDENT-CRUD.spec.ts` — dependent add/edit/delete/re-add lifecycle with boundary ages
 - `UI-FLOW-ASSETS-01.spec.ts` through `UI-FLOW-ASSETS-03.spec.ts` — legacy asset CRUD/Plaid checks pending route confirmation
 
 ## Running tests
+
+Run the loan amortization, interest coverage & tax bomb suite (FAL-3673):
+
+```bash
+# Playwright Chromium test execution
+npm run test:fal-3673
+
+# Standalone calculation suite runner with formatted summary
+npm run test:fal-3673:runner
+```
+
+Run the data retention & zero-value persistence suite (FAL-3672):
+
+```bash
+npm run test:data-retention
+```
 
 Run the filing, household size & state calculation suite (50 test scenarios):
 

@@ -80,7 +80,11 @@ export default defineConfig({
     ];
     try {
       require.resolve('allure-playwright');
-      base.splice(1, 0, ['allure-playwright', { outputFolder: `./test-results/allure/${mmddyyhhmmss}_${testProject}` }]);
+      // IMPORTANT: allure-playwright (v3.x) only honours `resultsDir`. Passing `outputFolder`
+      // or `outputDir` is silently ignored, and the reporter falls back to writing a loose
+      // `./allure-results/` folder in the repo root (see allure-js-commons createDefaultWriter).
+      // Keep results under test-results/allure/ so all run artifacts stay together.
+      base.splice(1, 0, ['allure-playwright', { resultsDir: `./test-results/allure/${mmddyyhhmmss}_${testProject}` }]);
     } catch (e) {
       // allure-playwright not installed; skip adding it so local dry-runs succeed
       // Users who want Allure should install `allure-playwright` as a devDependency.

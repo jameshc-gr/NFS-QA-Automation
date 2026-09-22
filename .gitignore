@@ -2,6 +2,12 @@
 # Playwright
 node_modules/
 /test-results/
+# Legacy Allure output. allure-playwright defaults to a loose `./allure-results` in the
+# repo root when `resultsDir` is not set; all results belong under `/test-results/allure/`.
+# Kept ignored as a safety net; see playwright.config.ts (allure-playwright `resultsDir`).
+/allure-results/
+# Locally generated Allure HTML report (see docs/reporting.md).
+/allure-report/
 /playwright-report/
 /blob-report/
 /playwright/.cache/

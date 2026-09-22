@@ -2,18 +2,19 @@ const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path');
 
-// Create a new workbook
-const workbook = XLSX.utils.book_new();
+// Generate dated output directory
+const dateStr = new Date().toISOString().slice(0, 10);
+const datedTestResults = path.join(process.cwd(), 'test-results', dateStr);
 
-// CSV file paths
+// CSV file paths - look for dated versions
 const csvFiles = {
-  'Test Cases': '/Users/jameshc/Automation/WebAutomation/test-results/LOAN-SCENARIOS-TEST-CASES-DATA.csv',
-  'Scenario Tests': '/Users/jameshc/Automation/WebAutomation/test-results/LOAN-SCENARIOS-SCENARIO-TESTS.csv',
-  'Dynamic Tests': '/Users/jameshc/Automation/WebAutomation/test-results/LOAN-SCENARIOS-DYNAMIC-TESTS.csv',
-  'Poverty Guidelines': '/Users/jameshc/Automation/WebAutomation/test-results/POVERTY-GUIDELINES-REFERENCE.csv',
-  'Execution Summary': '/Users/jameshc/Automation/WebAutomation/test-results/TEST-EXECUTION-SUMMARY.csv',
-  'Variable Impact': '/Users/jameshc/Automation/WebAutomation/test-results/TEST-RESULTS-BY-VARIABLE.csv',
-  'Formula Details': '/Users/jameshc/Automation/WebAutomation/test-results/FORMULA-CALCULATION-DETAILS.csv'
+  'Test Cases': path.join(datedTestResults, 'LOAN-SCENARIOS-TEST-CASES-DATA.csv'),
+  'Scenario Tests': path.join(datedTestResults, 'LOAN-SCENARIOS-SCENARIO-TESTS.csv'),
+  'Dynamic Tests': path.join(datedTestResults, 'LOAN-SCENARIOS-DYNAMIC-TESTS.csv'),
+  'Poverty Guidelines': path.join(datedTestResults, 'POVERTY-GUIDELINES-REFERENCE.csv'),
+  'Execution Summary': path.join(datedTestResults, 'TEST-EXECUTION-SUMMARY.csv'),
+  'Variable Impact': path.join(datedTestResults, 'TEST-RESULTS-BY-VARIABLE.csv'),
+  'Formula Details': path.join(datedTestResults, 'FORMULA-CALCULATION-DETAILS.csv')
 };
 
 // Read each CSV and add as sheet
@@ -57,7 +58,7 @@ Object.entries(csvFiles).forEach(([sheetName, filePath]) => {
 });
 
 // Save the workbook
-const outputPath = '/Users/jameshc/Automation/WebAutomation/test-results/LOAN-SCENARIOS-COMPLETE-RESULTS.xlsx';
+const outputPath = path.join(datedTestResults, "LOAN-SCENARIOS-COMPLETE-RESULTS.xlsx");
 XLSX.writeFile(workbook, outputPath);
 console.log(`\n✓ Excel file created: ${outputPath}`);
 console.log(`✓ File size: ${(fs.statSync(outputPath).size / 1024).toFixed(2)} KB`);

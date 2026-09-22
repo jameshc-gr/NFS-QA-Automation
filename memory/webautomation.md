@@ -434,3 +434,113 @@ Exit code: 0 (all operations successful)
 - **Execution & Batching Rule**: Run 1 test first. If and only if it passes, run subsequent tests in batches with 5 workers (`--workers=5`).
 - **Dynamic Environment Support**: Configured `test-setup.ts` to dynamically resolve `TEST_ENV=QA|STAGE|PROD` and appropriately prioritize `TEST_URL_STAGE` without falling back to hardcoded QA URLs.
 - **Harness Fixes**: Eliminated recursive call stack exhaustion in `handleLoginAndMfa`, ensured fresh signups reject unexpected login redirects instead of getting stuck in infinite auth loops, and properly initialized `student-IDR.yml` profile loading so form fields are populated cleanly.
+
+
+
+
+---
+
+## 2026-09-21: TWG Jira Agent Skills Suite Integration
+
+### Context & Capabilities
+- **Overview**: Integrated 14-skill The Work Graph (TWG) Atlassian suite under `ai/jobs/skills/jira twg/` powered by the `twg` CLI (`/Users/jameshc/.local/bin/twg`, version 1.3.1).
+
+- **Core Skills Added**:
+  - `twg`: Umbrella launcher and command discovery (`twg help <terms>`, `twg help describe "<path>"`).
+  - `twg-jira`: Authoritative Jira workitem hydration, JQL queries (`jira workitem query --jql`), custom field discovery, safe workflow transitions (`jira workitem transition`), and semantic duplicate bug detection.
+  - `twg-confluence`: Confluence PRDs, architecture pages, space management, and CQL queries.
+  - `twg-context-discovery`: Enterprise relationship graph linking Jira tickets, Confluence pages, PRs, and repos.
+  - `twg-engineering-work`: Code search across indexed repos, PR status, and issue-to-PR tracing.
+  - `twg-jira-resolve-merged-work`: Reconciling stale Jira tickets with merged PRs/commits (dry-run plans first).
+  - `twg-artifacts`: Publishing standalone HTML test reports and summaries as discoverable Atlassian Artifacts (`twg artifacts file create`).
+  - `twg-status-rollups`: Engineering velocity (`pr-tree`, `workitem-tree`), sprint progress, and release go/no-go readiness briefs.
+  - `twg-responsibility-routing`: Identifying declared owners, maintainers, SMEs, approvers, and escalation paths.
+  - `twg-operational-health`: Incident triage, post-incident reviews (PIR), on-call handoffs, and Assets (CMDB) graph.
+  - `twg-code-review`, `twg-space-creation`, `twg-bench-lite`, `twg-agentic-search`: Specialized engineering, search, and benchmarking skills.
+
+### Key Artifacts & Documentation Created
+- **Guide**: `docs/agents/jira-twg-agent-guide.md` — Complete operating guide with 6 agent playbooks, autonomy tier boundaries (Tiers 0–3), and token batching rules.
+- **Directory Readme**: `ai/jobs/skills/jira twg/README.md` — Skills index and direct navigation links.
+- **Framework Updates**:
+  - `README.md` — Added Atlassian & Jira TWG Agent Skills section and skills listing.
+  - `AGENTS.md` — Linked TWG skill family for Jira ticket analysis, PRD fetching, and duplicate detection.
+  - `ai/jobs/agents/USAGE.md` — Added TWG skills breakdown and agent usage patterns.
+
+### Operating Rules & Guardrails
+1. **Autonomy Tiers**:
+   - Tier 0: Read & diagnose (JQL queries, ticket hydration, Rovo search) — autonomous.
+   - Tier 1: Additive test plans in `specs/`, dry-run Jira cleanup plans — autonomous.
+   - Tier 2: Metadata discovery, remote links, comments, artifact publishing — autonomous.
+   - Tier 3: Workflow transitions (e.g., closing tickets), issue deletions — strictly requires user approval.
+2. **Token Optimization**:
+   - Never loop single `get` calls over keys. Always batch: `twg jira workitem get KEY1 KEY2 --agent-fields @compact`.
+      - Use 5-call circuit breaker to halt unproductive search loops.
+
+---
+
+## 2026-09-21: Allure Results Move & Dated Test-Results Paths
+
+### Context
+Allure results were previously stored under a loose `/allure-results/` directory at the repository root. The test-results directory was also being used by various scripts with loose (non-dated) paths, leading to mixed artifacts from different runs.
+
+### Changes
+
+#### 1. Config Updates
+- **`playwright.config.ts`** — Allure output moved from `./allure-results/` to `./test-results/allure/<MMDDYY_HHmmss>_<project>/`
+- **`mobile/wdio.conf.ts`** — Allure output folder updated to `path.join(process.cwd(), 'test-results', 'allure', `${timestamp}_${project}`)`
+
+#### 1a. Root Cause of the `allure-results/` Regression (fixed 2026-09-21)
+
+> **`allure-playwright` only reads `resultsDir` — not `outputFolder` / `outputDir`.**
+
+The initial config change used `outputFolder`, which `allure-playwright@3.10.2` silently ignores. Because the option was never read, `allure-js-commons` `createDefaultWriter` fell back to its default:
+
+```js
+// node_modules/allure-js-commons/dist/cjs/sdk/reporter/utils.js:273
+resultsDir: config.resultsDir || "./allure-results"
+```
+
+That is why a loose `allure-results/` folder kept reappearing at the repo root on every Playwright run while `test-results/allure/` stayed empty.
+
+Verified option names per reporter (do not change these):
+
+| Reporter | Package | Correct option | Wrong (silently ignored) |
+| --- | --- | --- | --- |
+| Playwright | `allure-playwright@3.x` | `resultsDir` | `outputFolder`, `outputDir` |
+| WDIO | `@wdio/allure-reporter@9.x` | `outputDir` | `resultsDir` (falls back), `outputFolder` |
+
+Both reporters default to the literal string `"allure-results"` when the option is missing, which is why the folder appears at `process.cwd()`.
+
+**Defence in depth added:**
+- `.gitignore` — `/allure-results/` added as a safety net so a stray folder can never pollute `git status` / commits again.
+- `scripts/organize-reports.js` — new `sweepStrayAllureResults()` (invoked from the `posttest` hook) relocates any stray root `allure-results/` into `test-results/allure/<MMDDYY_HHmmss>_<project>/`, self-healing leftovers from direct `npx playwright test` runs. Exported alongside `run`.
+
+#### 2. Script Path Fixes
+- **`scripts/create-consolidated-excel.js`** — Replaced hardcoded absolute paths (`/Users/jameshc/Automation/WebAutomation/test-results/...`) with dynamic dated paths using `path.join(process.cwd(), 'test-results', dateStr, ...)`. Output Excel now written to the dated subfolder.
+- **`scripts/validate-api-mapping.ts`** — Updated from loose `test-results/api-validation-report.json` to dated `test-results/YYYY-MM-DD/api-validation-report.json`
+- **`scripts/extract-rtl-patched-data.ts`** — Fixed `path` module import from `import { join, resolve } from "node:path"` to `import * as path from "node:path"` (the file was calling `path.join()` but `path` was never imported as a namespace, causing a runtime error). Updated all `resolve(...)` calls to `path.resolve(...)`.
+
+#### 3. Spec File Path Fixes
+- **`tests/projects/student-IDR/MASTER-DATA-VERIFICATION.spec.ts`** — Updated verification result writes from loose `test-results/` to dated `test-results/YYYY-MM-DD/`
+- **`tests/projects/student-IDR/DEBUG-DASHBOARD.spec.ts`** — Updated HTML report saves from loose `test-results/debug-dashboard.html` to dated `test-results/YYYY-MM-DD/debug-dashboard.html`
+
+#### 4. Documentation
+- **`README.md`** — Updated run artifacts section to document allure location under `test-results/allure/`, dated path structure `test-results/YYYY-MM-DD/`, and the convention that all scripts use dated subfolders.
+
+### Date Format Convention
+- Date string: `new Date().toISOString().slice(0, 10)` → `YYYY-MM-DD` (ISO 8601)
+- Allure timestamp: `YYYYMMDDHHMMSS_<project>`
+- Path pattern: `test-results/YYYY-MM-DD/<project>/<run-details>/`
+
+### Files Reviewed (Already Correct)
+- `scripts/run-playwright.js` — Already used `runDate` variable
+- `scripts/generate-tax-bomb-analysis.js` — Already used `new Date().toISOString().slice(0, 10)`
+- `scripts/run-api-tests.ts` — Already used dated paths
+- `scripts/postman-runner.ts` — Already used dated paths
+- `scripts/create-master-csv.js` — Already used dated paths
+- `scripts/playwright-date-type-reporter.js` — Already used dated paths
+- `mobile/src/utils/account-store.ts` — Already used dated paths
+- `mobile/src/utils/mobile-auth.ts` — Already used dated paths
+- `tests/projects/student-IDR/session-manager.ts` — Already used dated paths
+- Utility scripts (`organize-reports.js`, `organize-test-results.js`, `check-test-results-root.js`, `finalize-test-results.js`) — Read/organize the root, intentionally not modified
+

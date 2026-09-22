@@ -53,8 +53,9 @@ test('Debug: Capture dashboard content', async ({ page }) => {
   // Save the full HTML for inspection
   const fs = await import('fs');
   const path = await import('path');
-  const reportDir = path.join('test-results', 'debug-dashboard.html');
-  fs.mkdirSync(path.dirname(reportDir), { recursive: true });
-  fs.writeFileSync(reportDir, pageHTML);
-  console.log(`\nFull HTML saved to: ${reportDir}`);
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const reportPath = path.join(process.cwd(), 'test-results', dateStr, 'debug-dashboard.html');
+  fs.mkdirSync(path.dirname(reportPath), { recursive: true });
+  fs.writeFileSync(reportPath, pageHTML);
+  console.log(`\nFull HTML saved to: ${reportPath}`);
 });

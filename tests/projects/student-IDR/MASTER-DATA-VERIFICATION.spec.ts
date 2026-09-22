@@ -240,7 +240,8 @@ test.describe('MASTER-DATA Calculation Verification', () => {
       }
 
       // Save individual verification to file
-      const resultsDir = path.join(__dirname, '../../../test-results');
+      const dateStr = new Date().toISOString().slice(0, 10);
+      const resultsDir = path.join(__dirname, '../../../test-results', dateStr);
       const verificationFile = path.join(resultsDir, `MASTER-DATA-VERIFICATION-${testId}.json`);
       fs.writeFileSync(verificationFile, JSON.stringify(verification, null, 2));
 
