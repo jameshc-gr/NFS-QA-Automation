@@ -1357,7 +1357,7 @@ The root directory contains only essential project-level configuration and docum
 - `ai/` - Agent frameworks, skills, and prompts
 - `api/` - API testing utilities and schemas
 - `docs/` - Technical documentation
-- `memory/` - Project memory and session logs
+- `ai/memory/` - Project memory and session logs (migrated from `memory/`)
 - `mobile/` - Mobile app test framework (Appium/WDIO)
 - `scripts/` - Utility and maintenance scripts
 - `tests/` - Test specifications and page objects

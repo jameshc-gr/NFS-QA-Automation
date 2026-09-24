@@ -88,7 +88,7 @@ async function runSanityChecks() {
   });
 
   const locatorHistory = JSON.parse(
-    readFileSync(path.resolve(process.cwd(), 'memory/locator-history.json'), 'utf8')
+    readFileSync(path.resolve(process.cwd(), 'ai/memory/locator-history.json'), 'utf8')
   );
   assert.ok(
     locatorHistory.locators.some((e: any) => e.reason === 'Sanity test verification'),
@@ -96,7 +96,7 @@ async function runSanityChecks() {
   );
 
   const flakyHistory = JSON.parse(
-    readFileSync(path.resolve(process.cwd(), 'memory/flaky-tests.json'), 'utf8')
+    readFileSync(path.resolve(process.cwd(), 'ai/memory/flaky-tests.json'), 'utf8')
   );
   assert.ok(
     flakyHistory.flaky.some((e: any) => e.rootCause === 'Sanity test test'),
@@ -104,7 +104,7 @@ async function runSanityChecks() {
   );
 
   const healingHistory = JSON.parse(
-    readFileSync(path.resolve(process.cwd(), 'memory/healing-history.json'), 'utf8')
+    readFileSync(path.resolve(process.cwd(), 'ai/memory/healing-history.json'), 'utf8')
   );
   assert.ok(
     healingHistory.history.some((e: any) => e.failureType === 'selector'),

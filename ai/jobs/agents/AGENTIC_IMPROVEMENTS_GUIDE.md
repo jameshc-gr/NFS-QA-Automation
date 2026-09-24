@@ -84,15 +84,15 @@ Orchestrator executes: MOBILE_SPECS=tests/android/login-logout.spec.ts npx wdio 
 **Failure classification** (from `mobile-triage` skill):
 1. **Selector failure** — Element no longer matches page source
    - Fix: Check selector registry, try next candidate, add stable fallback
-   - Memory: Record selector change in `memory/locator-history.json`
+  - Memory: Record selector change in `ai/memory/locator-history.json`
 
 2. **Timing failure** — Element exists but not yet visible/clickable
    - Fix: Replace `browser.pause()` with explicit waits (`waitForDisplayed`, `waitForClickable`)
-   - Memory: Record in `memory/flaky-tests.json` if intermittent
+  - Memory: Record in `ai/memory/flaky-tests.json` if intermittent
 
 3. **Verification failure** — Email/SMS code didn't arrive or timed out
    - Fix: Trigger resend/retry or recommend mock mode for dev cycles
-   - Memory: Track code retrieval patterns in `memory/healing-history.json`
+  - Memory: Track code retrieval patterns in `ai/memory/healing-history.json`
 
 4. **App crash / Infrastructure** — Device offline, Appium disconnected, etc.
    - Action: Capture logs, stop cleanly, escalate to user (NOT a code fix)
@@ -181,9 +181,9 @@ await stepCheckpoint('Fill email field', async () => {
 ### Memory Tracking
 
 **Files:**
-- `memory/locator-history.json` — Selector changes applied by Healer
-- `memory/flaky-tests.json` — Intermittent failures detected
-- `memory/healing-history.json` — All fixes applied, with timestamps
+- `ai/memory/locator-history.json` — Selector changes applied by Healer
+- `ai/memory/flaky-tests.json` — Intermittent failures detected
+- `ai/memory/healing-history.json` — All fixes applied, with timestamps
 
 **Why this matters**: Agents learn from past failures and avoid re-fixing the same issue.
 
@@ -340,7 +340,7 @@ Healer checks this before proposing a fix: "This selector was already fixed on 8
 ## What's in memory/ Directory
 
 ```
-memory/
+ai/memory/
 ├── locator-history.json      # Selector changes applied
 ├── flaky-tests.json          # Intermittent failures tracked
 ├── healing-history.json      # All fixes applied (timestamps)
@@ -410,7 +410,7 @@ Healer should have reported this and escalated to user.
 
 1. **Try it**: Invoke Orchestrator with a simple request: "Test login-logout on Android QA"
 2. **Observe**: Watch it run pre-flight, execute, and handle any failures autonomously
-3. **Learn**: Check `memory/` after the run to see what was recorded
+3. **Learn**: Check `ai/memory/` after the run to see what was recorded
 4. **Extend**: Use the same patterns for other mobile flows (forgot-password, create-account, etc.)
 
 ---

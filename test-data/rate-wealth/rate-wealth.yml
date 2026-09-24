@@ -1,24 +1,303 @@
-# FitBUX Rate Wealth Test Data Profiles
-# Test User Convention: my-fitbux-jcXXXX@yopmail.com
+# FitBUX Rate Wealth Test Data Profiles & Page Object Mappings
+# Test User Convention: my-rw-jcXXXX@yopmail.com
 # Password: Test123!
-# Generated: 2026-07-30
+# Updated: September 2026
 
 # Base Test URLs
-TEST_URL_QA: "https://wealth.dev.fitbux.com"
-TEST_URL_STAGE: "https://wealth.stage.fitbux.com"
-TEST_URL_PROD: "https://wealth.fitbux.com"
+TEST_URL_QA: "https://wealth.dev.fitbux.com/"
+TEST_URL_ENTRY_REDIRECT: "https://www.gr-dev.com/fitbux-signup"
+TEST_URL_AUTH_GATEWAY: "https://login.dev.rate.com/oauth2/aus1lsk5st100GteN1d7/v1/authorize"
+TEST_URL_REGISTRATION: "https://my.dev.rate.com/registration"
+TEST_URL_STAGE: ""
+TEST_URL_PROD: ""
 
 TEST_ENV: "QA"
 TRIAL_DAYS: "14"
-MONTHLY_SUBSCRIPTION: "18.99"
-ANNUAL_SUBSCRIPTION: "189"
+MONTHLY_SUBSCRIPTION: "11.00"
+ANNUAL_SUBSCRIPTION: "110"
+DISCOUNT_PERCENTAGE: "17%"
+
+# ============================================
+# APPLICATION PAGE & FIELD OBJECT MAPPINGS
+# ============================================
+pages:
+  login:
+    page_name: "Rate Wealth SSO Login"
+    page_id: "sso-login"
+    route: "/oauth2/aus1lsk5st100GteN1d7/v1/authorize"
+    full_url_pattern: "https://login.dev.rate.com/oauth2/aus1lsk5st100GteN1d7/v1/authorize*"
+    heading: "Log in to Rate"
+    locators:
+      email_input: "input[name='identifier']"
+      password_input: "input[name='credentials.passcode']"
+      keep_me_signed_in_checkbox: "input[name='rememberMe']"
+      sign_in_button: "input[type='submit']"
+      forgot_password_link: "a:has-text('Forgot password?')"
+      unlock_account_link: "a:has-text('Unlock account?')"
+      register_link: "a:has-text(\"Don't have an account? Register\")"
+      accept_cookies_button: "button:has-text('Accept Cookies')"
+
+  membership_selection:
+    page_name: "Select Your Plan Modal"
+    page_id: "plan-selection-modal"
+    route: "/profile-builder"
+    heading: "Select your plan"
+    subheading: "Reach your financial goals with Rate Wealth"
+    locators:
+      monthly_plan_radio: "input[type='radio'][value='monthly'], label:has-text('Monthly')"
+      annual_plan_radio: "input[type='radio'][value='annual'], label:has-text('Annual')"
+      name_on_card_input: "input[placeholder=''], input[name='name']"
+      card_number_frame: "iframe[title*='card number' i]"
+      card_number_input: "input[name='cardnumber']"
+      expiration_date_frame: "iframe[title*='expiration' i]"
+      expiration_date_input: "input[name='exp-date']"
+      security_code_frame: "iframe[title*='CVC' i], iframe[title*='security' i]"
+      security_code_input: "input[name='cvc']"
+      promo_code_input: "input[name='promoCode']"
+      accept_policy_checkbox: "#acceptPolicy"
+      accept_policy_label: "label[for='acceptPolicy']"
+      start_membership_button: "button:has-text('Start membership')"
+      already_have_account_login: "button:has-text('Log in')"
+
+  welcome_back:
+    page_name: "Profile Builder Continue"
+    page_id: "profile-builder-continue"
+    route: "/profile-builder-continue"
+    heading: "Welcome Back"
+    locators:
+      continue_button: "button:has-text('Continue')"
+      logout_button: "button:has-text('Log Out')"
+
+  onboarding_step1_personal:
+    page_name: "Personal Info - Basic Demographics"
+    page_id: "onboarding-personal-basics"
+    route: "/profile-builder"
+    heading: "Let's start with you"
+    locators:
+      date_of_birth_input: "input[aria-label*='calendar' i], input[type='text']:nth-of-type(1)"
+      zip_code_input: "input[name='zip']"
+      gender_male_radio: "label[for='m']"
+      gender_female_radio: "label[for='f']"
+      gender_other_radio: "label[for='o']"
+      married_no_radio: "label[for='married_n']"
+      married_yes_radio: "label[for='married_y']"
+      children_no_radio: "label[for='has_children_n']"
+      children_yes_radio: "label[for='has_children_y']"
+      next_button: "button:has-text('Next')"
+      save_and_exit_button: "button:has-text('Save and Exit')"
+      back_button: "button:has-text('Back')"
+
+  onboarding_step1_education:
+    page_name: "Personal Info - Education"
+    page_id: "onboarding-personal-education"
+    route: "/profile-builder"
+    heading: "Your education"
+    locators:
+      degree_no_radio: "label[for='n']"
+      degree_yes_radio: "label[for='y']"
+      next_button: "button:has-text('Next')"
+      save_and_exit_button: "button:has-text('Save and Exit')"
+      back_button: "button:has-text('Back')"
+
+  onboarding_step2_financial_intro:
+    page_name: "Financial Info - Intro"
+    page_id: "onboarding-financial-intro"
+    route: "/profile-builder"
+    heading: "See your financial life together"
+    locators:
+      next_button: "button:has-text('Next')"
+      back_button: "button:has-text('Back')"
+
+  onboarding_step2_income:
+    page_name: "Financial Info - Income"
+    page_id: "onboarding-financial-income"
+    route: "/profile-builder"
+    heading: "Your Income"
+    locators:
+      monthly_salary_input: "input[name='monthly']"
+      annual_salary_input: "input[name='annual']"
+      add_more_income_button: "button:has-text('Add More Income')"
+      next_button: "button:has-text('Next')"
+      save_and_exit_button: "button:has-text('Save and Exit')"
+      back_button: "button:has-text('Back')"
+
+  onboarding_step2_expenses:
+    page_name: "Financial Info - Household Expenses"
+    page_id: "onboarding-financial-expenses"
+    route: "/profile-builder"
+    heading: "Household expenses"
+    locators:
+      rent_monthly_input: "input[name='monthly__rent']"
+      rent_annual_input: "input[name='annual__rent']"
+      grocery_monthly_input: "input[name='monthly__grocery']"
+      grocery_annual_input: "input[name='annual__grocery']"
+      hoa_monthly_input: "input[name='monthly__hoa']"
+      fuel_monthly_input: "input[name='monthly__fuel']"
+      power_monthly_input: "input[name='monthly__power']"
+      phone_monthly_input: "input[name='monthly__phone']"
+      water_monthly_input: "input[name='monthly__water']"
+      add_household_expense_button: "button:has-text('Add household expense')"
+      next_button: "button:has-text('Next')"
+      save_and_exit_button: "button:has-text('Save and Exit')"
+      back_button: "button:has-text('Back')"
+
+  onboarding_step2_debts:
+    page_name: "Financial Info - Debts"
+    page_id: "onboarding-financial-debts"
+    route: "/profile-builder"
+    heading: "Your debts"
+    locators:
+      add_debt_account_button: "button:has-text('Add debt account')"
+      connect_account_button: "button:has-text('Connect account')"
+      add_account_manually_button: "button:has-text('Add account manually')"
+      next_button: "button:has-text('Next')"
+      save_and_exit_button: "button:has-text('Save and Exit')"
+      back_button: "button:has-text('Back')"
+
+  onboarding_step2_assets:
+    page_name: "Financial Info - Assets"
+    page_id: "onboarding-financial-assets"
+    route: "/profile-builder"
+    heading: "Your assets"
+    locators:
+      add_asset_account_button: "button:has-text('Add asset account')"
+      connect_account_button: "button:has-text('Connect account')"
+      add_account_manually_button: "button:has-text('Add account manually')"
+      next_button: "button:has-text('Next')"
+      save_and_exit_button: "button:has-text('Save and Exit')"
+      back_button: "button:has-text('Back')"
+
+  onboarding_step3_work_intro:
+    page_name: "Work & Background - Intro"
+    page_id: "onboarding-work-intro"
+    route: "/profile-builder"
+    heading: "Work & Background"
+    locators:
+      next_button: "button:has-text('Next')"
+      back_button: "button:has-text('Back')"
+
+  onboarding_step3_work_form:
+    page_name: "Work & Background - Form"
+    page_id: "onboarding-work-form"
+    route: "/profile-builder"
+    heading: "Your work & background"
+    locators:
+      profession_combobox: ".euiComboBox"
+      profession_input: ".euiComboBox input"
+      networking_no_radio: "label[for='qual_networking_n']"
+      networking_yes_radio: "label[for='qual_networking_y']"
+      networking_na_radio: "label[for='qual_networking_na']"
+      ncaa_sports_no_radio: "label[for='qual_ncaa_sports_n']"
+      ncaa_sports_yes_radio: "label[for='qual_ncaa_sports_y']"
+      ncaa_sports_na_radio: "label[for='qual_ncaa_sports_na']"
+      marathons_no_radio: "label[for='qual_marathons_n']"
+      marathons_yes_radio: "label[for='qual_marathons_y']"
+      marathons_na_radio: "label[for='qual_marathons_na']"
+      military_no_radio: "label[for='qual_military_n']"
+      military_yes_radio: "label[for='qual_military_y']"
+      military_na_radio: "label[for='qual_military_na']"
+      finish_button: "button:has-text('Finish')"
+      a_few_more_questions_button: "button:has-text('A few more questions')"
+      back_button: "button:has-text('Back')"
+
+  dashboard_home:
+    page_name: "Rate Wealth Home Dashboard"
+    page_id: "dashboard-home"
+    route: "/home"
+    heading: "Financial Snapshot"
+    locators:
+      wealth_score_badge: "[class*='score'], text=Wealth Score"
+      build_plan_card_button: "button:has-text('Build Plan'), a:has-text('Build Your Financial Plan')"
+      link_accounts_button: "button:has-text('Link My Accounts')"
+      schedule_call_button: "button:has-text('Schedule A Call')"
+      open_investment_account_button: "button:has-text('Open Account')"
+      refer_friend_button: "button:has-text('Refer A Friend')"
+      go_to_accounts_link: "a:has-text('Go to Accounts')"
+      account_menu_button: "button[aria-label='Account menu']"
+
+  plan_select:
+    page_name: "How do you want to build your plan?"
+    page_id: "plan-select"
+    route: "/plan-select"
+    heading: "How do you want to build your plan?"
+    locators:
+      ai_assistant_card: "button:has-text('Use AI-Powered Assistant 1.0')"
+      manually_card: "button.euiCard__titleButton:has-text('Manually')"
+      cancel_button: "button:has-text('Cancel')"
+
+  plan_builder:
+    page_name: "Financial Plan Builder (Manual)"
+    page_id: "plan-builder"
+    route: "/plan-builder"
+    heading: "Name My Plan"
+    locators:
+      plan_name_input: "input[type='text']"
+      next_step_button: "button:has-text('Next Step')"
+      cancel_button: "button:has-text('Cancel')"
+
+  financial_plans:
+    page_name: "Financial Plans Overview"
+    page_id: "financial-plans"
+    route: "/financial-plans"
+    heading: "Financial Plans"
+    locators:
+      build_plan_button: "button:has-text('Build Your Financial Plan')"
+
+  financial_snapshot:
+    page_name: "Financial Snapshot / Net Wealth"
+    page_id: "financial-snapshot"
+    route: "/wealth"
+    heading: "Financial Snapshot"
+    locators:
+      summary_tab: "button:has-text('Summary')"
+      assets_tab: "button:has-text('Assets')"
+      debts_tab: "button:has-text('Debts')"
+      work_and_background_tab: "button:has-text('Work & Background')"
+
+  day_to_day_money:
+    page_name: "Day-to-Day Money (Budget)"
+    page_id: "day-to-day-money"
+    route: "/budget"
+    heading: "Day-to-Day Money"
+    locators:
+      income_tab: "button:has-text('Income')"
+      expenses_tab: "button:has-text('Expenses')"
+      add_income_button: "button:has-text('Add Income')"
+
+  transactions:
+    page_name: "Transactions"
+    page_id: "transactions"
+    route: "/transactions"
+    heading: "Transactions"
+    locators:
+      add_transaction_manually: "button:has-text('Add Transaction Manually')"
+      connect_account_button: "button:has-text('Connect Account')"
+
+  accounts:
+    page_name: "Accounts Overview"
+    page_id: "accounts"
+    route: "/accounts"
+    heading: "Accounts"
+    locators:
+      add_account_manually: "button:has-text('Add Account Manually')"
+      connect_account_button: "button:has-text('Connect Account')"
+
+  settings:
+    page_name: "Settings & Profile"
+    page_id: "settings"
+    route: "/settings"
+    heading: "Settings"
+    locators:
+      edit_profile_button: "button:has-text('Edit your profile')"
+      add_spouse_button: "button:has-text('Add Spouse/Fiance Manually')"
+      manage_subscription_button: "button:has-text('Manage Subscription')"
 
 # ============================================
 # PROFILE 001: Entry-Level Graduate (High Debt)
 # ============================================
 FIRST_NAME_P001: "EMILY"
 LAST_NAME_P001: "JOHNSON"
-EMAIL_P001: "my-fitbux-jc0001@yopmail.com"
+EMAIL_P001: "my-rateweath-jc0001@yopmail.com"
 AGE_P001: "24"
 EMPLOYMENT_STATUS_P001: "EMPLOYED"
 EMPLOYER_P001: "Tech Innovations Inc"

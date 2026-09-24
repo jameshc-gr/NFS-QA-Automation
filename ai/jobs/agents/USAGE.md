@@ -5,7 +5,7 @@ This document explains how to use the agent hierarchy, skills, and persistent me
 **Quick Summary**
 - Agents orchestrate workflows and make testing decisions using specialised modes (`*.agent.md`).
 - Skills (`ai/jobs/skills/*/SKILL.md`) are domain-specific operating procedures that provide expert QA knowledge for Web, Mobile, API, Test Data, Planning, and Bug Reporting.
-- Memory is stored under `memory/` and `/memories/repo/webautomation.md` to track locator changes, flaky tests, and framework conventions over time.
+- Memory was previously stored under `memory/`. Repository agents now use `ai/memory/` and `/memories/repo/webautomation.md` to track locator changes, flaky tests, and framework conventions over time.
 
 **Copilot Agent Modes**
 - `playwright-test-orchestrator`: Top-level coordinator that discovers, executes, and summarizes test workflows.
@@ -43,7 +43,7 @@ This document explains how to use the agent hierarchy, skills, and persistent me
 - `twg-status-rollups`: Engineering velocity, sprint progress, and release go/no-go readiness briefs.
 
 **Memory**
-- Location: `memory/` with JSON files:
+- Location: `ai/memory/` with JSON files:
   - `locator-history.json` — learned locator mappings.
   - `healing-history.json` — records of healing attempts and results.
   - `flaky-tests.json` — flakiness metadata for tests.

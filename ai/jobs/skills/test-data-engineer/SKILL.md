@@ -42,4 +42,4 @@ Use this skill to generate compliant, environment-aware test data and manage aut
 
 ## Guardrails
 - Never hardcode user passwords in plain text outside configuration files.
-- Always update test account registries (`login.yml`, `config.yml`, `memory/`) when creating persistent accounts.
+   - Always update test account registries (`login.yml`, `config.yml`, `ai/memory/`) when creating persistent accounts.

@@ -74,7 +74,7 @@ function organize() {
   const entries = fs.readdirSync(resultsDir);
   for (const e of entries) {
     const abs = path.join(resultsDir, e);
-    if (e === '.DS_Store') continue;
+    if (e === '.DS_Store' || e === 'allure') continue;
     if (fs.statSync(abs).isDirectory() && isDateFolder(e)) {
       // create standardized layout: test-results/YYYY-MM-DD/<projectName>/<run-timestamp>/...
           const date = String(e.includes('-') ? e : formatPlainDate(e));

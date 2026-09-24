@@ -12,9 +12,10 @@ function fail(msg) {
 if (!fs.existsSync(testResults)) process.exit(0)
 
 const entries = fs.readdirSync(testResults).filter(e => e !== '.' && e !== '..')
-// ignore only the date-folders (YYYY-MM-DD) and hidden files
+// ignore date-folders (YYYY-MM-DD), allure results directory, and hidden files
 const nonDate = entries.filter(e => {
   if (e.startsWith('.')) return false
+  if (e === 'allure') return false
   return !/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(e)
 })
 

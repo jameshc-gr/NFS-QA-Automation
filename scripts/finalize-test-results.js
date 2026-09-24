@@ -19,7 +19,7 @@ ensureDir(path.join(targetBase, 'misc'));
 
 const entries = fs.readdirSync(resultsDir);
 for (const e of entries) {
-  if (e === '.DS_Store') continue;
+  if (e === '.DS_Store' || e === 'allure') continue;
   if (/^\d{4}-\d{2}-\d{2}$/.test(e)) continue; // date folder
   const abs = path.join(resultsDir, e);
   try {

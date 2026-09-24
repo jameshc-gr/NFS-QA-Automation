@@ -1,0 +1,1 @@
+This folder contains spec test plans migrated from `specs/`. Each plan is grouped by Jira ticket directory.

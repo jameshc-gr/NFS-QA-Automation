@@ -708,8 +708,10 @@ export function runFal3673TestSuite() {
   console.log(`Execution Summary: Total: ${results.length} | Passed: ${passedCount} ✅ | Failed: ${failedCount} ${failedCount === 0 ? '✅' : '❌'}`);
   console.log('='.repeat(80));
 
-  // Save JSON report
-  const outputDir = path.resolve(__dirname, '../test-results/student-IDR');
+  // Save JSON report into dated/project subfolder (never directly under test-results/)
+  const d = new Date();
+  const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const outputDir = path.resolve(__dirname, `../test-results/${dateStr}/student-IDR`);
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }

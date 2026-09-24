@@ -121,6 +121,15 @@ export default defineConfig({
       }
     },
     {
+      name: 'rate-wealth',
+      testDir: './tests/projects/rate-wealth',
+      use: {
+        ...devices['Desktop Chrome'],
+        headless: true,
+        baseURL: 'https://wealth.dev.fitbux.com'
+      }
+    },
+    {
       name: 'api-tests',
       testDir: './api/tests',
       use: {

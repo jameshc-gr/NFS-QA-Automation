@@ -191,4 +191,4 @@ npx playwright test tests/projects/student-IDR/
 For questions about these tests:
 - See `readme.md` in the tests/projects/student-IDR directory for framework guidance
 - Check `docs/mobile-testing-rules.md` for canonical mobile test rules (if applicable)
-- Review `memory/webautomation.md` for session memory and troubleshooting
+- Review `ai/memory/webautomation.md` for session memory and troubleshooting

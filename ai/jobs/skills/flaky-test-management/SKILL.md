@@ -13,7 +13,7 @@ Use this skill to detect, quarantine, diagnose, and eliminate flaky tests across
 ## When to Use
 - A test passes intermittently or fails randomly in CI/CD without code changes
 - Isolating state leakage, race conditions, dynamic element timing, or environment instability
-- Recording flaky test metadata in `memory/flaky-tests.json` or applying quarantine status (`test.fixme` / `test.skip`)
+   - Recording flaky test metadata in `ai/memory/flaky-tests.json` or applying quarantine status (`test.fixme` / `test.skip`)
 - Applying resilience patterns (Playwright auto-waiting, resilient WebdriverIO retries, state resetting)
 
 ## Inputs
@@ -35,13 +35,13 @@ Use this skill to detect, quarantine, diagnose, and eliminate flaky tests across
    - Use role-based locators (`getByRole`) or stable test IDs over brittle CSS/XPath.
    - Ensure clean test isolation (`beforeEach` state reset / context isolation).
 4. **Quarantine or Track in Memory**:
-   - Record flaky test details in `memory/flaky-tests.json`.
+   - Record flaky test details in `ai/memory/flaky-tests.json`.
    - If a fix cannot be immediately applied, temporarily mark with `test.fixme` and log the issue ticket key.
 
 ## Output Contract
 - Flakiness diagnostic report (reproduction rate, root cause classification)
 - Refactored code snippet with resilient pattern applied
-- Updated `memory/flaky-tests.json` tracking entry
+   - Updated `ai/memory/flaky-tests.json` tracking entry
 
 ## Guardrails
 - Never increase test retries as a permanent substitute for fixing flaky test logic.
