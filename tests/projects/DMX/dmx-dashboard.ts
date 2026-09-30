@@ -6,10 +6,10 @@ export const MYACCOUNT_LOANS_URL = 'https://my.gr-dev.com/loans';
 export interface DashboardInfo { loanGuid: string; loanNumber: string; url: string }
 
 /** Loan officer attribution for emp-id=4723 must survive the whole journey. */
-export async function assertLoanOfficer(page: Page) {
+export async function assertLoanOfficer(page: Page, expectedName = 'John Sample') {
   const text = await page.locator('body').innerText();
-  expect(text, 'assigned loan officer name').toContain('John Sample');
-  expect(text, 'assigned loan officer NMLS').toMatch(/NMLS( ID:)? 12345/);
+  expect(text, 'assigned loan officer name').toContain(expectedName);
+  if (expectedName === 'John Sample') expect(text, 'assigned loan officer NMLS').toMatch(/NMLS( ID:)? 12345/);
 }
 
 /** Final milestone: MyAccount loan overview showing the newly created loan. */

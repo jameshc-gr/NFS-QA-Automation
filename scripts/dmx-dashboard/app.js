@@ -10,6 +10,8 @@ async function api(url, options = {}) {
 }
 
 function selectedCase() { return state.bootstrap.cases.find(test => test.id === $('#test-case').value); }
+function selectedOfficer() { return state.bootstrap.loanOfficers.find(officer => officer.id === $('#loan-officer').value); }
+function selectedTarget() { return state.bootstrap.entryTargets.find(target => target.id === $('#dmx-target').value); }
 function readScenario() {
   try { return JSON.parse($('#scenario').value); }
   catch (error) { throw new Error(`Scenario JSON: ${error.message}`); }
@@ -21,6 +23,7 @@ function populateCases(cases) {
     const test = selectedCase();
     const scenario = state.bootstrap.scenarios.find(item => item.id === test.scenarioRef);
     if (scenario) $('#scenario').value = JSON.stringify(scenario, null, 2);
+    renderTargetLink();
   });
 }
 
@@ -171,37 +174,24 @@ function populateBuilderSources() {
   };
 }
 
-function renderHistory(history) {
-  $('#history-count').textContent = history.length;
-  $('#history-list').innerHTML = history.length ? history.map(item => {
-    const result = item.result || {};
-    const passed = item.status === 'passed';
-    const loan = result.loanNumber ? `Loan #${esc(result.loanNumber)}` : (passed ? 'Passed' : 'No loan created');
-    const safeUrl = /^https:\/\/my\.gr-dev\.com\/loan\/[0-9a-f-]{36}\/overview$/.test(result.dashboardUrl || '') ? result.dashboardUrl : '';
-  const screenshot = item.diagnostic?.screenshotUrl ? `<a href="${esc(item.diagnostic.screenshotUrl)}" target="_blank" rel="noreferrer">View failure screenshot</a>` : '';
-    const link = safeUrl ? `<a href="${esc(safeUrl)}" target="_blank" rel="noreferrer">Open overview · ${esc(result.email)}</a>` : `<span>${esc(result.email || '')}</span>`;
-    const account = result.email ? `<span>Account: ${esc(result.email)} · Password: ${esc(result.password || '—')}</span>` : '';
-    const guid = result.dashboardLoanGuid || result.resumeGuid;
-    const guidLine = guid ? `<span>GR-loan-guid: ${esc(guid)}</span>` : '';
-    const failedAt = !passed && item.diagnostic ? `<span>Failed at ${esc(item.diagnostic.route || item.diagnostic.page || 'unknown page')}</span>` : '';
-    return `<div class="history-row ${passed ? 'passed' : 'failed'}"><strong>${esc(item.testId)}</strong><span class="history-status">${passed ? 'PASS' : 'FAIL'}</span><span>${loan} · ${new Date(item.finishedAt).toLocaleString()}</span>${account}${guidLine}${failedAt}${link}${screenshot}</div>`;
-  }).join('') : '<div class="history-empty">Completed loans will be listed here.</div>';
-}
-
 function renderResult(result) {
   if (!result) return;
   $('#result-panel').hidden = false;
   const passed = result.status === 'complete' || result.status === 'resumed-complete' || result.status === 'passed';
+  const entrySmoke = result.loanCreated === false;
+  const hasDiagnostic = !passed && Boolean(result.diagnostic);
   $('#result-panel').className = `result-panel panel ${passed ? 'passed' : 'failed'}`;
-  $('#result-kicker').textContent = passed ? '03 / LOAN CREATED' : '03 / RUN FAILED';
-  $('#result-heading').textContent = passed ? 'Loan created' : 'Loan creation failed';
+  $('#result-kicker').textContent = entrySmoke ? '03 / ENTRY CHECK' : passed ? '03 / LOAN CREATED' : '03 / RUN FAILED';
+  $('#result-heading').textContent = entrySmoke ? 'Tenant entry verified' : passed ? 'Loan created' : 'Loan creation failed';
   $('#result-mark').textContent = passed ? '✓' : '!';
   $('#run-status').className = `status-chip ${passed ? 'passed' : 'failed'}`;
-  $('#run-status').innerHTML = `<i></i> ${passed ? 'PASSED' : 'FAILED'}`;
+  $('#run-status').innerHTML = `<i></i> ${entrySmoke && passed ? 'ENTRY READY' : passed ? 'PASSED' : entrySmoke ? 'ENTRY FAILED' : 'FAILED'}`;
   $('#result-email').textContent = result.email || '—';
   $('#result-password').textContent = result.password || '—';
   $('#result-status').textContent = result.status || '—';
-  $('#result-number').textContent = result.loanNumber ? `#${result.loanNumber}` : (passed ? 'Not captured' : 'Not created');
+  const duplicateEmail = Boolean(result.email && state.bootstrap?.history?.some(item => item.result?.email?.toLowerCase() === result.email.toLowerCase()));
+  if (duplicateEmail && !$('#result-status').textContent.includes('existing account email')) $('#result-status').textContent += ' · existing account email';
+  $('#result-number').textContent = entrySmoke ? 'Not applicable (read-only check)' : result.loanNumber ? `#${result.loanNumber}` : (passed ? 'Not captured' : 'Not created');
   $('#result-guid').textContent = result.dashboardLoanGuid || 'Not captured';
   $('#result-resume-guid').textContent = result.resumeGuid || 'Not applicable';
   const link = $('#result-link');
@@ -209,16 +199,58 @@ function renderResult(result) {
   link.href = safeUrl || '#';
   link.hidden = !safeUrl;
   const failure = $('#failure-details');
-  failure.hidden = passed;
+  failure.hidden = passed || (entrySmoke && !hasDiagnostic);
   if (!passed) {
-    $('#failed-page').textContent = result.failedPage || result.diagnostic?.page || 'Page URL was not captured';
-    $('#failed-route').textContent = result.failedRoute || result.diagnostic?.route || 'Route was not captured';
-    $('#failure-error').textContent = result.note || result.diagnostic?.error || 'The run ended without a completed loan.';
+    $('#failed-page').textContent = result.failedPage || result.diagnostic?.page || result.landedUrl || 'Page URL was not captured';
+    let landedPath = '';
+    try { landedPath = result.landedUrl ? new URL(result.landedUrl).pathname : ''; } catch { /* Invalid or unavailable landing URL. */ }
+    $('#failed-route').textContent = result.failedRoute || result.diagnostic?.route || landedPath || 'Route was not captured';
+    $('#failure-error').textContent = result.note || result.diagnostic?.error || (entrySmoke ? 'Tenant entry page failed the configured smoke check.' : 'The run ended without a completed loan.');
     const screenshotUrl = result.screenshotUrl || result.diagnostic?.screenshotUrl || '';
     $('#screenshot-link').href = screenshotUrl || '#';
     $('#screenshot-link').hidden = !screenshotUrl;
     $('#failure-screenshot').src = screenshotUrl;
   }
+  if (entrySmoke) {
+    $('#result-email').textContent = `${result.environment} · ${result.tenant}`;
+    $('#result-password').textContent = 'Not used';
+    $('#result-status').textContent = passed ? 'Entry ready' : 'Entry check failed';
+    $('#result-guid').textContent = result.pageTitle || result.landedUrl || 'Not captured';
+    $('#result-resume-guid').textContent = result.landedUrl || result.url || '—';
+    $('#result-link').href = /^https:\/\//.test(result.landedUrl || '') ? result.landedUrl : result.url;
+    $('#result-link').hidden = false;
+    $('#result-link').innerHTML = 'Open tenant application entry <span>↗</span>';
+    $('#result-link').className = 'result-link';
+  } else if (result.tenant) {
+    $('#result-email').textContent = `${result.tenant} · ${result.loanOfficerLabel || 'DEV'}`;
+  }
+  if (!entrySmoke) $('#result-link').className = 'result-link';
+  if (entrySmoke && !passed) {
+    $('#result-panel').className = 'result-panel panel failed';
+    $('#result-kicker').textContent = '03 / ENTRY CHECK FAILED';
+    $('#result-heading').textContent = 'Tenant entry check failed';
+  }
+}
+
+function renderHistory(history) {
+  $('#history-count').textContent = history.length;
+  $('#history-list').innerHTML = history.length ? history.map(item => {
+    const result = item.result || {};
+    const passed = item.status === 'passed';
+    const readOnly = result.loanCreated === false;
+    const loan = result.loanNumber ? `Loan #${esc(result.loanNumber)}` : (readOnly ? 'Read-only entry check' : passed ? 'Passed' : 'No loan created');
+    const safeUrl = /^https:\/\/my\.gr-dev\.com\/loan\/[0-9a-f-]{36}\/overview$/.test(result.dashboardUrl || '') ? result.dashboardUrl : '';
+    const screenshotUrl = item.diagnostic?.screenshotUrl || result.screenshotUrl;
+    const screenshot = screenshotUrl ? `<a href="${esc(screenshotUrl)}" target="_blank" rel="noreferrer">View failure screenshot</a>` : '';
+    const account = result.email ? `<span>Account: ${esc(result.email)} · Password: ${esc(result.password || '—')}</span>` : '';
+    const link = safeUrl ? `<a href="${esc(safeUrl)}" target="_blank" rel="noreferrer">Open overview · ${esc(result.email)}</a>` : '';
+    const tenant = result.tenant ? `<span>${esc(result.tenant)} · ${esc(result.loanOfficerLabel || result.environment || '')}</span>` : (readOnly ? `<span>${esc(result.environment || '')} · ${esc(result.tenant || '')}</span>` : '');
+    const guid = result.dashboardLoanGuid || result.resumeGuid;
+    const guidLine = guid ? `<span>GR-loan-guid: ${esc(guid)}</span>` : '';
+    const failedAt = !passed && result.failedRoute ? `<span>Failed at ${esc(result.failedRoute)}</span>` : '';
+    const openLink = safeUrl ? `<a href="${esc(safeUrl)}" target="_blank" rel="noreferrer">Open overview · ${esc(result.email)}</a>` : '';
+    return `<div class="history-row ${passed ? 'passed' : 'failed'}"><strong>${esc(item.testId)}</strong><span class="history-status">${passed ? 'PASS' : 'FAIL'}</span><span>${loan} · ${new Date(item.finishedAt).toLocaleString()}</span>${tenant}${account}${guidLine}${failedAt}${link}${screenshot}</div>`;
+  }).join('') : '<div class="history-empty">Completed loans will be listed here.</div>';
 }
 
 function renderRun(run) {
@@ -226,10 +258,11 @@ function renderRun(run) {
   state.runId = run.id;
   const status = $('#run-status');
   status.className = `status-chip ${run.status === 'running' ? 'running' : run.status}`;
-  status.innerHTML = `<i></i> ${esc(run.status.toUpperCase())}`;
+  status.innerHTML = `<i></i> ${run.kind === 'entry-smoke' && run.status === 'passed' ? 'ENTRY READY' : esc(run.status.toUpperCase())}`;
   $('#progress-value').textContent = `${run.progress}%`;
   $('#progress-bar').style.width = `${run.progress}%`;
   $('#progress-label').textContent = run.currentStep || run.testId;
+  if (run.loanOfficerLabel) $('#progress-label').textContent = `${run.loanOfficerLabel} · ${run.currentStep || run.testId}`;
   $('#elapsed').textContent = formatTime(run.elapsedSeconds || 0);
   $('#remaining').textContent = run.estimatedSecondsRemaining == null ? '--:--' : formatTime(run.estimatedSecondsRemaining);
   $('#active-step').textContent = run.currentStep || '—';
@@ -242,7 +275,8 @@ function renderRun(run) {
   }
   $('#log-count').textContent = `${items.length} EVENTS`;
   const running = run.status === 'running';
-  $('#start-run').disabled = running;
+  $('#start-run').disabled = running || !selectedTarget()?.supportsLoanCreation || selectedTarget()?.id !== 'dev-gri-enhanced' || selectedOfficer()?.id !== 'lo-b';
+  $('#smoke-target').disabled = running || !selectedTarget()?.available || (selectedTarget()?.environment === 'PROD' && $('#prod-confirm-input').value !== 'READ-ONLY');
   $('#stop-run').hidden = !running;
   if (run.diagnostic && run.result) run.result.diagnostic = run.diagnostic;
   if (run.result) renderResult(run.result);
@@ -262,12 +296,46 @@ async function refreshBootstrap() {
   try {
     state.bootstrap = await api('/api/bootstrap');
     populateTemplates(state.bootstrap.templates);
+    $('#dmx-target').innerHTML = state.bootstrap.entryTargets.map(target => `<option value="${esc(target.id)}" ${!target.available ? 'disabled' : ''}>${esc(target.label)}${target.flowVariant ? ` · ${esc(target.flowVariant)}` : ''}${target.available ? '' : ' · entry check unavailable'}</option>`).join('');
+    $('#dmx-target').value = 'dev-gri-enhanced';
+    $('#dmx-target').onchange = renderTargetLink;
+    $('#loan-officer').innerHTML = state.bootstrap.loanOfficers.map(officer => `<option value="${esc(officer.id)}">${esc(officer.label)} · emp-id=${esc(officer.empId)}</option>`).join('');
+    $('#loan-officer').value = 'lo-b';
+    $('#loan-officer').onchange = () => { renderOfficerLink(); renderTargetLink(); };
+    $('#loan-officer').addEventListener('change', renderTargetLink);
+    renderOfficerLink();
+    renderTargetLink();
     renderHistory(state.bootstrap.history);
     if (state.bootstrap.activeRun?.status === 'running') {
       renderRun(state.bootstrap.activeRun);
       if (!state.poller) state.poller = setInterval(pollRun, 1000);
     }
   } catch (error) { showError(error); }
+}
+
+function renderOfficerLink() {
+  const officer = selectedOfficer();
+  const link = $('#officer-entry-link');
+  if (officer) {
+    link.href = officer.url;
+    link.textContent = `Open ${officer.label} DEV entry link ↗`;
+  }
+}
+
+function renderTargetLink() {
+  const target = selectedTarget();
+  const officer = selectedOfficer();
+  const link = $('#tenant-entry-link');
+  if (target) {
+    link.href = target.url;
+    link.textContent = `Open ${target.label} entry page ↗`;
+    $('#prod-confirm').hidden = target.environment !== 'PROD';
+    $('#smoke-target').disabled = !target.available || (target.environment === 'PROD' && $('#prod-confirm-input').value !== 'READ-ONLY');
+    const canCreateLoan = target.supportsLoanCreation && target.id === 'dev-gri-enhanced' && officer?.id === 'lo-b';
+    $('#start-run').disabled = !canCreateLoan;
+    $('#start-run').title = canCreateLoan ? '' : 'Loan creation is restricted to GRI Enhanced DEV with validated LO-B. Other targets support entry checks only.';
+    if (!canCreateLoan) $('#progress-label').textContent = 'Entry smoke only · loan creation unavailable for this target';
+  }
 }
 
 async function pollRun() {
@@ -370,7 +438,11 @@ $('#start-run').onclick = async () => {
     if (!test?.automated) throw new Error('Choose an automated test case.');
     if (!validateScenarioJson()) throw new Error('Fix the JSON syntax before starting the run.');
     const scenario = readScenario();
-    const { run } = await api('/api/run', { method: 'POST', body: JSON.stringify({ testId: test.id, scenario, email: $('#email').value, password: $('#password').value }) });
+    const officer = selectedOfficer();
+    const target = selectedTarget();
+    if (!target?.supportsLoanCreation || target.id !== 'dev-gri-enhanced' || officer?.id !== 'lo-b') throw new Error('Loan creation currently supports GRI Enhanced DEV with LO-B only. Select “Check entry page only” for other tenants/environments.');
+    const { run } = await api('/api/run', { method: 'POST', body: JSON.stringify({ testId: test.id, scenario, email: $('#email').value, password: $('#password').value, loanOfficerId: officer?.id, targetId: target.id }) });
+    run.loanOfficerLabel = officer?.label;
     renderRun(run);
     clearInterval(state.poller);
     state.poller = setInterval(pollRun, 1000);
@@ -381,6 +453,23 @@ $('#stop-run').onclick = async () => {
   try { await api('/api/stop', { method: 'POST', body: '{}' }); } catch (error) { showError(error); }
 };
 
+$('#smoke-target').onclick = async () => {
+  try {
+    const target = selectedTarget();
+    const isProd = target.environment === 'PROD';
+    if (isProd && $('#prod-confirm-input').value !== 'READ-ONLY') throw new Error('Type READ-ONLY to run a production entry check.');
+    const { run } = await api('/api/entry-smoke', { method: 'POST', headers: isProd ? { 'x-dmx-prod-smoke-confirm': 'read-only-entry-check' } : {}, body: JSON.stringify({ targetId: target.id }) });
+    run.kind = 'entry-smoke';
+    state.lastLogCount = 0;
+    $('#result-panel').hidden = true;
+    renderRun(run);
+    clearInterval(state.poller);
+    state.poller = setInterval(pollRun, 1000);
+  } catch (error) { showError(error); }
+};
+
+$('#prod-confirm-input').addEventListener('input', renderTargetLink);
+
 async function init() {
   await refreshBootstrap();
   populateCases(state.bootstrap.cases);
@@ -388,5 +477,6 @@ async function init() {
   const first = selectedCase();
   const scenario = state.bootstrap.scenarios.find(item => item.id === first?.scenarioRef);
   $('#scenario').value = JSON.stringify(scenario, null, 2);
+  renderTargetLink();
 }
 init().catch(showError);

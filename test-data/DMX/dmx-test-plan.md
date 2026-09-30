@@ -1,6 +1,7 @@
 # DMX (Digital Mortgage Experience) Test Plan
 
 Entry: `https://apply-gri.dev.saas.rate.com/apply/loan-purpose?emp-id=4723` (Loan Officer John Sample, NMLS 12345)
+Tenant/environment read-only plan: [dmx-tenant-environment-test-plan.md](dmx-tenant-environment-test-plan.md). Multi-tenant entry checks are isolated from loan creation; all PROD targets are smoke-only.
 Handoff milestone (definition of "complete"): `https://my.gr-dev.com/loan/<gr-loan-guid>/overview` showing `Purchase|Refinance #<loanNumber>DEV`, the subject address, the Overview / Tasks / Loan details / Documents tabs and the loan officer, plus a matching loan card on `https://my.gr-dev.com/loans`.
 Accounts: `my-dmx-<tag><n>--ra@yopmail.com` / `Test123!`. Every account created is logged to `dmx-created-accounts.csv` (append-only; the last row for an email is its current state).
 

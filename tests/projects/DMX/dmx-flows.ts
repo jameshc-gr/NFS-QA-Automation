@@ -1,9 +1,10 @@
-import { test, expect, Page, BrowserContext } from '@playwright/test';
+import { test, expect, Page, BrowserContext, TestInfo } from '@playwright/test';
 import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { register, runApplication, newEmail, routeOf, ENTRY_URL, PASSWORD } from './dmx-engine';
 import { loadScenarios, loadTestCase, recordAccount } from './dmx-data';
 import { assertDashboard, assertAccountsCard, assertLoanOfficer } from './dmx-dashboard';
+import { dmxEntryTarget } from './dmx-environments';
 
 test.afterEach(async ({ page, context }, testInfo) => {
   const dashboardRun = Boolean(process.env.RUN_ID);
@@ -64,6 +65,47 @@ function runScenario(id: string, ref: string) {
   return dashboardRun(id)?.scenario ?? scenarioFor(ref);
 }
 
+export async function runTenantEntrySmoke(targetId: string, page: Page, testInfo: TestInfo) {
+  const target = dmxEntryTarget(targetId);
+  if (!target) throw new Error(`Unknown DMX entry target: ${targetId}`);
+  const startedAt = Date.now();
+  let landedUrl = target.url;
+  let title = '';
+  try {
+    await page.goto(target.url, { waitUntil: 'domcontentloaded' });
+    landedUrl = page.url();
+    await expect(page.locator('main')).toBeVisible({ timeout: 30000 });
+    expect(new URL(page.url()).hostname).toBe(target.appHost);
+    await expect(page).toHaveTitle(new RegExp(target.brand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'));
+    await expect.poll(() => new URL(page.url()).pathname).toMatch(new RegExp(target.routePattern));
+    const visibleControls = page.locator('main button:visible, main select:visible');
+    await expect(visibleControls.first()).toBeVisible();
+    if (!target.id.includes('owning')) {
+      await expect(page.locator('main button').filter({ hasText: /^\s*(I’m Purchasing|I'm Purchasing)\s*$/ })).toHaveCount(1);
+      await expect(page.locator('main button').filter({ hasText: /^\s*(I’m Refinancing|I'm Refinancing)\s*$/ })).toHaveCount(1);
+    }
+    title = await page.title();
+  } catch (error) {
+    try { landedUrl = page.url(); } catch { /* Retain requested URL when navigation never started. */ }
+    const screenshotPath = testInfo.outputPath(`${target.id}-entry-failure.png`);
+    let screenshot = '';
+    try {
+      await page.screenshot({ path: screenshotPath, fullPage: true, timeout: 15000 });
+      screenshot = screenshotPath.replace(`${process.cwd()}/`, '');
+      await testInfo.attach(`${target.id}-entry-failure`, { path: screenshotPath, contentType: 'image/png' });
+    } catch { /* Navigation failures may leave no capturable page. */ }
+    const diagnostic = {
+      page: landedUrl,
+      route: (() => { try { return new URL(landedUrl).pathname; } catch { return ''; } })(),
+      error: (error as Error).message.split('\n').slice(0, 4).join(' '),
+      screenshot,
+    };
+    console.log(`DMX_ENTRY_SMOKE_DIAGNOSTIC:${JSON.stringify(diagnostic)}`);
+    throw error;
+  }
+  return { tenant: target.tenant, environment: target.environment, expectedBrand: target.brand, url: target.url, landedUrl, route: new URL(landedUrl).pathname, title, durationMs: Date.now() - startedAt, loanCreated: false };
+}
+
 const tagOf = (id: string) => id.split('-').slice(0, 2).join('').toLowerCase();
 
 // Complete application: register, fill every page, land on the MyAccount loan overview and the Accounts card.
@@ -74,12 +116,13 @@ export async function runCompleteLoan(id: string, page: Page, context: BrowserCo
   test.setTimeout(8 * 60_000);
   const email = run?.email || newEmail(tagOf(id));
   const password = run?.password || PASSWORD;
+  const entryUrl = run?.entryUrl || ENTRY_URL;
   const log = (m: string) => console.log(`[${id}] ${m}`);
   let stage = 'register';
   try {
-    await register(page, s, email, password);
+    await register(page, s, email, password, entryUrl);
     recordAccount({ email, password, scenarioId: id, product: s.product, status: 'registered' });
-    await assertLoanOfficer(page);
+    await assertLoanOfficer(page, run?.loanOfficerName);
 
     stage = 'application';
     await runApplication(page, s, { log });
@@ -111,9 +154,10 @@ export async function runResumeLoan(id: string, page: Page, context: BrowserCont
   test.setTimeout(8 * 60_000);
   const email = run?.email || newEmail(tagOf(id));
   const password = run?.password || PASSWORD;
+  const entryUrl = run?.entryUrl || ENTRY_URL;
   const log = (m: string) => console.log(`[${id}] ${m}`);
 
-  await register(page, s, email, password);
+  await register(page, s, email, password, entryUrl);
   await runApplication(page, s, { stopAt, log });
   expect(routeOf(page), 'stopped on the requested step').toBe(stopAt);
   const { resumeUrl, guid } = await abandon(page);
@@ -126,7 +170,7 @@ export async function runResumeLoan(id: string, page: Page, context: BrowserCont
   const back = await context.newPage();
   await back.goto(resumeUrl, { waitUntil: 'domcontentloaded' });
   await expect(back, 'resumes on the saved step, same loan').toHaveURL(new RegExp(`/apply/${stopAt}\\?.*gr-loan-guid=${guid}`), { timeout: 45_000 });
-  await assertLoanOfficer(back);
+  await assertLoanOfficer(back, run?.loanOfficerName);
 
   await runApplication(back, s, { log });
   const info = await assertDashboard(back, s);
@@ -145,9 +189,10 @@ export async function runRelogin(id: string, page: Page, context: BrowserContext
   test.setTimeout(12 * 60_000);
   const email = run?.email || newEmail(`${tagOf(id)}re`);
   const password = run?.password || PASSWORD;
+  const entryUrl = run?.entryUrl || ENTRY_URL;
   const log = (m: string) => console.log(`[${id}] ${m}`);
 
-  await register(page, s, email, password);
+  await register(page, s, email, password, entryUrl);
   await runApplication(page, s, { stopAt, log });
   const { resumeUrl, guid } = await abandon(page);
   recordAccount({ email, password, scenarioId: id, product: s.product, status: 'incomplete', stoppedAt: stopAt, loanGuid: guid, note: 'logged out; awaiting login' });

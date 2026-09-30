@@ -13,7 +13,13 @@ const TEMPLATES_FILE = path.join(ROOT, 'test-data/DMX/dmx-dashboard-templates.js
 const RESULTS_FILE = path.join(ROOT, 'test-data/DMX/dmx-dashboard-results.json');
 const RUN_CONFIG = path.join(ROOT, 'test-data/DMX/dmx-dashboard-run.json');
 const { loadScenarios } = require('../tests/projects/DMX/dmx-data.ts');
+const { DMX_ENTRY_TARGETS } = require('../tests/projects/DMX/dmx-environments.ts');
 const publicDir = path.join(__dirname, 'dmx-dashboard');
+const LOAN_OFFICERS = [
+  { id: 'lo-a', label: 'DMX Testlo (LO-A)', empId: '12657', url: 'https://apply-gri.dev.saas.rate.com/apply/loan-purpose?emp-id=12657', expectedName: 'Testlo' },
+  { id: 'lo-b', label: 'DMX Testlo (LO-B)', empId: '4723', url: 'https://apply-gri.dev.saas.rate.com/apply/loan-purpose?emp-id=4723', expectedName: 'John Sample' },
+  { id: 'lo-c', label: 'DMX Indu (LO-C)', empId: '6068', url: 'https://apply-gri.dev.saas.rate.com/apply/lo-selection?emp-id=6068', expectedName: 'Indu' },
+];
 
 let activeRun = null;
 let queue = Promise.resolve();
@@ -83,7 +89,10 @@ function addLog(run, text, kind = 'info') {
   if (diagnosticLine) {
     try {
       run.diagnostic = JSON.parse(diagnosticLine[1]);
-      run.diagnostic.screenshotUrl = `/api/runs/${run.id}/screenshot`;
+      if (run.diagnostic.screenshot) {
+        if (run.outputDir && path.isAbsolute(run.diagnostic.screenshot)) run.diagnostic.screenshot = path.relative(ROOT, run.diagnostic.screenshot);
+        run.diagnostic.screenshotUrl = `/api/runs/${run.id}/screenshot`;
+      }
     } catch { /* Preserve the raw log line if a diagnostic is malformed. */ }
   }
   const route = /\[[^\]]+\] step (\d+): (.+)$/.exec(line);
@@ -115,10 +124,18 @@ function finishRun(run, code, signal) {
   const diagnosticFile = run.outputDir ? path.join(ROOT, run.outputDir, 'dmx-dashboard-diagnostic.json') : '';
   run.diagnostic = diagnosticFile ? readJson(diagnosticFile, run.diagnostic) : run.diagnostic;
   if (run.diagnostic) run.diagnostic.screenshotUrl = `/api/runs/${run.id}/screenshot`;
+  if (run.diagnostic && run.outputDir) {
+    const diagnosticFile = path.join(ROOT, run.outputDir, 'dmx-dashboard-diagnostic.json');
+    fs.mkdirSync(path.dirname(diagnosticFile), { recursive: true });
+    fs.writeFileSync(diagnosticFile, JSON.stringify(run.diagnostic, null, 2), { mode: 0o600 });
+  }
   run.result = {
     email: run.email,
     password: run.password,
     status: run.status,
+    tenant: run.targetLabel || '',
+    environment: 'DEV',
+    loanOfficerLabel: run.loanOfficerLabel || '',
     resumeGuid: '',
     dashboardLoanGuid: '',
     loanNumber: '',
@@ -159,7 +176,7 @@ function finishRun(run, code, signal) {
   const history = readJson(RESULTS_FILE, []);
   history.unshift({
     id: run.id, testId: run.testId, title: run.title, status: run.status,
-    finishedAt: run.finishedAt, status: run.status, result: run.result || null, diagnostic: run.diagnostic || null,
+    finishedAt: run.finishedAt, result: run.result || null, diagnostic: run.diagnostic || null,
   });
   fs.writeFileSync(RESULTS_FILE, JSON.stringify(history.slice(0, 30), null, 2), { mode: 0o600 });
   addLog(run, `Run ${run.status}${run.result?.loanNumber ? `: loan #${run.result.loanNumber}` : ''}`, code === 0 ? 'success' : 'error');
@@ -167,8 +184,12 @@ function finishRun(run, code, signal) {
   run.child = null;
 }
 
-function launchRun(run, scenario, password) {
-  const config = { testId: run.testId, email: run.email, password, scenario };
+function launchRun(run, scenario, password, loanOfficer, target) {
+  const config = {
+    testId: run.testId, email: run.email, password, scenario,
+    loanOfficerId: loanOfficer.id, loanOfficerLabel: loanOfficer.label, loanOfficerName: loanOfficer.expectedName, entryUrl: loanOfficer.url,
+    targetId: target.id, environment: target.environment, tenant: target.tenant,
+  };
   fs.writeFileSync(RUN_CONFIG, JSON.stringify(config), { mode: 0o600 });
   const spec = path.resolve(ROOT, run.specFile);
   const runDate = new Date().toISOString().slice(0, 10);
@@ -205,6 +226,85 @@ function launchRun(run, scenario, password) {
   });
 }
 
+function launchEntrySmoke(run) {
+  const target = DMX_ENTRY_TARGETS.find(entry => entry.id === run.target.id);
+  const runDate = new Date().toISOString().slice(0, 10);
+  const output = `test-results/${runDate}/DMX/entry-smoke/${run.id}`;
+  run.outputDir = output;
+  const spec = path.join(ROOT, 'tests/projects/DMX/DMX-TENANT-ENTRY-SMOKE.spec.ts');
+  const args = ['test', spec, '--project=chromium', '--workers=1', `--output=${output}`];
+  const child = spawn(path.join(ROOT, 'node_modules/.bin/playwright'), args, {
+    cwd: ROOT, env: { ...process.env, TEST_PROJECT: 'DMX', RUN_ID: run.id, DMX_ENTRY_TARGET_ID: target.id }, stdio: ['ignore', 'pipe', 'pipe'], shell: false,
+  });
+  run.child = child;
+  addLog(run, `Read-only smoke check: ${target.label} · ${target.url}`);
+  let buffers = { stdout: '', stderr: '' };
+  for (const [stream, kind] of [[child.stdout, 'info'], [child.stderr, 'error']]) {
+    stream.on('data', chunk => {
+      const key = stream === child.stdout ? 'stdout' : 'stderr';
+      buffers[key] += chunk.toString();
+      const lines = buffers[key].split(/\r?\n/);
+      buffers[key] = lines.pop() || '';
+      for (const line of lines) {
+        const result = line.match(/DMX_ENTRY_SMOKE_RESULT:(\{.*\})/);
+        if (result) { try { run.smokeResult = JSON.parse(result[1]); } catch {} }
+        const diagnostic = line.match(/DMX_ENTRY_SMOKE_DIAGNOSTIC:(\{.*\})/);
+        if (diagnostic) { try { run.diagnostic = JSON.parse(diagnostic[1]); } catch {} }
+        const testResult = line.match(/(\d+) passed(?: \((\d+)\))?/);
+        if (testResult && run.smokeResult) run.smokeStatus = 'passed';
+        if (/\bfailed\b|timed out/i.test(line)) run.smokeStatus = 'failed';
+        addLog(run, line, kind);
+      }
+    });
+  }
+  child.on('error', error => { addLog(run, error.message, 'error'); finishEntrySmoke(run, 1); });
+  child.on('close', (code, signal) => {
+    for (const text of Object.values(buffers)) if (text) {
+      const result = text.match(/DMX_ENTRY_SMOKE_RESULT:(\{.*\})/);
+      if (result) { try { run.smokeResult = JSON.parse(result[1]); } catch {} }
+      const diagnostic = text.match(/DMX_ENTRY_SMOKE_DIAGNOSTIC:(\{.*\})/);
+      if (diagnostic) { try { run.diagnostic = JSON.parse(diagnostic[1]); } catch {} }
+      const testResult = text.match(/(\d+) passed(?: \((\d+)\))?/);
+      if (testResult && run.smokeResult) run.smokeStatus = 'passed';
+      if (/\d+ failed|\bfailed\b|timed out/i.test(text)) run.smokeStatus = 'failed';
+      addLog(run, text, 'info');
+    }
+    finishEntrySmoke(run, code ?? 1, signal);
+  });
+}
+
+function finishEntrySmoke(run, code, signal) {
+  if (run.finishedAt) return;
+  run.finishedAt = new Date().toISOString();
+  run.exitCode = code;
+  run.status = code === 0 && run.smokeResult && run.smokeResult.status === 'entry-ready' && run.smokeStatus === 'passed' ? 'passed' : 'failed';
+  run.progress = run.status === 'passed' ? 100 : run.progress;
+  run.estimatedSecondsRemaining = 0;
+  run.currentStep = run.status === 'passed' ? 'Entry page verified; no loan created' : 'Entry check failed';
+  if (signal) addLog(run, `Smoke check stopped by ${signal}`, 'error');
+  run.diagnostic = run.diagnostic || (run.outputDir ? readJson(path.join(ROOT, run.outputDir, 'dmx-dashboard-diagnostic.json'), null) : null);
+  if (run.outputDir && run.target && run.status === 'failed' && !run.diagnostic) {
+    const screenshot = path.join(run.outputDir, `${run.target.id}-entry-page.png`);
+    if (fs.existsSync(path.join(ROOT, screenshot))) run.diagnostic = { screenshot, screenshotUrl: `/api/runs/${run.id}/screenshot`, page: run.target.url, route: new URL(run.target.url).pathname, error: `Expected ${run.target.brand} entry page on ${run.target.appHost} at ${run.target.routePattern}` };
+  }
+  if (run.diagnostic) run.diagnostic.screenshotUrl = `/api/runs/${run.id}/screenshot`;
+  run.result = {
+    status: run.status, tenant: run.target.tenant, environment: run.target.environment,
+    url: run.target.url, landedUrl: run.smokeResult?.landedUrl || run.diagnostic?.page || '',
+    pageTitle: run.smokeResult?.title || '', loanCreated: false,
+    failedPage: run.status === 'failed' ? run.diagnostic?.page || run.target.url : '',
+    failedRoute: run.status === 'failed' ? run.diagnostic?.route || new URL(run.diagnostic?.page || run.target.url).pathname : '',
+    note: run.status === 'failed' ? run.diagnostic?.error || `Expected ${run.target.brand} entry page on ${run.target.appHost} at ${run.target.routePattern}` : '',
+    screenshotUrl: run.diagnostic?.screenshotUrl || '',
+    diagnostic: run.diagnostic,
+  };
+  const history = readJson(RESULTS_FILE, []);
+  history.unshift({ id: run.id, testId: run.testId, title: run.title, status: run.status, finishedAt: run.finishedAt, result: run.result, diagnostic: run.diagnostic });
+  fs.writeFileSync(RESULTS_FILE, JSON.stringify(history.slice(0, 30), null, 2), { mode: 0o600 });
+  addLog(run, `Read-only entry check ${run.status}; no loan was created`, run.status === 'passed' ? 'success' : 'error');
+  run.child = null;
+}
+
 async function route(req, res) {
   const url = new URL(req.url, `http://${HOST}:${PORT}`);
   if (url.pathname.startsWith('/api/') && !safeEqualOrigin(req)) return send(res, 403, { error: 'Cross-origin requests are not accepted.' });
@@ -214,11 +314,12 @@ async function route(req, res) {
     const historyItem = readJson(RESULTS_FILE, []).find(item => item.id === runId);
     const diagnostic = activeRun?.id === runId ? activeRun.diagnostic : historyItem?.diagnostic;
     const relative = diagnostic?.screenshot;
-    if (!relative || !relative.startsWith(`test-results/`) || !relative.endsWith('/dmx-failure.png')) return send(res, 404, { error: 'No failure screenshot was captured for this run.' });
+    if (!relative || !relative.startsWith(`test-results/`) || !/\.(png|jpe?g)$/.test(relative)) return send(res, 404, { error: 'No diagnostic screenshot was captured for this run.' });
     const full = path.resolve(ROOT, relative);
     const expectedPrefix = path.resolve(ROOT, 'test-results') + path.sep;
     if (!full.startsWith(expectedPrefix) || !fs.existsSync(full)) return send(res, 404, { error: 'Failure screenshot is unavailable.' });
-    res.writeHead(200, { 'content-type': 'image/png', 'cache-control': 'no-store', 'x-content-type-options': 'nosniff' });
+    const contentType = relative.endsWith('.png') ? 'image/png' : 'image/jpeg';
+    res.writeHead(200, { 'content-type': contentType, 'cache-control': 'no-store', 'x-content-type-options': 'nosniff' });
     return fs.createReadStream(full).pipe(res);
   }
   if (url.pathname === '/api/bootstrap' && req.method === 'GET') {
@@ -229,6 +330,8 @@ async function route(req, res) {
     }));
     return send(res, 200, {
       cases, scenarios: loadScenarios(),
+      loanOfficers: LOAN_OFFICERS,
+      entryTargets: DMX_ENTRY_TARGETS,
       templates: readJson(TEMPLATES_FILE, []),
       history: readJson(RESULTS_FILE, []),
       activeRun: publicRun(activeRun),
@@ -247,6 +350,10 @@ async function route(req, res) {
     if (activeRun && !activeRun.finishedAt) return send(res, 409, { error: 'A DMX run is already active. Wait for it to finish.' });
     const body = await readBody(req);
     if (activeRun && !activeRun.finishedAt) return send(res, 409, { error: 'A DMX run is already active. Wait for it to finish.' });
+    const target = DMX_ENTRY_TARGETS.find(entry => entry.id === body.targetId);
+    if (!target || target.id !== 'dev-gri-enhanced' || !target.supportsLoanCreation || body.loanOfficerId !== 'lo-b' || !LOAN_OFFICERS.some(officer => officer.id === body.loanOfficerId)) {
+      return send(res, 400, { error: 'Loan creation is restricted to GRI Enhanced DEV with LO-B. Other targets are read-only entry checks.' });
+    }
     const testCase = parseCsv(fs.readFileSync(CASES_FILE, 'utf8')).find(row => row.test_id === body.testId);
     if (!testCase || testCase.automated !== 'yes' || !testCase.spec_file || !/^tests\/projects\/DMX\/[\w.-]+\.spec\.ts$/.test(testCase.spec_file)) {
       return send(res, 400, { error: 'Select an automated test case from the catalog.' });
@@ -257,19 +364,13 @@ async function route(req, res) {
     }
     const email = String(body.email || '').trim() || undefined;
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return send(res, 400, { error: 'Enter a valid email address.' });
-    if (email) {
-      try {
-        const accounts = parseCsv(fs.readFileSync(path.join(ROOT, 'test-data/DMX/dmx-created-accounts.csv'), 'utf8'));
-        if (accounts.some(account => account.email.toLowerCase() === email.toLowerCase())) return send(res, 409, { error: 'That email already appears in the DMX account registry. Use a fresh account email.' });
-      } catch (error) {
-        if (error.code !== 'ENOENT') throw error;
-      }
-    }
     const password = String(body.password || 'Test123!');
     if (password.length < 8 || password.length > 128) return send(res, 400, { error: 'Password must contain 8 to 128 characters.' });
-    const run = {
+    const loanOfficer = LOAN_OFFICERS.find(officer => officer.id === body.loanOfficerId);
+  const run = {
       id: `dmx-${Date.now()}`, testId: testCase.test_id, title: testCase.title,
-      specFile: testCase.spec_file, email: email || '', password, status: 'running',
+      specFile: testCase.spec_file, email: email || '', password, status: 'running', loanOfficerId: loanOfficer.id, loanOfficerLabel: loanOfficer.label, loanOfficerName: loanOfficer.expectedName,
+      targetId: target.id, targetLabel: target.label,
       progress: 0, estimatedSecondsRemaining: null, startedAt: Date.now(),
       elapsedSeconds: 0, currentStep: 'Starting browser', steps: 0, logs: [],
     };
@@ -281,10 +382,27 @@ async function route(req, res) {
       run.email = `my-dmx-${tag}${Date.now().toString().slice(-5)}${Math.floor(Math.random() * 90 + 10)}--ra@yopmail.com`;
     }
     activeRun = run;
-    queue = queue.then(() => launchRun(run, { ...scenario, id: testCase.scenario_ref || testCase.test_id }, password));
+    queue = queue.then(() => launchRun(run, { ...scenario, id: testCase.scenario_ref || testCase.test_id }, password, loanOfficer, target));
     return send(res, 202, { run: publicRun(run) });
   }
   if (url.pathname === '/api/run' && req.method === 'GET') return send(res, 200, { run: publicRun(activeRun) });
+  if (url.pathname === '/api/entry-smoke' && req.method === 'POST') {
+    if (activeRun && !activeRun.finishedAt) return send(res, 409, { error: 'A DMX run is already active.' });
+    const body = await readBody(req);
+    const target = DMX_ENTRY_TARGETS.find(entry => entry.id === body.targetId && entry.available);
+    if (!target) return send(res, 400, { error: 'Select an approved DMX environment and tenant.' });
+    if (target.environment === 'PROD' && req.headers['x-dmx-prod-smoke-confirm'] !== 'read-only-entry-check') {
+      return send(res, 400, { error: 'For production, confirm a read-only entry check by typing READ-ONLY in the dashboard first.' });
+    }
+    const run = {
+      id: `dmx-${Date.now()}`, kind: 'entry-smoke', testId: `ENTRY-${target.id}`, title: `${target.label} read-only entry smoke`,
+      status: 'running', progress: 0, estimatedSecondsRemaining: null, startedAt: Date.now(),
+      elapsedSeconds: 0, currentStep: `Checking ${target.label}`, steps: 0, logs: [], target,
+    };
+    activeRun = run;
+    queue = queue.then(() => launchEntrySmoke(run));
+    return send(res, 202, { run: publicRun(run) });
+  }
   if (url.pathname === '/api/stop' && req.method === 'POST') {
     if (!activeRun?.child || activeRun.finishedAt) return send(res, 409, { error: 'There is no active run to stop.' });
     activeRun.child.kill('SIGTERM');

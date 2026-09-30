@@ -112,6 +112,7 @@
     "test:dmx:resume": "TEST_PROJECT=DMX npx playwright test tests/projects/DMX/INC- --project=chromium --workers=3",
     "dmx:test-cases": "ts-node scripts/generate-dmx-test-cases.ts",
     "dmx:dashboard": "node scripts/dmx-local-dashboard.js",
+    "test:dmx:tenant-entry": "TEST_PROJECT=DMX npx playwright test tests/projects/DMX/DMX-TENANT-ENTRY-SMOKE.spec.ts --project=chromium --workers=1",
     "test:project:solution-finder": "TEST_PROJECT=solution-finder node ./scripts/run-playwright.js --project=solution-finder",
     "setup:solution-finder-dashboard-auth": "ts-node scripts/setup-solution-finder-dashboard-auth.ts",
     "typecheck": "tsc --noEmit",

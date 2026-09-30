@@ -24,16 +24,23 @@
         <div class="section-head"><div><span class="kicker">01 / CONFIGURE</span><h2>Test setup</h2></div><span class="pill">DMX DEV</span></div>
         <label class="field-label" for="test-case">Test case <span>Existing automation</span></label>
         <select id="test-case"></select>
+        <label class="field-label" for="dmx-target">DMX environment & tenant <span>DEV / PROD entry</span></label>
+        <select id="dmx-target"></select>
+        <div class="prod-confirm" id="prod-confirm" hidden><span>Production check only navigates and inspects the entry screen. No loan data will be entered.</span><label>Type READ-ONLY <input id="prod-confirm-input" autocomplete="off"></label></div>
+        <div class="target-actions"><button id="smoke-target" class="button button-quiet">Check entry page only</button><a id="tenant-entry-link" class="officer-link" target="_blank" rel="noreferrer">Open selected entry page ↗</a></div>
+        <label class="field-label officer-label" for="loan-officer">DEV loan officer <span>Entry link attribution</span></label>
+        <select id="loan-officer"></select>
+        <a id="officer-entry-link" class="officer-link" target="_blank" rel="noreferrer">Open selected DEV entry link <span>↗</span></a>
         <div class="template-row"><label class="field-label" for="template">Saved template <span>Load and edit saved JSON</span></label><select id="template"><option value="">Choose a template…</option></select></div>
         <div class="grid-two template-actions"><button id="new-template" class="button button-quiet">+ Create new template</button><label><span class="field-label">Template name</span><input id="template-name" placeholder="Name for selected template"></label><button id="save-template" class="button button-quiet">Save edits to selected</button></div>
         <div class="identity-grid">
-          <label><span class="field-label">Account email <small>Optional, unique address</small></span><input id="email" type="email" autocomplete="off" placeholder="Generated automatically"></label>
+          <label><span class="field-label">Account email <small>Optional; existing account email allowed</small></span><input id="email" type="email" autocomplete="off" placeholder="Generated automatically"></label>
           <label><span class="field-label">Password <small>Shown in result</small></span><input id="password" type="text" autocomplete="new-password" value="Test123!"></label>
         </div>
         <div class="scenario-head"><div><span class="kicker">SCENARIO INPUT</span><h3>All DMX fields</h3></div><button id="format-json" class="text-button">Format JSON</button></div>
         <p class="hint">Type or paste a complete JSON object here. Change every DMX field, then save it as a new template or update the selected one.</p>
         <div class="json-editor"><div class="json-toolbar"><span>SCENARIO.JSON</span><span id="json-state" class="json-state valid">VALID JSON</span></div><textarea id="scenario" spellcheck="false" aria-label="DMX scenario JSON"></textarea></div>
-        <div class="guardrail"><strong>Creates a real DEV loan.</strong> Each run registers a DMX account and submits an application. Use synthetic test data and a fresh email.</div>
+        <div class="guardrail"><strong>Creates a real DEV loan.</strong> Loan creation is currently limited to GRI Enhanced DEV with LO-B. Every other target is read-only entry smoke only. You may reuse an existing account email to create another loan; enter that account's password.</div>
         <button id="start-run" class="button button-primary"><span>Launch DMX run</span><span aria-hidden="true">↗</span></button>
         <button id="stop-run" class="button button-stop" hidden>Stop current run</button>
       </div>

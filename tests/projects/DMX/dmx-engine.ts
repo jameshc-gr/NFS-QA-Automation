@@ -414,7 +414,12 @@ export async function runApplication(page: Page, s: Scenario, opts: RunOptions =
   throw new UnhandledPageError(`Exceeded max steps; last route /apply/${routeOf(page)}`);
 }
 
-export const ENTRY_URL = 'https://apply-gri.dev.saas.rate.com/apply/loan-purpose?emp-id=4723';
+export const ENTRY_URLS: Record<string, string> = {
+  'lo-a': 'https://apply-gri.dev.saas.rate.com/apply/loan-purpose?emp-id=12657',
+  'lo-b': 'https://apply-gri.dev.saas.rate.com/apply/loan-purpose?emp-id=4723',
+  'lo-c': 'https://apply-gri.dev.saas.rate.com/apply/lo-selection?emp-id=6068',
+};
+export const ENTRY_URL = ENTRY_URLS['lo-b'];
 export const PASSWORD = 'Test123!';
 
 export function newEmail(tag: string) {
@@ -422,13 +427,21 @@ export function newEmail(tag: string) {
 }
 
 /** Loan purpose -> contact info -> password; returns once the referral page is reached. */
-export async function register(page: Page, s: Scenario, email: string, password = PASSWORD) {
-  await page.goto(ENTRY_URL, { waitUntil: 'domcontentloaded' });
+export async function register(page: Page, s: Scenario, email: string, password = PASSWORD, entryUrl = ENTRY_URL) {
+  if (!Object.values(ENTRY_URLS).includes(entryUrl)) throw new Error(`Unapproved DMX DEV entry URL: ${entryUrl}`);
+  await page.goto(entryUrl, { waitUntil: 'domcontentloaded' });
   await page.locator('main').waitFor({ state: 'visible', timeout: 20000 });
   const cookie = page.locator('#onetrust-accept-btn-handler');
   if (await cookie.isVisible().catch(() => false)) await clickAction(page, cookie, 'Accept cookies');
-  const purpose = s.product === 'refinance' ? "I'm Refinancing" : "I'm Purchasing";
-  await clickAction(page, page.locator(`button:has-text("${purpose}")`).first(), purpose);
+  if (new URL(entryUrl).pathname.endsWith('/lo-selection')) {
+    const choices = page.locator('main button:visible, main a:visible');
+    const matchingOfficer = choices.filter({ hasText: /Indu|6068/i }).first();
+    if (await matchingOfficer.count()) await clickAction(page, matchingOfficer, 'Select Indu loan officer');
+    else await choices.first().waitFor({ state: 'visible', timeout: 15000 });
+  } else {
+    const purpose = s.product === 'refinance' ? "I'm Refinancing" : "I'm Purchasing";
+    await clickAction(page, page.locator(`button:has-text("${purpose}")`).first(), purpose);
+  }
   await page.waitForURL('**/user-info-ef**');
   await page.locator('#user-first-name-input').fill(s.borrower.firstName);
   await page.locator('#user-last-name-input').fill(s.borrower.lastName);
