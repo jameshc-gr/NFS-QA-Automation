@@ -1,0 +1,402 @@
+{
+  "project": "DMX",
+  "defaultPassword": "Test123!",
+  "emailFormat": "my-dmx-<stamp>--ra@yopmail.com",
+  "accounts": [
+    {
+      "email": "my-dmx-test9868--ra@yopmail.com",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T16:21:41.000Z",
+      "product": "Purchase",
+      "workflow": "Contact Info Started",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-test5995--ra@yopmail.com",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T16:28:10.000Z",
+      "product": "Purchase",
+      "workflow": "Account Created / Referral",
+      "loanGuid": "09d98e20-bd79-4cc3-8dd5-0efaba039594",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-test2920--ra@yopmail.com",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T16:30:15.000Z",
+      "product": "Purchase",
+      "workflow": "Borrower Referral Submitted",
+      "loanGuid": "5cb593ce-dc6a-4d0f-ac45-66f8671513fb",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-test3dad--ra@yopmail.com",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T16:32:00.000Z",
+      "product": "Purchase",
+      "workflow": "Purchase Needs Discovered",
+      "loanGuid": "3dad0391-7f06-4920-a882-2dedfbc76df2",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-test8826--ra@yopmail.com",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T16:41:20.000Z",
+      "product": "Pre-approval",
+      "workflow": "Pre-approval Timeline Completed",
+      "loanGuid": "598bee02-936c-487c-9221-113524032c3a",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-test6430--ra@yopmail.com",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T16:44:00.000Z",
+      "product": "Refinance",
+      "workflow": "Refinance Preferred Terms Discovered",
+      "loanGuid": "34ac0feb-f35e-454e-ae07-ba6b3358df0b",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-preapp8751947--ra@yopmail.com",
+      "product": "Pre-approval",
+      "workflow": "First start + LO saved",
+      "loanGuid": "d9cb4b2c-d901-4dbf-98ef-1e901b74345b",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:50:49.476Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-purch8667323--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "First start + LO saved",
+      "loanGuid": "6c35777a-b923-4be1-805f-fb97bff4dfc2",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:50:50.158Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-refi8705669--ra@yopmail.com",
+      "product": "Refinance",
+      "workflow": "First start + LO saved",
+      "loanGuid": "2d6d78f9-adbf-451c-98bd-bcf4dcf96d59",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:50:52.177Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-preapp5933785--ra@yopmail.com",
+      "product": "Pre-approval",
+      "workflow": "First start + LO saved",
+      "loanGuid": "d491c1c7-01cd-4782-bc56-0286ce9ecf45",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:51:22.281Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-purch5991934--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "First start + LO saved",
+      "loanGuid": "477c04eb-d16e-4487-86a7-f4fd5211f79f",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:51:23.705Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-refi5987132--ra@yopmail.com",
+      "product": "Refinance",
+      "workflow": "First start + LO saved",
+      "loanGuid": "2b945257-e3fe-4f0d-8408-b074337d677a",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:51:23.731Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-refi0463110--ra@yopmail.com",
+      "product": "Refinance",
+      "workflow": "First start + LO saved",
+      "loanGuid": "4ffe402b-801a-498c-a570-65c25b6889e9",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:52:18.832Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-preapp0099855--ra@yopmail.com",
+      "product": "Pre-approval",
+      "workflow": "First start + LO saved",
+      "loanGuid": "fd340c7f-998f-48ed-a4b9-1d564844bc06",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:52:20.476Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-purch0100154--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "First start + LO saved",
+      "loanGuid": "90390c9d-d2af-4ebd-b065-a79dbdd25379",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:52:21.119Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-refi9927286--ra@yopmail.com",
+      "product": "Refinance",
+      "workflow": "First start + LO saved",
+      "loanGuid": "dc395504-3023-41a6-8fce-b399de63027f",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:53:17.757Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-purch9840481--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "First start + LO saved",
+      "loanGuid": "5bd048dc-2ad9-44d9-8c19-659e2c906517",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:53:17.828Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-preapp9840821--ra@yopmail.com",
+      "product": "Pre-approval",
+      "workflow": "First start + LO saved",
+      "loanGuid": "78c2990a-ebcd-490d-a246-82373ae25f0e",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:53:20.034Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-jumbo056548104--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Scenario 5 Jumbo High Loan Amount ($1.4M)",
+      "loanGuid": "852b140c-5a38-4f2a-834f-95be1f4f17a5",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:54:01.952Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-subp046713522--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Scenario 4 Subprime Lower Credit Tier (610 FICO)",
+      "loanGuid": "c55f6313-be3c-476a-b72f-23baa5107189",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:54:02.344Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-highdti036655767--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Scenario 3 High DTI Boundary (49.8%)",
+      "loanGuid": "a8f46ebe-0451-4d81-b78d-669e25cd56d1",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:54:02.488Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-joint026556589--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Scenario 2 Co-Borrower Joint Application",
+      "loanGuid": "b2ae3ef4-1a5e-4bff-b81c-0bd330f581db",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:54:02.635Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-refi066717903--ra@yopmail.com",
+      "product": "Refinance",
+      "workflow": "Scenario 6 Rate & Term Refinance (Fannie Mae DU)",
+      "loanGuid": "5910ff4a-608b-40eb-8243-14eebdd7bb0e",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:54:03.598Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-prime016588893--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Scenario 1 Prime Single Borrower (Fannie Mae DU)",
+      "loanGuid": "e726e639-a79e-477e-9ea8-1187bb7670b5",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:54:03.697Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-series010112194--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Series Loan #1",
+      "loanGuid": "f3eb7390-d07b-4b22-83cb-e2340d303e39",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:54:36.794Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-secondloan0009694--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "First Loan of Multi-Loan Test",
+      "loanGuid": "c552461f-dda4-4a47-9b75-7590efe15f74",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:54:36.939Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-resume0063838--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Resume Lifecycle Verified",
+      "loanGuid": "28d80f3c-8b1e-4fcc-9c8d-5b7d579dec0d",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:54:37.957Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-secondloan1457284--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "First Loan of Multi-Loan Test",
+      "loanGuid": "4c4ac9f9-96af-4536-876f-39271833750b",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:55:49.592Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-series011471750--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Series Loan #1",
+      "loanGuid": "10379edc-f70b-4bd7-9b37-d038b87f1a27",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:55:49.850Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-resume1563834--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Resume Lifecycle Verified",
+      "loanGuid": "b6a540c8-98a7-4ee5-929d-d652e3d50341",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:55:51.190Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-series021145480--ra@yopmail.com",
+      "product": "Refinance",
+      "workflow": "Series Loan #2",
+      "loanGuid": "885ebc0c-bb8f-4764-81f6-823deedc9b31",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:56:05.640Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-refi5075904--ra@yopmail.com",
+      "product": "Refinance",
+      "workflow": "First start + LO saved",
+      "loanGuid": "6c625292-3de4-49ea-aad9-32a15cb3e96b",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:56:40.902Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-prime015146418--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Scenario 1 Prime Single Borrower (Fannie Mae DU)",
+      "loanGuid": "fc1c3342-4ed1-4121-ac01-b092637442e7",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:56:42.088Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-purch5146914--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "First start + LO saved",
+      "loanGuid": "1ff76f45-7149-4054-ac6a-f32892757232",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:56:42.194Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-secondloan4971396--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "First Loan of Multi-Loan Test",
+      "loanGuid": "d701cc25-f7da-4a7a-8c75-7bb28abedce2",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:56:42.952Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-resume4997586--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Resume Lifecycle Verified",
+      "loanGuid": "12fb55d6-6004-408c-af12-16ba0c327fdb",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:56:43.164Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-preapp5051686--ra@yopmail.com",
+      "product": "Pre-approval",
+      "workflow": "First start + LO saved",
+      "loanGuid": "a491de81-25aa-4cc9-b93b-e484ee0f33b3",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:56:48.419Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-series015013306--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Series Loan #1",
+      "loanGuid": "422abebf-aad6-45c5-98b8-cad20bbfe2fd",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:56:50.012Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-highdti039176588--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Scenario 3 High DTI Boundary (49.8%)",
+      "loanGuid": "d7ecb1d9-3d9c-48aa-9c12-691d37e5d09c",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:57:09.769Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-subp049551166--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Scenario 4 Subprime Lower Credit Tier (610 FICO)",
+      "loanGuid": "63d2a397-992d-4b98-ae88-89f01a61c807",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:57:10.916Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-joint028754948--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Scenario 2 Co-Borrower Joint Application",
+      "loanGuid": "0be91800-de6e-4a34-b48a-84bb372a447a",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:57:11.354Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-series021312875--ra@yopmail.com",
+      "product": "Refinance",
+      "workflow": "Series Loan #2",
+      "loanGuid": "ae987d8c-40bb-44b7-a070-5fda29b38d8d",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:57:12.045Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-jumbo053935234--ra@yopmail.com",
+      "product": "Purchase",
+      "workflow": "Scenario 5 Jumbo High Loan Amount ($1.4M)",
+      "loanGuid": "55dc6076-fd10-45f6-9983-5d89c6f1a2a7",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:57:12.077Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    },
+    {
+      "email": "my-dmx-refi066118383--ra@yopmail.com",
+      "product": "Refinance",
+      "workflow": "Scenario 6 Rate & Term Refinance (Fannie Mae DU)",
+      "loanGuid": "5d4bc344-7dce-46cc-ab33-526b4566a5e4",
+      "password": "Test123!",
+      "createdAt": "2026-09-29T23:57:14.331Z",
+      "loanOfficer": "John Sample (NMLS 12345)"
+    }
+  ]
+}

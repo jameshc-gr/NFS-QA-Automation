@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>DMX Loan Lab</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="/" aria-label="DMX Loan Lab home"><span class="brand-mark">D</span><span>DMX <b>Loan Lab</b></span></a><div class="local-status"><i></i> PRIVATE LOCAL RUNNER</div></header>
+  <main class="shell">
+    <section class="intro"><div><div class="eyebrow">DIGITAL MORTGAGE EXPERIENCE <span>•</span> DEV</div><h1>Build a loan.<br><em>Watch every step.</em></h1><p>Choose a proven scenario or tune every field, then launch a single tracked browser run.</p></div><div class="intro-stamp"><span>LOCAL</span><small>127.0.0.1 ONLY<br>ONE RUN AT A TIME</small></div></section>
+    <section id="template-builder" class="template-builder" hidden>
+      <div class="builder-top"><button id="cancel-template" class="text-button">← Back to run setup</button><span class="kicker">TEMPLATE WORKSHOP / NEW</span></div>
+      <div class="builder-heading"><div><h2>Create a DMX template</h2><p>Start with a test case, then edit each DMX field before saving a new template.</p></div><span class="builder-count"><strong id="field-count">0</strong> EDITABLE FIELDS</span></div>
+      <div class="builder-source panel"><label for="builder-source">Prefill from a DMX test case</label><select id="builder-source"></select><span>Changing the source replaces fields below. Your saved test cases are not modified.</span></div>
+      <div class="builder-meta panel"><label><span>NEW TEMPLATE NAME</span><input id="builder-name" placeholder="e.g. Chicago purchase - custom borrower"></label><label><span>PRODUCT</span><select id="builder-product"><option value="purchase">Purchase</option><option value="refinance">Refinance</option><option value="preapproval">Pre-approval</option></select></label><label><span>SCENARIO ID</span><input id="builder-id" placeholder="generated-from-template-name"></label><label class="wide"><span>DESCRIPTION</span><input id="builder-title" placeholder="Describe this loan scenario"></label></div>
+      <div id="builder-fields" class="builder-fields"></div>
+      <div class="builder-footer"><span id="builder-message">A new template is saved locally and will be available in Saved template.</span><div><button id="cancel-template-bottom" class="button button-quiet">Cancel</button><button id="create-template" class="button button-primary">Create new template <span>↗</span></button></div></div>
+    </section>
+    <section class="workspace">
+      <div class="editor panel">
+        <div class="section-head"><div><span class="kicker">01 / CONFIGURE</span><h2>Test setup</h2></div><span class="pill">DMX DEV</span></div>
+        <label class="field-label" for="test-case">Test case <span>Existing automation</span></label>
+        <select id="test-case"></select>
+        <div class="template-row"><label class="field-label" for="template">Saved template <span>Load and edit saved JSON</span></label><select id="template"><option value="">Choose a template…</option></select></div>
+        <div class="grid-two template-actions"><button id="new-template" class="button button-quiet">+ Create new template</button><label><span class="field-label">Template name</span><input id="template-name" placeholder="Name for selected template"></label><button id="save-template" class="button button-quiet">Save edits to selected</button></div>
+        <div class="identity-grid">
+          <label><span class="field-label">Account email <small>Optional, unique address</small></span><input id="email" type="email" autocomplete="off" placeholder="Generated automatically"></label>
+          <label><span class="field-label">Password <small>Shown in result</small></span><input id="password" type="text" autocomplete="new-password" value="Test123!"></label>
+        </div>
+        <div class="scenario-head"><div><span class="kicker">SCENARIO INPUT</span><h3>All DMX fields</h3></div><button id="format-json" class="text-button">Format JSON</button></div>
+        <p class="hint">Type or paste a complete JSON object here. Change every DMX field, then save it as a new template or update the selected one.</p>
+        <div class="json-editor"><div class="json-toolbar"><span>SCENARIO.JSON</span><span id="json-state" class="json-state valid">VALID JSON</span></div><textarea id="scenario" spellcheck="false" aria-label="DMX scenario JSON"></textarea></div>
+        <div class="guardrail"><strong>Creates a real DEV loan.</strong> Each run registers a DMX account and submits an application. Use synthetic test data and a fresh email.</div>
+        <button id="start-run" class="button button-primary"><span>Launch DMX run</span><span aria-hidden="true">↗</span></button>
+        <button id="stop-run" class="button button-stop" hidden>Stop current run</button>
+      </div>
+      <div class="monitor-column">
+        <section class="monitor panel">
+          <div class="section-head"><div><span class="kicker">02 / LIVE RUN</span><h2>Run monitor</h2></div><div id="run-status" class="status-chip idle"><i></i> READY</div></div>
+          <div class="progress-meta"><span id="progress-label">Waiting for a run</span><strong id="progress-value">0%</strong></div><div class="progress-track"><div id="progress-bar"></div></div>
+          <div class="metrics"><div><span>ELAPSED</span><strong id="elapsed">00:00</strong></div><div><span>EST. REMAINING</span><strong id="remaining">--:--</strong></div><div><span>ACTIVE STEP</span><strong id="active-step">—</strong></div></div>
+          <div class="log-head"><span>EXECUTION LOG</span><span id="log-count">0 EVENTS</span></div><div id="logs" class="logs" aria-live="polite"><div class="empty-log">Runner output will appear here.<br><span>Route changes and Playwright checks stream live.</span></div></div>
+        </section>
+        <section id="result-panel" class="result-panel panel" hidden>
+          <div class="section-head"><div><span id="result-kicker" class="kicker">03 / RUN COMPLETE</span><h2 id="result-heading">Run result</h2></div><span id="result-mark" class="result-mark">✓</span></div>
+          <div class="result-grid"><div class="result-item wide"><span>ACCOUNT</span><strong id="result-email">—</strong></div><div class="result-item"><span>PASSWORD</span><strong id="result-password">—</strong></div><div class="result-item"><span>STATUS</span><strong id="result-status">—</strong></div><div class="result-item"><span>LOAN NUMBER</span><strong id="result-number">—</strong></div><div class="result-item"><span>MYACCOUNT LOAN GUID</span><strong id="result-guid">—</strong></div><div class="result-item wide"><span>DMX RESUME GUID</span><strong id="result-resume-guid">—</strong></div></div>
+          <a id="result-link" class="result-link" href="#" target="_blank" rel="noreferrer">Open completed loan overview <span>↗</span></a>
+          <div id="failure-details" class="failure-details" hidden><strong>Failure diagnostics</strong><div><span>FAILED PAGE</span><code id="failed-page">—</code></div><div><span>ROUTE</span><code id="failed-route">—</code></div><p id="failure-error">—</p><a id="screenshot-link" href="#" target="_blank" rel="noreferrer"><img id="failure-screenshot" alt="Screenshot of the DMX page where the run failed"><span>Open full-size failure screenshot ↗</span></a></div>
+          <p class="result-note">Credentials and loan identifiers are stored locally in the ignored dashboard history and the existing DMX account registry.</p>
+        </section>
+        <section class="history panel"><div class="section-head"><div><span class="kicker">SAVED LOCALLY</span><h2>Recent completions</h2></div><span class="history-count" id="history-count">0</span></div><div id="history-list" class="history-list"><div class="history-empty">Completed loans will be listed here.</div></div></section>
+      </div>
+    </section>
+    <footer>DMX Loan Lab <span>•</span> Scenario templates and completion details stay on this machine.</footer>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

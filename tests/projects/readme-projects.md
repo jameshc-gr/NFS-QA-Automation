@@ -5,6 +5,7 @@ Use this directory to keep tests separated by project.
 ## Structure
 
 - `student-loan-refi/`: student loan refinance tests
+- `DMX/`: Digital Mortgage Experience end-to-end loans (purchase, refinance, pre-approval) through the MyAccount dashboard, plus resume tests
 
 ## Notes
 

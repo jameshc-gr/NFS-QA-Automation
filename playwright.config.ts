@@ -95,6 +95,7 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'on',
     video: 'on',
+    storageState: process.env.PLAYWRIGHT_STORAGE_STATE || undefined,
     actionTimeout: 30000,
     navigationTimeout: 90000
   },
@@ -123,6 +124,7 @@ export default defineConfig({
     {
       name: 'rate-wealth',
       testDir: './tests/projects/rate-wealth',
+      timeout: 120 * 1000,
       use: {
         ...devices['Desktop Chrome'],
         headless: true,

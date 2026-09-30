@@ -138,6 +138,7 @@ test-data/
 │           └── 30.0/
 │               └── stage/
 ├── rate-wealth/
+│   ├── rate-wealth-automation-catalog.csv
 │   ├── rate-wealth-test-cases.csv
 │   ├── rate-wealth-test-cases.xlsx
 │   └── rate-wealth.yml

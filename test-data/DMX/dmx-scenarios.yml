@@ -1,0 +1,250 @@
+# ==============================================================================
+# DMX loan scenarios (data source for tests/projects/DMX/*.spec.ts)
+#
+# Borrower names/SSNs/credit tiers come ONLY from the Fannie Mae DO/DU
+# "Test Credit Report Characteristics" (9.9.26) in this folder. The PDF does not
+# provide birthdates, phone numbers, addresses, employers or income, so those
+# fields are synthetic and chosen to give the DTI / LTV profile named in each id.
+# Property addresses are realistic for the market but are NOT verified against
+# Zillow listings; treat them as fixtures.
+# Every account is registered as my-dmx-<tag><n>--ra@yopmail.com / Test123!
+# ==============================================================================
+
+defaults:
+  phone: "(312) 658-4000"          # 555 numbers are rejected by the app's phone validation
+  employer_phone: "(312) 658-4100"
+  password: "Test123!"
+
+# ---- Fannie Mae test credit borrowers used below (SSN -> report characteristics) ----
+credit_profiles:
+  ron_tintin:        { first: Ron,      last: Tintin,      ssn: "999-72-5641", scores: [660, 670, 680], report: Individual, history: clean }
+  alice_firstimer:   { first: Alice,    last: Firstimer,   ssn: "991-91-9991", scores: [715, 710, 703], report: Individual, history: "3x30, 1x60" }
+  penny_public:      { first: Penny,    last: Public,      ssn: "999-60-3000", scores: [670, 640, 650], report: Individual, history: "2x30, 2x60, 1x90, 1 BK" }
+  ross_blemished:    { first: Ross,     last: Blemished,   ssn: "000-88-9999", scores: [595, 625, 610], report: Individual, history: "10x30, 2x60, 1 collection, 2 mortgages" }
+  elizabeth_spender: { first: Elizabeth, last: Spender,    ssn: "000-66-7777", scores: [525, 560, 585], report: Individual, history: "15x30, 4x60, tax lien" }
+  pitt_rock:         { first: Pitt,     last: Rock,        ssn: "666-00-6666", scores: [525, 515, 497], report: Individual, history: "11x30, BK, foreclosure, credit counseling" }
+  homer_loanseeker:  { first: Homer,    last: Loanseeker,  ssn: "999-60-1111", scores: [640, 636, 620], report: Individual, history: "4x30, 3x60, 1x90, 2 civil suits" }
+  lucky_knowscore:   { first: Lucky,    last: Knowscore,   ssn: "999-42-2345", scores: [],              report: Individual, history: "no credit score" }
+  john_homeowner:    { first: John,     last: Homeowner,   ssn: "999-40-5000", scores: [760, 779, 785], report: Joint }
+  mary_homeowner:    { first: Mary,     last: Homeowner,   ssn: "500-22-2000", scores: [783, 768, 771], report: Joint }
+  andy_america:      { first: Andy,     last: America,     ssn: "999-60-3333", scores: [724, 740, 742], report: Joint, history: "1x30" }
+  amy_america:       { first: Amy,      last: America,     ssn: "500-60-2222", scores: [750, 739, 728], report: Joint }
+  patrick_purchaser: { first: Patrick,  last: Purchaser,   ssn: "999-12-1234", scores: [670, 661, 675], report: Joint, history: "2x30" }
+  lorraine_purchaser: { first: Lorraine, last: Purchaser,  ssn: "999-56-5678", scores: [678, 670, 663], report: Joint }
+  wanna_house:       { first: Wanna,    last: House,       ssn: "000-11-2222", scores: [547, 555, 525], report: Joint, history: "32x30, 7x60" }
+  needa_house:       { first: Needa,    last: House,       ssn: "999-44-5555", scores: [521, 530, 515], report: Joint }
+  dad_firstimer:     { first: Dad,      last: Firstimer,   ssn: "999-00-8881", scores: [660, 685, 672], report: Joint, history: "3x30, 1x60, 1x90" }
+  mom_firstimer:     { first: Mom,      last: Firstimer,   ssn: "999-00-8882", scores: [674, 680, 695], report: Joint }
+
+# ==============================================================================
+# Complete applications: every one must end on my.gr-dev.com/loan/<guid>/overview
+# ==============================================================================
+scenarios:
+  - id: PUR-01-single-good-credit-low-dti
+    title: Single borrower, good credit, low DTI, standard conforming purchase
+    product: purchase
+    tags: [purchase, single, good-credit, low-dti]
+    borrower: { profile: ron_tintin, dob: "03/14/1985", marital: Unmarried }
+    residence: { address: "1801 W Belmont Ave", city: Chicago, state: Illinois, zip: "60657", move_in: "01/2020", status: Rent, monthly_rent: 1900 }
+    employment: { employer: Illinois Tech Solutions LLC, title: Senior Engineer, city: Chicago, state: Illinois, start: "01/15/2019", salary: 165000 }
+    assets: [{ type: Checking account, institution: Chase Bank, balance: 60000 }, { type: Savings account, institution: Bank of America, balance: 80000 }]
+    property: { address: "1420 W Belmont Ave", city: Chicago, state: Illinois, zip: "60657", type: Single Family, usage: As a primary residence }
+    loan: { price: 520000, down: 104000, loan_amount: 416000 }
+    expect: { dti: low, credit: good }
+
+  - id: PUR-02-single-high-income-large-loan
+    title: Single borrower, high income, large (jumbo) loan
+    product: purchase
+    tags: [purchase, single, high-income, large-loan, good-credit]
+    borrower: { profile: ron_tintin, dob: "03/14/1985", marital: Unmarried }
+    residence: { address: "1801 W Belmont Ave", city: Chicago, state: Illinois, zip: "60657", move_in: "01/2020", status: Rent, monthly_rent: 3400 }
+    employment: { employer: Northfield Capital Partners, title: Managing Director, city: Chicago, state: Illinois, start: "06/01/2015", salary: 520000 }
+    assets: [{ type: Checking account, institution: JPMorgan Chase, balance: 350000 }, { type: Savings account, institution: Charles Schwab Bank, balance: 600000 }]
+    property: { address: "1845 N Orchard St", city: Chicago, state: Illinois, zip: "60614", type: Single Family, usage: As a primary residence }
+    loan: { price: 1850000, down: 450000, loan_amount: 1400000 }
+    expect: { dti: low, credit: good, large_loan: true }
+
+  - id: PUR-03-single-high-dti
+    title: Single borrower, modest income, 5% down (high DTI stress)
+    product: purchase
+    tags: [purchase, single, high-dti]
+    borrower: { profile: penny_public, dob: "11/04/1979", marital: Unmarried }
+    residence: { address: "4521 S Wallace St", city: Chicago, state: Illinois, zip: "60609", move_in: "06/2021", status: Rent, monthly_rent: 1500 }
+    employment: { employer: Metro Logistics Inc, title: Dispatcher, city: Chicago, state: Illinois, start: "02/10/2020", salary: 62000 }
+    assets: [{ type: Checking account, institution: Chase Bank, balance: 14000 }, { type: Savings account, institution: Fifth Third Bank, balance: 12000 }]
+    property: { address: "2215 W School St", city: Chicago, state: Illinois, zip: "60618", type: Single Family, usage: As a primary residence }
+    loan: { price: 420000, down: 21000, loan_amount: 399000 }
+    expect: { dti: high, credit: fair }
+
+  - id: PUR-04-single-poor-credit
+    title: Single borrower, poor credit (595-625), small down payment
+    product: purchase
+    tags: [purchase, single, bad-credit]
+    borrower: { profile: ross_blemished, dob: "09/19/1988", marital: Unmarried }
+    residence: { address: "5310 W Irving Park Rd", city: Chicago, state: Illinois, zip: "60641", move_in: "03/2022", status: Rent, monthly_rent: 1400 }
+    employment: { employer: Windy City Builders, title: Foreman, city: Chicago, state: Illinois, start: "05/01/2018", salary: 78000 }
+    assets: [{ type: Checking account, institution: BMO Harris, balance: 18000 }, { type: Savings account, institution: BMO Harris, balance: 9000 }]
+    property: { address: "4521 S Wallace St", city: Chicago, state: Illinois, zip: "60609", type: Single Family, usage: As a primary residence }
+    loan: { price: 280000, down: 9800, loan_amount: 270200 }
+    expect: { credit: poor }
+
+  - id: PUR-05-single-very-poor-credit
+    title: Single borrower, very poor credit (bankruptcy/foreclosure history)
+    product: purchase
+    tags: [purchase, single, bad-credit, derogatory]
+    borrower: { profile: pitt_rock, dob: "02/10/1975", marital: Unmarried }
+    residence: { address: "7415 S Halsted St", city: Chicago, state: Illinois, zip: "60620", move_in: "08/2021", status: Rent, monthly_rent: 1200 }
+    employment: { employer: Southside Auto Group, title: Service Manager, city: Chicago, state: Illinois, start: "09/01/2017", salary: 71000 }
+    assets: [{ type: Checking account, institution: Chase Bank, balance: 22000 }, { type: Savings account, institution: Chase Bank, balance: 7500 }]
+    property: { address: "9021 S Ada St", city: Chicago, state: Illinois, zip: "60620", type: Single Family, usage: As a primary residence }
+    loan: { price: 240000, down: 12000, loan_amount: 228000 }
+    expect: { credit: very-poor }
+
+  - id: PUR-06-single-small-loan-first-time
+    title: First-time buyer, small loan amount
+    product: purchase
+    tags: [purchase, single, small-loan, first-time-buyer, good-credit]
+    borrower: { profile: alice_firstimer, dob: "06/18/1994", marital: Unmarried }
+    residence: { address: "3300 N Lincoln Ave", city: Chicago, state: Illinois, zip: "60657", move_in: "09/2022", status: Rent, monthly_rent: 1350 }
+    employment: { employer: Lakeview Dental Group, title: Dental Hygienist, city: Chicago, state: Illinois, start: "07/01/2020", salary: 74000 }
+    assets: [{ type: Checking account, institution: Chase Bank, balance: 11000 }, { type: Savings account, institution: Ally Bank, balance: 12500 }]
+    property: { address: "6234 S Kedzie Ave", city: Chicago, state: Illinois, zip: "60629", type: Condo, usage: As a primary residence }
+    loan: { price: 165000, down: 8250, loan_amount: 156750 }
+    expect: { credit: good, small_loan: true }
+
+  - id: PUR-07-coborrower-excellent-credit
+    title: Married co-borrowers, excellent credit, low DTI, high combined income
+    product: purchase
+    tags: [purchase, co-borrower, excellent-credit, low-dti, high-income]
+    borrower: { profile: john_homeowner, dob: "05/12/1982", marital: Married }
+    co_borrower:
+      profile: mary_homeowner
+      dob: "07/22/1984"
+      marital: Married
+      same_address: true
+      employment: { employer: Cook County Health, title: Nurse Manager, city: Chicago, state: Illinois, start: "03/01/2016", salary: 118000 }
+    residence: { address: "2140 N Damen Ave", city: Chicago, state: Illinois, zip: "60647", move_in: "05/2018", status: Rent, monthly_rent: 2600 }
+    employment: { employer: Illinois Tech Solutions LLC, title: Senior VP Technology, city: Chicago, state: Illinois, start: "01/15/2014", salary: 198000 }
+    assets: [{ type: Checking account, institution: Chase Bank, balance: 95000 }, { type: Savings account, institution: Bank of America, balance: 140000 }]
+    property: { address: "1512 W Wolfram St", city: Chicago, state: Illinois, zip: "60657", type: Single Family, usage: As a primary residence }
+    loan: { price: 780000, down: 156000, loan_amount: 624000 }
+    expect: { dti: low, credit: excellent }
+
+  - id: PUR-08-coborrower-poor-credit-high-dti
+    title: Co-borrowers, poor credit, high DTI
+    product: purchase
+    tags: [purchase, co-borrower, bad-credit, high-dti]
+    borrower: { profile: wanna_house, dob: "04/03/1986", marital: Married }
+    co_borrower:
+      profile: needa_house
+      dob: "10/27/1987"
+      marital: Married
+      same_address: true
+      employment: { employer: Riverside Home Care, title: Home Health Aide, city: Chicago, state: Illinois, start: "08/15/2021", salary: 34000 }
+    residence: { address: "6720 S Western Ave", city: Chicago, state: Illinois, zip: "60636", move_in: "02/2021", status: Rent, monthly_rent: 1250 }
+    employment: { employer: Metro Transit Contractors, title: Machine Operator, city: Chicago, state: Illinois, start: "04/01/2019", salary: 46000 }
+    assets: [{ type: Checking account, institution: Chase Bank, balance: 9000 }, { type: Savings account, institution: Chase Bank, balance: 6000 }]
+    property: { address: "8034 S Marshfield Ave", city: Chicago, state: Illinois, zip: "60620", type: Single Family, usage: As a primary residence }
+    loan: { price: 235000, down: 8225, loan_amount: 226775 }
+    expect: { dti: high, credit: poor }
+
+  - id: PUR-09-coborrower-good-credit-mid-loan
+    title: Co-borrowers, good credit, mid-size loan (California)
+    product: purchase
+    tags: [purchase, co-borrower, good-credit, california]
+    borrower: { profile: patrick_purchaser, dob: "01/30/1983", marital: Married }
+    co_borrower:
+      profile: lorraine_purchaser
+      dob: "12/09/1984"
+      marital: Married
+      same_address: true
+      employment: { employer: Clovis Unified School District, title: Teacher, city: Clovis, state: California, start: "08/15/2012", salary: 88000 }
+    residence: { address: "1450 Shaw Ave", city: Clovis, state: California, zip: "93612", move_in: "06/2019", status: Rent, monthly_rent: 2100 }
+    employment: { employer: Valley Farm Credit, title: Loan Officer, city: Fresno, state: California, start: "03/01/2015", salary: 102000 }
+    assets: [{ type: Checking account, institution: Wells Fargo, balance: 48000 }, { type: Savings account, institution: Golden 1 Credit Union, balance: 62000 }]
+    property: { address: "9664 N Stanford Ave", city: Clovis, state: California, zip: "93619", type: Single Family, usage: As a primary residence }
+    loan: { price: 585000, down: 117000, loan_amount: 468000 }
+    expect: { credit: good }
+
+  - id: REF-01-single-rate-term
+    title: Single borrower, rate-and-term refinance, low DTI
+    product: refinance
+    tags: [refinance, single, rate-and-term, good-credit, low-dti]
+    borrower: { profile: ron_tintin, dob: "03/14/1985", marital: Unmarried }
+    residence: { address: "2215 W School St", city: Chicago, state: Illinois, zip: "60618", move_in: "01/2018", status: Own }
+    employment: { employer: Illinois Tech Solutions LLC, title: Senior Engineer, city: Chicago, state: Illinois, start: "01/15/2016", salary: 150000 }
+    assets: [{ type: Checking account, institution: Chase Bank, balance: 60000 }, { type: Savings account, institution: Bank of America, balance: 80000 }]
+    property: { address: "2215 W School St", city: Chicago, state: Illinois, zip: "60618", type: Single Family, usage: As a primary residence }
+    loan: { refi_goal: Lower my rate and monthly payment, year_purchased: 2018, orig_price: 400000, current_value: 720000, balance: 410000, new_loan: 415000, interest_rate: 6.75, taxes: 7200, insurance: 1450 }
+    expect: { dti: low, credit: good }
+
+  - id: REF-02-single-cash-out-fair-credit
+    title: Single borrower, cash-out refinance, fair credit
+    product: refinance
+    tags: [refinance, single, cash-out, fair-credit]
+    borrower: { profile: homer_loanseeker, dob: "08/30/1983", marital: Unmarried }
+    residence: { address: "3415 N Southport Ave", city: Chicago, state: Illinois, zip: "60657", move_in: "05/2016", status: Own }
+    employment: { employer: Lakeview Hospitality Group, title: General Manager, city: Chicago, state: Illinois, start: "04/01/2014", salary: 96000 }
+    assets: [{ type: Checking account, institution: Chase Bank, balance: 25000 }, { type: Savings account, institution: Chase Bank, balance: 18000 }]
+    property: { address: "3415 N Southport Ave", city: Chicago, state: Illinois, zip: "60657", type: Single Family, usage: As a primary residence }
+    loan: { refi_goal: Get cash, year_purchased: 2016, orig_price: 385000, current_value: 640000, balance: 290000, new_loan: 350000, interest_rate: 4.25, taxes: 6800, insurance: 1300 }
+    expect: { credit: fair }
+
+  - id: REF-03-coborrower-rate-term
+    title: Co-borrower rate-and-term refinance, good credit
+    product: refinance
+    tags: [refinance, co-borrower, rate-and-term, good-credit]
+    borrower: { profile: andy_america, dob: "02/14/1981", marital: Married }
+    co_borrower:
+      profile: amy_america
+      dob: "09/05/1982"
+      marital: Married
+      same_address: true
+      employment: { employer: American Family Insurance, title: Claims Adjuster, city: Chicago, state: Illinois, start: "06/01/2015", salary: 84000 }
+    residence: { address: "5420 N Winthrop Ave", city: Chicago, state: Illinois, zip: "60640", move_in: "08/2017", status: Own }
+    employment: { employer: Chicago Public Schools, title: Assistant Principal, city: Chicago, state: Illinois, start: "08/15/2011", salary: 112000 }
+    assets: [{ type: Checking account, institution: Chase Bank, balance: 40000 }, { type: Savings account, institution: Chase Bank, balance: 55000 }]
+    property: { address: "5420 N Winthrop Ave", city: Chicago, state: Illinois, zip: "60640", type: Condo, usage: As a primary residence }
+    loan: { refi_goal: Lower my rate and monthly payment, year_purchased: 2017, orig_price: 310000, current_value: 455000, balance: 240000, new_loan: 245000, interest_rate: 5.99, taxes: 5400, insurance: 900 }
+    expect: { credit: good }
+
+  - id: PRE-01-single-preapproval
+    title: First-time buyer researching what they can afford (pre-approval)
+    product: preapproval
+    tags: [preapproval, single, first-time-buyer, good-credit]
+    borrower: { profile: alice_firstimer, dob: "06/18/1994", marital: Unmarried }
+    residence: { address: "3300 N Lincoln Ave", city: Chicago, state: Illinois, zip: "60657", move_in: "09/2022", status: Rent, monthly_rent: 1350 }
+    employment: { employer: Lakeview Dental Group, title: Dental Hygienist, city: Chicago, state: Illinois, start: "07/01/2020", salary: 74000 }
+    assets: [{ type: Checking account, institution: Chase Bank, balance: 11000 }, { type: Savings account, institution: Ally Bank, balance: 12500 }]
+    property: { address: "", city: Chicago, state: Illinois, zip: "60657", type: Condo, usage: As a primary residence }
+    loan: { price: 350000, down: 35000, timeline: As soon as possible, target_payment: 2400, max_payment: 2800 }
+    expect: { credit: good }
+
+  - id: PRE-02-coborrower-preapproval
+    title: Co-borrower pre-approval, mid credit
+    product: preapproval
+    tags: [preapproval, co-borrower, fair-credit]
+    borrower: { profile: dad_firstimer, dob: "10/12/1985", marital: Married }
+    co_borrower:
+      profile: mom_firstimer
+      dob: "04/28/1986"
+      marital: Married
+      same_address: true
+      employment: { employer: Oak Park Public Library, title: Librarian, city: Oak Park, state: Illinois, start: "09/01/2017", salary: 61000 }
+    residence: { address: "812 N Austin Blvd", city: Oak Park, state: Illinois, zip: "60302", move_in: "10/2019", status: Rent, monthly_rent: 1750 }
+    employment: { employer: Oak Park Plumbing & Heating, title: Service Technician, city: Oak Park, state: Illinois, start: "05/01/2016", salary: 68000 }
+    assets: [{ type: Checking account, institution: Fifth Third Bank, balance: 26000 }, { type: Savings account, institution: Fifth Third Bank, balance: 22000 }]
+    property: { address: "", city: Oak Park, state: Illinois, zip: "60302", type: Single Family, usage: As a primary residence }
+    loan: { price: 385000, down: 38500, timeline: Within the next few months, target_payment: 2700, max_payment: 3100 }
+    expect: { credit: fair }
+
+# ==============================================================================
+# Incomplete applications for resume tests: stop_at is the DMX route where the
+# user abandons the application; the test then re-enters and finishes it.
+# ==============================================================================
+incomplete:
+  - { id: INC-01-abandon-after-personal-info,  base: PUR-01-single-good-credit-low-dti, stop_at: user-residence-ef,               note: "left after marital status / before address" }
+  - { id: INC-02-abandon-before-credit-check,  base: PUR-06-single-small-loan-first-time, stop_at: credit-check-consent-borrower-ef, note: "left on the soft credit check consent" }
+  - { id: INC-03-abandon-during-income,        base: PUR-03-single-high-dti,            stop_at: add-income-information,           note: "left on employment entry" }
+  - { id: INC-04-abandon-refi-mid-flow,        base: REF-01-single-rate-term,           stop_at: interest-rate-refi2,              note: "refinance left after property details" }
+  - { id: INC-05-abandon-before-government,    base: PUR-07-coborrower-excellent-credit, stop_at: government-questions-hmda,       note: "co-borrower loan left before government questions" }

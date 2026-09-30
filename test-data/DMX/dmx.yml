@@ -1,0 +1,62 @@
+# DMX field-ID and route reference (discovered against apply-gri.dev.saas.rate.com, emp-id=4723).
+# Test DATA lives in dmx-scenarios.yml; the executable page logic lives in tests/projects/DMX/dmx-engine.ts.
+# Rule of thumb for masked inputs (phone, SSN, dates, money): fill with force:true, then dispatch input/change/blur.
+
+app:
+  entry_url: "https://apply-gri.dev.saas.rate.com/apply/loan-purpose?emp-id=4723"
+  loan_officer: { name: John Sample, nmls: "12345" }
+  myaccount: { loans: "https://my.gr-dev.com/loans", overview: "https://my.gr-dev.com/loan/<gr-loan-guid>/overview" }
+  login: { host: login.dev.rate.com, identifier: "input[name=identifier]", password: "input[name='credentials.passcode']", submit: "input[type=submit]", mfa_note: "DMX resume login works with email+password; direct my.gr-dev.com login for a new account showed 'Set up security methods' (phone SMS)" }
+  logout: "/api/logout"
+  email_format: "my-dmx-<tag><n>--ra@yopmail.com"
+  password: "Test123!"
+  notes:
+    - "Phone numbers containing 555 fail validation; use (312) 658-4xxx."
+    - "Continue often takes 3-8s (saving screens show an h1 ending in an ellipsis); wait for the route to change."
+    - "Starting another application inside a live DMX session creates a NEW gr-loan-guid."
+
+routes:            # in visit order for a purchase; product-specific branches noted
+  common_start:
+    loan-purpose: { buttons: ["I'm Purchasing", "I'm Refinancing"] }
+    user-info-ef: { first: "#user-first-name-input", last: "#user-last-name-input", phone: "#user-home-phone-input", email: "#user-email-input", comm: "#user-communication-method-select", next: "#button-next" }
+    personal-info-create-account: { password: "#user-password-input", confirm: "#user-confirm-password-input" }
+    borrower-referral: { source: "#referral-source-select" }
+  purchase:
+    purchase-needs: { options: ["I'm researching what I can afford", "I'm looking at homes and listings", "I found a house I'd like to buy", "I signed a purchase agreement"] }
+    contract-property-address: { address: "#property-address-input", city: "#property-city-input", state: "#property-potential-state-select", zip: "#property-zip-input", note: "Continue needs several seconds" }
+    looking-property-type: { buttons: [Single Family, Condo, Townhome, "Multi Family (2 - 4 units)", Co-op] }
+    property-usage: { buttons: ["As a primary residence", "As a vacation home", "As a rental property"] }
+    loan-details-price-range: { price: "#loan-details-target-purchase-price-input", down: "#loan-details-down-payment-input", percent: "#loan-details-down-payment-percent-input", closing: "#estimated-closing-date-input" }
+  preapproval:
+    property-buy-timeline: { buttons: ["As soon as possible", "Within the next few months", "Within the next year", "I don't know yet"] }
+    property-search-location: { city: "#property-city-input (type 'City, ST' and pick the suggestion <li>; state/zip auto-fill and stay disabled)" }
+    loan-details-payment-range: { target: "#loan-details-payment-target-amount-input", max: "#loan-details-payment-max-amount-input" }
+    loan-details-price-range: { price: "#loan-details-target-purchase-price-input", max: "#loan-details-max-purchase-price-input", down: "#loan-details-down-payment-input" }
+  refinance:
+    property-preferred-terms: { buttons: [Lower my rate and monthly payment, Get cash, Shorten my loan term, Add or remove a borrower] }
+    property-address-refi2: { current_residence: "#refi-property-current-residence-radio", move_in: "#user-residence-started-input", taxes: "#property-estimated-taxes-input", insurance: "#property-estimated-insurance-input", note: "answer 'taxes & insurance included' = No to reveal amounts; HOA = No" }
+    property-details-refi2: { year: "#refi-year-purchased-input", price: "#refi-purchase-price-input", type: "#property-type-select", value: "#refi-estimated-value-input" }
+    interest-rate-refi2: { rate: "#refi-interest-rate-input" }
+    refi-loan-amount-user-estimate: { amount: "#refi-loan-amount-user-estimate-input" }
+    loan-options: { groups: ["#loan-details-interested-in-multiple-loan-products-radio", "#loan-details-interested-in-buying-rate-with-points-radio", "#loan-details-interested-in-not-playing-closing-costs-radio"] }
+  personal:
+    personal-info-borrower-marital-status: { marital: "#borrower-marital-status-radio", co_borrower_group: "#borrower-marital-status-co-borrower-radio | #borrower-marital-status-spouse-co-borrower-radio (Married)", prior_home: "#borrower-marital-status-prior-home-radio", dependents: "#borrower-marital-status-dependents-radio", co_first: "#co-borrower-first-name-input", co_last: "#co-borrower-last-name-input" }
+    user-residence-ef: { address: "#user-address-1-input", city: "#user-city-input", county: "#residence-county-select", state: "#user-state-select", zip: "#user-zip-code-input", move_in: "#user-residence-started-input", status: "#user-residence-status-radio", rent: "#estimated-monthly-expenses-rent-input" }
+    reo-collection-subflow: { buttons: [Yes, No] }
+    borrower-us-military: { group: "#user-us-military-auto-radio" }
+    co-borrower-personal: { email: "#co-borrower-email-input", phone: "#co-borrower-home-phone-input", owned: "#co-government-ownership-interest-radio", marital: "#co-borrower-marital-status-radio", same_address: "#co-borrower-address-same-radio", move_in: "#co-borrower-residence-started-input", dependents: "#co-borrower-dependents-radio" }
+  credit:
+    credit-check-consent-borrower-ef: { ssn: "#social-security-number-input", dob: "#birth-date-input", checks: [soft-credit-credit-indicator-checkbox, borrower-credit-pull-consent-checkbox, credit-monitoring-consent-checkbox] }
+    credit-check-consent-co-borrower-ef: { ssn: "#co-social-security-number-input", dob: "#co-birth-date-input", checks: [co-soft-credit-credit-indicator-checkbox, co-borrower-credit-pull-consent-checkbox, co-credit-monitoring-consent-checkbox] }
+  financial:
+    add-income-information: { states: ["choice: I am employed", "form", "review: additional income? No"], type: "#source-of-employment-select", employer: "#employer-name-input", title: "#job-title-input", city: "#employment-city-input", phone: "#employment-phone-number-input", state: "#employment-state-select", current: "#is-current-employer-checkbox", start: "#employment-start-date-input", salary_group: "#has-annual-base-salary-radio", salary: "#salary-input", extra_income: "#extra-income-radio", co_prefix: "co- (button text 'They are employed')" }
+    add-asset-information: { rows: ["#asset-type-select/#financial-institution-input/#balance-input", "#asset-type-1-select/#financial-institution-1-input/#balance-1-input"], owner: "#asset-owner-select (co-borrower loans only)" }
+    add-gift-grant: { group: "#has-gift-grant-auto-radio" }
+  government:
+    government-questions-hmda: { checks: [government-gender-male-checkbox, government-ethnicity-not-hispanic-checkbox, government-race-white-checkbox], co_prefix: "co-" }
+    government-questions-additional: { citizenship: "#government-citizenship-select", note: "first question = occupy as primary residence (Yes); all others No" }
+    borrower-language-preference: { group: "#borrower-language-preference-radio", note: "purchase advances on click; refi needs Continue" }
+  submit:
+    loan-options: { purchase: "#loan-option-2-select + #loan-down-payment-2-input AND #loan-option-3-select + #loan-down-payment-3-input are REQUIRED" }
+    application-summary: { note: "loading screen; redirects to MyAccount" }
+    handoff: "https://my.gr-dev.com/loan/<gr-loan-guid>/overview  -> 'Purchase #<loanNumber>' header, tabs Overview/Tasks/Loan details/Documents"

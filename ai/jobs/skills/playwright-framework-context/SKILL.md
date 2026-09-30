@@ -37,6 +37,7 @@ Current Framework Notes
 - The authoritative customization split is `ai/jobs/agents/`, `ai/jobs/prompts/`, and `ai/jobs/skills/`.
 - API tests now run from `api/tests/` via the `api-tests` Playwright project.
 - The API runner loads dotenv in `playwright.config.ts`, reads collection and mapping JSON from `api/postman/<projectname>/` and `api/api-mappings/<projectname>/`, and resolves placeholders from runtime saves, Postman environment JSON, `process.env`, and `API_PROJECT` selection.
+- DMX scenarios are defined in `test-data/DMX/dmx-scenarios.yml`; generated catalog specs call shared route-driven flows. `npm run dmx:dashboard` starts a loopback-only UI for choosing a catalog case, editing/saving scenario JSON templates, and launching one Chromium worker at a time. Dashboard run overrides use the ignored `test-data/DMX/dmx-dashboard-run.json`; the existing account CSV and local dashboard history contain plaintext account credentials and loan identifiers. Dashboard launch input must remain restricted to catalog spec paths, and manual MFA remains opt-in outside the dashboard.
 - Mobile runs resolve the app under test from a named build in
   `test-data/mobile-app/gri/<platform>/config.yml`, selected with
   `MOBILE_ANDROID_BUILD` / `MOBILE_IOS_BUILD` or the config's `defaultBuild`.
@@ -81,6 +82,11 @@ Recent changes (2026-07-31)
   it reuses the Google Voice browser profile, so tester access is sufficient.
 - iOS/Android create-user specs verified green end to end, including SMS
   verification and dismissing the "working with someone from Rate?" modal.
+
+Recent changes (2026-09-30)
+- Added the local DMX Loan Lab dashboard for scenario templates, serialized single-case launches, streamed logs/progress and local loan/account results. It binds to `127.0.0.1`; do not expose it or publish its ignored credential-bearing files.
+- Dashboard has a dedicated field-based Template Workshop: prefill from an automated DMX case, edit labeled borrower/co-borrower/residence/employment/assets/property/loan/expectation fields, add/remove asset rows or add a co-borrower, then create a separately named new template. Existing template edits remain available through the JSON editor. Builder case changes do not mutate the catalog scenario. DMX failures emit page/route/error diagnostics and a screenshot under the run's Playwright output; only complete/resumed-complete loan outcomes are green.
+- DMX route handlers must avoid fixed sleeps and `networkidle` for SPA progress. Use locator/DOM state and route checkpoints; the shared click helper logs slow clicks with route and button name and has a bounded timeout.
 
 Recent changes (2026-07-29)
 - Mobile build selection is config-driven on both platforms, with versioned,

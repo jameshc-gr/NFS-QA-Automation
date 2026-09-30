@@ -53,3 +53,6 @@ mobile/.builds/
 # Local Solution Finder loan extraction artifacts
 test-data/solution-finder/*
 !test-data/solution-finder/dashboard-auth.yml
+
+# Local DMX dashboard templates, run configuration, and credential-bearing results
+test-data/DMX/dmx-dashboard-*.json
