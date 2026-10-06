@@ -5,7 +5,7 @@
 **Document Version:** 1.0.0  
 **Date:** 2026-09-21  
 **Target Module:** Loan Amortization Projections, Payment vs. Interest Evaluation, Asset Tax Bomb Offsets, and Repayment Plan Duration Engines  
-**Applicability:** Playwright E2E UI Suite, Calculation Engine Verification, Regression Matrix  
+**Applicability:** Local calculation/model verification. This plan does not represent live UI coverage.
 
 ---
 

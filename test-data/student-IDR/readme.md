@@ -10,10 +10,9 @@ This directory contains the source-of-truth test data for the Student IDR (Incom
 | [01_field_matrix.csv](01_field_matrix.csv) | Field inventory per page (from QA walkthrough) |
 | [02_scenario_matrix.csv](02_scenario_matrix.csv) | Persona scenarios driving the regression suite |
 | [03_test_cases.csv](03_test_cases.csv) | Detailed test intents and expected results |
-| [04_final_test_cases_with_data.csv](04_final_test_cases_with_data.csv) | Final executable case matrix with profile and input data references |
-| [test_cases_automation.csv](test_cases_automation.csv) | 50 comprehensive automated test cases for IDR calculation engine |
+| Filing calculation input | `test_cases_automation.csv`, referenced by the calculation runner/spec, is absent from this checkout |
 | [FILING-HOUSEHOLD-STATE-CALCULATION-TEST-PLAN.md](FILING-HOUSEHOLD-STATE-CALCULATION-TEST-PLAN.md) | Test plan and formula specifications for filing, household & state calculation suite |
-| [FILING-HOUSEHOLD-STATE-CALCULATION-TEST-RESULTS.md](FILING-HOUSEHOLD-STATE-CALCULATION-TEST-RESULTS.md) | Test execution report covering all 50 scenarios with 100% pass rate |
+| [FILING-HOUSEHOLD-STATE-CALCULATION-TEST-RESULTS.md](FILING-HOUSEHOLD-STATE-CALCULATION-TEST-RESULTS.md) | Historical 50/50 local calculation result; current rerun is blocked by the missing input CSV and this is not a live UI run |
 | [FAL-3672-DATA-RETENTION-TEST-PLAN.md](FAL-3672-DATA-RETENTION-TEST-PLAN.md) | Data retention & zero-value persistence test plan (reproducing & preventing FAL-3672) |
 | [FAL-3673-AMORTIZATION-TAX-BOMB-TEST-PLAN.md](FAL-3673-AMORTIZATION-TAX-BOMB-TEST-PLAN.md) | Loan amortization, interest coverage, asset offsets & tax bomb test plan (FAL-3673) |
 | [FAL-3673-AMORTIZATION-TEST-RESULTS.md](FAL-3673-AMORTIZATION-TEST-RESULTS.md) | Test execution report for FAL-3673 amortization & tax bomb suite |
@@ -62,11 +61,14 @@ At runtime, the framework also appends a sequential per-worker number to every e
 | GLOBAL-06 | Invalid email format | [GLOBAL-06.spec.ts](../../tests/projects/student-IDR/GLOBAL-06.spec.ts) | Passing |
 | GLOBAL-07 | Terms checkbox unchecked | [GLOBAL-07.spec.ts](../../tests/projects/student-IDR/GLOBAL-07.spec.ts) | Passing |
 | UI-FLOW-04-welcome | Missing required fields on welcome | [UI-FLOW-04-welcome.spec.ts](../../tests/projects/student-IDR/UI-FLOW-04-welcome.spec.ts) | Passing |
-| FILING-HOUSEHOLD-STATE-CALCULATION | 50 CSV test cases (Filing status, household size, regional FPL, tax bomb & savings) | [FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts](../../tests/projects/student-IDR/FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts) | 50/50 Passing (100%) |
-| DATA-RETENTION-ZERO-PERSISTENCE | Zero-value data retention & persistence across reload/tabs (FAL-3672) | [DATA-RETENTION-ZERO-PERSISTENCE.spec.ts](../../tests/projects/student-IDR/DATA-RETENTION-ZERO-PERSISTENCE.spec.ts) | 7/7 Passing (100%) |
-| FAL-3673-AMORTIZATION-TAX-BOMB | Loan amortization, interest shortfall, asset offsets & tax bomb suite (FAL-3673) | [FAL-3673-AMORTIZATION-TAX-BOMB.spec.ts](../../tests/projects/student-IDR/FAL-3673-AMORTIZATION-TAX-BOMB.spec.ts) | 23/23 Passing (100%) |
+| FILING-HOUSEHOLD-STATE-CALCULATION | 50 local calculation cases (filing status, household size, regional FPL, tax bomb & savings) | [FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts](../../tests/projects/student-IDR/FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts) | Latest recorded calculation run: 50/50; not UI coverage |
+| DATA-RETENTION-ZERO-PERSISTENCE | Zero-value data retention & persistence across reload/tabs (FAL-3672) | [DATA-RETENTION-ZERO-PERSISTENCE.spec.ts](../../tests/projects/student-IDR/DATA-RETENTION-ZERO-PERSISTENCE.spec.ts) | Run status not recorded here |
+| FAL-3673-AMORTIZATION-TAX-BOMB | Loan amortization model and synthetic defect-response checks (FAL-3673) | [FAL-3673-AMORTIZATION-TAX-BOMB.spec.ts](../../tests/projects/student-IDR/FAL-3673-AMORTIZATION-TAX-BOMB.spec.ts) | Latest standalone run: 6 baseline passes, 16 simulated defect detections; not live UI coverage |
 
 ## Notes
+
+- The filing/state and FAL-3673 suites exercise local calculation code. FAL-3673 also generates synthetic overview text for defect-rule checks. Neither suite drives the Rate UI; only describe a run as live UI coverage when a browser actually exercised the application.
+- `test_cases_automation.csv` and `04_final_test_cases_with_data.csv` are absent from this checkout. The filing calculation spec and runner still reference the former, so its historical 50/50 result does not establish that it can currently be rerun.
 
 - "Full flow (needs auth)" specs automate the pages from `/forgiveness/welcome` through `/forgiveness/assets`, but currently require a pre-authenticated session because the QA environment redirects newly created accounts to `my.gr-dev.com/dashboard`.
 - See [tests/projects/student-IDR/readme-projects.md](../../tests/projects/student-IDR/readme-projects.md) for execution commands and authentication options.

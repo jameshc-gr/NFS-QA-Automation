@@ -1,0 +1,8 @@
+/* Custom overrides for compact header, top section and Read Me button */
+/* Override for compact header and top section */
+.topbar{height:56px;padding:0 20px}
+.intro{margin-bottom:20px;padding:0 10px}
+/* Read Me button styling – prominent and larger */
+#readme-btn{display:inline-block;background:#d00;color:#fff;border-radius:4px;font-size:1.15em;font-weight:700;padding:8px 12px;margin:8px 0}
+.readme-exit{position:absolute;top:14px;right:44px;background:#d00;color:#fff;border:0;border-radius:4px;padding:8px 14px;font:700 14px Manrope,sans-serif;cursor:pointer}
+.readme-exit:hover{filter:brightness(1.08)}

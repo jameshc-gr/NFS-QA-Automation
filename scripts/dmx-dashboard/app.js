@@ -19,6 +19,9 @@ function readScenario() {
 
 function populateCases(cases) {
   $('#test-case').innerHTML = cases.map(test => `<option value="${esc(test.id)}" ${!test.automated ? 'disabled' : ''}>${esc(test.id)} · ${esc(test.title)}</option>`).join('');
+  const complete = cases.filter(test => test.category === 'complete-application').length;
+  const resumes = cases.filter(test => test.category === 'incomplete-resume' || test.category === 'incomplete-relogin').length;
+  $('#case-coverage').textContent = `${complete} complete-loan cases · ${resumes} resume/relogin cases · ${state.bootstrap.entryTargets.length} tenant entry checks (read-only)`;
   $('#test-case').addEventListener('change', () => {
     const test = selectedCase();
     const scenario = state.bootstrap.scenarios.find(item => item.id === test.scenarioRef);
@@ -154,6 +157,35 @@ function closeTemplateBuilder() {
   $('#template-builder').hidden = true;
   $('.intro').hidden = false;
   $('.workspace').hidden = false;
+}
+
+// Read Me modal logic
+const readmeBtn = document.getElementById('readme-btn');
+const readmeModal = document.getElementById('readme-modal');
+const readmeExit = document.getElementById('readme-exit');
+const readmeClose = document.getElementById('readme-close');
+const readmeText = document.getElementById('readme-text');
+
+if (readmeBtn) {
+  readmeBtn.addEventListener('click', async () => {
+    try {
+      const res = await fetch('README.md');
+      if (!res.ok) throw new Error(`Guide not found (${res.status})`);
+      const text = await res.text();
+      readmeText.textContent = text;
+      readmeModal.hidden = false;
+    } catch (e) {
+      readmeText.textContent = 'Could not load the guide.';
+      readmeModal.hidden = false;
+    }
+  });
+
+  const closeReadme = () => {
+    readmeModal.hidden = true;
+  };
+
+  readmeExit?.addEventListener('click', closeReadme);
+  readmeClose.addEventListener('click', closeReadme);
 }
 
 function populateBuilderSources() {

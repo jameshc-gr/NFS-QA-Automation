@@ -128,7 +128,7 @@ export async function runCompleteLoan(id: string, page: Page, context: BrowserCo
     await runApplication(page, s, { log });
 
     stage = 'dashboard';
-    const info = await assertDashboard(page, s);
+    const info = await assertDashboard(page, s, run?.loanOfficerName);
     recordAccount({ email, password, scenarioId: id, product: s.product, status: 'complete', loanGuid: info.loanGuid, loanNumber: info.loanNumber, dashboardUrl: info.url });
 
     stage = 'accounts';
@@ -173,7 +173,7 @@ export async function runResumeLoan(id: string, page: Page, context: BrowserCont
   await assertLoanOfficer(back, run?.loanOfficerName);
 
   await runApplication(back, s, { log });
-  const info = await assertDashboard(back, s);
+  const info = await assertDashboard(back, s, run?.loanOfficerName);
   expect(info.loanGuid.length).toBeGreaterThan(10);
   recordAccount({ email, password, scenarioId: id, product: s.product, status: 'resumed-complete', stoppedAt: stopAt, loanGuid: guid, loanNumber: info.loanNumber, dashboardUrl: info.url });
   await assertAccountsCard(context, info);
@@ -221,7 +221,7 @@ export async function runRelogin(id: string, page: Page, context: BrowserContext
   await page.goto(resumeUrl, { waitUntil: 'domcontentloaded' });
   await expect(page).toHaveURL(new RegExp(`gr-loan-guid=${guid}`));
   await runApplication(page, s, { log });
-  const info = await assertDashboard(page, s);
+  const info = await assertDashboard(page, s, run?.loanOfficerName);
   recordAccount({ email, password, scenarioId: id, product: s.product, status: 'resumed-complete', stoppedAt: stopAt, loanGuid: guid, loanNumber: info.loanNumber, dashboardUrl: info.url });
   await assertAccountsCard(context, info);
 }

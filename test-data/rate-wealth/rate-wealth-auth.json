@@ -1,0 +1,926 @@
+{
+  "cookies": [
+    {
+      "name": "_gcl_au",
+      "value": "1.1.1579955656.1790640709",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": 1798416709,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_fbp",
+      "value": "fb.1.1790640709295.998195949376380037",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": 1798417074,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "prism_1000170838",
+      "value": "41358d7e-3197-40b4-83df-dde465fd04f1",
+      "domain": "prism.app-us1.com",
+      "path": "/",
+      "expires": 1793233074.10358,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "PHPSESSID",
+      "value": "89tapfuk6plgergi7ad3pohhi4",
+      "domain": ".wealth.dev.fitbux.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "DT",
+      "value": "DI1q8lYlX9oRgW-rh6-bw8l9g",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": 1825200710.35633,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "at_check",
+      "value": "true",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "OptanonConsent",
+      "value": "isGpcEnabled=0&datestamp=Mon+Sep+28+2026+17%3A11%3A51+GMT-0700+(Pacific+Daylight+Time)&version=202601.1.0&browserGpcFlag=0&isIABGlobal=false&hosts=&landingPath=https%3A%2F%2Flogin.dev.rate.com%2Foauth2%2Faus1lsk5st100GteN1d7%2Fv1%2Fauthorize&groups=C0001%3A1%2CC0003%3A1%2CC0002%3A1%2CSPD_BG%3A1%2CC0004%3A1",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": 1822176711,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "demdex",
+      "value": "82419065336605311531555048534499269422",
+      "domain": ".demdex.net",
+      "path": "/",
+      "expires": 1806192711.622149,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "AMCVS_46B6704E60382AF50A495E12%40AdobeOrg",
+      "value": "1",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_tq_id.TV-4545090963-1.f83a",
+      "value": "862e985d314e18f4.1790640712.0.1790640712..",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": 1825200711.525984,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "everest_g_v2",
+      "value": "g_surferid~arsCRwAAAC2mxQlG",
+      "domain": ".everesttech.net",
+      "path": "/",
+      "expires": 1822176711.59511,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "mbox",
+      "value": "session#7a486d25b9bc4e0b845a82b2e502f567#1790642572|PC#7a486d25b9bc4e0b845a82b2e502f567.35_0#1853885512",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": 1825200711.601178,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "dpm",
+      "value": "82419065336605311531555048534499269422",
+      "domain": ".dpm.demdex.net",
+      "path": "/",
+      "expires": 1806192711.622194,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "AMCV_46B6704E60382AF50A495E12%40AdobeOrg",
+      "value": "179643557%7CMCIDTS%7C20726%7CMCMID%7C86884197361553116832262761410303577276%7CMCAAMLH-1791245511%7C9%7CMCAAMB-1791245511%7C6G1ynYcLPuiQxYZrsz_pkqfLG9yMXBpb2zX5dvJdYQJzPXImdj0y%7CMCOPTOUT-1790647911s%7CNONE%7CMCSYNCSOP%7C411-20733%7CvVersion%7C5.5.0",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": 1825200711.622901,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "s_cc",
+      "value": "true",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_cq_duid",
+      "value": "1.1790640712.pmx8lf54h93Wv5B8",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": 1798524712,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_cq_suid",
+      "value": "1.1790640712.CzyvFNWMPUF7BNUE",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_fbp",
+      "value": "fb.1.1790640712390.804053183276437424",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": 1798416712,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_uetsid",
+      "value": "5f5c74d0bb9a11f18d9db3a90dd4f062",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": 1790727112,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_uetvid",
+      "value": "5f5c5d50bb9a11f193066bb0b1970e63",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": 1824336712,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "MUID",
+      "value": "26114E2505AA69A725C859C6048768C9",
+      "domain": ".bing.com",
+      "path": "/",
+      "expires": 1824336712.525462,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "MR",
+      "value": "0",
+      "domain": ".bat.bing.com",
+      "path": "/",
+      "expires": 1791245512.525497,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "",
+      "value": "GA1.4.1766228789.1790640713",
+      "domain": ".login.dev.rate.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_gid",
+      "value": "GA1.4.1666347520.1790640713",
+      "domain": ".login.dev.rate.com",
+      "path": "/",
+      "expires": 1790727112,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_twpid",
+      "value": "tw.1790640712803.63948917873780205",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": 1824336747.226186,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Strict"
+    },
+    {
+      "name": "cg_uuid",
+      "value": "f0901e07a641a4bf89001eecca697f68",
+      "domain": "obs.withflowersea.com",
+      "path": "/",
+      "expires": 1819671112.815552,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "sa-user-id",
+      "value": "s%3A0-b26e28fa-d78e-531b-4a76-31f2b962f594.xHlTFcIb2MhVlnivR16I1BJ8wk2iuilpXtX%2FuGwkYKw",
+      "domain": "tags.srv.stackadapt.com",
+      "path": "/",
+      "expires": 1822176712.939664,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "sa-user-id",
+      "value": "s%3A0-b26e28fa-d78e-531b-4a76-31f2b962f594.xHlTFcIb2MhVlnivR16I1BJ8wk2iuilpXtX%2FuGwkYKw",
+      "domain": ".srv.stackadapt.com",
+      "path": "/",
+      "expires": 1822176712.939695,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "sa-user-id-v2",
+      "value": "s%3Asm4o-teOUxtKdjHyuWL1lIjiNxc.O%2BHxtmTyJMAzqH9Ecm5e6mrkAra1%2F9nXD6FiACTxPx0",
+      "domain": "tags.srv.stackadapt.com",
+      "path": "/",
+      "expires": 1822176712.939705,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "sa-user-id-v2",
+      "value": "s%3Asm4o-teOUxtKdjHyuWL1lIjiNxc.O%2BHxtmTyJMAzqH9Ecm5e6mrkAra1%2F9nXD6FiACTxPx0",
+      "domain": ".srv.stackadapt.com",
+      "path": "/",
+      "expires": 1822176712.939715,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "sa-user-id-v4",
+      "value": "s%3ACiQwMWEwZWE4MC1lY2JkLTc2ZGUtOWZjYy1iYWUyNWFkNGE2MzAQBBoCTkEgJg.BKIpfsIipjOiU9p%2B5RcI02QCvZ61GKk%2FTWQ88%2FHpF%2BY",
+      "domain": "tags.srv.stackadapt.com",
+      "path": "/",
+      "expires": 1822176712.939725,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "sa-user-id-v4",
+      "value": "s%3ACiQwMWEwZWE4MC1lY2JkLTc2ZGUtOWZjYy1iYWUyNWFkNGE2MzAQBBoCTkEgJg.BKIpfsIipjOiU9p%2B5RcI02QCvZ61GKk%2FTWQ88%2FHpF%2BY",
+      "domain": ".srv.stackadapt.com",
+      "path": "/",
+      "expires": 1822176712.939733,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "sa-r-source",
+      "value": "wealth.dev.fitbux.com",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": 1793232712,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "sa-r-date",
+      "value": "2026-09-29T00:11:52.941Z",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": 1793232712,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "sa-user-id",
+      "value": "s%253A0-b26e28fa-d78e-531b-4a76-31f2b962f594.xHlTFcIb2MhVlnivR16I1BJ8wk2iuilpXtX%252FuGwkYKw",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": 1822176712,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "sa-user-id-v2",
+      "value": "s%253Asm4o-teOUxtKdjHyuWL1lIjiNxc.O%252BHxtmTyJMAzqH9Ecm5e6mrkAra1%252F9nXD6FiACTxPx0",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": 1822176712,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "sa-user-id-v3",
+      "value": "s%253A.o6W7wkJsHSTU4%252BLlDruZ%252FwNjVcUZZMvakQpSatDoAgo",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": 1822176712,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "sa-user-id-v4",
+      "value": "s%253ACiQwMWEwZWE4MC1lY2JkLTc2ZGUtOWZjYy1iYWUyNWFkNGE2MzAQBBoCTkEgJg.BKIpfsIipjOiU9p%252B5RcI02QCvZ61GKk%252FTWQ88%252FHpF%252BY",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": 1822176712,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "UID",
+      "value": "388b5e0d-30ea-465a-a9a7-88b756b8446d",
+      "domain": "beacon.lynx.cognitivlabs.com",
+      "path": "/",
+      "expires": 1822176713.035642,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "muc_ads",
+      "value": "a5f54273-aa2b-4c66-b666-935e64e1e45d",
+      "domain": ".t.co",
+      "path": "/",
+      "expires": 1825200712.966469,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "personalization_id",
+      "value": "\"v1_+LEMHqCaa9s5qAAOYtvv6g==\"",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": 1825200712.984569,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "rlas3",
+      "value": "qhn50hCU9U1h6mRyuf3KmUiuGLvjtDDaN2NKWKwi8e8=",
+      "domain": ".rlcdn.com",
+      "path": "/",
+      "expires": 1822176713.285891,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "pxrc",
+      "value": "CMmE7NUGEgYI5bkrEAA=",
+      "domain": ".rlcdn.com",
+      "path": "/",
+      "expires": 1795824713.285931,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "ss",
+      "value": "KggEEgJvY%2F9MBOyE4rrYGOMUAG8QpGXBFon3GFHHIZD%2Fu%2FVNhiwLwA%2F3WplxqTdG73RSQtnyRL%2BuYtXyxQLU3t9agMnfkuGWqsilVb6cSyM%3D",
+      "domain": "beacon.lynx.cognitivlabs.com",
+      "path": "/",
+      "expires": 1822176713.365393,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_cq_s",
+      "value": "b2d04215b52cb82b9fa5607886cdc095.dIpiMS5VUYBFU4p1:EV5VMKZi/K9RNwDnZhYwt/QSl48BXMTm+LeNTNaT7Ybn9xZucpygNNUEbse8j/vjkZPTaAel9cwtPg1y9ZCQucMUr3c1qU80/eX6FghMdKGvqmj5WfhTGFvgKK5hemMHEftifIdr979RCSIGvHMdS54EKI1OTAjYnpVZy99ZmPy6IREXXPvsEugwCFEz0/iHffFDS/8ZgRkNZpCP8yvj5L3vUnQ/rrckqxNFoNBQhGOnAjMlyDRX9CP7Sv+ofO80gjPQq0JLFi1eWvNJ3Ngc93ZO7W3ojG3AwhTdstwHHRe6e7JIrajV16/QTc67KApqvsnt9uIQK4EC5OgTQMXH:XD8QJRrXiiLXlK/UccEfYA==",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": 1791245516,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_lr_geo_location_state",
+      "value": "WA",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": 1790813517.483276,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_lr_geo_location",
+      "value": "US",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": 1790813517.483304,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.1.1766228789.1790640713",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "IDE",
+      "value": "AHWqTUmoE3rl6_RrsXacMRHhSj4MA3XmQILyHX5nnym_KenVt1-vCzrGjhE7YZRf",
+      "domain": ".doubleclick.net",
+      "path": "/",
+      "expires": 1825200727.272987,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_twsid",
+      "value": "1790640712803-818613663.1.1790640747225",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": 1824336747.225206,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Strict"
+    },
+    {
+      "name": "s_sq",
+      "value": "grratemaindev%3D%2526pid%253Dhttps%25253A%25252F%25252Flogin.dev.rate.com%25252Foauth2%25252Faus1lsk5st100gten1d7%25252Fv1%25252Fauthorize%2526pidt%253D1%2526oid%253Dasync%252528...o%252529%25253D%25253E%25257Bfor%252528lettofn%252529if%252528%2525211%252521%25253D%25253De.flag_consentCheckPassed%252529%25257Blete%25253Dt.value.trim%252528%252529%25253Bif%252528awaitne%252528e%252529%252529%25257Bc.lo%2526oidt%253D2%2526ot%253DSUBMIT",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_gcl_au",
+      "value": "1.1.1052603974.1790640713.977137977.1790640727.1790640747.676425032.1790640727.1790640747",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": 1798416713,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_lr_env",
+      "value": "eyJ0aW1lc3RhbXAiOjE3OTA2NDA3NDc1MDAsInZlcnNpb24iOiIxLjYuMSIsImVudmVsb3BlIjoiQXV3ekRkdlk1YnEtXzByLWdrNUZWSnJCcFZzdmhxdHRzMVZRV01MTVEzR3lLZlZwTE9XaGp3MG8yM2hXWnZSeTVLTkZFcnlwTTRaNjMyd3RvWFY4MUxhSnA5SVlPOWoxSG5nVHg5aFNlU0RIMm8xRHVVd1lxTmFNS1pGWHVTQ3B0ZGdXZzc3WWhBZnFtbXV6OHdxSm1JOGE2MG1UYm16bG5ENllJOFF4Ri1jOEp3U0JMalYzaTR4SXFvY2t4YkY3NjQ4MmtDcmthQXNYQWhTU3lmYUpGZ3ZFdldleTNZQnRvbDJyX1VEa1hJZXVlNGhqbkMydTBZZHBSUjRUIiwiY3JlYXRpb25UaW1lc3RhbXAiOjE3OTA2NDA3NDc1MDB9",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": 1822176747.500367,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_cq_session",
+      "value": "1.1790640712343.T5JEOuv1tflolbDV.1790640747229",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": 1825200747.821013,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "ln",
+      "value": "my-idr-jc001@yopmail.com",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": 1822176747,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_P3FWVLKCPW",
+      "value": "GS2.1.s1790640727$o1$g1$t1790640748$j39$l0$h26090625",
+      "domain": ".rate.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "luf_1252065732",
+      "value": "eyJ6aXAiOiJERUYiLCJ2ZXIiOiIxIiwiYWxpYXMiOiJlbmNyeXB0aW9ua2V5Iiwib2lkIjoiMDBvMWxmem02bWZ3M1VXMngxZDciLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiZGlyIiwidGltZXN0YW1wIjoxNzkwNjQwNzQ4OTU2fQ..qY2UljHsivkrW9TJ.ExaZ3x2PXdNBDG-Ou9ZQ-wQ3N89QTfRo6iQKU780jyDO-uoxdPyBTJQc8ESvSYM0CO9TcgAorWN_DBP6Gx9ujFr6GYIH8OB48O1K8DZ9d4xxzfsCwxLukQjbfSDoWy8TlY4gJV9hXnwZ4emJOXgiJcLaBvn8qREy0IUjSWLXDFEC1TpdEGZzJKJRn5Qtao5KY-SHtnE.cv8BPeJPtXm0chAnyEN_DQ",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": 1793232749.092091,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "s_fid",
+      "value": "02B1DC973E229DA3-22732F5943A8AD24",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": 1825250415.303444,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "s_cc",
+      "value": "true",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "m",
+      "value": "fb04e481-10e7-4286-aa07-a32da85e9400fb398e",
+      "domain": "m.stripe.com",
+      "path": "/",
+      "expires": 1825200935.879021,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "__stripe_mid",
+      "value": "322b3180-54ab-4830-bfd0-8edaee98cc54691e1a",
+      "domain": ".wealth.dev.fitbux.com",
+      "path": "/",
+      "expires": 1822176927,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Strict"
+    },
+    {
+      "name": "OptanonAlertBoxClosed",
+      "value": "2026-09-29T00:12:37.357Z",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": 1822176757,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "proximity_35bd6a53f96ba80f61d2bd04c5adc570",
+      "value": "eyJ6aXAiOiJERUYiLCJwMnMiOiJUQ0FRclJ0T0Iwd2pIQjRRNGVkX2pnIiwicDJjIjoxMDAwLCJ2ZXIiOiIxIiwiZW5jIjoiQTI1NkdDTSIsImFsZyI6IlBCRVMyLUhTNTEyK0EyNTZLVyJ9.5rawPuariraf1-bUZE_xuQxxk3nbcDvVeK4nNk05ISckwn19Vy_cKg.jKJBzL6Nund8_yFc.csbaIW6eD9ebJ1AHL7Q6UILX0VItHVGxyGiu-ZE7P8fV_tqRBzo7BCi_nsyEkts46qBgYxDQlqX65RkVwCXr3bujA8fXya4L_hjwiUPuUIlF7XZUqC9F48wOXIRMURt4bridiaz90iOBY-sP8ROacQYh9D2MDqRkEDqPbNQbbDsg8g.JuEziau30PP8Al6N_QirBQ",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": 1822176792.149966,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "JSESSIONID",
+      "value": "2D63947A9A26F7E8C8D3F41B0C42FC5D",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "idx",
+      "value": "eyJ6aXAiOiJERUYiLCJ2ZXIiOiIxIiwiYWxpYXMiOiJlbmNyeXB0aW9ua2V5Iiwib2lkIjoiMDBvMWxmem02bWZ3M1VXMngxZDciLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiZGlyIiwieHNpZCI6ImlkeEVlTER0enBhUWVDMVd5ZDdKaUZSa3cifQ..fSwG7zgmOV5I-jRS.zA8nfSp-9Oa5KyOrBvQEz6I0m_W0RlwfJ42ng0Qt7I2WqCa153KDvGiQSAtvRGsLb_3yDJKXcZRuTBeWtUSMLN6jHVgHB8ex5wT4fwfAYfxmUPwrotDw0M2JbwABg-7WYd5Zf81qJx0WjOI1knhfkRWH_L7swfhzZOPFyFs1DkCMaC9ysL3ffE_hzNkGMICA6f2JVB7RrNEhdvxY84rW06pzqeZEON_JCZhB6Aa66BFegCTzO8aHWX8bQnWQigdNTJy_WAkboXdfMxVSXly5w_m_kw8JvE6UQlNLHthNgBmCDvsEwNG0pf0kp08dhcuOs62kM0qM6rLkMKjX3-sO9ZKT9bzatNYvgLtU7wEhpFYfTX8x372VZ95ARqinUhplq6h7-o4RjebhLam7uFC9H1VgNhN4BbulhXcidJ-aY2G71c6Yh4g36teR6Udue5s5NDQxMvYrLZT7vhBZGg6Xk6cLUSHWjy3GrGZ96fugHlFJpJOaO7lNNDUCg-ZjK_jKxRuf1Rl4-Q6yRua-JRlQTClXf11Rj0i3eO7Ia8jfQuhWPIe8DsGMlQYAQJ7yk5dqny-wSLnvKJJf.7bQAdZf7jf1WqFn4VFblaQ",
+      "domain": "login.dev.rate.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "ac_enable_tracking",
+      "value": "1",
+      "domain": "www.fitbux.com",
+      "path": "/",
+      "expires": 1793207873,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "cf_clearance",
+      "value": "jWjmwH.1jqsLyPOLcftUmZEdn8jPzKHd0CCNeU.j5FQ-1790640977-1.2.1.1-qRFLNdrNfb8kZOcqrvfWfGU9rcqECfPQpg0UfsWnFtsrSTsAeP9Jkewc.tXQswZ_nDyx7bMq5B1FN53Sc1afP8RrafgtRGmC797IfbHtn0HxUbH.iJLT78Qs7vVVziZGYyDm7.VsZgGjYZz9543iqjcO31wS6_UW6mjbknaoTw7afqmb9rFbVX0WGMPAqAMsSPGL7dk8aWksyhOa2sD.WOyZY8Orq0llwddwdGme_1DN9jfZToeQ8RtNGwo7g3593vkmlbfIa8tzaltFjPqDA.uivVkf3eggxdg_oov8FuWjD2AlSfa.lt.kQOt7tSe90sRviB5Z2Sq1g7FxF_bbbTPTT35E6jl5yxk7t5VoS_QlZgKzvyFiP.97BJdou2ojk3mSAHizHCJIVquD.wZG_Q",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": 1822176977.249627,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None",
+      "partitionKey": "https://fitbux.com",
+      "_crHasCrossSiteAncestor": false
+    },
+    {
+      "name": "_gid",
+      "value": "GA1.2.580588644.1790640979",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": 1790727473,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "prism_1000170838",
+      "value": "41358d7e-3197-40b4-83df-dde465fd04f1",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": 1793233074,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.1.1713233528.1790640709",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": 1825201073.997568,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "mp_c39f9e5e8cc1334413127ba26c960953_mixpanel",
+      "value": "%7B%22distinct_id%22%3A%22%24device%3A7a9a0f19-385e-4f35-b089-a191885964c8%22%2C%22%24device_id%22%3A%227a9a0f19-385e-4f35-b089-a191885964c8%22%2C%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%2C%22__mps%22%3A%7B%7D%2C%22__mpso%22%3A%7B%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%7D%2C%22__mpus%22%3A%7B%7D%2C%22__mpa%22%3A%7B%7D%2C%22__mpu%22%3A%7B%7D%2C%22__mpr%22%3A%5B%5D%2C%22__mpap%22%3A%5B%5D%7D",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": 1822178793,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "s_vi_wbbqduvydrehx60bx7Ft",
+      "value": "[CS]v4|355D81369F9A629A-40001A19A0443E53|6ABB03B2[CE]",
+      "domain": ".2o7.net",
+      "path": "/",
+      "expires": 1825201074.056419,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "OptanonConsent",
+      "value": "isGpcEnabled=0&datestamp=Mon+Sep+28+2026+17%3A17%3A54+GMT-0700+(Pacific+Daylight+Time)&version=202604.1.0&browserGpcFlag=0&isDntEnabled=0&isIABGlobal=false&hosts=&consentId=26750834-8f32-4075-918e-98305c1c4bd5&interactionCount=1&isAnonUser=1&prevHadToken=0&landingPath=NotLandingPage&groups=C0001%3A1%2CC0003%3A1%2CSPD_BG%3A1%2CC0002%3A1%2CC0004%3A1&AwaitingReconsent=false&intType=3&geolocation=US%3BWA",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": 1822177074,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_0T23MWGW9W",
+      "value": "GS2.1.s1790640979$o1$g1$t1790641075$j25$l0$h0",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": 1825201075.267874,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_cfuvid",
+      "value": "kbgilv.1f2H4Q9nT3WuXsG4AYN9IMcbu4mSH2G2Ehr4-1790642791.9159017-1.0.1.1-Y2Al2C.1UsHMQHjIWW3Dlr6WnUVaipEJQeFIAYyoIhg",
+      "domain": ".calendly.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "s_sq",
+      "value": "grratefitbuxprod%3D%2526pid%253Dhttps%25253A%25252F%25252Fwealth.dev.fitbux.com%25252Fprofile-builder%2526oid%253DfunctionLr%252528%252529%25257B%25257D%2526oidt%253D2%2526ot%253DSUBMIT",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_5LXR2HB4XT",
+      "value": "GS2.1.s1790690416$o2$g0$t1790690416$j60$l0$h0",
+      "domain": ".fitbux.com",
+      "path": "/",
+      "expires": 1825250416.844292,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://wealth.dev.fitbux.com",
+      "localStorage": [
+        {
+          "name": "lastExternalReferrerTime",
+          "value": "1790640926261"
+        },
+        {
+          "name": "persist:system",
+          "value": "{\"loggedIn\":\"true\",\"user\":\"{\\\"first_name\\\":\\\"John\\\",\\\"last_name\\\":\\\"Homeowner\\\",\\\"email\\\":\\\"my-idr-jc001@yopmail.com\\\",\\\"dob_day\\\":0,\\\"dob_month\\\":0,\\\"dob_year\\\":0,\\\"phone_number\\\":\\\"\\\",\\\"street_address\\\":\\\"\\\",\\\"city\\\":\\\"\\\",\\\"state\\\":\\\"GA\\\",\\\"zip\\\":\\\"\\\",\\\"marital_status\\\":\\\"n\\\",\\\"children_qty\\\":0,\\\"child_1_age\\\":0,\\\"child_2_age\\\":0,\\\"child_3_age\\\":0,\\\"child_4_age\\\":0,\\\"child_5_age\\\":0}\",\"_persist\":\"{\\\"version\\\":-1,\\\"rehydrated\\\":true}\"}"
+        },
+        {
+          "name": "fitBUX-refresh-jwt",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQzOCIsImlhdCI6MTc5MDY0Mjc5MSwiZXhwIjoxNzkwNzI5MTkxLCJhdWQiOiJyZWZyZXNoIn0.NAfk0m_XpwugJfWRY8SImgLsV0A9uESte5URekIYsgo"
+        },
+        {
+          "name": "__mpq_c39f9e5e8cc1334413127ba26c960953_ev",
+          "value": "[]"
+        },
+        {
+          "name": "lastExternalReferrer",
+          "value": "empty"
+        },
+        {
+          "name": "_gcl_ls",
+          "value": "{\"schema\":\"gcl\",\"version\":1,\"gcl_ctr\":{\"value\":{\"value\":0,\"timeouts\":0,\"errors\":0,\"eopCount\":0,\"creationTimeMs\":1790640708723},\"expires\":1798416708723},\"gsid_dc\":{\"value\":{\"joinId\":\"HNqiYZg8O42EwqXXYRr5hn1h1bTis6-xLw\",\"lastJoinedTimeMs\":1790640925708},\"expires\":1790641225708}}"
+        },
+        {
+          "name": "id_token_hint",
+          "value": ""
+        },
+        {
+          "name": "fitBUX-jwt",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQzOCIsImlhdCI6MTc5MDY0Mjc5MSwiZXhwIjoxNzkwNjQzNjkxfQ.o_qkhk38D98zI2bFW72yhtn7gkx5vlmFdcZEIr9ykjs"
+        },
+        {
+          "name": "persist:root",
+          "value": "{\"_persist\":\"{\\\"version\\\":-1,\\\"rehydrated\\\":true}\"}"
+        }
+      ]
+    },
+    {
+      "origin": "https://login.dev.rate.com",
+      "localStorage": [
+        {
+          "name": "sa-user-id",
+          "value": "s%3A0-b26e28fa-d78e-531b-4a76-31f2b962f594.xHlTFcIb2MhVlnivR16I1BJ8wk2iuilpXtX%2FuGwkYKw"
+        },
+        {
+          "name": "_uetvid_exp",
+          "value": "Sun, 24 Oct 2027 00:11:52 GMT"
+        },
+        {
+          "name": "geo-location",
+          "value": "{\"data\":\"{\\\"country\\\":\\\"US\\\",\\\"region\\\":\\\"WA\\\"}\",\"expire\":1790727115062}"
+        },
+        {
+          "name": "tgt:tlm:0",
+          "value": "{\"execution\":257.1,\"parsing\":0,\"request\":{\"dns\":111.4,\"tls\":97.5,\"timeToFirstByte\":46.6,\"download\":0.2,\"responseSize\":296},\"telemetryServerToken\":\"Qv9asBCJI4KXVt9YAM8uGYxCqfoOfvdHYVd54Kgi1nc=\",\"mode\":\"edge\",\"features\":{\"executePageLoad\":true,\"prefetchViewCount\":1,\"decisioningMethod\":\"server-side\"},\"requestId\":\"f67b75053032443a996f54c392d7a480\",\"timestamp\":1790640711600}"
+        },
+        {
+          "name": "tgt:tlm:upper",
+          "value": "0"
+        },
+        {
+          "name": "_gcl_ls",
+          "value": "{\"schema\":\"gcl\",\"version\":1,\"gcl_ctr\":{\"value\":{\"value\":0,\"timeouts\":0,\"errors\":0,\"eopCount\":0,\"creationTimeMs\":1790640712503},\"expires\":1798416712503},\"gsid_dc\":{\"value\":{\"joinId\":\"Md8KwrG4f1OYoCA7YPeM6plrLF3-B8SflQ\",\"lastJoinedTimeMs\":1790640712505},\"expires\":1790641012505}}"
+        },
+        {
+          "name": "_uetsid",
+          "value": "5f5c74d0bb9a11f18d9db3a90dd4f062"
+        },
+        {
+          "name": "sa-user-id-v3",
+          "value": "s%3A.o6W7wkJsHSTU4%2BLlDruZ%2FwNjVcUZZMvakQpSatDoAgo"
+        },
+        {
+          "name": "sa-user-id-v2",
+          "value": "s%3Asm4o-teOUxtKdjHyuWL1lIjiNxc.O%2BHxtmTyJMAzqH9Ecm5e6mrkAra1%2F9nXD6FiACTxPx0"
+        },
+        {
+          "name": "sa-r-date",
+          "value": "2026-09-29T00:11:52.941Z"
+        },
+        {
+          "name": "lastExternalReferrerTime",
+          "value": "1790640711448"
+        },
+        {
+          "name": "_uetsid_exp",
+          "value": "Wed, 30 Sep 2026 00:11:52 GMT"
+        },
+        {
+          "name": "sa-r-source",
+          "value": "wealth.dev.fitbux.com"
+        },
+        {
+          "name": "sa-user-id-v4",
+          "value": "s%3ACiQwMWEwZWE4MC1lY2JkLTc2ZGUtOWZjYy1iYWUyNWFkNGE2MzAQBBoCTkEgJg.BKIpfsIipjOiU9p%2B5RcI02QCvZ61GKk%2FTWQ88%2FHpF%2BY"
+        },
+        {
+          "name": "_uetvid",
+          "value": "5f5c5d50bb9a11f193066bb0b1970e63"
+        },
+        {
+          "name": "com.adobe.reactor.core.maxFrequency.RL29f0337ed531410fb4d50c9203744613.session",
+          "value": "1"
+        },
+        {
+          "name": "lastExternalReferrer",
+          "value": "other"
+        },
+        {
+          "name": "com.adobe.reactor.core.visitorTracking.sessionCount",
+          "value": "1"
+        },
+        {
+          "name": "com.adobe.reactor.core.visitorTracking.pagesViewed",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "origin": "https://www.fitbux.com",
+      "localStorage": [
+        {
+          "name": "lastExternalReferrer",
+          "value": "other"
+        },
+        {
+          "name": "_gcl_ls",
+          "value": "{\"schema\":\"gcl\",\"version\":1,\"gcl_ctr\":{\"value\":{\"value\":0,\"timeouts\":0,\"errors\":0,\"eopCount\":0,\"creationTimeMs\":1790640976685},\"expires\":1798416976685},\"gsid_dc\":{\"value\":{\"joinId\":\"5YxBoV5O1fV-3Vf-xyfKLVTXzqqaanHDtQ\",\"lastJoinedTimeMs\":1790641038682},\"expires\":1790641338682},\"last_convs\":{\"value\":[],\"expires\":1798417055241}}"
+        },
+        {
+          "name": "lastExternalReferrerTime",
+          "value": "1790641074039"
+        }
+      ]
+    },
+    {
+      "origin": "https://calendly.com",
+      "localStorage": [
+        {
+          "name": "_cache",
+          "value": "ZAIlRD7eYfNwxMdbbR+j+PO9jTabzA1E5Xqa0TemAJs="
+        }
+      ]
+    }
+  ]
+}

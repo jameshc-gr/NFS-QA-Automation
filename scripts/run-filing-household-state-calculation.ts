@@ -152,9 +152,10 @@ export function printAndSaveResults() {
 }
 
 function generateMarkdownReport(result: TestRunResult): string {
-  let md = `# Student IDR - Filing Status, Household Size & State Calculation Test Execution Results
+  let md = `# Student IDR - Filing Status, Household Size & State Calculation Results
 
 **Execution Date:** ${result.runDate}  
+**Execution Scope:** Local IDR calculation engine only; no live application or browser interaction
 **Total Tests:** ${result.totalTests}  
 **Passed:** ${result.passed} ✅  
 **Failed:** ${result.failed} ${result.failed === 0 ? '✅' : '❌'}  

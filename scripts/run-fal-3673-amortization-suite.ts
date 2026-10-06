@@ -730,19 +730,22 @@ export function runFal3673TestSuite() {
 
 function generateMarkdownResults(passed: number, failed: number, results: any[]): string {
   const dateStr = new Date().toISOString().replace('T', ' ').substring(0, 19);
-  let md = `# FAL-3673: Loan Amortization, Interest Coverage & Tax Bomb Verification Report
+  let md = `# FAL-3673: Loan Amortization, Interest Coverage & Tax Bomb Model Report
 
 **Execution Date:** ${dateStr}  
+**Execution Scope:** Local calculations and synthetic overview responses; no live application or browser interaction
 **Total Tests:** ${results.length}  
 **Passed:** ${passed} ✅  
 **Failed:** ${failed} ${failed === 0 ? '✅' : '❌'}  
 **Pass Rate:** ${((passed / results.length) * 100).toFixed(1)}%  
 
+**Interpretation:** A failed scenario means the synthetic response triggered the business-rule violation. It is not an observed live-UI failure. Passing scenarios are model/control checks only.
+
 ---
 
 ## 1. Executive Summary
 
-This suite specifically validates and guards against the critical defect reported in **[FAL-3673](https://rate.atlassian.net/browse/FAL-3673)**:
+This local model suite checks the reported defect conditions in **[FAL-3673](https://rate.atlassian.net/browse/FAL-3673)** using generated inputs and synthetic overview responses; it does not validate the live application's current behavior:
 - **Flawed Message Identified:** Overview incorrectly stated *"Your monthly payments will cover the cost of your loan"* when paying only **$10/mo** on a **$75,000 loan at 9% APR**.
 - **Accrual Proof:** Monthly interest is **$562.50**. A $10 payment produces a monthly shortfall of **$552.50**, leading to negative amortization and an ending balloon balance exceeding **$200,000** at 20-year forgiveness.
 - **Tax Bomb Reality:** Forgiveness is taxable at 35%, generating a tax liability $> \$70,000$ and requiring sinking fund savings $> \$300/\text{mo}$, refuting *"Tax savings goal: Not applicable"* and *"Tax-free"*.

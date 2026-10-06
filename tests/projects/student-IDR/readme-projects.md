@@ -16,9 +16,9 @@ This Playwright suite covers the Income-Driven Repayment (IDR) / federal student
 - `test-setup.ts` — YAML profile loader, page helpers, and `runIdrFlow` orchestrator
 - `idr-calculator.ts` — 150% FPL calculation engine, monthly payment formulas, tax bomb projections, and sinking fund savings evaluator
 - `loan-amortization-calculator.ts` — loan amortization simulation, negative amortization detector, interest coverage comparator, asset tax bomb offsets, and plan duration calculator
-- `FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts` — 50 comprehensive CSV test cases covering filing status (Separate vs Joint), household size, state variations (WA, CA, OR, AK, HI), income tiers, payment floors, tax bomb calculations, and sinking fund savings goals
+- `FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts` — local calculation checks only; its referenced `test_cases_automation.csv` input is absent from this checkout, so the suite is currently blocked and does not drive the UI
 - `DATA-RETENTION-ZERO-PERSISTENCE.spec.ts` — zero-value data retention and persistence suite addressing defect [FAL-3672](https://rate.atlassian.net/browse/FAL-3672) across Personal Data, Loans, and Assets
-- `FAL-3673-AMORTIZATION-TAX-BOMB.spec.ts` — loan amortization, interest coverage, asset offsets, and tax bomb suite guarding against [FAL-3673](https://rate.atlassian.net/browse/FAL-3673)
+- `FAL-3673-AMORTIZATION-TAX-BOMB.spec.ts` — local loan-model assertions and synthetic defect-response checks for FAL-3673; does not drive the UI
 - `SCN-001.spec.ts` through `SCN-020.spec.ts` — one spec per scenario from `02_scenario_matrix.csv`
 - `DASHBOARD-COVERAGE.spec.ts` — dashboard Overview, Scenarios, Personal Data, Settings, and Feedback discovery checks
 - `DEPENDENT-CRUD.spec.ts` — dependent add/edit/delete/re-add lifecycle with boundary ages
@@ -36,13 +36,15 @@ npm run test:fal-3673
 npm run test:fal-3673:runner
 ```
 
+The FAL-3673 commands exercise local model logic; the standalone runner synthesizes defective overview text for rule checks. Neither command is a live application/UI test.
+
 Run the data retention & zero-value persistence suite (FAL-3672):
 
 ```bash
 npm run test:data-retention
 ```
 
-Run the filing, household size & state calculation suite (50 test scenarios):
+Run the filing, household size & state calculation suite (50 calculation scenarios; not UI coverage):
 
 ```bash
 # Playwright Chromium test execution
@@ -77,7 +79,7 @@ npx playwright test tests/projects/student-IDR --project=chromium --project=fire
 
 Profiles live in [test-data/student-IDR/student-IDR.yml](../../../test-data/student-IDR/student-IDR.yml). Each `SCN-XXX` override block is loaded automatically when a spec calls `loadProfile('SCN-XXX')`.
 
-The final execution-oriented case matrix, including profile data references and expected results, is maintained in [test-data/student-IDR/04_final_test_cases_with_data.csv](../../../test-data/student-IDR/04_final_test_cases_with_data.csv). The Jira-style execution report is [test-results/student-IDR-test-execution-report-2026-07-28.md](../../../test-results/student-IDR-test-execution-report-2026-07-28.md).
+The previously referenced execution-oriented case matrix `test-data/student-IDR/04_final_test_cases_with_data.csv` is absent from this checkout. The filing calculation runner/spec also reference the absent `test_cases_automation.csv`; historical results should not be treated as evidence of a current rerun. The Jira-style execution report is [test-results/student-IDR-test-execution-report-2026-07-28.md](../../../test-results/student-IDR-test-execution-report-2026-07-28.md).
 
 ### Unique credentials per run
 

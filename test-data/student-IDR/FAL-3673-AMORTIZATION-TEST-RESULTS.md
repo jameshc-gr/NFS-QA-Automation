@@ -1,10 +1,13 @@
 # FAL-3673: Loan Amortization, Interest Coverage & Tax Bomb Verification Report
 
-**Execution Date:** 2026-09-21 23:50:41  
+**Execution Date:** 2026-10-02 23:13:23
+**Execution Scope:** Local calculations and synthetic overview responses; no live application or browser interaction
 **Total Tests:** 22  
 **Passed:** 6 ✅  
 **Failed:** 16 ❌  
 **Pass Rate:** 27.3%  
+
+**Interpretation:** The 16 failures are synthetic defect detections from generated overview responses, not observed live-UI failures. The 6 passing cases are model/control checks.
 
 ---
 

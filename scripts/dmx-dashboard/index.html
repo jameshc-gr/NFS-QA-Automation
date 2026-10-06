@@ -6,11 +6,21 @@
   <link rel="icon" href="data:,">
   <title>DMX Loan Lab</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/custom.css">
 </head>
 <body>
-  <header class="topbar"><a class="brand" href="/" aria-label="DMX Loan Lab home"><span class="brand-mark">D</span><span>DMX <b>Loan Lab</b></span></a><div class="local-status"><i></i> PRIVATE LOCAL RUNNER</div></header>
+  <header class="topbar"><a class="brand" href="/" aria-label="DMX Loan Lab home">RATE NFS QA - DMX LOAN Creator</a><div class="local-status"><i></i> PRIVATE LOCAL RUNNER</div></header>
   <main class="shell">
-    <section class="intro"><div><div class="eyebrow">DIGITAL MORTGAGE EXPERIENCE <span>•</span> DEV</div><h1>Build a loan.<br><em>Watch every step.</em></h1><p>Choose a proven scenario or tune every field, then launch a single tracked browser run.</p></div><div class="intro-stamp"><span>LOCAL</span><small>127.0.0.1 ONLY<br>ONE RUN AT A TIME</small></div></section>
+    <section class="intro"><div><div class="eyebrow">DIGITAL MORTGAGE EXPERIENCE <span>•</span> DEV</div>
+      <button id="readme-btn" class="text-button">Read Me</button>
+      <div id="readme-modal" class="modal" hidden>
+        <div class="modal-content">
+          <button type="button" class="readme-exit" id="readme-exit">Exit</button>
+          <span class="modal-close" id="readme-close">×</span>
+          <pre id="readme-text"></pre>
+        </div>
+      </div>
+    </div><div class="intro-stamp"><span>LOCAL</span><small>127.0.0.1 ONLY<br>ONE RUN AT A TIME</small></div></section>
     <section id="template-builder" class="template-builder" hidden>
       <div class="builder-top"><button id="cancel-template" class="text-button">← Back to run setup</button><span class="kicker">TEMPLATE WORKSHOP / NEW</span></div>
       <div class="builder-heading"><div><h2>Create a DMX template</h2><p>Start with a test case, then edit each DMX field before saving a new template.</p></div><span class="builder-count"><strong id="field-count">0</strong> EDITABLE FIELDS</span></div>
@@ -24,6 +34,7 @@
         <div class="section-head"><div><span class="kicker">01 / CONFIGURE</span><h2>Test setup</h2></div><span class="pill">DMX DEV</span></div>
         <label class="field-label" for="test-case">Test case <span>Existing automation</span></label>
         <select id="test-case"></select>
+        <div id="case-coverage" class="case-coverage" aria-live="polite"></div>
         <label class="field-label" for="dmx-target">DMX environment & tenant <span>DEV / PROD entry</span></label>
         <select id="dmx-target"></select>
         <div class="prod-confirm" id="prod-confirm" hidden><span>Production check only navigates and inspects the entry screen. No loan data will be entered.</span><label>Type READ-ONLY <input id="prod-confirm-input" autocomplete="off"></label></div>
@@ -34,7 +45,7 @@
         <div class="template-row"><label class="field-label" for="template">Saved template <span>Load and edit saved JSON</span></label><select id="template"><option value="">Choose a template…</option></select></div>
         <div class="grid-two template-actions"><button id="new-template" class="button button-quiet">+ Create new template</button><label><span class="field-label">Template name</span><input id="template-name" placeholder="Name for selected template"></label><button id="save-template" class="button button-quiet">Save edits to selected</button></div>
         <div class="identity-grid">
-          <label><span class="field-label">Account email <small>Optional; existing account email allowed</small></span><input id="email" type="email" autocomplete="off" placeholder="Generated automatically"></label>
+           <label><span class="field-label">Account email</span><input id="email" type="email" autocomplete="off" placeholder="Generated automatically"></label>
           <label><span class="field-label">Password <small>Shown in result</small></span><input id="password" type="text" autocomplete="new-password" value="Test123!"></label>
         </div>
         <div class="scenario-head"><div><span class="kicker">SCENARIO INPUT</span><h3>All DMX fields</h3></div><button id="format-json" class="text-button">Format JSON</button></div>

@@ -1,6 +1,7 @@
 # Student IDR - Filing Status, Household Size & State Calculation Test Execution Results
 
 **Execution Date:** 2026-09-21 17:42:02  
+**Execution Scope:** Local IDR calculation engine only; no live application or browser interaction
 **Total Tests:** 50  
 **Passed:** 50 ✅  
 **Failed:** 0 ✅  

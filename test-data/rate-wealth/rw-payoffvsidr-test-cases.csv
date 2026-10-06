@@ -1,0 +1,13 @@
+test_id,category,borrower_agi,dependents,filing_status,state_1,fpl_1,expected_payment_1,state_2,fpl_2,expected_payment_2,payment_variance,expected_tax_bomb_1,expected_tax_bomb_2,tax_bomb_variance,inverse_proven,notes
+TC_RW_001,Baseline,50000,0,Separately,WA,23940,217.17,AK,29925,167.29,49.88,97879,109850,11971,YES,Single baseline - inverse hierarchy proven
+TC_RW_002,Baseline,50000,0,Separately,AK,29925,167.29,HI,27540,187.17,19.88,109850,105079,4771,YES,Mid-range FPL comparison
+TC_RW_003,Baseline,50000,0,Separately,WA,23940,217.17,HI,27540,187.17,30.00,97879,105079,7200,YES,Lowest vs mid-range FPL
+TC_RW_004,Contiguous,50000,0,Separately,WA,23940,217.17,TX,23940,217.17,0.00,97879,97879,0,YES,Contiguous identity - zero variance
+TC_RW_005,Contiguous,50000,0,Separately,TX,23940,217.17,NY,23940,217.17,0.00,97879,97879,0,YES,Contiguous identity - zero variance
+TC_RW_006,Contiguous,50000,0,Separately,NY,23940,217.17,FL,23940,217.17,0.00,97879,97879,0,YES,Contiguous identity - zero variance
+TC_RW_007,Contiguous,50000,0,Separately,FL,23940,217.17,PA,23940,217.17,0.00,97879,97879,0,YES,Contiguous identity - zero variance
+TC_RW_008,Contiguous,50000,0,Separately,PA,23940,217.17,WA,23940,217.17,0.00,97879,97879,0,YES,Full circle identity proof
+TC_RW_009,Joint,90000,0,Jointly,WA,32460,479.50,AK,40575,411.88,67.62,34920,51149,16229,YES,Higher income - larger absolute diff
+TC_RW_010,MultiHH,90000,2,Jointly,WA,49500,33.33,AK,61875,0.00,33.33,142001,150000,7999,YES,HH4 - larger household
+TC_RW_011,Floor,25000,0,Separately,WA,23940,8.83,AK,29925,0.00,8.83,147881,150000,2119,YES,Boundary crossing - AK hits floor
+TC_RW_012,Floor,20000,0,Separately,AK,29925,0.00,HI,27540,0.00,0.00,150000,150000,0,YES,Both hit floor - zero variance

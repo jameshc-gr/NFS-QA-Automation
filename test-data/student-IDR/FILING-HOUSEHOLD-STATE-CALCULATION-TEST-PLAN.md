@@ -3,8 +3,8 @@
 **Document Version:** 1.0.0  
 **Date:** 2026-09-21  
 **Target Module:** Student Loan IDR Repayment & Tax Bomb Calculation Engine  
-**Source Reference:** [test-data/student-IDR/test_cases_automation.csv](test-data/student-IDR/test_cases_automation.csv)  
-**Applicability:** Playwright E2E & Calculation Engine Verification Suite (`FILING-HOUSEHOLD-STATE-CALCULATION.spec.ts`)
+**Source Reference:** Historical input path `test-data/student-IDR/test_cases_automation.csv` (absent from this checkout)
+**Applicability:** Local calculation verification only; this plan does not represent live UI coverage
 
 ---
 
