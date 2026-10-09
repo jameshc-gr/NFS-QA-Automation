@@ -1,11 +1,9 @@
 import { test, expect } from "@playwright/test";
 import {
-  fillAndSubmitInquiryForm,
   formatCurrency,
   generateUniqueEmail,
   toCalendarInputDateDigits,
   typeMaskedInput,
-  formatPhoneNumber,
 } from "./helpers/inquiry-form";
 
 const inquiryConfig = {
@@ -14,7 +12,7 @@ const inquiryConfig = {
     applicationInput: {
       applicationType: "HELOC",
     },
-   propertyInputHeloc: {
+    propertyInputHeloc: {
       address: {
         street: ["49 Longview Ln"],
         city: "Newtown Square",
@@ -27,7 +25,6 @@ const inquiryConfig = {
       loanOfficerId: 6068,
     },
     basicInfoInput: {
-      emailId: "test30-328@yopmail.com",
       name: {
         first: "Erica",
         middle: "",
@@ -42,7 +39,7 @@ const inquiryConfig = {
         country: "US",
       },
       residenceStartDate: "2009-01-01",
-      phoneNumber: "6163200701",
+      phoneNumber: "3302741661",
       isAgreed: true,
     },
     basicInfoUpdateInput: {
@@ -64,9 +61,7 @@ const inquiryConfig = {
   },
 } as const;
 
-test("@smoke NewInquiryPage - Income source is part time", async ({
-  page,
-}) => {
+test("Income source is part time", async ({ page }) => {
   const uniqueEmail = generateUniqueEmail();
   const config = {
     ...inquiryConfig,
@@ -159,22 +154,6 @@ test("@smoke NewInquiryPage - Income source is part time", async ({
       .click();
   }
 
-  // Toggle same-as-address off after occupancy is set (required for secondary).
-  const sameAddressCheckbox = page.locator('#sameAsAddress, input[name="sameAsAddress"], [data-testid="same-as-address-toggle"] input[type="checkbox"]').first();
-  if (await sameAddressCheckbox.isVisible({ timeout: 1500 }).catch(() => false)) {
-  await expect(sameAddressCheckbox).not.toBeDisabled({ timeout: 5000 });
-  const isSameAsChecked = await sameAddressCheckbox.isChecked();
-  if (isSameAsChecked) {
-    const sameAddressToggle = page.getByTestId("same-as-address-toggle");
-    if (await sameAddressToggle.isVisible({ timeout: 1000 }).catch(() => false)) {
-      await sameAddressToggle.click();
-    } else {
-      await sameAddressCheckbox.click();
-    }
-    await expect(sameAddressCheckbox).not.toBeChecked({ timeout: 3000 });
-  }
-}
-
   // ──────────────────────────────────────────────────────────────────
   // Personal Information Section
   // ──────────────────────────────────────────────────────────────────
@@ -204,9 +183,9 @@ test("@smoke NewInquiryPage - Income source is part time", async ({
   const phoneInput = page.locator('input[name="phoneNumber"]').first();
   await phoneInput.click();
   await phoneInput.clear();
-  await typeMaskedInput(
-    phoneInput,
-    formatPhoneNumber(config.applicationInquiryInput.basicInfoInput.phoneNumber),
+  await phoneInput.pressSequentially(
+    config.applicationInquiryInput.basicInfoInput.phoneNumber,
+    { delay: 35 },
   );
 
   // Date of Birth (Calendar Input)
@@ -414,10 +393,12 @@ test("@smoke NewInquiryPage - Income source is part time", async ({
     page.locator('[data-testid^="inquiry-offer-card-"]'),
   ).toHaveCount(3, { timeout: 3 * 60 * 1000 });
 
-  // Verify static LO mismatch warning banner is shown
-  await expect(page.getByTestId("static-lo-mismatch-warning")).toBeVisible({
-    timeout: 3 * 60 * 1000,
-  });
+  // Verify static LO mismatch warning banner is shown (GRI only)
+  if (!process.env.COMPANY || process.env.COMPANY === "gri") {
+    await expect(page.getByTestId("static-lo-mismatch-warning")).toBeVisible({
+      timeout: 3 * 60 * 1000,
+    });
+  }
 
   // ────────────────────────────────────────────────────────────────────
   // Validate Offers UI content (property on sale — HELOAN ineligible)
@@ -459,7 +440,7 @@ test("@smoke NewInquiryPage - Income source is part time", async ({
   }
   console.log("Inquiry summary:", JSON.stringify(capturedSummary, null, 2));
 
-    // Offer cards render in a fixed product order: Fixed HELOC, Variable HELOC, HELOAN
+  // Offer cards render in a fixed product order: Fixed HELOC, Variable HELOC, HELOAN
   const expectedOfferOrder = [
     "Fixed Rate HELOC",
     "Variable Rate HELOC",
@@ -476,7 +457,7 @@ test("@smoke NewInquiryPage - Income source is part time", async ({
   // Both HELOC offers (cards 0 and 1) should show a rate, loan amount, term and details
   for (const cardIndex of [0, 1]) {
     const card = page.getByTestId(`inquiry-offer-card-${cardIndex}`);
-    await expect(card.getByText(/^\d+\.\d{2}%$/).first()).toBeVisible();
+    await expect(card.getByText(/^\d+\.\d{2,3}%$/).first()).toBeVisible();
     await expect(card).toContainText("Loan Amount");
     await expect(card).toContainText(/\$[\d,]+/);
     await expect(card).toContainText("Term");

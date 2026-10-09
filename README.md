@@ -165,6 +165,7 @@ The DMX suite drives the Guaranteed Rate online application in DEV for purchase,
 
 ### Rate Wealth (FitBUX) Web Suite
 Covers `https://wealth.dev.fitbux.com` (Okta SSO via `login.dev.rate.com`, registration at `https://my.dev.rate.com/registration`). The full product guide, verified site map and findings log live on Confluence (space NFP): the parent [Rate Wealth QA Testing Documentation](https://rate.atlassian.net/wiki/spaces/NFP/pages/1322418194/Rate+Wealth+QA+Testing+Documentation) and its child [Rate Wealth QA Handbook: Verified App Guide, First-Timer Test Path and Findings (2026-09-30)](https://rate.atlassian.net/wiki/spaces/NFP/pages/1521418244/Rate+Wealth+QA+Handbook+Verified+App+Guide+First-Timer+Test+Path+and+Findings+2026-09-30) (page id 1521418244).
+- Security assessment: [Planning-only security assessment plan](ai/tests/rate-wealth/RATE-WEALTH-SECURITY-ASSESSMENT-PLAN.md) and reusable role prompt [Rate Wealth Security Assessment](ai/jobs/prompts/rate-wealth-security-assessment.prompt.md). Current candidate URL is not authorization; do not run active security tests until the plan's written scope, accounts, rules of engagement, limits, contacts, and stop procedure are approved. Historical findings in the additional bugs report are leads, not current security findings.
 - Specs: [tests/projects/rate-wealth/](tests/projects/rate-wealth/) `rw-01` auth + registration, `rw-02` navigation/home/snapshot/plan summary, `rw-03` accounts/transactions/budget/risk/settings/13 calculators, `rw-04` onboarding (Profile Builder), `rw-05` plan builder + plan management, `rw-06` life-event/goal validation matrix (14 types x 0/negative). Shared helpers: [rw-helpers.ts](tests/projects/rate-wealth/rw-helpers.ts). Catalog of every test: [test-data/rate-wealth/rate-wealth-automation-catalog.csv](test-data/rate-wealth/rate-wealth-automation-catalog.csv); findings: [RATE-WEALTH-ADDITIONAL-BUGS-REPORT.md](test-data/rate-wealth/RATE-WEALTH-ADDITIONAL-BUGS-REPORT.md).
 - Known-defect pattern: tests for confirmed defects assert the expected behaviour and call `test.fail(true, '<reason>')`, so they pass while the defect exists and go red with "Expected to fail, but passed" once it is fixed; remove the `test.fail` line then.
 - Accounts (dev; all share one QA password): `my-rw-jc001` (complete profile, read-only use; `RW_TEST_EMAIL`), `my-rw-jc002` (plan builder; every test deletes all its plans because the app caps plans at 3; `RW_PLAN_EMAIL`), `my-rw-jc003` (onboarding; `RW_ONBOARDING_EMAIL`, tests use Next/Back only and never Finish).
@@ -712,11 +713,19 @@ Then run:
 npm run test:project:solution-finder
 ```
 
-This suite contains 20 specs under the dedicated Playwright project
+This suite contains 25 specs under the dedicated Playwright project
 `solution-finder` (including the project-specific browser settings) in
 [tests/projects/solution-finder](tests/projects/solution-finder). The tests
 submit live inquiries and should be run intentionally against the Solution
 Finder QA endpoint.
+
+The Solution Finder reporter reads each test trace and appends entered form
+values, the email, and the inquiry `id` from the prequalify URL to
+`test-data/solution-finder/test_account.yaml`. That folder is gitignored and
+the YAML file is restricted to the current user because it can contain DOB,
+SSN last four, and other personal test data. A password is recorded only if a
+test actually enters one; the current inquiry specs do not create or enter an
+account password, so it will be `null` for those runs.
 
 If you see `Cannot navigate to invalid URL`, the base URL was not resolved.
 If you see `page not found` at the OneLoan Dashboard host, that host is for

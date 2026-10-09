@@ -1,7 +1,7 @@
 /**
  * Shared helpers for inquiry e2e tests.
  *
- * Centralising these prevents selector/test-id drift across the 14 spec files
+ * Centralising these prevents selector/test-id drift across the 25 spec files
  * and makes form-fill changes a single-file edit.
  */
 
@@ -23,16 +23,6 @@ export async function typeMaskedInput(
   await locator.press("Backspace");
   await locator.pressSequentially(value, { delay: 35 });
   await locator.press("Tab");
-}
-
-export function formatPhoneNumber(digits: string): string {
-  // Normalize: keep only digits
-  const cleaned = (digits || "").replace(/\D/g, "");
-  if (cleaned.length !== 10) return digits;
-  const area = cleaned.slice(0, 3);
-  const prefix = cleaned.slice(3, 6);
-  const line = cleaned.slice(6);
-  return `(${area}) ${prefix}-${line}`;
 }
 
 /**
@@ -118,8 +108,13 @@ export async function fillAndSubmitInquiryForm(
   page: Page,
   input: InquiryFormInput,
 ): Promise<string> {
-  const { propertyInputHeloc, basicInfoInput, basicInfoUpdateInput, incomeInput, existingMortgageAmount } =
-    input;
+  const {
+    propertyInputHeloc,
+    basicInfoInput,
+    basicInfoUpdateInput,
+    incomeInput,
+    existingMortgageAmount,
+  } = input;
   const propertyAddress = propertyInputHeloc.address;
   const residenceAddress = basicInfoInput.residenceAddress;
   const borrowerName = basicInfoInput.name;
@@ -147,15 +142,23 @@ export async function fillAndSubmitInquiryForm(
 
   await page.locator('input[name="address"]').first().fill(propertyStreet);
   await page.locator('input[name="city"]').first().fill(propertyAddress.city);
-  await page.locator('input[name="state"]').first().fill(propertyAddress.region);
-  await page.locator('input[name="zip"]').first().fill(propertyAddress.postalCode);
+  await page
+    .locator('input[name="state"]')
+    .first()
+    .fill(propertyAddress.region);
+  await page
+    .locator('input[name="zip"]')
+    .first()
+    .fill(propertyAddress.postalCode);
 
   const targetOccupancy = propertyInputHeloc.type || "PRIMARY";
   const occupancyField = page.getByTestId("occupancy-type-field");
   await expect(occupancyField).toBeVisible({ timeout: 5000 });
 
   const nativeOccupancySelect = occupancyField.locator("select").first();
-  if (await nativeOccupancySelect.isVisible({ timeout: 2000 }).catch(() => false)) {
+  if (
+    await nativeOccupancySelect.isVisible({ timeout: 2000 }).catch(() => false)
+  ) {
     await nativeOccupancySelect.selectOption({ value: targetOccupancy });
   } else {
     const occupancyDropdown = occupancyField
@@ -173,23 +176,11 @@ export async function fillAndSubmitInquiryForm(
       .click();
   }
 
-  const sameAddressCheckbox = page.locator('#sameAsAddress, input[name="sameAsAddress"], [data-testid="same-as-address-toggle"] input[type="checkbox"]').first();
-  if (await sameAddressCheckbox.isVisible({ timeout: 1500 }).catch(() => false)) {
-  await expect(sameAddressCheckbox).not.toBeDisabled({ timeout: 5000 });
-  if (await sameAddressCheckbox.isChecked()) {
-    const sameAddressToggle = page.getByTestId("same-as-address-toggle");
-    if (await sameAddressToggle.isVisible({ timeout: 1000 }).catch(() => false)) {
-      await sameAddressToggle.click();
-    } else {
-      await sameAddressCheckbox.click();
-    }
-    await expect(sameAddressCheckbox).not.toBeChecked({ timeout: 3000 });
-  }
-}
-
   // ── Personal Information ──────────────────────────────────────────────────
 
-  await page.getByTestId("borrower-information-section").scrollIntoViewIfNeeded();
+  await page
+    .getByTestId("borrower-information-section")
+    .scrollIntoViewIfNeeded();
 
   await page
     .locator('input[placeholder*="first" i], input[name*="firstName"]')
@@ -206,8 +197,7 @@ export async function fillAndSubmitInquiryForm(
   const phoneInput = page.locator('input[name="phoneNumber"]').first();
   await phoneInput.click();
   await phoneInput.clear();
-  // Format phone to (XXX) XXX-XXXX before typing so masked inputs receive expected characters
-  await typeMaskedInput(phoneInput, formatPhoneNumber(basicInfoInput.phoneNumber));
+  await phoneInput.pressSequentially(basicInfoInput.phoneNumber, { delay: 35 });
 
   const dobInput = page
     .locator('input#date, input[name="birthday"], input[name="date"]')
@@ -232,10 +222,22 @@ export async function fillAndSubmitInquiryForm(
   await expect(residenceManualAddressButton).toBeVisible({ timeout: 5000 });
   await residenceManualAddressButton.click();
 
-  await page.locator('input[name="residenceAddress"]').first().fill(residenceStreet);
-  await page.locator('input[name="residenceCity"]').first().fill(residenceAddress.city);
-  await page.locator('input[name="residenceState"]').first().fill(residenceAddress.region);
-  await page.locator('input[name="residenceZip"]').first().fill(residenceAddress.postalCode);
+  await page
+    .locator('input[name="residenceAddress"]')
+    .first()
+    .fill(residenceStreet);
+  await page
+    .locator('input[name="residenceCity"]')
+    .first()
+    .fill(residenceAddress.city);
+  await page
+    .locator('input[name="residenceState"]')
+    .first()
+    .fill(residenceAddress.region);
+  await page
+    .locator('input[name="residenceZip"]')
+    .first()
+    .fill(residenceAddress.postalCode);
 
   const residenceDateInput = page
     .locator('input#residence-start-date, input[name="start"]')
@@ -258,7 +260,9 @@ export async function fillAndSubmitInquiryForm(
     String(propertyInputHeloc.requestedLoanAmount),
   );
 
-  const mortgageInput = page.locator('input[name="existingMortgageAmount"]').first();
+  const mortgageInput = page
+    .locator('input[name="existingMortgageAmount"]')
+    .first();
   await expect(mortgageInput).toBeVisible({ timeout: 10000 });
   await typeMaskedInput(mortgageInput, String(existingMortgageAmount));
 
@@ -272,8 +276,12 @@ export async function fillAndSubmitInquiryForm(
   const targetIncomeSource = incomeInput[0].incomeSource;
 
   const nativeIncomeSelect = incomeSourceField.locator("select").first();
-  if (await nativeIncomeSelect.isVisible({ timeout: 1000 }).catch(() => false)) {
-    const selected = await nativeIncomeSelect.selectOption({ value: targetIncomeSource });
+  if (
+    await nativeIncomeSelect.isVisible({ timeout: 1000 }).catch(() => false)
+  ) {
+    const selected = await nativeIncomeSelect.selectOption({
+      value: targetIncomeSource,
+    });
     if (!selected.length) {
       const nonEmptyValue = await nativeIncomeSelect
         .locator("option")
@@ -340,7 +348,9 @@ export async function fillAndSubmitInquiryForm(
     const additionalSourceSelect = additionalRow.locator("select").first();
 
     if (
-      await additionalSourceSelect.isVisible({ timeout: 2000 }).catch(() => false)
+      await additionalSourceSelect
+        .isVisible({ timeout: 2000 })
+        .catch(() => false)
     ) {
       const selected = await additionalSourceSelect.selectOption({
         value: additionalIncome.incomeSource,
@@ -350,7 +360,8 @@ export async function fillAndSubmitInquiryForm(
           .locator("option")
           .evaluateAll((options) => {
             const first = options.find(
-              (opt) => ((opt as HTMLOptionElement).value ?? "").trim().length > 0,
+              (opt) =>
+                ((opt as HTMLOptionElement).value ?? "").trim().length > 0,
             ) as HTMLOptionElement | undefined;
             return first?.value ?? "";
           });

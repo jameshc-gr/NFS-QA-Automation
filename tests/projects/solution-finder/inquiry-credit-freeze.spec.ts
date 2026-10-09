@@ -1,11 +1,9 @@
 import { test, expect } from "@playwright/test";
 import {
-  fillAndSubmitInquiryForm,
   formatCurrency,
   generateUniqueEmail,
   toCalendarInputDateDigits,
   typeMaskedInput,
-  formatPhoneNumber,
 } from "./helpers/inquiry-form";
 
 const inquiryConfig = {
@@ -27,7 +25,6 @@ const inquiryConfig = {
       loanOfficerId: 6068,
     },
     basicInfoInput: {
-      emailId: "test-freeze-credit-23@yopmail.com",
       name: {
         first: "Les",
         middle: "",
@@ -42,7 +39,7 @@ const inquiryConfig = {
         country: "US",
       },
       residenceStartDate: "2009-01-01",
-      phoneNumber: "6163200701",
+      phoneNumber: "3302741661",
       isAgreed: true,
     },
     basicInfoUpdateInput: {
@@ -64,9 +61,7 @@ const inquiryConfig = {
   },
 } as const;
 
-test("@smoke NewInquiryPage - credit freeze - all offers ineligible", async ({
-  page,
-}) => {
+test("Credit freeze - all offers ineligible", async ({ page }) => {
   const uniqueEmail = generateUniqueEmail();
   const config = {
     ...inquiryConfig,
@@ -159,22 +154,6 @@ test("@smoke NewInquiryPage - credit freeze - all offers ineligible", async ({
       .click();
   }
 
-  // Toggle same-as-address off after occupancy is set (required for secondary).
-  const sameAddressCheckbox = page.locator('#sameAsAddress, input[name="sameAsAddress"], [data-testid="same-as-address-toggle"] input[type="checkbox"]').first();
-  if (await sameAddressCheckbox.isVisible({ timeout: 1500 }).catch(() => false)) {
-  await expect(sameAddressCheckbox).not.toBeDisabled({ timeout: 5000 });
-  const isSameAsChecked = await sameAddressCheckbox.isChecked();
-  if (isSameAsChecked) {
-    const sameAddressToggle = page.getByTestId("same-as-address-toggle");
-    if (await sameAddressToggle.isVisible({ timeout: 1000 }).catch(() => false)) {
-      await sameAddressToggle.click();
-    } else {
-      await sameAddressCheckbox.click();
-    }
-    await expect(sameAddressCheckbox).not.toBeChecked({ timeout: 3000 });
-  }
-}
-
   // ──────────────────────────────────────────────────────────────────
   // Personal Information Section
   // ──────────────────────────────────────────────────────────────────
@@ -204,9 +183,9 @@ test("@smoke NewInquiryPage - credit freeze - all offers ineligible", async ({
   const phoneInput = page.locator('input[name="phoneNumber"]').first();
   await phoneInput.click();
   await phoneInput.clear();
-  await typeMaskedInput(
-    phoneInput,
-    formatPhoneNumber(config.applicationInquiryInput.basicInfoInput.phoneNumber),
+  await phoneInput.pressSequentially(
+    config.applicationInquiryInput.basicInfoInput.phoneNumber,
+    { delay: 35 },
   );
 
   // Date of Birth (Calendar Input)
@@ -414,10 +393,12 @@ test("@smoke NewInquiryPage - credit freeze - all offers ineligible", async ({
     page.locator('[data-testid^="inquiry-offer-card-"]'),
   ).toHaveCount(3, { timeout: 3 * 60 * 1000 });
 
-  // Verify static LO mismatch warning banner is shown
-  await expect(page.getByTestId("static-lo-mismatch-warning")).toBeVisible({
-    timeout: 3 * 60 * 1000,
-  });
+  // Verify static LO mismatch warning banner is shown (GRI only)
+  if (!process.env.COMPANY || process.env.COMPANY === "gri") {
+    await expect(page.getByTestId("static-lo-mismatch-warning")).toBeVisible({
+      timeout: 3 * 60 * 1000,
+    });
+  }
 
   // ─────────────────────────────────────────────────────────────────
   // Validate Offers UI content (credit freeze — all offers ineligible)
@@ -476,8 +457,10 @@ test("@smoke NewInquiryPage - credit freeze - all offers ineligible", async ({
   // HELOC offers (cards 0 and 1) are ineligible due to no credit match
   for (const cardIndex of [0, 1]) {
     await expect(
-      page.getByTestId(`inquiry-offer-card-${cardIndex}`),
-    ).toContainText("CREDIT_NO_MATCH");
+      page
+        .getByTestId(`inquiry-offer-card-${cardIndex}`)
+        .getByText(/No credit profile match found/),
+    ).toBeVisible();
   }
 
   // HELOAN (card 2) is ineligible — exact reason varies in QA (frozen credit or creation failure)

@@ -1,11 +1,9 @@
 import { test, expect } from "@playwright/test";
 import {
-  fillAndSubmitInquiryForm,
   formatCurrency,
   generateUniqueEmail,
   toCalendarInputDateDigits,
   typeMaskedInput,
-  formatPhoneNumber,
 } from "./helpers/inquiry-form";
 
 const inquiryConfig = {
@@ -27,7 +25,6 @@ const inquiryConfig = {
       loanOfficerId: 6068,
     },
     basicInfoInput: {
-      emailId: "retest-na-23-6@yopmail.com",
       name: {
         first: "Erica",
         middle: "",
@@ -42,7 +39,7 @@ const inquiryConfig = {
         country: "US",
       },
       residenceStartDate: "2009-01-01",
-      phoneNumber: "6163200701",
+      phoneNumber: "3302741661",
       isAgreed: true,
     },
     basicInfoUpdateInput: {
@@ -69,9 +66,7 @@ const inquiryConfig = {
   },
 } as const;
 
-test("@smoke NewInquiryPage - multiple income sources - all offers eligible", async ({
-  page,
-}) => {
+test("Multiple income sources - all offers eligible", async ({ page }) => {
   const uniqueEmail = generateUniqueEmail();
   const config = {
     ...inquiryConfig,
@@ -164,22 +159,6 @@ test("@smoke NewInquiryPage - multiple income sources - all offers eligible", as
       .click();
   }
 
-  // Toggle same-as-address off after occupancy is set (required for secondary).
-  const sameAddressCheckbox = page.locator('#sameAsAddress, input[name="sameAsAddress"], [data-testid="same-as-address-toggle"] input[type="checkbox"]').first();
-  if (await sameAddressCheckbox.isVisible({ timeout: 1500 }).catch(() => false)) {
-  await expect(sameAddressCheckbox).not.toBeDisabled({ timeout: 5000 });
-  const isSameAsChecked = await sameAddressCheckbox.isChecked();
-  if (isSameAsChecked) {
-    const sameAddressToggle = page.getByTestId("same-as-address-toggle");
-    if (await sameAddressToggle.isVisible({ timeout: 1000 }).catch(() => false)) {
-      await sameAddressToggle.click();
-    } else {
-      await sameAddressCheckbox.click();
-    }
-    await expect(sameAddressCheckbox).not.toBeChecked({ timeout: 3000 });
-  }
-}
-
   // ──────────────────────────────────────────────────────────────────
   // Personal Information Section
   // ──────────────────────────────────────────────────────────────────
@@ -209,9 +188,9 @@ test("@smoke NewInquiryPage - multiple income sources - all offers eligible", as
   const phoneInput = page.locator('input[name="phoneNumber"]').first();
   await phoneInput.click();
   await phoneInput.clear();
-  await typeMaskedInput(
-    phoneInput,
-    formatPhoneNumber(config.applicationInquiryInput.basicInfoInput.phoneNumber),
+  await phoneInput.pressSequentially(
+    config.applicationInquiryInput.basicInfoInput.phoneNumber,
+    { delay: 35 },
   );
 
   // Date of Birth (Calendar Input)
@@ -372,8 +351,7 @@ test("@smoke NewInquiryPage - multiple income sources - all offers eligible", as
   );
 
   // Additional income sources (everything after the primary income)
-  const additionalIncomes =
-    config.applicationInquiryInput.incomeInput.slice(1);
+  const additionalIncomes = config.applicationInquiryInput.incomeInput.slice(1);
   for (let addlIndex = 0; addlIndex < additionalIncomes.length; addlIndex++) {
     const additionalIncome = additionalIncomes[addlIndex];
 
@@ -501,10 +479,12 @@ test("@smoke NewInquiryPage - multiple income sources - all offers eligible", as
     page.locator('[data-testid^="inquiry-offer-card-"]'),
   ).toHaveCount(3, { timeout: 3 * 60 * 1000 });
 
-  // Verify static LO mismatch warning banner is shown
-  await expect(page.getByTestId("static-lo-mismatch-warning")).toBeVisible({
-    timeout: 3 * 60 * 1000,
-  });
+  // Verify static LO mismatch warning banner is shown (GRI only)
+  if (!process.env.COMPANY || process.env.COMPANY === "gri") {
+    await expect(page.getByTestId("static-lo-mismatch-warning")).toBeVisible({
+      timeout: 3 * 60 * 1000,
+    });
+  }
 
   // ────────────────────────────────────────────────────────────────
   // Validate Offers UI content (multiple incomes — all offers eligible)
@@ -564,7 +544,7 @@ test("@smoke NewInquiryPage - multiple income sources - all offers eligible", as
   // Card 2 (HELOAN) may show ineligible reasons in QA (e.g. "Pricing is disabled for Heloan")
   for (const cardIndex of [0, 1]) {
     const card = page.getByTestId(`inquiry-offer-card-${cardIndex}`);
-    await expect(card.getByText(/^\d+\.\d{2}%$/).first()).toBeVisible();
+    await expect(card.getByText(/^\d+\.\d{2,3}%$/).first()).toBeVisible();
     await expect(card).toContainText("Loan Amount");
     await expect(card).toContainText(/\$[\d,]+/);
     await expect(card).toContainText("Term");

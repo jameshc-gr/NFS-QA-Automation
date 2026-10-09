@@ -544,3 +544,10 @@ Both reporters default to the literal string `"allure-results"` when the option 
 - `tests/projects/student-IDR/session-manager.ts` — Already used dated paths
 - Utility scripts (`organize-reports.js`, `organize-test-results.js`, `check-test-results-root.js`, `finalize-test-results.js`) — Read/organize the root, intentionally not modified
 
+---
+
+## 2026-10-06: Rate Wealth Security Assessment Plan
+
+- **Readiness:** Planning only. The dev URL is known, but no written security authorization, complete asset scope, test identities/roles, approved techniques/limits, evidence rules, or emergency/stop contacts were supplied.
+- **Deliverables:** Added `ai/tests/rate-wealth/RATE-WEALTH-SECURITY-ASSESSMENT-PLAN.md` with an authorization checklist, consolidated questionnaire, draft RoE, provisional asset/role/data-flow inventory, threat hypotheses, risk-ranked master plan, detailed gated test cases, execution tracker, report/remediation/retest templates, residual risks, and next actions. Added reusable role prompt `ai/jobs/prompts/rate-wealth-security-assessment.prompt.md` and linked both from the Rate Wealth section of `README.md`.
+- **Safety/validation:** No requests were sent to Rate Wealth and no security tests were executed. Historical findings are explicitly treated as unverified leads. Documentation paths and section structure were checked; no application behavior was changed or claimed as validated.

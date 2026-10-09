@@ -14,28 +14,28 @@ const inquiryConfig = {
     },
     propertyInputHeloc: {
       address: {
-        street: ["49 Longview Ln"],
-        city: "Newtown Square",
-        region: "PA",
-        postalCode: "19073",
+        street: ["1729 N Clybourn Ave APT E"],
+        city: "Chicago",
+        region: "IL",
+        postalCode: "60614",
         country: "US",
       },
       type: "SECONDARY",
-      requestedLoanAmount: 210000,
+      requestedLoanAmount: 200000,
       loanOfficerId: 6068,
     },
     basicInfoInput: {
       name: {
-        first: "Timothy",
-        middle: "J",
-        last: "Harvin",
+        first: "Erica",
+        middle: "",
+        last: "Lambert",
         suffix: "",
       },
       residenceAddress: {
-        street: ["310 Fillmore St"],
-        city: "Taft",
+        street: ["409 Glenwood Ave"],
+        city: "Menlo Park",
         region: "CA",
-        postalCode: "93268",
+        postalCode: "94025",
         country: "US",
       },
       residenceStartDate: "2009-01-01",
@@ -44,24 +44,24 @@ const inquiryConfig = {
     },
     basicInfoUpdateInput: {
       dateOfBirth: "2000-01-01",
-      lastFourSSN: "9376",
+      lastFourSSN: "2955",
     },
     incomeInput: [
       {
-        annualIncome: 444444,
-        incomeSource: "EMPLOYED_FULL_TIME",
+        annualIncome: 1000000,
+        incomeSource: "SELF_EMPLOYED",
         incomeType: null,
       },
     ],
     loId: 6068,
-    loCostCenter: "7547",
+    loCostCenter: "9127",
     isConsent: true,
     channel: "CONSUMERDIRECT",
     existingMortgageAmount: 70000,
   },
 } as const;
 
-test("Low credit - all offers ineligible", async ({ page }) => {
+test("Address with unit number(APT E)", async ({ page }) => {
   const uniqueEmail = generateUniqueEmail();
   const config = {
     ...inquiryConfig,
@@ -318,7 +318,7 @@ test("Low credit - all offers ineligible", async ({ page }) => {
 
     const targetIncomeOption = page
       .locator('[role="listbox"] [role="option"], [role="option"]')
-      .filter({ hasText: /Employed full-time|EMPLOYED_FULL_TIME/i })
+      .filter({ hasText: new RegExp(targetIncomeSource, "i") })
       .first();
     if (
       await targetIncomeOption.isVisible({ timeout: 2000 }).catch(() => false)
@@ -400,16 +400,16 @@ test("Low credit - all offers ineligible", async ({ page }) => {
     });
   }
 
-  // ─────────────────────────────────────────────────────────────────
-  // Validate Offers UI content (low credit — all offers ineligible)
-  // ─────────────────────────────────────────────────────────────────
+  // ────────────────────────────────────────────────────────────────────
+  // Validate Offers UI content (address with unit number)
+  // ────────────────────────────────────────────────────────────────────
 
   const offersPage = page.getByTestId("inquiry-offers-page");
 
-  // Inquiry summary reflects the submitted borrower + property + requested amount.
-  // (First/last asserted separately — the middle initial isn't entered via the form.)
-  await expect(offersPage).toContainText(borrowerName.first);
-  await expect(offersPage).toContainText(borrowerName.last);
+  // Inquiry summary reflects the submitted borrower + property + requested amount
+  await expect(offersPage).toContainText(
+    `${borrowerName.first} ${borrowerName.last}`,
+  );
   await expect(offersPage).toContainText(propertyStreet);
   await expect(offersPage).toContainText(propertyAddress.city);
   await expect(offersPage).toContainText(propertyAddress.region);
@@ -420,12 +420,16 @@ test("Low credit - all offers ineligible", async ({ page }) => {
     ),
   );
 
-  // FICO field is present — exact score may vary if credit pull fails in QA
-  const ficoValue = offersPage.locator('span:text-is("FICO:") + span').first();
-  await expect(ficoValue).not.toBeEmpty();
-
   // Capture the summary fields rendered as "<Label>: <value>" pairs
-  const summaryLabels = ["Borrower", "Address", "FICO", "Requested Amount"];
+  const summaryLabels = [
+    "Borrower",
+    "Address",
+    "FICO",
+    "Requested Amount",
+    "CLTV",
+    "Rate Range",
+    "DTI",
+  ];
   const capturedSummary: Record<string, string> = {};
   for (const label of summaryLabels) {
     const valueLocator = offersPage
@@ -436,8 +440,7 @@ test("Low credit - all offers ineligible", async ({ page }) => {
   }
   console.log("Inquiry summary:", JSON.stringify(capturedSummary, null, 2));
 
-  // Offer cards render in a fixed product order: Fixed HELOC, Variable HELOC, HELOAN.
-  // With a low credit score, every product is ineligible.
+  // Offer cards render in a fixed product order: Fixed HELOC, Variable HELOC, HELOAN
   const expectedOfferOrder = [
     "Fixed Rate HELOC",
     "Variable Rate HELOC",
@@ -450,23 +453,34 @@ test("Low credit - all offers ineligible", async ({ page }) => {
     const card = page.getByTestId(`inquiry-offer-card-${i}`);
     await expect(card).toBeVisible();
     await expect(card).toContainText(expectedOfferOrder[i]);
-    await expect(card).toContainText(ineligibleHeading);
     capturedOffers.push(((await card.innerText()) ?? "").trim());
   }
 
-  // HELOC offers (cards 0 and 1) are ineligible due to no credit match
+  // HELOC offers (cards 0 and 1) are ineligible — insufficient income (ASSETS_PREQUAL)
   for (const cardIndex of [0, 1]) {
     await expect(
-      page
-        .getByTestId(`inquiry-offer-card-${cardIndex}`)
-        .getByText(/No credit profile match found/),
-    ).toBeVisible();
+      page.getByTestId(`inquiry-offer-card-${cardIndex}`),
+    ).toContainText(ineligibleHeading);
+    await expect(
+      page.getByTestId(`inquiry-offer-card-${cardIndex}`),
+    ).toContainText("NAV_RESI_EVAL_ESTIMATE_NO_AVM");
   }
 
-  // HELOAN (card 2) is ineligible because the FICO score is below 660
-  await expect(page.getByTestId("inquiry-offer-card-2")).toContainText(
-    "Representative Credit Score < 660",
-  );
+  // HELOAN (card 2) — pricing may be disabled in QA; verify card is visible
+  const heloanCard = page.getByTestId("inquiry-offer-card-2");
+  await expect(heloanCard).toBeVisible({ timeout: 5000 });
+  await expect(heloanCard).toContainText("HELOAN");
+
+  const card = page.getByTestId(`inquiry-offer-card-2`);
+  await expect(card.getByText(/^\d+\.\d{2,3}%$/).first()).toBeVisible();
+  await expect(card).toContainText("Loan Amount");
+  await expect(card).toContainText(/\$[\d,]+/);
+  await expect(card).toContainText("Term");
+  await expect(card).toContainText(/\d+\s+years/);
+  await expect(card).toContainText("Offer Details");
+  await expect(card).toContainText("Max CLTV:");
+  await expect(card).toContainText("Credit Score Required:");
+  await expect(card).toContainText("Rate Type:");
 
   console.log("Captured offers:\n" + capturedOffers.join("\n---\n"));
 

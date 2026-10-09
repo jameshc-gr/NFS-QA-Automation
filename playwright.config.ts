@@ -78,6 +78,9 @@ export default defineConfig({
       }],
       ['./scripts/playwright-date-type-reporter.js', {}]
     ];
+    if (testProject === 'solution-finder') {
+      base.push(['./scripts/solution-finder-account-recorder.js', {}]);
+    }
     try {
       require.resolve('allure-playwright');
       // IMPORTANT: allure-playwright (v3.x) only honours `resultsDir`. Passing `outputFolder`
@@ -118,7 +121,8 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         headless: false,
-        baseURL: solutionFinderBaseUrl
+        baseURL: solutionFinderBaseUrl,
+        trace: 'on'
       }
     },
     {
