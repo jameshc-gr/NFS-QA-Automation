@@ -19,9 +19,12 @@ Playwright specs live under `tests/projects/`. The active UI suites are:
 
 ## AI Framework Layout
 
-All agent framework assets are centralized under `ai/jobs`:
+Agent procedures, skills, and prompts are organized under `ai/jobs`, with
+Copilot-discoverable custom-agent profiles in `.github/agents`:
 
 - `ai/jobs/agents`: agent mode files (`*.agent.md`)
+- `.github/agents`: Copilot-discoverable agent profiles, including the closed-loop team roles
+- `ai/team-agent`: closed-loop role instructions, PM handoff contract, and durable team memory
 - `ai/jobs/prompts`: user-facing prompts (`*.prompt.md`)
 - `ai/jobs/skills`: reusable QA domain skills (`*/SKILL.md`)
   - `playwright-framework-context`: Living framework architecture & conventions
@@ -75,7 +78,18 @@ flowchart TD
 2. Run the narrowest possible test first (single spec, single browser).
 3. Use healer only after reproducing failures in a focused run.
 4. Generate new tests into `tests/projects/<project>/generated/`.
-5. After validated behavior changes, run `doc-memory-sync` (`ai/jobs/agents/doc-memory-sync.agent.md`) to update `readme.md` and `/memories/repo/webautomation.md`.
+5. After validated behavior changes, run `doc-memory-sync` (`ai/jobs/agents/doc-memory-sync.agent.md`) to update `README.md` and `/memories/repo/webautomation.md`.
+
+For CEO-directed feature delivery, select **PM** from the Copilot custom-agent
+picker (or use `@PM` where supported). PM coordinates the role profiles in
+`.github/agents/team-*.agent.md` using the workflow and handoff contract in
+[ai/team-agent/README.md](ai/team-agent/README.md). Detailed role instructions
+are in `ai/team-agent/roles/`, and verified shared process learnings are stored
+in [ai/team-agent/memory/team-memory.md](ai/team-agent/memory/team-memory.md).
+Each role reads `README.md`, `AGENTS.md`, and team memory before acting. The PM
+routes QA/UAT failures back for targeted rework; Pentester requires explicit
+scope and authorization. No team agent creates/switches branches or commits,
+pushes, or opens a PR without explicit CEO approval.
 
 ### How To Write Skills
 

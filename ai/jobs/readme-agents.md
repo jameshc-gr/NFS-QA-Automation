@@ -1,6 +1,8 @@
 # AI Agent Framework
 
-This folder is the canonical home for all agent assets in this repository.
+This folder contains the repository's agent procedures, skills, and prompts.
+Copilot-discoverable custom-agent profiles live in `.github/agents/`; the
+closed-loop team roles and shared memory are documented under `ai/team-agent/`.
 
 ## Folder Structure
 
@@ -60,6 +62,25 @@ flowchart TD
 3. Expand scope only after a stable green run.
 4. Save generated tests under `tests/projects/<project>/generated/`.
 
+## Closed-Loop Team Agents
+
+- The CEO-facing PM profile is **PM**, discoverable from
+  `.github/agents/team-pm.agent.md`. Select it from the custom-agent picker or
+  use an agent mention where the host supports it.
+- PM can delegate to Team Designer, Team Developer, Team Git Manager, Team QA
+  Engineer, Team UAT Tester, and Team Pentester. Profiles are in
+  `.github/agents/team-*.agent.md`; role instructions and the workflow are in
+  `ai/team-agent/`.
+- Every profile must read `README.md`, `AGENTS.md`, and
+  `ai/team-agent/memory/team-memory.md` before acting, then read the applicable
+  role file and canonical framework rules.
+- PM owns peer handoffs and the QA/UAT rework loop. Pentesting is opt-in and
+  requires explicit target scope and authorization.
+- No team profile may create/switch branches, commit, push, or open a pull
+  request without explicit CEO authorization.
+- Agent definitions do not start agents by themselves: the host must load the
+  profile, and PM must explicitly delegate using the agent tool.
+
 ## Mobile Test Generation Workflow
 
 - Review-first mobile test case files live in `ai/tests/mobile/`.
@@ -118,7 +139,7 @@ Create `ai/jobs/agents/<agent-name>.agent.md` with:
 
 ## Related Guides
 
-- [Root framework guide](../../readme.md)
+- [Root framework guide](../../README.md)
 - [API how-to guide](../../api/README.md)
 
 Use [ai/jobs/agents/AGENT_TEMPLATE.md](ai/jobs/agents/AGENT_TEMPLATE.md).
