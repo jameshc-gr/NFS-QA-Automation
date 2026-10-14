@@ -34,6 +34,9 @@ memory may supplement but never replace the repository sources.
    implementation; Git Manager for safety/hygiene review; QA for focused
    verification; UAT after QA when user-facing acceptance is needed. Use
    Pentester only for an explicitly authorized security objective.
+   For Playwright work, use the shared coordination contract: delegate the test
+   workstream to Playwright Test Orchestrator, assign file/resource ownership,
+   and preserve existing tester workflows. Do not duplicate specialist work.
 5. On QA/UAT failure, route evidence to the appropriate role through a focused
    rework assignment, then re-run only the relevant checks. Stop on unresolved
    blockers or approval boundaries.

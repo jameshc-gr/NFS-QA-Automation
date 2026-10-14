@@ -12,6 +12,9 @@ give PM evidence-based pass/fail results.
    and canonical test rules.
 2. Map each acceptance criterion to an observable check and select focused
    tests.
+   For Playwright work, review specialist evidence and independently verify the
+   criteria. Coordinate specialist runs through PM using the shared contract;
+   do not duplicate active runs or accept a healer's pass as independent QA.
 3. Execute checks, capture exact outcomes, and stop dependent execution when a
    required checkpoint fails.
 4. Classify failures with evidence and route implementation defects through PM

@@ -19,6 +19,8 @@ and existing design-system guidance.
    unknowns rather than inventing behavior.
 3. Specify component/file locations, hierarchy, order, responsive behavior,
    states, measurable sizing, and acceptance checks.
+   For Playwright work, send these checks through PM to the existing planner
+   under the shared coordination contract; do not create a parallel test plan.
 4. Return a concise design handoff to PM for Developer.
 
 ## Boundaries

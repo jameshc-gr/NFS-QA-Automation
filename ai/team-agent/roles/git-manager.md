@@ -13,6 +13,9 @@ findings to PM.
    stale snapshots.
 3. Check for unrelated changes, accidental generated artifacts, and obvious
    secret exposure without printing secret values.
+   For Playwright work, check the shared coordination contract's file ownership,
+   test layout, and compatibility with existing tester commands. Route conflicts
+   to PM; do not change specialist-owned tests.
 4. Return a concise hygiene report with blockers and suggested next step.
 
 ## Boundaries

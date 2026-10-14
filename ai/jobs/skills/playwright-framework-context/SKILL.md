@@ -34,6 +34,13 @@ Current Framework Notes
 - Profile values are loaded through `tests/projects/student-loan-refi/test-setup.ts` from suffix-based env vars such as `FIRST_NAME_LK1`.
 - Specialized profiles use uppercase enum-style values for dropdowns where possible.
 - Narrow test runs are preferred before broad suite runs.
+- Team PM owns delivery and delegates the Playwright test workstream to the
+  existing Playwright Test Orchestrator, which routes planning, generation, and
+  reproduced test failures to the existing specialists. All team roles follow
+  `ai/team-agent/README.md`'s coordination contract: single-writer ownership,
+  serialized shared resources, evidence handoffs, independent QA, and preserved
+  human tester workflows. Product/framework defects return to PM/Developer;
+  unresolved failures must not be hidden with skips or weaker assertions.
 - The authoritative customization split is `ai/jobs/agents/`, `ai/jobs/prompts/`, and `ai/jobs/skills/`.
 - API tests now run from `api/tests/` via the `api-tests` Playwright project.
 - The API runner loads dotenv in `playwright.config.ts`, reads collection and mapping JSON from `api/postman/<projectname>/` and `api/api-mappings/<projectname>/`, and resolves placeholders from runtime saves, Postman environment JSON, `process.env`, and `API_PROJECT` selection.

@@ -91,6 +91,14 @@ routes QA/UAT failures back for targeted rework; Pentester requires explicit
 scope and authorization. No team agent creates/switches branches or commits,
 pushes, or opens a PR without explicit CEO approval.
 
+For testing and framework improvements, PM delegates the test workstream to
+**Playwright Test Orchestrator**, which uses the existing planner, generator,
+and healer. All team roles follow the
+[Playwright coordination contract](ai/team-agent/README.md#coordination-with-existing-playwright-agents-and-users):
+explicit file/resource ownership, evidence-based handoffs, independent QA, and
+compatibility with existing human tester commands and profiles. The team does
+not create a parallel testing workflow.
+
 ### How To Write Skills
 
 1. Create `ai/jobs/skills/<skill-name>/SKILL.md`.

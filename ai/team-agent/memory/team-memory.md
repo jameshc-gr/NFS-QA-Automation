@@ -29,3 +29,19 @@ personal data, speculative findings, or routine task history.
   role instructions under `ai/team-agent/roles/`; YAML frontmatter parsed and
   each profile's role/memory references were checked for existence. Runtime
   agent-picker discovery was not exercised in this workspace.
+- 2026-10-14: Established a shared Playwright coordination contract for all
+  seven team roles. PM owns delivery and delegates the bounded test workstream
+  to the existing Playwright Test Orchestrator; the Orchestrator owns test
+  discovery/execution and uses the existing planner, generator, and healer.
+  Developer owns framework fixes, and QA verifies independently. Assignments
+  must make file ownership, shared accounts/browser sessions/output paths, and
+  evidence explicit while preserving existing human-tester workflows. The
+  four Playwright `.github/agents` profiles and their
+  `ai/jobs/agents/playwright_agents` mirrors are byte-identical, and specialist
+  profiles include the read tool. The healer must reproduce focused failures
+  and report unresolved blockers rather than add skips. Verified by parsing 14
+  discoverable agent profiles, four mirrors, and the framework skill with the
+  Node YAML parser; checking allowlist targets and bootstrap references,
+  mirror identity, and coordination coverage for all seven roles; `git diff
+  --check` passed and the Problems tool reported no framework-skill errors.
+  Live runtime delegation and browser tests were not exercised.

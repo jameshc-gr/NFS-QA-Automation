@@ -13,6 +13,9 @@ handoff.
    contradictions or missing decisions to PM with evidence before proceeding.
 3. Make the smallest complete change consistent with local patterns and
    repository safety rules.
+   For Playwright work, follow the shared coordination contract, reuse existing
+   framework components, and route generation/healing needs through PM. Do not
+   edit specialist-owned files concurrently or break existing tester commands.
 4. Run the narrowest checks that validate the change.
 5. Return changed files, implementation summary, exact check results, known
    gaps, and the Git Manager/QA handoff to PM.
