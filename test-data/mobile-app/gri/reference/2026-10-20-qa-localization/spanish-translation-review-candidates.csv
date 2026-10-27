@@ -1,0 +1,12 @@
+Platform,Screen,Element type,English source string,Observed Spanish string,Occurrence count,English evidence,Spanish evidence,Review priority,Qualification
+ios,accounts,Text,GRI QA,GRI QA,1,qa-current-ios-en-accounts.xml,qa-current-ios-es-accounts.xml,LOW,"LOW CONFIDENCE: exact retained token; may be a proper noun, brand, cognate, or approved unchanged label."
+ios,financial,Text,GRI QA,GRI QA,1,qa-current-ios-en-financial.xml,qa-current-ios-es-financial.xml,LOW,"LOW CONFIDENCE: exact retained token; may be a proper noun, brand, cognate, or approved unchanged label."
+ios,home,Text,GRI QA,GRI QA,1,qa-current-ios-en-home.xml,qa-current-ios-es-home.xml,LOW,"LOW CONFIDENCE: exact retained token; may be a proper noun, brand, cognate, or approved unchanged label."
+ios,language-preference,Text,GRI QA,GRI QA,1,qa-current-ios-en-language-preference.xml,qa-current-ios-es-language-preference.xml,LOW,"LOW CONFIDENCE: exact retained token; may be a proper noun, brand, cognate, or approved unchanged label."
+ios,personal,Text,GRI QA,GRI QA,1,qa-current-ios-en-personal.xml,qa-current-ios-es-personal.xml,LOW,"LOW CONFIDENCE: exact retained token; may be a proper noun, brand, cognate, or approved unchanged label."
+ios,profile,Text,GRI QA,GRI QA,1,qa-current-ios-en-profile.xml,qa-current-ios-es-profile.xml,LOW,"LOW CONFIDENCE: exact retained token; may be a proper noun, brand, cognate, or approved unchanged label."
+ios,settings,Text,GRI QA,GRI QA,1,qa-current-ios-en-settings.xml,qa-current-ios-es-settings.xml,LOW,"LOW CONFIDENCE: exact retained token; may be a proper noun, brand, cognate, or approved unchanged label."
+ios,settings,Button/CTA,Face ID,Face ID,1,qa-current-ios-en-settings.xml,qa-current-ios-es-settings.xml,LOW,"LOW CONFIDENCE: exact retained token; may be a proper noun, brand, cognate, or approved unchanged label."
+ios,tools,Text,GRI QA,GRI QA,1,qa-current-ios-en-tools.xml,qa-current-ios-es-tools.xml,LOW,"LOW CONFIDENCE: exact retained token; may be a proper noun, brand, cognate, or approved unchanged label."
+ios,tools-goal-prompt,Text,GRI QA,GRI QA,1,qa-current-ios-en-tools-goal-prompt.xml,qa-current-ios-es-tools-goal-prompt.xml,LOW,"LOW CONFIDENCE: exact retained token; may be a proper noun, brand, cognate, or approved unchanged label."
+ios,tools-goal-prompt,Button/CTA,No,No,1,qa-current-ios-en-tools-goal-prompt.xml,qa-current-ios-es-tools-goal-prompt.xml,LOW,"LOW CONFIDENCE: exact retained token; may be a proper noun, brand, cognate, or approved unchanged label."

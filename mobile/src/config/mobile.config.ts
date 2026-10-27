@@ -1092,6 +1092,7 @@ export function resolveMobileCapabilities(): MobileCapabilities {
         platformName: 'iOS',
         'appium:automationName': 'XCUITest',
         'appium:deviceName': process.env.MOBILE_IOS_DEVICE_NAME || build.deviceName || 'iPhone 17',
+        ...(process.env.MOBILE_IOS_DEVICE_UDID ? { 'appium:udid': process.env.MOBILE_IOS_DEVICE_UDID } : {}),
         'appium:platformVersion': resolveIOSPlatformVersion(),
         'appium:app': appPath,
         'appium:bundleId': bundleId,
@@ -1150,6 +1151,7 @@ export function resolveMobileCapabilities(): MobileCapabilities {
     platformName: 'Android',
     'appium:automationName': 'UiAutomator2',
     'appium:deviceName': process.env.MOBILE_ANDROID_DEVICE_NAME || 'Android Emulator',
+    ...(process.env.MOBILE_ANDROID_DEVICE_UDID ? { 'appium:udid': process.env.MOBILE_ANDROID_DEVICE_UDID } : {}),
     'appium:platformVersion': process.env.MOBILE_ANDROID_PLATFORM_VERSION || '16',
     'appium:app': resolveAndroidAppPath(android),
     'appium:appPackage':

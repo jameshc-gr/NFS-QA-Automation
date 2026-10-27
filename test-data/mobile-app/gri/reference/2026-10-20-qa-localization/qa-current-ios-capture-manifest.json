@@ -1,0 +1,199 @@
+{
+  "capturedAt": "2026-10-20T19:07:08.052Z",
+  "environment": "qa",
+  "platform": "ios",
+  "appVersion": "30.3",
+  "build": "1000",
+  "records": [
+    {
+      "platform": "ios",
+      "language": "es",
+      "screen": "home",
+      "xml": "qa-current-ios-es-home.xml",
+      "png": "qa-current-ios-es-home.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "true",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "ios",
+      "language": "es",
+      "screen": "tools-goal-prompt",
+      "xml": "qa-current-ios-es-tools-goal-prompt.xml",
+      "png": "qa-current-ios-es-tools-goal-prompt.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "true"
+    },
+    {
+      "platform": "ios",
+      "language": "es",
+      "screen": "tools",
+      "xml": "qa-current-ios-es-tools.xml",
+      "png": "qa-current-ios-es-tools.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "true",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "ios",
+      "language": "es",
+      "screen": "financial",
+      "xml": "qa-current-ios-es-financial.xml",
+      "png": "qa-current-ios-es-financial.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "true",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "ios",
+      "language": "es",
+      "screen": "personal",
+      "xml": "qa-current-ios-es-personal.xml",
+      "png": "qa-current-ios-es-personal.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "true",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "ios",
+      "language": "es",
+      "screen": "profile",
+      "xml": "qa-current-ios-es-profile.xml",
+      "png": "qa-current-ios-es-profile.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "true"
+    },
+    {
+      "platform": "ios",
+      "language": "es",
+      "screen": "settings",
+      "xml": "qa-current-ios-es-settings.xml",
+      "png": "qa-current-ios-es-settings.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "true"
+    },
+    {
+      "platform": "ios",
+      "language": "es",
+      "screen": "language-preference",
+      "xml": "qa-current-ios-es-language-preference.xml",
+      "png": "qa-current-ios-es-language-preference.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "true"
+    },
+    {
+      "platform": "ios",
+      "language": "en",
+      "screen": "home",
+      "xml": "qa-current-ios-en-home.xml",
+      "png": "qa-current-ios-en-home.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "false",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "ios",
+      "language": "en",
+      "screen": "accounts",
+      "xml": "qa-current-ios-en-accounts.xml",
+      "png": "qa-current-ios-en-accounts.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "false",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "ios",
+      "language": "en",
+      "screen": "tools-goal-prompt",
+      "xml": "qa-current-ios-en-tools-goal-prompt.xml",
+      "png": "qa-current-ios-en-tools-goal-prompt.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "false"
+    },
+    {
+      "platform": "ios",
+      "language": "en",
+      "screen": "tools",
+      "xml": "qa-current-ios-en-tools.xml",
+      "png": "qa-current-ios-en-tools.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "false",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "ios",
+      "language": "en",
+      "screen": "financial",
+      "xml": "qa-current-ios-en-financial.xml",
+      "png": "qa-current-ios-en-financial.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "false",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "ios",
+      "language": "en",
+      "screen": "personal",
+      "xml": "qa-current-ios-en-personal.xml",
+      "png": "qa-current-ios-en-personal.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "false",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "ios",
+      "language": "en",
+      "screen": "profile",
+      "xml": "qa-current-ios-en-profile.xml",
+      "png": "qa-current-ios-en-profile.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "false"
+    },
+    {
+      "platform": "ios",
+      "language": "en",
+      "screen": "settings",
+      "xml": "qa-current-ios-en-settings.xml",
+      "png": "qa-current-ios-en-settings.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "false"
+    },
+    {
+      "platform": "ios",
+      "language": "en",
+      "screen": "language-preference",
+      "xml": "qa-current-ios-en-language-preference.xml",
+      "png": "qa-current-ios-en-language-preference.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "false"
+    },
+    {
+      "platform": "ios",
+      "language": "es",
+      "screen": "accounts",
+      "xml": "qa-current-ios-es-accounts.xml",
+      "png": "qa-current-ios-es-accounts.png",
+      "languageVerifiedBy": "AppleLanguages launch argument plus rendered labels",
+      "localizedStringsPresent": "true",
+      "spanishToggleVerified": "true",
+      "selectedTabVerified": "true"
+    }
+  ]
+}

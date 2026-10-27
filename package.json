@@ -6,6 +6,7 @@
   "scripts": {
     "test": "node ./scripts/run-playwright.js",
     "extract:rtl-patched-data": "ts-node scripts/extract-rtl-patched-data.ts",
+    "export:one-loan-excel": "node scripts/export-one-loan-excel.cjs",
     "test:api": "TEST_PROJECT=api-tests node ./scripts/run-playwright.js --project=api-tests",
     "test:api:headed": "TEST_PROJECT=api-tests node ./scripts/run-playwright.js --project=api-tests --headed",
     "test:api:report": "playwright show-report",
@@ -49,6 +50,7 @@
     "verify:sessions": "ts-node scripts/verify-sessions.ts",
     "setup:gv-session": "ts-node scripts/setup-gv-session.ts",
     "setup:rate-wealth-session": "ts-node scripts/setup-rate-wealth-session.ts",
+    "setup:gr-dev-signup-session": "ts-node scripts/setup-gr-dev-signup-session.ts",
     "setup:rate-wealth-auth": "ts-node scripts/setup-rate-wealth-auth.ts",
     "setup:firebase-session": "ts-node scripts/setup-firebase-session.ts",
     "setup:outlook-session": "ts-node scripts/setup-outlook-session.ts",

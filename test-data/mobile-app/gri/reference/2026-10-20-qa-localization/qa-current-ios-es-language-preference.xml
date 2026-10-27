@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AppiumAUT>
+  <XCUIElementTypeApplication type="XCUIElementTypeApplication" name="GRI QA" label="GRI QA" enabled="true" visible="true" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="" processId="6447" bundleId="com.guaranteedrate.superapp.qa">
+    <XCUIElementTypeWindow type="XCUIElementTypeWindow" enabled="true" visible="true" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                            <XCUIElementTypeNavigationBar type="XCUIElementTypeNavigationBar" name="_TtGC7SwiftUI29PresentationHosting" enabled="true" visible="false" accessible="false" x="0" y="62" width="402" height="54" index="0" traits="">
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" name="navigation_top.button.logo" enabled="true" visible="false" accessible="false" x="20" y="66" width="83" height="36" index="0" traits="">
+                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="20" y="66" width="83" height="36" index="0" traits="">
+                                  <XCUIElementTypeImage type="XCUIElementTypeImage" name="navigation_top.button.logo" enabled="true" visible="false" accessible="true" x="32" y="72" width="59" height="24" index="0" traits="Image"/>
+                                </XCUIElementTypeOther>
+                              </XCUIElementTypeOther>
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" name="home_greeting" label="Hola Shilpa" enabled="true" visible="false" accessible="false" x="192" y="66" width="190" height="36" index="1" traits="">
+                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="192" y="66" width="190" height="36" index="0" traits="">
+                                  <XCUIElementTypeButton type="XCUIElementTypeButton" name="home_greeting" label="Hola Shilpa" enabled="true" visible="false" accessible="true" x="192" y="66" width="106" height="36" index="0" traits="Button"/>
+                                  <XCUIElementTypeButton type="XCUIElementTypeButton" name="ic_contact_person" label="ic_contact_person" enabled="true" visible="false" accessible="true" x="300" y="66" width="44" height="36" index="1" traits="Button"/>
+                                  <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="true" visible="false" accessible="true" x="346" y="66" width="36" height="36" index="2" traits="Button"/>
+                                </XCUIElementTypeOther>
+                              </XCUIElementTypeOther>
+                            </XCUIElementTypeNavigationBar>
+                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="1" traits="">
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                                    <XCUIElementTypeScrollView type="XCUIElementTypeScrollView" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="171" index="0" traits=""/>
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="726" width="402" height="148" index="1" traits=""/>
+                                      </XCUIElementTypeOther>
+                                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="1" traits="">
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="726" width="402" height="148" index="0" traits="">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" name="AdditionalDimmingOverlay" enabled="true" visible="false" accessible="false" x="-120" y="731" width="642" height="286" index="0" traits="Image"/>
+                                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="726" width="402" height="148" index="1" traits="">
+                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="726" width="402" height="148" index="0" traits=""/>
+                                          </XCUIElementTypeOther>
+                                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="726" width="402" height="148" index="2" traits="">
+                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="726" width="402" height="148" index="0" traits=""/>
+                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="726" width="402" height="148" index="1" traits=""/>
+                                          </XCUIElementTypeOther>
+                                        </XCUIElementTypeOther>
+                                      </XCUIElementTypeOther>
+                                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="116" width="402" height="3839" index="2" traits="">
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Bienestar financiero" name="Bienestar financiero" label="Bienestar financiero" enabled="true" visible="false" accessible="true" x="16" y="132" width="280" height="32" index="0" traits="StaticText"/>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Zona de préstamos hipotecarios" name="Zona de préstamos hipotecarios" label="Zona de préstamos hipotecarios" enabled="true" visible="false" accessible="true" x="16" y="188" width="283" height="20" index="1" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Preaprobación" label="Preaprobación" enabled="true" visible="false" accessible="true" x="16" y="224" width="117" height="121" index="2" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="16" y="223" width="117" height="91" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Preaprobación" name="Preaprobación" label="Preaprobación" enabled="true" visible="false" accessible="false" x="23" y="321" width="91" height="14" index="1" traits="StaticText"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Comprar" label="Comprar" enabled="true" visible="false" accessible="true" x="142" y="224" width="118" height="121" index="3" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="142" y="223" width="118" height="91" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Comprar" name="Comprar" label="Comprar" enabled="true" visible="false" accessible="false" x="150" y="321" width="55" height="14" index="1" traits="StaticText"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Refinanciar" label="Refinanciar" enabled="true" visible="false" accessible="true" x="269" y="224" width="117" height="121" index="4" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="269" y="223" width="117" height="91" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Refinanciar" name="Refinanciar" label="Refinanciar" enabled="true" visible="false" accessible="false" x="277" y="321" width="69" height="14" index="1" traits="StaticText"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Tu equipo de expertos" name="Tu equipo de expertos" label="Tu equipo de expertos" enabled="true" visible="false" accessible="true" x="16" y="371" width="197" height="20" index="5" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="true" visible="false" accessible="true" x="362" y="369" width="24" height="24" index="6" traits="Button"/>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Michael Romano" name="Michael Romano" label="Michael Romano" enabled="true" visible="false" accessible="true" x="73" y="416" width="119" height="17" index="7" traits="StaticText"/>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Tu asesor hipotecario" name="Tu asesor hipotecario" label="Tu asesor hipotecario" enabled="true" visible="false" accessible="true" x="73" y="433" width="123" height="14" index="8" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Búsqueda de vivienda, Encuentra la casa de tus sueños" label="Búsqueda de vivienda, Encuentra la casa de tus sueños" enabled="true" visible="false" accessible="true" x="16" y="478" width="370" height="87" index="9" traits="Button">
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Búsqueda de vivienda" name="Búsqueda de vivienda" label="Búsqueda de vivienda" enabled="true" visible="false" accessible="false" x="32" y="502" width="195" height="21" index="0" traits="StaticText"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Encuentra la casa de tus sueños" name="Encuentra la casa de tus sueños" label="Encuentra la casa de tus sueños" enabled="true" visible="false" accessible="false" x="32" y="526" width="198" height="15" index="1" traits="StaticText"/>
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="233" y="526" width="15" height="15" index="2" traits="Image"/>
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="274" y="490" width="96" height="63" index="3" traits="Image"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Todos los seguros" name="Todos los seguros" label="Todos los seguros" enabled="true" visible="false" accessible="true" x="16" y="591" width="159" height="20" index="10" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="true" visible="false" accessible="true" x="362" y="589" width="24" height="24" index="11" traits="Button"/>
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="18" y="629" width="366" height="252" index="12" traits="">
+                                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="Automóvil" label="Automóvil" enabled="true" visible="false" accessible="true" x="18" y="629" width="116" height="121" index="0" traits="Button">
+                                            <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="18" y="621" width="116" height="105" index="0" traits="Image"/>
+                                            <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Automóvil" name="Automóvil" label="Automóvil" enabled="true" visible="false" accessible="false" x="26" y="726" width="62" height="14" index="1" traits="StaticText"/>
+                                          </XCUIElementTypeButton>
+                                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="Vivienda" label="Vivienda" enabled="true" visible="false" accessible="true" x="143" y="629" width="116" height="121" index="1" traits="Button">
+                                            <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="143" y="621" width="116" height="105" index="0" traits="Image"/>
+                                            <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Vivienda" name="Vivienda" label="Vivienda" enabled="true" visible="false" accessible="false" x="151" y="726" width="54" height="14" index="1" traits="StaticText"/>
+                                          </XCUIElementTypeButton>
+                                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="Vida" label="Vida" enabled="true" visible="false" accessible="true" x="268" y="629" width="116" height="121" index="2" traits="Button">
+                                            <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="268" y="621" width="116" height="105" index="0" traits="Image"/>
+                                            <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Vida" name="Vida" label="Vida" enabled="true" visible="false" accessible="false" x="276" y="726" width="29" height="14" index="1" traits="StaticText"/>
+                                          </XCUIElementTypeButton>
+                                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="Empresas" label="Empresas" enabled="true" visible="false" accessible="true" x="18" y="760" width="116" height="121" index="3" traits="Button">
+                                            <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="18" y="752" width="116" height="105" index="0" traits="Image"/>
+                                            <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Empresas" name="Empresas" label="Empresas" enabled="true" visible="false" accessible="false" x="26" y="857" width="61" height="14" index="1" traits="StaticText"/>
+                                          </XCUIElementTypeButton>
+                                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="Paraguas" label="Paraguas" enabled="true" visible="false" accessible="true" x="143" y="760" width="116" height="121" index="4" traits="Button">
+                                            <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="143" y="752" width="116" height="105" index="0" traits="Image"/>
+                                            <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Paraguas" name="Paraguas" label="Paraguas" enabled="true" visible="false" accessible="false" x="151" y="857" width="58" height="14" index="1" traits="StaticText"/>
+                                          </XCUIElementTypeButton>
+                                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="Mascota" label="Mascota" enabled="true" visible="false" accessible="true" x="268" y="760" width="116" height="121" index="5" traits="Button">
+                                            <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="268" y="752" width="116" height="105" index="0" traits="Image"/>
+                                            <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Mascota" name="Mascota" label="Mascota" enabled="true" visible="false" accessible="false" x="276" y="857" width="53" height="14" index="1" traits="StaticText"/>
+                                          </XCUIElementTypeButton>
+                                        </XCUIElementTypeOther>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Capital empoderado" name="Capital empoderado" label="Capital empoderado" enabled="true" visible="false" accessible="true" x="16" y="905" width="180" height="20" index="13" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Refinanciación con retiro de efectivo" label="Refinanciación con retiro de efectivo" enabled="true" visible="false" accessible="true" x="16" y="941" width="117" height="138" index="14" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="16" y="939" width="117" height="93" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Refinanciación con retiro de efectivo" name="Refinanciación con retiro de efectivo" label="Refinanciación con retiro de efectivo" enabled="true" visible="false" accessible="false" x="24" y="1038" width="100" height="32" index="1" traits="StaticText"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="HELOC" label="HELOC" enabled="true" visible="false" accessible="true" x="142" y="941" width="118" height="138" index="15" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="142" y="940" width="118" height="91" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="HELOC" name="HELOC" label="HELOC" enabled="true" visible="false" accessible="false" x="150" y="1038" width="46" height="14" index="1" traits="StaticText"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Hipoteca inversa" label="Hipoteca inversa" enabled="true" visible="false" accessible="true" x="269" y="941" width="117" height="138" index="16" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="269" y="940" width="117" height="91" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Hipoteca inversa" name="Hipoteca inversa" label="Hipoteca inversa" enabled="true" visible="false" accessible="false" x="277" y="1038" width="60" height="32" index="1" traits="StaticText"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Salón de préstamos" name="Salón de préstamos" label="Salón de préstamos" enabled="true" visible="false" accessible="true" x="16" y="1103" width="175" height="20" index="17" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Préstamos personales" label="Préstamos personales" enabled="true" visible="false" accessible="true" x="16" y="1139" width="117" height="138" index="18" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="16" y="1138" width="117" height="91" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Préstamos personales" name="Préstamos personales" label="Préstamos personales" enabled="true" visible="false" accessible="false" x="23" y="1236" width="70" height="32" index="1" traits="StaticText"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Préstamos para automóviles, Nuevo" label="Préstamos para automóviles, Nuevo" enabled="true" visible="false" accessible="true" x="142" y="1139" width="118" height="138" index="19" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="142" y="1138" width="118" height="91" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Préstamos para automóviles" name="Préstamos para automóviles" label="Préstamos para automóviles" enabled="true" visible="false" accessible="false" x="150" y="1236" width="100" height="32" index="1" traits="StaticText"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Nuevo" name="Nuevo" label="Nuevo" enabled="true" visible="false" accessible="false" x="150" y="1143" width="36" height="12" index="2" traits="StaticText"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Refinanciación de préstamos estudiantiles, Nuevo" label="Refinanciación de préstamos estudiantiles, Nuevo" enabled="true" visible="false" accessible="true" x="269" y="1139" width="117" height="138" index="20" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="269" y="1138" width="117" height="91" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Refinanciación de préstamos estudiantiles" name="Refinanciación de préstamos estudiantiles" label="Refinanciación de préstamos estudiantiles" enabled="true" visible="false" accessible="false" x="277" y="1236" width="94" height="32" index="1" traits="StaticText"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Nuevo" name="Nuevo" label="Nuevo" enabled="true" visible="false" accessible="false" x="277" y="1143" width="36" height="12" index="2" traits="StaticText"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Herramientas para el comprador de vivienda" name="Herramientas para el comprador de vivienda" label="Herramientas para el comprador de vivienda" enabled="true" visible="false" accessible="true" x="16" y="1284" width="290" height="44" index="21" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="true" visible="false" accessible="true" x="362" y="1294" width="24" height="24" index="22" traits="Button"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Calculadora de hipoteca" label="Calculadora de hipoteca" enabled="true" visible="false" accessible="true" x="16" y="1344" width="117" height="138" index="23" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="16" y="1343" width="117" height="91" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Calculadora de hipoteca" name="Calculadora de hipoteca" label="Calculadora de hipoteca" enabled="true" visible="false" accessible="false" x="23" y="1441" width="78" height="32" index="1" traits="StaticText"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Poder de compra" label="Poder de compra" enabled="true" visible="false" accessible="true" x="142" y="1344" width="118" height="138" index="24" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="142" y="1343" width="118" height="91" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Poder de compra" name="Poder de compra" label="Poder de compra" enabled="true" visible="false" accessible="false" x="150" y="1441" width="61" height="32" index="1" traits="StaticText"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Avalúo de viviendas" label="Avalúo de viviendas" enabled="true" visible="false" accessible="true" x="269" y="1344" width="117" height="138" index="25" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="269" y="1343" width="117" height="91" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Avalúo de viviendas" name="Avalúo de viviendas" label="Avalúo de viviendas" enabled="true" visible="false" accessible="false" x="277" y="1441" width="66" height="32" index="1" traits="StaticText"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Beneficios de membresía" name="Beneficios de membresía" label="Beneficios de membresía" enabled="true" visible="false" accessible="true" x="16" y="1508" width="222" height="20" index="26" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="true" visible="false" accessible="true" x="362" y="1506" width="24" height="24" index="27" traits="Button"/>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Estación educativa" name="Estación educativa" label="Estación educativa" enabled="true" visible="false" accessible="true" x="16" y="1856" width="165" height="20" index="28" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="true" visible="false" accessible="true" x="362" y="1854" width="24" height="24" index="29" traits="Button"/>
+                                        <XCUIElementTypeScrollView type="XCUIElementTypeScrollView" enabled="true" visible="false" accessible="false" x="0" y="1894" width="402" height="138" index="30" traits="">
+                                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="1894" width="485" height="138" index="0" traits="">
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Centro de compra de viviendas" label="Centro de compra de viviendas" enabled="true" visible="false" accessible="true" x="16" y="1894" width="106" height="138" index="0" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="16" y="1891" width="106" height="95" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Centro de compra de viviendas" name="Centro de compra de viviendas" label="Centro de compra de viviendas" enabled="true" visible="false" accessible="false" x="16" y="1894" width="106" height="138" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Sala de refinanciación" label="Sala de refinanciación" enabled="true" visible="false" accessible="true" x="131" y="1894" width="107" height="138" index="1" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="131" y="1891" width="107" height="95" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Sala de refinanciación" name="Sala de refinanciación" label="Sala de refinanciación" enabled="true" visible="false" accessible="false" x="131" y="1894" width="107" height="138" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Soluciones de efectivo" label="Soluciones de efectivo" enabled="true" visible="false" accessible="true" x="247" y="1894" width="106" height="138" index="2" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="247" y="1891" width="106" height="95" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Soluciones de efectivo" name="Soluciones de efectivo" label="Soluciones de efectivo" enabled="true" visible="false" accessible="false" x="247" y="1894" width="106" height="138" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Todos los seguros" label="Todos los seguros" enabled="true" visible="false" accessible="true" x="363" y="1894" width="106" height="138" index="3" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="363" y="1891" width="106" height="95" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Todos los seguros" name="Todos los seguros" label="Todos los seguros" enabled="true" visible="false" accessible="false" x="363" y="1894" width="106" height="138" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                          </XCUIElementTypeOther>
+                                        </XCUIElementTypeScrollView>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Bienestar personal" name="Bienestar personal" label="Bienestar personal" enabled="true" visible="false" accessible="true" x="16" y="2056" width="263" height="32" index="31" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Explore the world from getaways to grand journeys" label="Explore the world from getaways to grand journeys" enabled="true" visible="false" accessible="true" x="-3" y="2112" width="408" height="130" index="32" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="-3" y="2112" width="408" height="100" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Explore the world from getaways to grand journeys" name="Explore the world from getaways to grand journeys" label="Explore the world from getaways to grand journeys" enabled="true" visible="false" accessible="false" x="32" y="2220" width="313" height="14" index="1" traits="StaticText"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Entrena como un campeón" name="Entrena como un campeón" label="Entrena como un campeón" enabled="true" visible="false" accessible="true" x="16" y="2268" width="236" height="20" index="33" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="true" visible="false" accessible="true" x="362" y="2266" width="24" height="24" index="34" traits="Button"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="Colecciones" label="Colecciones" enabled="true" visible="false" accessible="true" x="16" y="2713" width="370" height="24" index="35" traits="Button">
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Colecciones" name="Colecciones" label="Colecciones" enabled="true" visible="false" accessible="false" x="16" y="2715" width="109" height="20" index="0" traits="StaticText"/>
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="362" y="2713" width="24" height="24" index="1" traits="Image"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeScrollView type="XCUIElementTypeScrollView" enabled="true" visible="false" accessible="false" x="0" y="2753" width="402" height="192" index="36" traits="">
+                                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="2753" width="1444" height="192" index="0" traits="">
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Entrena como un campeón" label="Entrena como un campeón" enabled="true" visible="false" accessible="true" x="16" y="2753" width="148" height="192" index="0" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="16" y="2747" width="148" height="204" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Entrena como un campeón" name="Entrena como un campeón" label="Entrena como un campeón" enabled="true" visible="false" accessible="false" x="16" y="2753" width="148" height="192" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="California" label="California" enabled="true" visible="false" accessible="true" x="174" y="2753" width="148" height="192" index="1" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="174" y="2748" width="148" height="202" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="California" name="California" label="California" enabled="true" visible="false" accessible="false" x="174" y="2753" width="148" height="192" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Chicago" label="Chicago" enabled="true" visible="false" accessible="true" x="332" y="2753" width="148" height="192" index="2" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="332" y="2748" width="148" height="202" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Chicago" name="Chicago" label="Chicago" enabled="true" visible="false" accessible="false" x="332" y="2753" width="148" height="192" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Miami" label="Miami" enabled="true" visible="false" accessible="true" x="490" y="2753" width="148" height="192" index="3" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="490" y="2748" width="148" height="202" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Miami" name="Miami" label="Miami" enabled="true" visible="false" accessible="false" x="490" y="2753" width="148" height="192" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Armonía del sueño" label="Armonía del sueño" enabled="true" visible="false" accessible="true" x="648" y="2753" width="148" height="192" index="4" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="648" y="2748" width="148" height="202" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Armonía del sueño" name="Armonía del sueño" label="Armonía del sueño" enabled="true" visible="false" accessible="false" x="648" y="2753" width="148" height="192" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Rutina matutina de 5 días" label="Rutina matutina de 5 días" enabled="true" visible="false" accessible="true" x="806" y="2753" width="148" height="192" index="5" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="806" y="2748" width="148" height="202" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Rutina matutina de 5 días" name="Rutina matutina de 5 días" label="Rutina matutina de 5 días" enabled="true" visible="false" accessible="false" x="806" y="2753" width="148" height="192" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Introducción al yoga" label="Introducción al yoga" enabled="true" visible="false" accessible="true" x="964" y="2753" width="148" height="192" index="6" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="964" y="2747" width="148" height="204" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Introducción al yoga" name="Introducción al yoga" label="Introducción al yoga" enabled="true" visible="false" accessible="false" x="964" y="2753" width="148" height="192" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Dr. Paul Savage" label="Dr. Paul Savage" enabled="true" visible="false" accessible="true" x="1122" y="2753" width="148" height="192" index="7" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="1046" y="2753" width="300" height="192" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Dr. Paul Savage" name="Dr. Paul Savage" label="Dr. Paul Savage" enabled="true" visible="false" accessible="false" x="1122" y="2753" width="148" height="192" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Tone n’ tunes" label="Tone n’ tunes" enabled="true" visible="false" accessible="true" x="1280" y="2753" width="148" height="192" index="8" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="1280" y="2748" width="148" height="202" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Tone n’ tunes" name="Tone n’ tunes" label="Tone n’ tunes" enabled="true" visible="false" accessible="false" x="1280" y="2753" width="148" height="192" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                          </XCUIElementTypeOther>
+                                        </XCUIElementTypeScrollView>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Desafíos" name="Desafíos" label="Desafíos" enabled="true" visible="false" accessible="true" x="16" y="2971" width="76" height="20" index="37" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="true" visible="false" accessible="true" x="362" y="2969" width="24" height="24" index="38" traits="Button"/>
+                                        <XCUIElementTypeScrollView type="XCUIElementTypeScrollView" enabled="true" visible="false" accessible="false" x="0" y="3009" width="402" height="192" index="39" traits="">
+                                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="3009" width="484" height="192" index="0" traits="">
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Chakra flow" label="Chakra flow" enabled="true" visible="false" accessible="true" x="16" y="3009" width="144" height="192" index="0" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="16" y="3007" width="144" height="196" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Chakra flow" name="Chakra flow" label="Chakra flow" enabled="true" visible="false" accessible="false" x="16" y="3009" width="144" height="192" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Flexibilidad" label="Flexibilidad" enabled="true" visible="false" accessible="true" x="170" y="3009" width="144" height="192" index="1" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="170" y="3007" width="144" height="196" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Flexibilidad" name="Flexibilidad" label="Flexibilidad" enabled="true" visible="false" accessible="false" x="170" y="3009" width="144" height="192" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                            <XCUIElementTypeButton type="XCUIElementTypeButton" name="Aliento de vida" label="Aliento de vida" enabled="true" visible="false" accessible="true" x="324" y="3009" width="144" height="192" index="2" traits="Button">
+                                              <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="324" y="3007" width="144" height="196" index="0" traits="Image"/>
+                                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Aliento de vida" name="Aliento de vida" label="Aliento de vida" enabled="true" visible="false" accessible="false" x="324" y="3009" width="144" height="192" index="1" traits="StaticText"/>
+                                            </XCUIElementTypeButton>
+                                          </XCUIElementTypeOther>
+                                        </XCUIElementTypeScrollView>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Estudio al aire libre" name="Estudio al aire libre" label="Estudio al aire libre" enabled="true" visible="false" accessible="true" x="16" y="3227" width="167" height="20" index="40" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="true" visible="false" accessible="true" x="362" y="3225" width="24" height="24" index="41" traits="Button"/>
+                                        <XCUIElementTypeScrollView type="XCUIElementTypeScrollView" enabled="true" visible="false" accessible="false" x="0" y="3265" width="402" height="121" index="42" traits="">
+                                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="3265" width="484" height="121" index="0" traits="">
+                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="16" y="3265" width="452" height="121" index="0" traits="">
+                                              <XCUIElementTypeButton type="XCUIElementTypeButton" name="Chicago" label="Chicago" enabled="true" visible="false" accessible="true" x="16" y="3265" width="144" height="121" index="0" traits="Button">
+                                                <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="16" y="3266" width="144" height="89" index="0" traits="Image"/>
+                                                <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Chicago" name="Chicago" label="Chicago" enabled="true" visible="false" accessible="false" x="16" y="3265" width="144" height="121" index="1" traits="StaticText"/>
+                                              </XCUIElementTypeButton>
+                                              <XCUIElementTypeButton type="XCUIElementTypeButton" name="Miami" label="Miami" enabled="true" visible="false" accessible="true" x="170" y="3265" width="144" height="121" index="1" traits="Button">
+                                                <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="170" y="3266" width="144" height="89" index="0" traits="Image"/>
+                                                <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Miami" name="Miami" label="Miami" enabled="true" visible="false" accessible="false" x="170" y="3265" width="144" height="121" index="1" traits="StaticText"/>
+                                              </XCUIElementTypeButton>
+                                              <XCUIElementTypeButton type="XCUIElementTypeButton" name="California" label="California" enabled="true" visible="false" accessible="true" x="324" y="3265" width="144" height="121" index="2" traits="Button">
+                                                <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="324" y="3266" width="144" height="89" index="0" traits="Image"/>
+                                                <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="California" name="California" label="California" enabled="true" visible="false" accessible="false" x="324" y="3265" width="144" height="121" index="1" traits="StaticText"/>
+                                              </XCUIElementTypeButton>
+                                            </XCUIElementTypeOther>
+                                          </XCUIElementTypeOther>
+                                        </XCUIElementTypeScrollView>
+                                        <XCUIElementTypeActivityIndicator type="XCUIElementTypeActivityIndicator" value="1" enabled="true" visible="false" accessible="true" x="191" y="3418" width="20" height="20" index="43" traits="UpdatesFrequently">
+                                          <XCUIElementTypeActivityIndicator type="XCUIElementTypeActivityIndicator" value="1" enabled="true" visible="false" accessible="false" x="191" y="3418" width="20" height="20" index="0" traits=""/>
+                                        </XCUIElementTypeActivityIndicator>
+                                        <XCUIElementTypeActivityIndicator type="XCUIElementTypeActivityIndicator" value="1" enabled="true" visible="false" accessible="true" x="191" y="3470" width="20" height="20" index="44" traits="UpdatesFrequently">
+                                          <XCUIElementTypeActivityIndicator type="XCUIElementTypeActivityIndicator" value="1" enabled="true" visible="false" accessible="false" x="191" y="3470" width="20" height="20" index="0" traits=""/>
+                                        </XCUIElementTypeActivityIndicator>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Find the right services" name="Find the right services" label="Find the right services" enabled="true" visible="false" accessible="true" x="16" y="3514" width="194" height="20" index="45" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="feedback_view.button.open" label="¿Cómo lo estamos haciendo?, Tus comentarios nos ayudan a mejorar de manera significativa." enabled="true" visible="false" accessible="true" x="32" y="3574" width="338" height="56" index="46" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="44" y="3589" width="24" height="26" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="¿Cómo lo estamos haciendo?" name="¿Cómo lo estamos haciendo?" label="¿Cómo lo estamos haciendo?" enabled="true" visible="false" accessible="false" x="96" y="3574" width="205" height="16" index="1" traits="StaticText"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Tus comentarios nos ayudan a mejorar de manera significativa." name="Tus comentarios nos ayudan a mejorar de manera significativa." label="Tus comentarios nos ayudan a mejorar de manera significativa." enabled="true" visible="false" accessible="false" x="96" y="3598" width="195" height="32" index="2" traits="StaticText"/>
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="346" y="3590" width="24" height="24" index="3" traits="Image"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="true" visible="false" accessible="true" x="201" y="3602" width="0" height="0" index="47" traits="Button"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="rate_foundation_view.button.open" enabled="true" visible="false" accessible="true" x="16" y="3670" width="370" height="66" index="48" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="32" y="3686" width="49" height="34" index="0" traits="Image"/>
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="false" x="346" y="3691" width="24" height="24" index="1" traits="Image"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Más de 8.2 millones otorgados" name="Más de 8.2 millones otorgados" label="Más de 8.2 millones otorgados" enabled="true" visible="false" accessible="true" x="32" y="3742" width="181" height="45" index="49" traits="StaticText"/>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Cada historia es personal. Cada &#10;subvención está personalizada." name="Cada historia es personal. Cada &#10;subvención está personalizada." label="Cada historia es personal. Cada &#10;subvención está personalizada." enabled="true" visible="false" accessible="true" x="32" y="3790" width="227" height="37" index="50" traits="StaticText"/>
+                                        <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="false" accessible="true" x="290" y="3750" width="80" height="69" index="51" traits="Image"/>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Más de 670" name="Más de 670" label="Más de 670" enabled="true" visible="false" accessible="true" x="32" y="3842" width="83" height="17" index="52" traits="StaticText"/>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="100 " name="100 " label="100 " enabled="true" visible="false" accessible="true" x="156" y="3842" width="30" height="17" index="53" traits="StaticText"/>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="13 años" name="13 años" label="13 años" enabled="true" visible="false" accessible="true" x="300" y="3842" width="53" height="17" index="54" traits="StaticText"/>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="familias recibieron ayuda" name="familias recibieron ayuda" label="familias recibieron ayuda" enabled="true" visible="false" accessible="true" x="32" y="3862" width="99" height="29" index="55" traits="StaticText"/>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="cada centavo de cada dólar va &#10;directamente a los beneficiarios." name="cada centavo de cada dólar va &#10;directamente a los beneficiarios." label="cada centavo de cada dólar va &#10;directamente a los beneficiarios." enabled="true" visible="false" accessible="true" x="156" y="3862" width="120" height="61" index="56" traits="StaticText"/>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Ayudando a las personas &#10;en crisis" name="Ayudando a las personas &#10;en crisis" label="Ayudando a las personas &#10;en crisis" enabled="true" visible="false" accessible="true" x="300" y="3862" width="70" height="45" index="57" traits="StaticText"/>
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="0" height="0" index="58" traits=""/>
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="0" height="0" index="59" traits=""/>
+                                      </XCUIElementTypeOther>
+                                    </XCUIElementTypeScrollView>
+                                  </XCUIElementTypeOther>
+                                </XCUIElementTypeOther>
+                              </XCUIElementTypeOther>
+                            </XCUIElementTypeOther>
+                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="2" traits="">
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits=""/>
+                            </XCUIElementTypeOther>
+                          </XCUIElementTypeOther>
+                        </XCUIElementTypeOther>
+                      </XCUIElementTypeOther>
+                    </XCUIElementTypeOther>
+                  </XCUIElementTypeOther>
+                </XCUIElementTypeOther>
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="791" width="402" height="83" index="1" traits="">
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                    <XCUIElementTypeTabBar type="XCUIElementTypeTabBar" name="Barra de pestañas" label="Barra de pestañas" enabled="true" visible="false" accessible="false" x="0" y="791" width="402" height="83" index="0" traits="">
+                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="21" y="791" width="360" height="62" index="0" traits="">
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="21" y="791" width="75" height="54" index="0" traits=""/>
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="21" y="791" width="360" height="62" index="1" traits="">
+                          <XCUIElementTypeButton type="XCUIElementTypeButton" value="1" name="bottom_navigation.button.home" label="Vivienda" enabled="true" visible="false" accessible="true" x="25" y="795" width="75" height="54" index="0" traits="Selected, Button">
+                            <XCUIElementTypeImage type="XCUIElementTypeImage" name="ic_home_selected" enabled="true" visible="false" accessible="false" x="50" y="803" width="24" height="24" index="0" traits="Image"/>
+                          </XCUIElementTypeButton>
+                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="bottom_navigation.button.accounts" label="Cuentas" enabled="true" visible="false" accessible="true" x="86" y="795" width="75" height="54" index="1" traits="Button">
+                            <XCUIElementTypeImage type="XCUIElementTypeImage" name="ic_loans" enabled="true" visible="false" accessible="false" x="111" y="803" width="25" height="24" index="0" traits="Image"/>
+                          </XCUIElementTypeButton>
+                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="bottom_navigation.button.tools" label="Herramientas" enabled="true" visible="false" accessible="true" x="146" y="795" width="100" height="54" index="2" traits="Button">
+                            <XCUIElementTypeImage type="XCUIElementTypeImage" name="ic_tools" enabled="true" visible="false" accessible="false" x="183" y="803" width="26" height="24" index="0" traits="Image"/>
+                          </XCUIElementTypeButton>
+                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="bottom_navigation.button.financial" label="Financiero" enabled="true" visible="false" accessible="true" x="232" y="795" width="84" height="54" index="3" traits="Button">
+                            <XCUIElementTypeImage type="XCUIElementTypeImage" name="ic_financial_wellness" enabled="true" visible="false" accessible="false" x="261" y="803" width="26" height="24" index="0" traits="Image"/>
+                          </XCUIElementTypeButton>
+                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="bottom_navigation.button.personal" label="Personal" enabled="true" visible="false" accessible="true" x="302" y="795" width="75" height="54" index="4" traits="Button">
+                            <XCUIElementTypeImage type="XCUIElementTypeImage" name="ic_personal_wellness" enabled="true" visible="false" accessible="false" x="327" y="803" width="25" height="24" index="0" traits="Image"/>
+                          </XCUIElementTypeButton>
+                        </XCUIElementTypeOther>
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="25" y="795" width="75" height="54" index="2" traits="">
+                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="25" y="795" width="75" height="54" index="0" traits="">
+                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="25" y="795" width="75" height="54" index="0" traits=""/>
+                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="25" y="795" width="75" height="54" index="1" traits="">
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="25" y="795" width="75" height="54" index="0" traits="">
+                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="25" y="795" width="75" height="54" index="0" traits="">
+                                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="25" y="795" width="75" height="54" index="0" traits=""/>
+                                </XCUIElementTypeOther>
+                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="25" y="795" width="75" height="54" index="1" traits=""/>
+                              </XCUIElementTypeOther>
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="25" y="795" width="75" height="54" index="1" traits=""/>
+                            </XCUIElementTypeOther>
+                          </XCUIElementTypeOther>
+                        </XCUIElementTypeOther>
+                      </XCUIElementTypeOther>
+                    </XCUIElementTypeTabBar>
+                  </XCUIElementTypeOther>
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="791" width="402" height="83" index="1" traits="">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="791" width="402" height="83" index="0" traits="">
+                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="791" width="402" height="83" index="0" traits="">
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="791" width="402" height="83" index="0" traits="">
+                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="791" width="402" height="83" index="0" traits="">
+                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="791" width="402" height="83" index="0" traits=""/>
+                          </XCUIElementTypeOther>
+                        </XCUIElementTypeOther>
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="791" width="402" height="83" index="1" traits="">
+                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="791" width="402" height="83" index="0" traits=""/>
+                        </XCUIElementTypeOther>
+                      </XCUIElementTypeOther>
+                    </XCUIElementTypeOther>
+                  </XCUIElementTypeOther>
+                </XCUIElementTypeOther>
+              </XCUIElementTypeOther>
+            </XCUIElementTypeOther>
+          </XCUIElementTypeOther>
+        </XCUIElementTypeOther>
+      </XCUIElementTypeOther>
+      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="402" height="874" index="1" traits="">
+        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+              <XCUIElementTypeNavigationBar type="XCUIElementTypeNavigationBar" name="_TtGC7SwiftUI32NavigationStackHosting" enabled="true" visible="true" accessible="false" x="0" y="62" width="402" height="54" index="0" traits="">
+                <XCUIElementTypeOther type="XCUIElementTypeOther" name="navigation_top.button.back" label="Volver" enabled="true" visible="true" accessible="false" x="20" y="66" width="73" height="36" index="0" traits="">
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="20" y="66" width="73" height="36" index="0" traits="">
+                    <XCUIElementTypeButton type="XCUIElementTypeButton" name="navigation_top.button.back" label="Volver" enabled="true" visible="true" accessible="true" x="20" y="66" width="73" height="36" index="0" traits="Button">
+                      <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="true" accessible="false" x="17" y="72" width="25" height="24" index="0" traits="Image"/>
+                      <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Volver" name="Volver" label="Volver" enabled="true" visible="true" accessible="false" x="41" y="76" width="46" height="16" index="1" traits="StaticText"/>
+                    </XCUIElementTypeButton>
+                  </XCUIElementTypeOther>
+                </XCUIElementTypeOther>
+              </XCUIElementTypeNavigationBar>
+              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="402" height="874" index="1" traits="">
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+                      <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Preferencia de idioma" name="Preferencia de idioma" label="Preferencia de idioma" enabled="true" visible="true" accessible="true" x="16" y="116" width="313" height="32" index="0" traits="StaticText"/>
+                      <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="La traducción al español de esta aplicación es para comodidad de nuestros clientes; sin embargo, no todas las páginas están traducidas. En caso de discrepancias entre el contenido de la página traducida y el contenido de la misma página en inglés, prevalecerá la versión en inglés." name="La traducción al español de esta aplicación es para comodidad de nuestros clientes; sin embargo, no todas las páginas están traducidas. En caso de discrepancias entre el contenido de la página traducida y el contenido de la misma página en inglés, prevalecerá la versión en inglés." label="La traducción al español de esta aplicación es para comodidad de nuestros clientes; sin embargo, no todas las páginas están traducidas. En caso de discrepancias entre el contenido de la página traducida y el contenido de la misma página en inglés, prevalecerá la versión en inglés." enabled="true" visible="true" accessible="true" x="16" y="164" width="365" height="116" index="1" traits="StaticText"/>
+                      <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Preferencia de idioma" name="Preferencia de idioma" label="Preferencia de idioma" enabled="true" visible="true" accessible="true" x="16" y="320" width="156" height="17" index="2" traits="StaticText"/>
+                      <XCUIElementTypeSwitch type="XCUIElementTypeSwitch" value="1" name="Español" label="Español" enabled="true" visible="true" accessible="true" x="270" y="310" width="116" height="37" index="3" traits="ToggleButton, Button">
+                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" enabled="true" visible="false" accessible="false" x="0" y="0" width="0" height="0" index="0" traits="StaticText"/>
+                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Español" name="Español" label="Español" enabled="true" visible="true" accessible="false" x="283" y="320" width="58" height="17" index="1" traits="StaticText"/>
+                      </XCUIElementTypeSwitch>
+                    </XCUIElementTypeOther>
+                  </XCUIElementTypeOther>
+                </XCUIElementTypeOther>
+              </XCUIElementTypeOther>
+              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="2" traits="">
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits=""/>
+              </XCUIElementTypeOther>
+            </XCUIElementTypeOther>
+          </XCUIElementTypeOther>
+        </XCUIElementTypeOther>
+      </XCUIElementTypeOther>
+    </XCUIElementTypeWindow>
+    <XCUIElementTypeWindow type="XCUIElementTypeWindow" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="1" traits="">
+      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits="">
+        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="402" height="874" index="0" traits=""/>
+      </XCUIElementTypeOther>
+    </XCUIElementTypeWindow>
+  </XCUIElementTypeApplication>
+</AppiumAUT>

@@ -24,6 +24,21 @@ export abstract class BasePage {
   protected async waitForVisible(selector: string | any, timeout = 15000) {
     const element: any = typeof selector === 'string' ? $(selector) : selector;
 
+    if (typeof selector === 'string' && selector.startsWith('android=new UiSelector()')) {
+      const source = await browser.getPageSource().catch(() => '');
+      const loginPageVisible = /Create account|Log in|Iniciar sesi.n|Crear cuenta/.test(source)
+        && /class="android.widget.EditText"/.test(source);
+      if (loginPageVisible) {
+        const direct = $(selector);
+        const directDisplayed = await direct.isDisplayed().catch(() => false);
+        if (directDisplayed) return direct;
+        const index = selector.includes('instance(1)') ? 1 : 0;
+        const editFields = await browser.$$('//android.widget.EditText');
+        const fieldCount = await editFields.length;
+        if (fieldCount > index && await editFields[index].isDisplayed().catch(() => false)) return editFields[index];
+      }
+    }
+
     try {
       await element.waitForDisplayed({ timeout: 5000 });
       return element;

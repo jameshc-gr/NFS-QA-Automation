@@ -165,3 +165,84 @@ Each row below is backed by a test in `tests/projects/rate-wealth/`. "Known-defe
 3. Wealth Score reaches 803 for a user with income only and no expenses or assets; is that intended?
 4. The Settings address of jc001 reads "Norcross, GA 90210"; is ZIP/state consistency validated anywhere?
 5. Okta asks `my-rw-jc003` for an MFA method when the browser uses Playwright's Desktop Chrome profile but not a default headless profile. Can the QA accounts get an Okta policy exemption so the onboarding suite can run unattended? Until then a human completes MFA (`RW_MFA_MANUAL=1 ... --headed`, or `npm run setup:rate-wealth-session`).
+
+---
+
+## 2026-10-26 Resumed Regression Run
+
+### Execution evidence
+
+- Regression command used `TEST_PROJECT=rate-wealth npx playwright test` for `rw-01` through `rw-06`, with `--project=rate-wealth --workers=1`.
+- Full run summary: **12 passed, 13 failed, 143 skipped (168 total)**. Twelve failures stopped at login because neither `TEST_PASSWORD` nor the encrypted `test-data/rate-wealth/rate-wealth-auth.yml` was available. The remaining failure was the registration-copy assertion below. The other five authenticated spec fixtures could not initialize, so their cases were not exercised; the skipped count is not a pass.
+- Focused public-registration rerun: **5 passed, 1 failed (6 total)**. `RW-REG-006` again found the misspelling **"discrepency"** on the registration page. This reproduces **RW-BUG-08** on 2026-10-26.
+- No signup, checkout, account creation, or plan mutation was performed by these runs. The goal and plan specs stopped at login, before their setup/cleanup could touch the planner account.
+- Artifacts: `test-results/2026-10-26/rate-wealth/playwright-summary-1793043408580.md` and `test-results/2026-10-26/rate-wealth/playwright-summary-1793043465184.md`.
+
+### CSV scenario disposition
+
+The regression CSV contains **40** scenario rows. These dispositions describe the 2026-10-26 run only; earlier dated results above remain historical evidence and are not being presented as a fresh pass.
+
+| Current disposition | CSV scenario IDs |
+| :--- | :--- |
+| Passed in this run | `RW-AUTH-001`, `RW-REG-001` |
+| Blocked by unavailable authenticated QA credentials | `RW-AUTH-002` through `RW-AUTH-004`; `RW-NAV-001` through `RW-NAV-003`; `RW-DASH-001` through `RW-DASH-002`; `RW-SNAP-001`; `RW-ACCT-001`; `RW-TX-001`; `RW-BUD-001`; `RW-RISK-001`; `RW-TOOLS-001`; `RW-ONB-001` through `RW-ONB-005`; `RW-PLAN-001` through `RW-PLAN-006`; `RW-GOAL-001` through `RW-GOAL-003`; `RW-API-001`; `RW-A11Y-001`; `RW-CALC-001` |
+| Not fully covered by current automated assertions; requires additional UI-focused tests/manual execution | `RW-UI-001` through `RW-UI-007` |
+
+The reproduced `RW-REG-006` typo check is additional to the 40 CSV scenario IDs. Previously recorded defects and product questions are retained; this run does not reconfirm any authenticated finding because those fixtures could not log in.
+
+## 2026-10-26 Signup Retry and Failure Rerun
+
+- Restarted at the public registration page and reused the pending synthetic address `rwqa.copilot.20261026194600@yopmail.com`; no login attempt or duplicate address was used.
+- Registration accepted the activation resend and displayed “We've sent an email with an activation link.” The Yopmail inbox still showed `0 mail` after a normal refresh, so the account remains unactivated. This is an account-setup blocker, not a product failure.
+- Reran the public registration suite with `--grep @registration`: **6 passed, 0 failed, 0 skipped**. The summary is at `test-results/2026-10-26/rate-wealth/playwright-summary-1793046905087.md`.
+- Isolated `RW-REG-006` with Playwright's detailed reporter. Its spelling assertion still detects `discrepency`; `test.fail(true, ...)` correctly classifies this known defect as an expected failure, so Playwright reports the case as passed rather than an unexpected test failure.
+- The login-dependent failures were not rerun because activation mail was not delivered and no usable password/session could be established. They remain setup-blocked and are not counted as product failures.
+
+## 2026-10-26 Planner Edit, Delete/Recreate, and Plaid Rerun
+
+- `RW-PLAN-018` passed on dedicated planner account `jc002`: the simulation loader completed and rendered the populated preview.
+- `RW-PLAN-020` passed the distinct Buying-a-Home scenario (purchase price `$450,000`, down payment `$90,000`) through Goal Ranking, Review Plan, and Implement Plan. The Home `Progress Towards Your Top Goal` card rendered a circular SVG progress chart at `7%`, with `$7,000/$90,000` shown for the down-payment goal; screenshot: `test-results/rw-plan-020-home-goal-card.png`. The current profile skips four investment/account substeps. Three full end-to-end repeats passed without a blank screen; this does not rule out an intermittent failure.
+- `RW-PLAN-021` reproduced a saved-edit defect: after changing the home purchase price from `$450,000` to `$475,000`, selecting Next Step and Save and Exit, reopening the plan showed `$450,000` again. The test is marked `test.fail` as known defect **RW-BUG-12**. Down-payment persistence was changed in the same attempt but was not independently confirmed after the price assertion failed.
+- `RW-PLAN-022` passed: after deleting a plan containing a Buying-a-Home goal, a newly created plan did not contain that goal. This narrows the observed stale-value issue to editing the existing plan; it does not disprove stale state in other delete/edit sequences.
+- `RW-ACCT-005` could not reach Plaid credentials or institution selection. Rate Wealth opened the owner picker, then Plaid Link loaded with an empty `token=` parameter; no application link-token request was issued. The `user_good` / `pass_good` sandbox credentials were therefore not entered and Platypus was not linked. The test records **RW-BUG-13** as an expected failure. Separate `/api/profile/calendar.php` (500) and `/api/invest/portfolio.php` (404) requests appeared during page load and were not the missing Plaid token request.
+- No MFA prompt appeared in these planner runs. Test source: `tests/projects/rate-wealth/rw-05-plan-builder.spec.ts` and `tests/projects/rate-wealth/rw-07-plaid-account.spec.ts`.
+
+## 2026-10-26 Full Regression Delivery
+
+### Saved automation and rerun commands
+
+- Registration copy: `tests/projects/rate-wealth/rw-01-auth-registration.spec.ts` (`RW-REG-006`).
+- Plan creation, preview, edit persistence, and delete/recreate: `tests/projects/rate-wealth/rw-05-plan-builder.spec.ts` (`RW-PLAN-018`, `RW-PLAN-020` through `RW-PLAN-022`).
+- Plaid Link: `tests/projects/rate-wealth/rw-07-plaid-account.spec.ts` (`RW-ACCT-005`). Shared authentication, navigation, and HTTP tracking are in `tests/projects/rate-wealth/rw-helpers.ts`.
+- Detailed case steps and dispositions: `test-data/rate-wealth/rate-wealth-regression-test-plan-2026-10-26.csv`.
+- The commands below intentionally omit the password. Set `TEST_PASSWORD` in the local environment or use the encrypted auth file; do not copy credentials into reports.
+
+```bash
+TEST_PROJECT=rate-wealth npx playwright test tests/projects/rate-wealth/rw-01-auth-registration.spec.ts --project=rate-wealth --workers=1 --headed --grep @registration --reporter=list
+TEST_PROJECT=rate-wealth RW_PLAN_EMAIL=my-rw-jc002@yopmail.com npx playwright test tests/projects/rate-wealth/rw-05-plan-builder.spec.ts --project=rate-wealth --workers=1 --headed --grep RW-PLAN-018 --reporter=list
+TEST_PROJECT=rate-wealth RW_PLAN_EMAIL=my-rw-jc002@yopmail.com npx playwright test tests/projects/rate-wealth/rw-05-plan-builder.spec.ts --project=rate-wealth --workers=1 --headed --grep RW-PLAN-020 --repeat-each=3 --reporter=list
+TEST_PROJECT=rate-wealth RW_PLAN_EMAIL=my-rw-jc002@yopmail.com npx playwright test tests/projects/rate-wealth/rw-05-plan-builder.spec.ts --project=rate-wealth --workers=1 --headed --grep RW-PLAN-021 --reporter=list
+TEST_PROJECT=rate-wealth RW_PLAN_EMAIL=my-rw-jc002@yopmail.com npx playwright test tests/projects/rate-wealth/rw-05-plan-builder.spec.ts --project=rate-wealth --workers=1 --headed --grep RW-PLAN-022 --reporter=list
+TEST_PROJECT=rate-wealth RW_PLAN_EMAIL=my-rw-jc002@yopmail.com npx playwright test tests/projects/rate-wealth/rw-07-plaid-account.spec.ts --project=rate-wealth --workers=1 --headed --grep RW-ACCT-005 --reporter=list
+```
+
+### Account inventory for this run
+
+| Account | Use/status |
+| :--- | :--- |
+| `my-rw-jc002@yopmail.com` | Existing dedicated planner account; reused for planner cases. The planner suite clears its plans before/after cases because the app caps the account at three plans. No new login account was created. |
+| `rwqa.copilot.20261026194600@yopmail.com` | Synthetic signup address used for a registration retry; resend confirmation appeared but the mailbox remained empty. Treat as pending/unactivated, not a usable created account. |
+| `my-rw-jc001@yopmail.com` | Existing complete-profile account; not used in this run. |
+| `my-rw-jc003@yopmail.com` | Existing onboarding account; not used in this run. |
+
+No account was created or linked through Plaid during this run. The sandbox credentials were not entered because Plaid Link had no token. No passwords are included in this report.
+
+### Bug report disposition
+
+| ID | Finding | Evidence/status |
+| :--- | :--- | :--- |
+| RW-BUG-08 | Registration translation notice spells “discrepency” incorrectly. | Reproduced by `RW-REG-006`; test remains marked expected failure. |
+| RW-BUG-12 | Editing the existing Buying-a-Home goal does not persist its purchase price. | `$475,000` reverted to `$450,000` after Save and Exit and reopening; reproduced by `RW-PLAN-021`. Down-payment persistence was not independently verified. |
+| RW-BUG-13 | Plaid Link initializes with an empty token and the app makes no link-token request. | Reproduced by `RW-ACCT-005`; credentials and Platypus selection were not reached. This is an app integration blocker, not a sandbox credential failure. |
+
+The fresh-plan isolation check `RW-PLAN-022` passed: the replacement plan did not restore the deleted Buying-a-Home goal. This does not prove that stale values are cleared in every edit/delete sequence. The complete plan flow displayed the Home goal chart in three repeat runs and subsequent focused runs; the reported intermittent blank screen was not observed, but is not ruled out. The activation-mail delay is a setup blocker, not a product bug. Severity for the newly reported defects remains for product triage.

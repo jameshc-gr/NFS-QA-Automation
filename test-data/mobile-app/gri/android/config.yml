@@ -59,7 +59,7 @@ android:
       source: local
       environment: qa
       appPackage: com.guaranteedrate.superapp.qa
-      appPath: test-data/mobile-app/gri/android/1.43/qa/app.apk
+      appPath: test-data/mobile-app/gri/android/1.54/qa/qa-latest.apk
     stage-local:
       source: local
       environment: stage

@@ -1,0 +1,10 @@
+Manifest-accepted captures: 34
+Consolidated unique screen/element mappings: 349
+High-priority exact English phrase gaps for review: 2
+Low-confidence retained-token candidates for review: 11
+Reviewed Spanish platform discrepancy rows: 5
+Three unique wording inconsistencies (Home Search repeats on Home and Financial) plus one iOS untranslated title. Unmatched component candidates are isolated in platform-comparison-unmatched.csv, not asserted as defects.
+The platform-discrepancy CSV is Spanish-only and uses NOT COMPARABLE when either platform lacks verified Spanish evidence.
+Repeated identical UI strings are consolidated per screen and include occurrence counts and all observed element paths. Translation candidates require human review; semantic translation adequacy is not machine-asserted.
+Exact retained English is reported only when the Spanish language state and destination are verified. Spanish-only elements remain explicit unmapped rows.
+Historical filename-only captures are excluded unless referenced by a QA capture manifest with an identity checkpoint.

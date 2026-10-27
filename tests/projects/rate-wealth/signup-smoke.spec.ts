@@ -6,8 +6,7 @@ test.describe('GR Dev Signup Smoke @smoke', () => {
     await expect(page).toHaveTitle(/GR Companies|Sign/);
 
     // Check visible headings and form inputs
-    const h1 = page.locator('h1');
-    await expect(h1.first()).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Welcome', level: 2 })).toBeVisible();
 
     const username = page.locator('input[name="identifier"], input[name="username"], input[name="email"], input[id*="user"], input[type="text"]');
     await expect(username.first()).toBeVisible();

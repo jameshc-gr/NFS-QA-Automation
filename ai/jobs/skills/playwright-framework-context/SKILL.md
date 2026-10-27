@@ -34,6 +34,11 @@ Current Framework Notes
 - Profile values are loaded through `tests/projects/student-loan-refi/test-setup.ts` from suffix-based env vars such as `FIRST_NAME_LK1`.
 - Specialized profiles use uppercase enum-style values for dropdowns where possible.
 - Narrow test runs are preferred before broad suite runs.
+- Start continuation tasks from `test-data/README.md` for the October 2026
+  reusable-input inventory and focused commands. Do not use prior test results
+  as current coverage. One-off exploration/capture/probe specs, media report
+  builders, backlog controllers, and hard-coded issue migrations were retired
+  on 2026-10-27; their historical commands are no longer supported.
 - Team PM owns delivery and delegates the Playwright test workstream to the
   existing Playwright Test Orchestrator, which routes planning, generation, and
   reproduced test failures to the existing specialists. All team roles follow
@@ -73,6 +78,22 @@ Current Framework Notes
   supplies `ios.builds`.
 - Mobile specs run under WebdriverIO, not Playwright: `npx wdio run
   mobile/wdio.conf.ts` with `MOBILE_SPECS` paths relative to `mobile/`.
+- Inventory/reuse existing devices before launching mobile tests. Keep at most
+  one test-owned simulator per platform. Simulator capabilities accept
+  `MOBILE_IOS_DEVICE_UDID`. Stop owned Android AVDs when
+  finished, but never stop someone else's active device.
+- At the start and end of every exploratory phase, match booted simulator and
+  emulator hubs to running test workers. Shut down inactive test-owned hubs
+  promptly, including on failure and before reporting, while preserving any
+  active run or device owned by another tester.
+- iOS WDIO preflight hard-caps at 10 booted simulators (environment overrides
+  cannot raise it), requires an explicit `MOBILE_IOS_DEVICE_UDID`, and refuses an
+  unbooted requested UDID (prevents Appium auto-selection/creation).
+  Retired `MOBILE_MEDIA_BATCH` / `MOBILE_MEDIA_BACKLOG_CHILD` invocations fail
+  explicitly rather than falling through to default regression selection.
+- Dated mobile reference snapshots remain historical baselines, not current-build
+  coverage. Their old crawler/report commands are retired. Preserve machine-readable
+  fixtures, account registries, counters, build metadata, and October evidence.
 
 Output Contract
 - Return a short framework snapshot with:
@@ -101,6 +122,11 @@ Recent changes (2026-09-30)
 - Loan Lab exposes the 20 automated CSV loan cases (14 complete plus 6 resume/relogin) and separately the 20 tenant/environment read-only entry targets. Do not add duplicate case scripts for these; `ENTRY-01` remains an attribution-only check, not a loan creation option.
 
 Recent changes (2026-07-29)
+- iOS QA localization capture: language changes require a process restart. Use
+  `mobile: launchApp` with `arguments: ['-AppleLanguages', '(es)']` or `(en)`;
+  verify rendered localized labels and selected tabs before recording evidence.
+  Capture/dismiss the system Save Password sheet and Tools goals dialog before
+  root screenshots. A switch accessibility value alone is not language proof.
 - Mobile build selection is config-driven on both platforms, with versioned,
   per-environment artifacts and `build-info.json` provenance.
 - Added Firebase App Distribution downloads for Android, over the REST API and

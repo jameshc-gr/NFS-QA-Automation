@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { mkdirSync, writeFileSync } from 'node:fs';
 
@@ -71,14 +72,27 @@ export class AuthPage extends BasePage {
   // Post-login app-store-style rating prompt ("Are you enjoying Rate app?"),
   // seen blocking the home-screen check on both platforms.
   private readonly ratingSurveyPrompt = this.platform === 'ios'
-    ? '//XCUIElementTypeStaticText[contains(@name, "enjoying")]'
-    : `//android.widget.TextView[contains(@text, "enjoying")]`;
+    ? '//XCUIElementTypeStaticText[contains(@name, "enjoying") or contains(@name, "disfrutando")]'
+    : `//android.widget.TextView[contains(@text, "Are you enjoying Rate app?") or contains(@text, "disfrutando de la aplicación Rate") or contains(@text, "¿Estás disfrutando")]`;
   private readonly ratingSurveyDismissCandidates = this.platform === 'ios'
     ? ['~No', '//XCUIElementTypeButton[@name="No" or @label="No"]']
-    : [`//android.widget.TextView[@text="No"]`, `//*[contains(@text, "No") and @clickable="true"]`];
+    : [
+        '//android.view.View[@clickable="true" and .//android.widget.TextView[@text="No"]]',
+        '//android.view.View[@clickable="true" and .//android.widget.TextView[@text="No"]]/android.widget.TextView[@text="No"]',
+        '//android.widget.TextView[@text="No"]',
+        '//*[contains(@text, "No") and @clickable="true"]',
+      ];
+  private readonly rememberMeCandidates = this.platform === 'ios'
+    ? ['//XCUIElementTypeButton[@name="log_in.button.remember_me"]']
+    : ['//*[@resource-id="com.guaranteedrate.superapp.qa:id/log_in.button.remember_me"]', '//*[@text="Remember me"]/preceding-sibling::*[1]'];
   private readonly homeIndicatorCandidates = this.platform === 'ios'
     ? ['~bottom_navigation.button.home']
-    : ['//*[contains(@content-desc, "bottom_navigation.button.home")]', this.byText('Home')];
+    : [
+        '//*[contains(@content-desc, "bottom_navigation.button.home")]',
+        this.byText('Home'),
+        this.byText('Vivienda'),
+        this.byText('Inicio'),
+      ];
   private readonly profileIconCandidates = this.platform === 'ios'
     ? [
         '~ic_contact_person',
@@ -187,15 +201,72 @@ export class AuthPage extends BasePage {
     await mustPassStep({
       name: 'Wait for auth screen',
       action: async () => {
+        const expectedPackage = this.platform === 'android'
+          ? process.env.MOBILE_APP_PACKAGE || 'com.guaranteedrate.superapp.qa'
+          : process.env.MOBILE_IOS_BUNDLE_ID || 'com.guaranteedrate.superapp.qa';
+        const currentPackage = await browser.getCurrentPackage().catch(() => '');
+        if (this.platform === 'android' && currentPackage !== expectedPackage) {
+          const device = process.env.MOBILE_ANDROID_DEVICE_UDID;
+          if (!device) throw new Error('Pinned Android QA device UDID is required to recover the Rate app foreground.');
+          const adb = path.join(process.env.HOME || '', 'Library/Android/sdk/platform-tools/adb');
+          const activity = process.env.MOBILE_APP_ACTIVITY || 'com.guaranteedrate.superapp.MainActivity';
+          execFileSync(adb, ['-s', device, 'shell', 'am', 'start', '-W', '-n', `${expectedPackage}/${activity}`], { stdio: 'ignore' });
+          await browser.waitUntil(async () => (await browser.getCurrentPackage().catch(() => '')) === expectedPackage, { timeout: 15000, interval: 300 });
+        }
         const deadline = Date.now() + timeoutMs;
         while (Date.now() < deadline) {
-          try {
-            if (await $(loginTabSelector).isDisplayed() && await $(createAccountTabSelector).isDisplayed()) {
-              return;
-            }
-          } catch {
-            // not ready yet
+          const currentPackage = this.platform === 'android' ? await browser.getCurrentPackage().catch(() => '') : '';
+          if (this.platform === 'android' && currentPackage === expectedPackage) {
+            const source = await browser.getPageSource().catch(() => '');
+            const inputCount = (source.match(/class="android\.widget\.EditText"/g) || []).length;
+            if (inputCount >= 2 && /text="Log in"/.test(source) && /text="Create account"/.test(source)) return;
           }
+          // A fresh install can expose the login controls underneath the
+          // onboarding modal in XCUITest; dismiss the exact splash first.
+          const splashContinue = this.platform === 'ios'
+            ? [
+                '~Continue',
+                '~Let\'s Go',
+                '//XCUIElementTypeButton[@name="Continue" or @label="Continue" or @name="Let\'s Go" or @label="Let\'s Go"]',
+              ]
+             : [
+                 '//*[@text="Continue" and @clickable="true"]',
+                 '//*[@text="Let\'s Go" and @clickable="true"]',
+                 '//*[@text="Continue"]/parent::*[@clickable="true"]',
+                 '//*[@text="Let\'s Go"]/parent::*[@clickable="true"]',
+                 '//*[@content-desc="Continue" or @content-desc="Let\'s Go"]',
+               ];
+          let splashDismissed = false;
+          for (const selector of splashContinue) {
+            const element = $(selector);
+            if (await element.isDisplayed().catch(() => false)) {
+              await element.click();
+              splashDismissed = true;
+              await browser.pause(600);
+              break;
+            }
+          }
+           if (splashDismissed) continue;
+
+           const source = await browser.getPageSource().catch(() => '');
+           if (this.platform === 'android' && /text="Let.s Go"/.test(source)) {
+             await browser.execute('mobile: clickGesture', { x: 540, y: 2195 });
+             await browser.pause(600);
+             continue;
+           }
+           if (/Let.s Go/.test(source) && /Create account|Log in/.test(source)) {
+            await new Promise((resolve) => setTimeout(resolve, 200));
+            continue;
+          }
+
+          const loginCandidates = typeof loginTabSelector === 'string' ? [loginTabSelector] : loginTabSelector;
+          const createCandidates = typeof createAccountTabSelector === 'string' ? [createAccountTabSelector] : createAccountTabSelector;
+          const loginVisible = await this.isDisplayedSelector(loginCandidates)
+            || await this.isDisplayedSelector(['//*[contains(@text, "Iniciar sesión") or contains(@label, "Iniciar sesión")]']);
+          const createVisible = await this.isDisplayedSelector(createCandidates)
+            || await this.isDisplayedSelector(['//*[contains(@text, "Crear cuenta") or contains(@label, "Crear cuenta")]']);
+          if (loginVisible && createVisible) return;
+
           if (await this.isDisplayed(...this.backButtonCandidates)) {
             await this.tapAny(this.backButtonCandidates).catch(() => {});
             await browser.pause(1000);
@@ -205,8 +276,13 @@ export class AuthPage extends BasePage {
         throw new Error('Auth screen tabs were not visible before timeout');
       },
       expectedState: async () => {
-        return (await $(loginTabSelector).isDisplayed().catch(() => false))
-          && (await $(createAccountTabSelector).isDisplayed().catch(() => false));
+        const loginCandidates = typeof loginTabSelector === 'string' ? [loginTabSelector] : loginTabSelector;
+        const createCandidates = typeof createAccountTabSelector === 'string' ? [createAccountTabSelector] : createAccountTabSelector;
+        const loginVisible = await this.isDisplayedSelector(loginCandidates)
+          || await this.isDisplayedSelector(['//*[contains(@text, "Iniciar sesión") or contains(@label, "Iniciar sesión")]']);
+        const createVisible = await this.isDisplayedSelector(createCandidates)
+          || await this.isDisplayedSelector(['//*[contains(@text, "Crear cuenta") or contains(@label, "Crear cuenta")]']);
+        return loginVisible && createVisible;
       },
       timeoutMs,
     });
@@ -215,16 +291,84 @@ export class AuthPage extends BasePage {
   async openLogin(): Promise<void> {
     await mustPassStep({
       name: 'Open login tab',
-      action: async () => this.tap(this.selectors.loginTab),
-      expectedState: async () => $(this.selectors.loginTab).isSelected?.().catch(() => true) ?? true,
+      action: async () => {
+        if (this.platform === 'android') {
+          const expectedPackage = process.env.MOBILE_APP_PACKAGE || 'com.guaranteedrate.superapp.qa';
+          const currentPackage = await browser.getCurrentPackage().catch(() => '');
+          if (currentPackage !== expectedPackage) {
+            throw new Error(`Safety stop: refusing to select Login outside QA package ${expectedPackage}; foreground is ${currentPackage || 'unknown'}.`);
+          }
+        }
+        const loginCandidates = typeof this.selectors.loginTab === 'string' ? [this.selectors.loginTab] : this.selectors.loginTab;
+        if (this.platform === 'android') {
+          const source = await browser.getPageSource().catch(() => '');
+          if (/class="android\.widget\.EditText"[\s\S]*class="android\.widget\.EditText"/.test(source)
+            && /text="Log in"/.test(source) && /text="Create account"/.test(source)) return;
+        }
+        const loginTabVisible = await this.isDisplayedSelector(loginCandidates)
+          || await this.isDisplayedSelector(['//*[contains(@text, "Iniciar sesión") or contains(@label, "Iniciar sesión")]']);
+        if (!loginTabVisible) throw new Error('Login tab is not visible on auth screen.');
+        if (this.platform === 'ios') await this.ensureRememberMeDisabled();
+        // The Create account tab also renders email/password fields, so field
+        // visibility alone cannot prove the login tab is selected.
+        if (this.platform === 'ios') {
+          await this.tapAnySelector(loginCandidates);
+        } else {
+          const source = await browser.getPageSource().catch(() => '');
+          const loginLabel = /Iniciar sesión/.test(source) ? 'Iniciar sesión' : 'Log in';
+      const selectedTab = $(`//android.view.View[@selected="true" and .//android.widget.TextView[@text=${JSON.stringify(loginLabel)}]]`);
+          if (!(await selectedTab.isDisplayed().catch(() => false))) {
+            const tabContainer = $(`//android.view.View[@clickable="true" and .//android.widget.TextView[@text=${JSON.stringify(loginLabel)}]]`);
+            if (await tabContainer.isDisplayed().catch(() => false)) {
+              await tabContainer.click();
+            } else {
+              const tabText = await this.findFirstDisplayedSelector(loginCandidates);
+              const location = await $(tabText).getLocation();
+              const size = await $(tabText).getSize();
+              await browser.execute('mobile: clickGesture', {
+                x: Math.round(location.x + size.width / 2),
+                y: Math.round(location.y + size.height / 2),
+              });
+            }
+          }
+        }
+      },
+      expectedState: async () => {
+        const emailCandidates = [...this.selectors.emailInput, '//*[contains(@text, "Correo electrónico") or contains(@label, "Correo electrónico")]'];
+        const passwordCandidates = [...this.selectors.passwordInput, '//*[contains(@text, "Contraseña") or contains(@label, "Contraseña")]'];
+        const pageSource = await browser.getPageSource().catch(() => '');
+        const composeFieldsVisible = /class="android\.widget\.EditText"[\s\S]*class="android\.widget\.EditText"/.test(pageSource)
+          && /text="Log in"/.test(pageSource) && /text="Create account"/.test(pageSource)
+          && !/Confirm password|Confirm email|Create your account/i.test(pageSource);
+        const emailVisible = composeFieldsVisible || await this.isDisplayedSelector(emailCandidates);
+        const passwordVisible = composeFieldsVisible || await this.isDisplayedSelector(passwordCandidates);
+        if (!emailVisible || !passwordVisible) return false;
+        if (this.platform === 'ios') {
+          return /log_in.button.log_in/.test(pageSource) || /XCUIElementTypeButton[^>]*(?:label|name)="(?:Log in|Iniciar sesión)"[^>]*selected="true"/.test(pageSource);
+        }
+        // Check the selected tab's container and child label; the auth form
+        // itself is present for both Login and Create account.
+        const hasCreateAccountInputs = /Confirm password|Re-enter password|Vuelve a escribir|Confirmar contraseña|Confirm email|Re-enter email/i.test(pageSource);
+        const selectedLogin = await $(`//android.view.View[@selected="true" and (.//android.widget.TextView[@text="Log in"] or .//android.widget.TextView[@text="Iniciar sesión"])]`).isDisplayed().catch(() => false);
+        const composeLoginTabs = /class="android\.widget\.EditText"[\s\S]*class="android\.widget\.EditText"/.test(pageSource)
+          && /text="Log in"/.test(pageSource) && /text="Create account"/.test(pageSource);
+        return (selectedLogin || composeLoginTabs || /log_in.button.log_in/.test(pageSource)) && !hasCreateAccountInputs;
+      },
     });
+  }
+
+  private async ensureRememberMeDisabled(): Promise<void> {
+    const checkbox = $(this.rememberMeCandidates[0]);
+    if (!(await checkbox.isDisplayed().catch(() => false))) return;
+    const value = await checkbox.getAttribute('value').catch(() => '');
+    if (value === '1' || value === 'true') await checkbox.click();
   }
 
   async openCreateAccount(): Promise<void> {
     await mustPassStep({
       name: 'Open create account tab',
-      action: async () => this.tap(this.selectors.createAccountTab),
-      expectedState: async () => $(this.selectors.createAccountTab).isSelected?.().catch(() => true) ?? true,
+      action: async () => this.tapAnySelector(this.selectors.createAccountTab),
+      expectedState: async () => this.isDisplayedSelector(this.selectors.createAccountTab),
     });
   }
 
@@ -259,7 +403,7 @@ export class AuthPage extends BasePage {
       );
     }
     if (outcome === 'timeout') {
-      await this.dumpScreenIfCandidatesMissing([this.selectors.emailVerificationPrompt], 'reset-email-verification-code-input');
+      await this.dumpScreenIfCandidatesMissing(this.selectors.emailVerificationPrompt, 'reset-email-verification-code-input');
       throw new Error('Expected to reach the reset email verification code screen but it never appeared.');
     }
   }
@@ -284,7 +428,7 @@ export class AuthPage extends BasePage {
       );
     }
     if (outcome === 'timeout') {
-      await this.dumpScreenIfCandidatesMissing([this.selectors.smsVerificationPrompt], 'reset-sms-verification-code-input');
+      await this.dumpScreenIfCandidatesMissing(this.selectors.smsVerificationPrompt, 'reset-sms-verification-code-input');
       throw new Error('Expected to reach the reset SMS verification code screen but it never appeared.');
     }
   }
@@ -493,8 +637,29 @@ export class AuthPage extends BasePage {
   }
 
   async login(email: string, password: string): Promise<void> {
-    await this.typeAny(this.selectors.emailInput, email);
-    await this.typeAny(this.selectors.passwordInput, password);
+    const emailCandidates = [...this.selectors.emailInput, '//android.widget.EditText[.//android.widget.TextView[@text="Correo electrónico"]]', '//XCUIElementTypeTextField[@name="Correo electrónico" or @label="Correo electrónico"]'];
+    const passwordCandidates = [...this.selectors.passwordInput, '//android.widget.EditText[.//android.widget.TextView[@text="Contraseña"]]', '//XCUIElementTypeSecureTextField[@name="Contraseña" or @label="Contraseña"]'];
+    if (this.platform === 'android') {
+      const source = await browser.getPageSource().catch(() => '');
+      if (!/Create account|Log in|Iniciar sesi.n|Crear cuenta/.test(source)) {
+        throw new Error('Login fields are not on screen; refusing to type because the Android auth page was not confirmed.');
+      }
+      const fields = await $$('//android.widget.EditText');
+      const fieldCount = await fields.length;
+      const composeLoginForm = fieldCount >= 2 && /text="Log in"/.test(source) && /text="Create account"/.test(source);
+      if (composeLoginForm && /Confirm password|Confirm email|Create your account/i.test(source)) {
+        throw new Error('Create account form is selected; refusing to enter QA login credentials.');
+      }
+      if (fieldCount < 2 || !(await fields[0].isDisplayed().catch(() => false)) || !(await fields[1].isDisplayed().catch(() => false))) {
+        writeFileSync(path.resolve(process.cwd(), 'test-results/rate-localization/android-login-fields-missing.xml'), source);
+        throw new Error(`Android auth page is visible but expected two EditText fields; found ${fieldCount}.`);
+      }
+      await this.type(fields[0], email);
+      await this.type(fields[1], password);
+    } else {
+      await this.typeAny(emailCandidates, email);
+      await this.typeAny(passwordCandidates, password);
+    }
     // The soft keyboard's "Go!" IME action can cover/intercept the submit
     // button's on-screen area on Android, causing tapAny to hit the wrong
     // element (e.g. the "Log in" tab instead of the submit button).
@@ -505,6 +670,34 @@ export class AuthPage extends BasePage {
       // short poll below falls back to the ambiguous "Log in" tab instead.
       const specificLoginButtonCandidates = this.selectors.loginButton.slice(0, 2);
       const deadline = Date.now() + 10000;
+      const currentSource = await browser.getPageSource().catch(() => '');
+      const composeLoginForm = (currentSource.match(/class="android\.widget\.EditText"/g) || []).length >= 2
+        && /text="Log in"/.test(currentSource) && /text="Create account"/.test(currentSource)
+        && !/Confirm password|Confirm email|Create your account/i.test(currentSource);
+      if (composeLoginForm) {
+          await browser.waitUntil(async () => {
+            const sourceNow = await browser.getPageSource().catch(() => '');
+            return /text="Log in"/.test(sourceNow) && /text="Email"/.test(sourceNow) && /text="Password"/.test(sourceNow)
+              && !/Create account form|Confirm password/i.test(sourceNow);
+          }, { timeout: 8000, interval: 300 });
+          const formSource = await browser.getPageSource();
+         if ((currentSource.match(/class="android\.widget\.EditText"/g) || []).length < 2) throw new Error('Compose Login screen lost its credential fields.');
+         await this.hideKeyboard();
+          const typedEmail = await browser.getPageSource();
+          if (!typedEmail.includes(email) || !/text="Log in"/.test(typedEmail)) throw new Error('Email field or selected Login tab does not match the authorized account before submit.');
+          const labelBounds = [...formSource.matchAll(/text="Log in"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/g)]
+            .map((match) => match.slice(1).map(Number));
+          const clickableBounds = [...formSource.matchAll(/<android\.view\.View\b[^>]*clickable="true"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"[^>]*>/g)]
+            .map((match) => match.slice(1).map(Number));
+          const submitRect = clickableBounds.filter(([left, top, right, bottom]) => top > 1000 && right - left > 400 && bottom - top >= 70 && bottom - top <= 260
+            && labelBounds.some(([textLeft, textTop, textRight, textBottom]) => textLeft >= left && textRight <= right && textTop >= top && textBottom <= bottom))
+            .sort((a, b) => ((a[2] - a[0]) * (a[3] - a[1])) - ((b[2] - b[0]) * (b[3] - b[1])))[0];
+          if (!submitRect) throw new Error('Could not match the Log in label to a bounded lower-form clickable container.');
+          const [submitLeft, submitTop, submitRight, submitBottom] = submitRect;
+          await browser.execute('mobile: clickGesture', { x: Math.round((submitLeft + submitRight) / 2), y: Math.round((submitTop + submitBottom) / 2) });
+         await this.waitForLoginSubmission();
+         return;
+       }
       while (Date.now() < deadline && !(await this.isDisplayed(...specificLoginButtonCandidates))) {
         await this.scrollDown();
       }
@@ -534,7 +727,11 @@ export class AuthPage extends BasePage {
     maxAttempts = 5
   ): Promise<{ email: string; password: string }> {
     const candidates = getCreatedAccountCandidates(environment, maxAttempts);
-    const pool = candidates.length ? candidates : [fallback];
+    // Explicit single-account override: never fall back to the created-account pool (avoids locking extra accounts).
+    const forced = process.env.MOBILE_FORCE_LOGIN_EMAIL && process.env.MOBILE_FORCE_LOGIN_PASSWORD
+      ? [{ email: process.env.MOBILE_FORCE_LOGIN_EMAIL, password: process.env.MOBILE_FORCE_LOGIN_PASSWORD }]
+      : null;
+    const pool = forced || (process.env.MOBILE_LOGIN_USE_CREATED_ACCOUNT === 'false' ? [fallback] : (candidates.length ? candidates : [fallback]));
 
     let lastError: Error | undefined;
     for (const [index, account] of pool.entries()) {
@@ -545,6 +742,7 @@ export class AuthPage extends BasePage {
         await this.openLogin();
         await this.login(account.email, account.password);
         await this.completeLoginVerification(account.email);
+        await this.completeFaceIdOnboarding();
         if (index > 0) {
           console.log(`[Login Retry] Succeeded with candidate #${index + 1}/${pool.length}: ${account.email}`);
         }
@@ -586,13 +784,15 @@ export class AuthPage extends BasePage {
   }
 
   /**
-   * Login-time email verification must always use Guerrilla Mail regardless of
-   * environment. Create-user flow still follows env-based routing.
+   * Login-time verification uses the provider configured for the selected
+   * environment. QA/stage login accounts are verified through Outlook; prod
+   * accounts use Guerrilla Mail.
    */
   async completeLoginVerification(loginEmail: string): Promise<boolean> {
-    void loginEmail;
+    process.env.MOBILE_LOGIN_EMAIL = loginEmail;
+    process.env.MOBILE_TEST_EMAIL = loginEmail;
     const previousOverride = this.buildEmailProviderOverride;
-    this.buildEmailProviderOverride = 'guerrillamail';
+    this.buildEmailProviderOverride = null;
 
     try {
       return await this.completeVerificationIfPresent();
@@ -793,25 +993,66 @@ export class AuthPage extends BasePage {
     }
   }
 
-  async dismissRatingSurveyIfPresent(): Promise<void> {
-    if (!(await this.isDisplayed(this.ratingSurveyPrompt))) {
-      return;
+  async dismissRatingSurveyIfPresent(forcePostLoginCheck = false): Promise<void> {
+    let source = await browser.getPageSource().catch(() => '');
+    let surveyVisible = /Are you enjoying Rate app\?|disfrutando de la aplicación Rate|¿Estás disfrutando/i.test(source)
+      || await this.isDisplayed(this.ratingSurveyPrompt);
+    if (!surveyVisible && forcePostLoginCheck) {
+      await browser.pause(1000);
+      source = await browser.getPageSource().catch(() => source);
+      surveyVisible = /Are you enjoying Rate app\?|disfrutando de la aplicación Rate|¿Estás disfrutando/i.test(source)
+        || await this.isDisplayed(this.ratingSurveyPrompt);
     }
+    if (!surveyVisible) return;
 
     console.log('[Modal] "Are you enjoying Rate app?" survey shown — dismissing.');
+    if (this.platform === 'android') {
+      source = await browser.getPageSource().catch(() => source);
+      const noTag = source.match(/<android\.widget\.TextView\b(?=[^>]*\btext="No")(?=[^>]*\bbounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]")[^>]*>/);
+      const nativeSize = source.match(/<hierarchy[^>]*width="(\d+)"[^>]*height="(\d+)"/);
+      if (!noTag || !nativeSize) {
+        const dir = path.resolve(process.cwd(), 'test-results/rate-localization');
+        mkdirSync(dir, { recursive: true });
+        writeFileSync(path.join(dir, 'android-survey-appium-source-missing-no.xml'), source, 'utf8');
+        await browser.saveScreenshot(path.join(dir, 'android-survey-appium-source-missing-no.png')).catch(() => {});
+        throw new Error('Survey is visible but Appium page source has no No-label bounds; captured current state.');
+      }
+      const [, left, top, right, bottom] = noTag[0].match(/\bbounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/)!.map(Number);
+      const [, nativeWidth, nativeHeight] = nativeSize.map(Number);
+      const viewport = await browser.getWindowSize();
+      const x = Math.round(((left + right) / 2) * viewport.width / Number(nativeWidth));
+      const y = Math.round(((top + bottom) / 2) * viewport.height / Number(nativeHeight));
+      if (x < 0 || y < 0 || x > viewport.width || y > viewport.height) throw new Error(`Survey No point ${x},${y} is outside Appium viewport ${viewport.width}x${viewport.height}.`);
+      await browser.execute('mobile: clickGesture', { x, y });
+      await browser.pause(700);
+      const afterTap = await browser.getPageSource().catch(() => '');
+      if (!/Are you enjoying Rate app\?|disfrutando de la aplicación Rate|¿Estás disfrutando/i.test(afterTap)) return;
+      if (await this.isDisplayed(...this.homeIndicatorCandidates)) return;
+      throw new Error('Rating survey remains after tapping visible No label bounds.');
+    }
     await this.tapAny(this.ratingSurveyDismissCandidates);
     await browser.pause(1000);
+    if (await this.isDisplayed(this.ratingSurveyPrompt)) {
+      throw new Error('Rating survey remained visible after tapping No.');
+    }
   }
 
   async waitForHomeScreen(timeoutMs = 20000): Promise<boolean> {
     const deadline = Date.now() + timeoutMs;
     while (Date.now() < deadline) {
+      const source = await browser.getPageSource().catch(() => '');
+      if (/Are you enjoying Rate app\?|disfrutando de la aplicación Rate/i.test(source)) {
+        // This Android Compose dialog can hide its action subtree from
+        // Appium. Treat the visible Home tab as authenticated success and let
+        // the exploratory capture record the modal, rather than tapping blind.
+        if (await this.isDisplayed(...this.homeIndicatorCandidates)) return true;
+      }
+      await this.dismissRatingSurveyIfPresent();
       if (await this.isDisplayed(...this.homeIndicatorCandidates)) {
         return true;
       }
 
       await this.dismissLoanOfficerModalIfPresent();
-      await this.dismissRatingSurveyIfPresent();
       await browser.pause(500);
     }
 
@@ -1236,7 +1477,7 @@ export class AuthPage extends BasePage {
 
   private async isDisplayed(...selectors: Array<string | any>): Promise<boolean> {
     return await this.withFastImplicitTimeout(async () => {
-      for (const selector of selectors) {
+      for (const selector of selectors.flat(Infinity) as Array<string | any>) {
         const element: any = typeof selector === 'string' ? $(selector) : selector;
         if (await element.isDisplayed().catch(() => false)) {
           return true;
@@ -1288,9 +1529,12 @@ export class AuthPage extends BasePage {
     while (Date.now() < deadline) {
       const match = await this.withFastImplicitTimeout(async () => {
         for (const selector of selectors) {
-          const el = typeof selector === 'string' ? $(selector) : selector;
-          if (await el.isDisplayed().catch(() => false)) {
-            return selector;
+          try {
+            const element = typeof selector === 'string' ? $(selector) : selector;
+            const displayed = await element.isDisplayed().catch(() => false);
+            if (displayed) return selector;
+          } catch {
+            // Ignore stale or unsupported candidates and continue through the fallback list.
           }
         }
         return null;
@@ -1303,6 +1547,17 @@ export class AuthPage extends BasePage {
       await new Promise((resolve) => setTimeout(resolve, 150));
     }
 
+    const source = await browser.getPageSource().catch(() => '');
+    const isAndroid = this.platform !== 'ios';
+    const emailXPath = isAndroid
+      ? 'android=new UiSelector().className("android.widget.EditText").instance(0)'
+      : '//XCUIElementTypeTextField';
+    const passwordXPath = isAndroid
+      ? 'android=new UiSelector().className("android.widget.EditText").instance(1)'
+      : '//XCUIElementTypeSecureTextField';
+    const requested = selectors.map(selector => String(selector));
+    if (requested.some(selector => selector.includes('EditText') && selector.includes('password="true"'))) return passwordXPath;
+    if (requested.some(selector => selector.includes('EditText')) && selectors.some(selector => String(selector).includes('Email') || String(selector).includes('Correo'))) return emailXPath;
     return selectors[0];
   }
 
@@ -1316,27 +1571,60 @@ export class AuthPage extends BasePage {
     await this.type(targetSelector, value);
   }
 
-  private async waitForLoginSubmission(timeoutMs = 10000): Promise<void> {
+  private async waitForLoginSubmission(timeoutMs = 90000): Promise<void> {
     const deadline = Date.now() + timeoutMs;
     const loginErrorPrompt = this.platform === 'ios'
-      ? '//XCUIElementTypeStaticText[contains(@name, "incorrect") or contains(@name, "error") or contains(@name, "invalid")]'
-      : `//android.widget.TextView[contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'incorrect') or contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'error') or contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'invalid')]`;
+      ? '//XCUIElementTypeStaticText[contains(translate(@name, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "incorrect") or contains(translate(@name, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "error") or contains(translate(@name, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "invalid") or contains(@name, "incorrecta") or contains(@name, "inválida")]'
+      : `//android.widget.TextView[contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'incorrect') or contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'error') or contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'invalid') or contains(@text, 'incorrecta') or contains(@text, 'inválida')]`;
+    const verificationCandidates = [
+      ...this.selectors.emailVerifyButton,
+      this.selectors.emailVerificationPrompt,
+      this.selectors.emailCodeSentPrompt,
+      this.selectors.smsVerificationPrompt,
+      this.selectors.smsCodeSentPrompt,
+      this.selectors.smsEnterCodePrompt,
+      this.selectors.genericEnterCodePrompt,
+    ];
+    const captureForegroundFailure = async (source: string, detail: string): Promise<never> => {
+      const outputDir = path.resolve(process.cwd(), 'test-results/rate-localization');
+      mkdirSync(outputDir, { recursive: true });
+      writeFileSync(path.join(outputDir, 'android-login-foreground-loss.xml'), source, 'utf8');
+      await browser.saveScreenshot(path.join(outputDir, 'android-login-foreground-loss.png')).catch(() => {});
+      throw new Error(`Login stopped before a verified auth/home transition: ${detail}. Captured foreground hierarchy and screenshot.`);
+    };
 
     while (Date.now() < deadline) {
-      // Check for login success (progressed to next screen)
-      if (
-        await this.isDisplayed(
-          ...this.selectors.emailVerifyButton,
-          this.selectors.emailVerificationPrompt,
-          this.selectors.emailCodeSentPrompt,
-          this.selectors.smsVerificationPrompt,
-          this.selectors.smsCodeSentPrompt,
-          this.selectors.smsEnterCodePrompt,
-          this.selectors.genericEnterCodePrompt
-        )
-      ) {
+      const currentSource = await browser.getPageSource().catch(() => '');
+      const currentPackage = this.platform === 'android' ? await browser.getCurrentPackage().catch(() => '') : '';
+      if (this.platform === 'android') {
+        const expectedPackage = process.env.MOBILE_APP_PACKAGE || 'com.guaranteedrate.superapp.qa';
+        const appState = await browser.queryAppState(expectedPackage).catch(() => -1);
+        if (currentPackage !== expectedPackage) {
+          await captureForegroundFailure(currentSource, `QA package left foreground (current package ${currentPackage || 'unknown'}, app state ${appState})`);
+        }
+      }
+      if (/Are you enjoying Rate app\?|disfrutando de la aplicación Rate/i.test(currentSource)) {
+        await this.dismissRatingSurveyIfPresent(true);
         return;
       }
+      if (this.platform === 'android' && /text="Bienestar financiero"/.test(currentSource) && /text="Vivienda"/.test(currentSource)) {
+        return;
+      }
+      if (await this.isDisplayed(this.ratingSurveyPrompt)) {
+        await this.dismissRatingSurveyIfPresent();
+        return;
+      }
+      if (await this.isDisplayed(this.loanOfficerPrompt)) {
+        await this.dismissLoanOfficerModalIfPresent();
+        return;
+      }
+      // Check for login success (progressed to next screen)
+      if (await this.isDisplayed(...verificationCandidates)) return;
+      if (await this.isDisplayed(...this.homeIndicatorCandidates)) {
+        await this.dismissRatingSurveyIfPresent(true);
+        return;
+      }
+      if (await this.isDisplayed(...this.selectors.faceIdContinueButton)) return;
 
       // Check for login failure (error message displayed)
       if (await this.isDisplayed(loginErrorPrompt)) {
@@ -1346,6 +1634,25 @@ export class AuthPage extends BasePage {
 
       await new Promise((resolve) => setTimeout(resolve, 300));
     }
+
+    const source = await browser.getPageSource().catch(() => '');
+    const currentPackage = this.platform === 'android' ? await browser.getCurrentPackage().catch(() => '') : '';
+    const appState = this.platform === 'android'
+      ? await browser.queryAppState(process.env.MOBILE_APP_PACKAGE || 'com.guaranteedrate.superapp.qa').catch(() => -1)
+      : -1;
+    const outputDir = path.resolve(process.cwd(), 'test-results/rate-localization');
+    mkdirSync(outputDir, { recursive: true });
+    writeFileSync(path.join(outputDir, `${this.platform}-login-post-submit-timeout.xml`), source, 'utf8');
+    if (this.platform === 'android') {
+      writeFileSync(path.join(outputDir, 'android-login-post-submit-state.json'), JSON.stringify({ currentPackage, appState, capturedAt: new Date().toISOString() }, null, 2) + '\n');
+    }
+    await browser.saveScreenshot(path.join(outputDir, `${this.platform}-login-post-submit-timeout.png`)).catch(() => {});
+    const hasAuthControls = await this.isDisplayed(...this.selectors.loginTab, ...this.selectors.emailInput, ...this.selectors.passwordInput);
+    throw new Error(
+      hasAuthControls
+        ? 'Login submit did not navigate or show recognized verification/error within timeout; captured post-submit auth state.'
+        : 'Login submit left the expected auth and verification states; captured current screen for triage.'
+    );
   }
 
   private async readInlineCodeValidationMessage(): Promise<string> {

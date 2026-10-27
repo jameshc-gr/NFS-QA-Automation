@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { existsSync, cpSync, writeFileSync, mkdirSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 
 import { resolveMobileCapabilities, resolveMobilePlatform } from './src/config/mobile.config';
 
@@ -50,6 +51,24 @@ const logLevel = process.env.MOBILE_LOG_LEVEL || 'info';
 // Allows running Android + iOS suites in parallel: each needs its own Appium
 // server, since the default service always binds to port 4723.
 const appiumPort = Number(process.env.MOBILE_APPIUM_PORT || 4723);
+const maxBootedIOSSimulators = 10;
+
+if (process.env.MOBILE_MEDIA_BATCH || process.env.MOBILE_MEDIA_BACKLOG_CHILD) {
+  throw new Error('The one-off media exploration workflow has been retired. Select a retained regression spec with MOBILE_SPECS.');
+}
+
+if (platform === 'ios') {
+  const requested = process.env.MOBILE_IOS_DEVICE_UDID;
+  if (!requested) throw new Error('MOBILE_IOS_DEVICE_UDID is required; refusing Appium automatic simulator creation/selection.');
+  const inventory = JSON.parse(execFileSync('xcrun', ['simctl', 'list', 'devices', 'booted', '--json'], { encoding: 'utf8' }));
+  const booted = Object.values(inventory.devices).flat() as Array<{ udid: string }>;
+  if (booted.length > Math.min(maxBootedIOSSimulators, 20)) {
+    throw new Error(`Refusing iOS test: ${booted.length} simulators are booted; hard limit is 10.`);
+  }
+  if (!booted.some(device => device.udid === requested)) {
+    throw new Error(`Requested iOS simulator ${requested} is not booted. Refusing Appium auto-selection/creation.`);
+  }
+}
 
 export const config = {
   runner: 'local',
@@ -93,6 +112,14 @@ export const config = {
       }
     ]
   ],
+  onPrepare: async () => {
+    if (platform !== 'android') return;
+    const adb = path.join(androidSdkRoot, 'platform-tools', 'adb');
+    const device = process.env.MOBILE_ANDROID_DEVICE_UDID;
+    if (!device) throw new Error('MOBILE_ANDROID_DEVICE_UDID is required for Android Appium startup.');
+    const devices = execFileSync(adb, ['devices'], { encoding: 'utf8' });
+    if (!new RegExp(`^${device}\\s+device$`, 'm').test(devices)) throw new Error(`Pinned Android device ${device} is not online; refusing Appium auto-selection.`);
+  },
   before: async () => {
     try {
       await browser.setTimeout({ implicit: 3000, pageLoad: 30000 });

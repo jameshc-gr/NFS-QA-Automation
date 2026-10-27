@@ -26,6 +26,11 @@ ios:
       environment: qa
       bundleId: com.guaranteedrate.superapp.qa
       appPath: test-data/mobile-app/gri/ios/30.3/qa/GRI QA.app
+    qa-31.3-simulator:
+      source: simulator
+      environment: qa
+      bundleId: com.guaranteedrate.superapp.qa
+      appPath: test-data/mobile-app/gri/ios/31.3/qa/GRI QA.app
     qa-30.0-simulator:
       source: simulator
       environment: qa
@@ -40,7 +45,7 @@ ios:
       source: simulator
       environment: stage
       bundleId: com.guaranteedrate.superapp.stage
-      appPath: test-data/mobile-app/gri/ios/30.0/stage/GRI Stage.app
+      appPath: test-data/mobile-app/gri/ios/30.3/stage/GRI Stage.app
     stage-ipa:
       source: ipa
       environment: stage

@@ -1,0 +1,470 @@
+{
+  "savedAt": "2026-10-20T20:27:42.505Z",
+  "historicalReference": true,
+  "captures": 34,
+  "privacy": "Internal authenticated QA evidence; contains account/advisor information. Redact before external sharing.",
+  "files": [
+    {
+      "file": "coverage.csv",
+      "source": "test-results/rate-localization/coverage.csv",
+      "bytes": 6293,
+      "sha256": "d8a6da94d60e24640a733cf28f80234c9cc1b16c43292965ab1a51be205ca1e6"
+    },
+    {
+      "file": "localization-report-summary.txt",
+      "source": "test-results/rate-localization/localization-report-summary.txt",
+      "bytes": 1074,
+      "sha256": "e447473fa1631ac2f6c0a17992c5bcd6107712f32d485884d3a901d57b47443e"
+    },
+    {
+      "file": "platform-comparison-unmatched.csv",
+      "source": "test-results/rate-localization/platform-comparison-unmatched.csv",
+      "bytes": 17149,
+      "sha256": "daf60f8216d7ae23817ae7f59d1acb83dbb5ca7287a421b56908b0e9ae8c5350"
+    },
+    {
+      "file": "platform-discrepancies.csv",
+      "source": "test-results/rate-localization/platform-discrepancies.csv",
+      "bytes": 1626,
+      "sha256": "dfad7ab1ad3a3930c9149e4a55bf25dcdee6c9f6cf6cd500c123218452abc566"
+    },
+    {
+      "file": "qa-current-android-capture-manifest.json",
+      "source": "test-results/rate-localization/qa-current-android-capture-manifest.json",
+      "bytes": 4193,
+      "sha256": "6ed5207194d41f69d1ef2da37808bcca792a5be30a9c9e9be7142c282214aa77"
+    },
+    {
+      "file": "qa-current-android-en-accounts.png",
+      "source": "test-results/rate-localization/qa-current-android-en-accounts.png",
+      "bytes": 130390,
+      "sha256": "ac3e955307b1bd88fa6994c068edd4ccaa44daf6ddf030048ca536b9e07f1ab9"
+    },
+    {
+      "file": "qa-current-android-en-accounts.xml",
+      "source": "test-results/rate-localization/qa-current-android-en-accounts.xml",
+      "bytes": 34713,
+      "sha256": "3eb51fb68b9343c7fd324f52b18745c8a1652180a49f427201964c9cd96ed93a"
+    },
+    {
+      "file": "qa-current-android-en-financial.png",
+      "source": "test-results/rate-localization/qa-current-android-en-financial.png",
+      "bytes": 856182,
+      "sha256": "38a8856cfa7889100762bd4c1c223a57135131106a895f07ef9770fedbc47e90"
+    },
+    {
+      "file": "qa-current-android-en-financial.xml",
+      "source": "test-results/rate-localization/qa-current-android-en-financial.xml",
+      "bytes": 49377,
+      "sha256": "c17c2b0cc4d23309146ad25de840d53d1ca6bfa937ffbacdb6059237d7bf6019"
+    },
+    {
+      "file": "qa-current-android-en-home.png",
+      "source": "test-results/rate-localization/qa-current-android-en-home.png",
+      "bytes": 904595,
+      "sha256": "9cd9989a86e1b6f66a2b076cc9a20fbd5a8ccd717ae0707a3faef24b8127ba45"
+    },
+    {
+      "file": "qa-current-android-en-home.xml",
+      "source": "test-results/rate-localization/qa-current-android-en-home.xml",
+      "bytes": 60260,
+      "sha256": "bd8ea4c814f751f308ff3e9063201d80f429640121c857cd646de31a50003e5c"
+    },
+    {
+      "file": "qa-current-android-en-language-preference.png",
+      "source": "test-results/rate-localization/qa-current-android-en-language-preference.png",
+      "bytes": 84435,
+      "sha256": "198f832bb9c72a5444287c524b96df935d37bedb8c2959aa759d69b60734beec"
+    },
+    {
+      "file": "qa-current-android-en-language-preference.xml",
+      "source": "test-results/rate-localization/qa-current-android-en-language-preference.xml",
+      "bytes": 16545,
+      "sha256": "b3590bb17ca32d6c3aedd93fff49508bdd4b4125e1f6a2b4d1230ca40d758324"
+    },
+    {
+      "file": "qa-current-android-en-personal.png",
+      "source": "test-results/rate-localization/qa-current-android-en-personal.png",
+      "bytes": 1650331,
+      "sha256": "8afe2633fba5a5e4cd44551a479a6f9f1ce8ff1dfa2c1bbc9ad6def443a9c0d3"
+    },
+    {
+      "file": "qa-current-android-en-personal.xml",
+      "source": "test-results/rate-localization/qa-current-android-en-personal.xml",
+      "bytes": 43072,
+      "sha256": "4eff03ce7f70ea6b8446f691c98620fc69a6f4ea61dfae99a60a8f6a3632dd36"
+    },
+    {
+      "file": "qa-current-android-en-profile.png",
+      "source": "test-results/rate-localization/qa-current-android-en-profile.png",
+      "bytes": 198823,
+      "sha256": "832cb31f7ea2247383749a03381061a6b540002c4b6ed0870b28d3ac96169b6d"
+    },
+    {
+      "file": "qa-current-android-en-profile.xml",
+      "source": "test-results/rate-localization/qa-current-android-en-profile.xml",
+      "bytes": 38894,
+      "sha256": "0762f42803f986e588e959d1a43fc0796fb793e2c1fd609cfdf1366109f40ea9"
+    },
+    {
+      "file": "qa-current-android-en-settings.png",
+      "source": "test-results/rate-localization/qa-current-android-en-settings.png",
+      "bytes": 139277,
+      "sha256": "c775ea854bf7a41f8c02d624c5731b79d4ae94f04e788303eb29e00dda025bac"
+    },
+    {
+      "file": "qa-current-android-en-settings.xml",
+      "source": "test-results/rate-localization/qa-current-android-en-settings.xml",
+      "bytes": 28506,
+      "sha256": "ce48ceab6eb8bd8f0b766544af242e323a2cf7846fd7438a4a9655377ee4a145"
+    },
+    {
+      "file": "qa-current-android-en-tools.png",
+      "source": "test-results/rate-localization/qa-current-android-en-tools.png",
+      "bytes": 313038,
+      "sha256": "02660c9dbcae210986089bfddcfc773883ab8e4a6d5eced210e28924a5311196"
+    },
+    {
+      "file": "qa-current-android-en-tools.xml",
+      "source": "test-results/rate-localization/qa-current-android-en-tools.xml",
+      "bytes": 41075,
+      "sha256": "abbb7de355f9f9a247dfa89369aca3f6cb6426637062892ef16f873102ea8562"
+    },
+    {
+      "file": "qa-current-android-es-accounts.png",
+      "source": "test-results/rate-localization/qa-current-android-es-accounts.png",
+      "bytes": 140517,
+      "sha256": "6cbc8e22ae45848ad0eda9ef35120651bef4355ce90b0b17f1f854e30f7e9563"
+    },
+    {
+      "file": "qa-current-android-es-accounts.xml",
+      "source": "test-results/rate-localization/qa-current-android-es-accounts.xml",
+      "bytes": 34129,
+      "sha256": "76c818aece92fb11901f2d71f39bcabe4fcfbb019d6021116d605fcc2c631ef2"
+    },
+    {
+      "file": "qa-current-android-es-financial.png",
+      "source": "test-results/rate-localization/qa-current-android-es-financial.png",
+      "bytes": 816394,
+      "sha256": "dc8db6809a72112292365bce0bb2f3d2e71418467a37055253b91354a4dd06cd"
+    },
+    {
+      "file": "qa-current-android-es-financial.xml",
+      "source": "test-results/rate-localization/qa-current-android-es-financial.xml",
+      "bytes": 49444,
+      "sha256": "3488139f2517203122bb6b4eeba73795881e40fa1cef3be2ee18288a3f97ffa0"
+    },
+    {
+      "file": "qa-current-android-es-home.png",
+      "source": "test-results/rate-localization/qa-current-android-es-home.png",
+      "bytes": 872038,
+      "sha256": "88b054f36e0366617b5ee709ab71d5218ff37dd9bba1d3c047c4fd71851cd2a6"
+    },
+    {
+      "file": "qa-current-android-es-home.xml",
+      "source": "test-results/rate-localization/qa-current-android-es-home.xml",
+      "bytes": 60335,
+      "sha256": "6940267a014f85cae16b7d959e88ec99d3872b4bc2bdbee1faeb3c79faef7141"
+    },
+    {
+      "file": "qa-current-android-es-language-preference.png",
+      "source": "test-results/rate-localization/qa-current-android-es-language-preference.png",
+      "bytes": 86982,
+      "sha256": "3ceaa018aa11d4450f9de32bce9acd8ba651be3357ba3016546a843b80c9a047"
+    },
+    {
+      "file": "qa-current-android-es-language-preference.xml",
+      "source": "test-results/rate-localization/qa-current-android-es-language-preference.xml",
+      "bytes": 16580,
+      "sha256": "c493be8782c33402db61a8887e823f7ac6124e315f4b3cfd23ca05d39fb89403"
+    },
+    {
+      "file": "qa-current-android-es-personal.png",
+      "source": "test-results/rate-localization/qa-current-android-es-personal.png",
+      "bytes": 1459727,
+      "sha256": "78cf3bd5d03447886bc2c35f97553ec98191d212780fd0fbf89d17c46a2654de"
+    },
+    {
+      "file": "qa-current-android-es-personal.xml",
+      "source": "test-results/rate-localization/qa-current-android-es-personal.xml",
+      "bytes": 41164,
+      "sha256": "75fe25b6ffc1b3e5c8f0764760fd6765d4ec7983d0c679e40fc4a59599f091c6"
+    },
+    {
+      "file": "qa-current-android-es-profile.png",
+      "source": "test-results/rate-localization/qa-current-android-es-profile.png",
+      "bytes": 204628,
+      "sha256": "d6c9884d6d00962d05f1b0d7ebcb3898cefc9e3f6a42dfe26bafa999beaba656"
+    },
+    {
+      "file": "qa-current-android-es-profile.xml",
+      "source": "test-results/rate-localization/qa-current-android-es-profile.xml",
+      "bytes": 39010,
+      "sha256": "ee1fbad07d9f7f747621daa4093cad6cbddcad77266f665a8d45c804de3f600f"
+    },
+    {
+      "file": "qa-current-android-es-settings.png",
+      "source": "test-results/rate-localization/qa-current-android-es-settings.png",
+      "bytes": 152453,
+      "sha256": "0f139939c62141eb58e94ffd02a82eafdeb9b7ad6895e163d54422f89c8eedd1"
+    },
+    {
+      "file": "qa-current-android-es-settings.xml",
+      "source": "test-results/rate-localization/qa-current-android-es-settings.xml",
+      "bytes": 28579,
+      "sha256": "0706a2535e4da7e66d67f6043b6db4f954d35bf4c4bd95bdcb31712b906262d5"
+    },
+    {
+      "file": "qa-current-android-es-tools.png",
+      "source": "test-results/rate-localization/qa-current-android-es-tools.png",
+      "bytes": 334648,
+      "sha256": "ee108f4c7bd42c603e620529d983ad3a4cbab5f6cc714acc414d97dae1a5ce18"
+    },
+    {
+      "file": "qa-current-android-es-tools.xml",
+      "source": "test-results/rate-localization/qa-current-android-es-tools.xml",
+      "bytes": 41150,
+      "sha256": "8acc374f2c29967f8446385efd66cd7e765baa8d2f01eea6411bae5c9f6b8cc7"
+    },
+    {
+      "file": "qa-current-ios-capture-manifest.json",
+      "source": "test-results/rate-localization/qa-current-ios-capture-manifest.json",
+      "bytes": 6838,
+      "sha256": "8ab9b1304d5a9e6cf5cec443e52745925d225bbafe33e994609f710f13c603aa"
+    },
+    {
+      "file": "qa-current-ios-en-accounts.png",
+      "source": "test-results/rate-localization/qa-current-ios-en-accounts.png",
+      "bytes": 322463,
+      "sha256": "ab154055620269ecd92cf5fbfd9604bd9433aef51821c67765a62cc7f116a11a"
+    },
+    {
+      "file": "qa-current-ios-en-accounts.xml",
+      "source": "test-results/rate-localization/qa-current-ios-en-accounts.xml",
+      "bytes": 31738,
+      "sha256": "0b8b19e0ae25fd6b6a7a5d5ded5daa3194b56620d507bcd1c59dea44d2ee9e0b"
+    },
+    {
+      "file": "qa-current-ios-en-financial.png",
+      "source": "test-results/rate-localization/qa-current-ios-en-financial.png",
+      "bytes": 1292189,
+      "sha256": "c85718e4b0ddbcda860dea654774a67ee39a484a085ab2f8f50cd8efb00e41bb"
+    },
+    {
+      "file": "qa-current-ios-en-financial.xml",
+      "source": "test-results/rate-localization/qa-current-ios-en-financial.xml",
+      "bytes": 41827,
+      "sha256": "1ff8d7ebe79453085ce773158683f3cfff0625b94123f006ee66d32b8fd9d8f6"
+    },
+    {
+      "file": "qa-current-ios-en-home.png",
+      "source": "test-results/rate-localization/qa-current-ios-en-home.png",
+      "bytes": 1400448,
+      "sha256": "13fda01d82182ef4335fa5f4782d0aa8c1bf0a9d8ce3950b2190f51690d17c0b"
+    },
+    {
+      "file": "qa-current-ios-en-home.xml",
+      "source": "test-results/rate-localization/qa-current-ios-en-home.xml",
+      "bytes": 116849,
+      "sha256": "a1dc6c4c15424abad33192470a0a0a7005d33b5725f374c36465749cd2fae5ac"
+    },
+    {
+      "file": "qa-current-ios-en-language-preference.png",
+      "source": "test-results/rate-localization/qa-current-ios-en-language-preference.png",
+      "bytes": 155552,
+      "sha256": "d46bbab2fdc3b69412fa7151c96ae3f2f8d5340f17d6f431a40408af6b5aecc3"
+    },
+    {
+      "file": "qa-current-ios-en-language-preference.xml",
+      "source": "test-results/rate-localization/qa-current-ios-en-language-preference.xml",
+      "bytes": 122774,
+      "sha256": "8de46a7300f3e42b796ef54ef1253824be6ffccbee0c10e44a96da78df232c13"
+    },
+    {
+      "file": "qa-current-ios-en-personal.png",
+      "source": "test-results/rate-localization/qa-current-ios-en-personal.png",
+      "bytes": 2017301,
+      "sha256": "c0d6e889637c18f64876d126de726ccaf549a1fa647c57d3b73d34c18abd7393"
+    },
+    {
+      "file": "qa-current-ios-en-personal.xml",
+      "source": "test-results/rate-localization/qa-current-ios-en-personal.xml",
+      "bytes": 80315,
+      "sha256": "4b31657adcc5ed0f7bb177dae20aa03e06632bdaecc6d7f0bb6cc8ad90ceb29b"
+    },
+    {
+      "file": "qa-current-ios-en-profile.png",
+      "source": "test-results/rate-localization/qa-current-ios-en-profile.png",
+      "bytes": 253613,
+      "sha256": "89b8259f1edb77daaf77c6f240e1e5dbd8f6c91f31b219e5b9acfbecee102edc"
+    },
+    {
+      "file": "qa-current-ios-en-profile.xml",
+      "source": "test-results/rate-localization/qa-current-ios-en-profile.xml",
+      "bytes": 132924,
+      "sha256": "d5c3cb22f1f4c40823f3e3836c44a82dd448411dd42de1cfc5b53b9b87d2606b"
+    },
+    {
+      "file": "qa-current-ios-en-settings.png",
+      "source": "test-results/rate-localization/qa-current-ios-en-settings.png",
+      "bytes": 347024,
+      "sha256": "1d1b1506aca8d56f02a67991e60d7e57a9067497ffe0464b7ef073769cedd54d"
+    },
+    {
+      "file": "qa-current-ios-en-settings.xml",
+      "source": "test-results/rate-localization/qa-current-ios-en-settings.xml",
+      "bytes": 132664,
+      "sha256": "afcbca5c052cdf3c44d9d934398af25ad0649c47e4603630547e0a74b04b38c3"
+    },
+    {
+      "file": "qa-current-ios-en-tools-goal-prompt.png",
+      "source": "test-results/rate-localization/qa-current-ios-en-tools-goal-prompt.png",
+      "bytes": 619836,
+      "sha256": "45f8b5c4fc8f66e1fc46ad1c7483aa1901238906b1a3c0461a2a1b19732c18e6"
+    },
+    {
+      "file": "qa-current-ios-en-tools-goal-prompt.xml",
+      "source": "test-results/rate-localization/qa-current-ios-en-tools-goal-prompt.xml",
+      "bytes": 27256,
+      "sha256": "ab0b9360c27a71ae3c67e482f34c7c3dee9c3a4f147307f51970210345488459"
+    },
+    {
+      "file": "qa-current-ios-en-tools.png",
+      "source": "test-results/rate-localization/qa-current-ios-en-tools.png",
+      "bytes": 507664,
+      "sha256": "e1522bcceb83e214dd582602c18f7634e0ae356956cf4a2f12226b95b746ef5d"
+    },
+    {
+      "file": "qa-current-ios-en-tools.xml",
+      "source": "test-results/rate-localization/qa-current-ios-en-tools.xml",
+      "bytes": 22724,
+      "sha256": "35e1f8f32a67bb2e3b83ad52e6abe0fd124e970e955a9b89571e4fea95fb47f6"
+    },
+    {
+      "file": "qa-current-ios-es-accounts.png",
+      "source": "test-results/rate-localization/qa-current-ios-es-accounts.png",
+      "bytes": 365558,
+      "sha256": "a0d5948ddd3dbd96c2c79bd13fd8e11ed1684b5b899981b7fb7b7f42bdff060d"
+    },
+    {
+      "file": "qa-current-ios-es-accounts.xml",
+      "source": "test-results/rate-localization/qa-current-ios-es-accounts.xml",
+      "bytes": 33350,
+      "sha256": "ab334d0263a42b08ee2b56174cec175c4035ff4a63a719f537ff309b58bdd21b"
+    },
+    {
+      "file": "qa-current-ios-es-financial.png",
+      "source": "test-results/rate-localization/qa-current-ios-es-financial.png",
+      "bytes": 1309503,
+      "sha256": "4b5ba3c13b8af5502adcfd9ae835ee91c7589449f96ea812c750737e3c1c459d"
+    },
+    {
+      "file": "qa-current-ios-es-financial.xml",
+      "source": "test-results/rate-localization/qa-current-ios-es-financial.xml",
+      "bytes": 43431,
+      "sha256": "09f730c8e1ab80fdeac7874abba30bd761e245b98fb29b5875d93e08ad7ff91e"
+    },
+    {
+      "file": "qa-current-ios-es-home.png",
+      "source": "test-results/rate-localization/qa-current-ios-es-home.png",
+      "bytes": 1414759,
+      "sha256": "dadf259ce17c8cac523be1e8441d35733f4a4ce106c0ed6cb98d0bfc3f20031f"
+    },
+    {
+      "file": "qa-current-ios-es-home.xml",
+      "source": "test-results/rate-localization/qa-current-ios-es-home.xml",
+      "bytes": 69159,
+      "sha256": "aaa3dd4dfbef3ed2cd998fdbf061609b22b3fbc70d25d47e9e0d8fa32aa0f67a"
+    },
+    {
+      "file": "qa-current-ios-es-language-preference.png",
+      "source": "test-results/rate-localization/qa-current-ios-es-language-preference.png",
+      "bytes": 163789,
+      "sha256": "40475eb46a4133fa59129d28892802ac9129ec5a8ccbfcd95df0a6044f35d476"
+    },
+    {
+      "file": "qa-current-ios-es-language-preference.xml",
+      "source": "test-results/rate-localization/qa-current-ios-es-language-preference.xml",
+      "bytes": 75199,
+      "sha256": "dbc639406c253e288945f141bfc2590f0d27bedabd96f8577719cb81e35a2645"
+    },
+    {
+      "file": "qa-current-ios-es-personal.png",
+      "source": "test-results/rate-localization/qa-current-ios-es-personal.png",
+      "bytes": 1443368,
+      "sha256": "9a3aea102c54bf898e66228b0db1906ce85ea0e8ad23e4a8abca92502caf571d"
+    },
+    {
+      "file": "qa-current-ios-es-personal.xml",
+      "source": "test-results/rate-localization/qa-current-ios-es-personal.xml",
+      "bytes": 68053,
+      "sha256": "78c699aa4c2889020a80e6fcc44d9080b495c11bc04047809bfccb34a6e4bd8a"
+    },
+    {
+      "file": "qa-current-ios-es-profile.png",
+      "source": "test-results/rate-localization/qa-current-ios-es-profile.png",
+      "bytes": 258171,
+      "sha256": "8813416ea90340c500c646c436fbe471fe10755bd685f72e42735f036eee5c11"
+    },
+    {
+      "file": "qa-current-ios-es-profile.xml",
+      "source": "test-results/rate-localization/qa-current-ios-es-profile.xml",
+      "bytes": 85725,
+      "sha256": "bd9e5affc6528d805648bc3f7d58c37359fe2e8d153f2588de78af8f70cd0ab4"
+    },
+    {
+      "file": "qa-current-ios-es-settings.png",
+      "source": "test-results/rate-localization/qa-current-ios-es-settings.png",
+      "bytes": 362704,
+      "sha256": "ed0032aad462ecb494b7e513ed7772fa2d8a5af661d7dea0a78a1d9389aab288"
+    },
+    {
+      "file": "qa-current-ios-es-settings.xml",
+      "source": "test-results/rate-localization/qa-current-ios-es-settings.xml",
+      "bytes": 85434,
+      "sha256": "063e1dd92a4a6eabae1418ab1857bc6cf058a39e8e4b7ec6620c6509bd1621f8"
+    },
+    {
+      "file": "qa-current-ios-es-tools-goal-prompt.png",
+      "source": "test-results/rate-localization/qa-current-ios-es-tools-goal-prompt.png",
+      "bytes": 613023,
+      "sha256": "38b9bdd58ce2d5652c903829d10be157cc57e1f9c602a1ff598b7a7ac609b561"
+    },
+    {
+      "file": "qa-current-ios-es-tools-goal-prompt.xml",
+      "source": "test-results/rate-localization/qa-current-ios-es-tools-goal-prompt.xml",
+      "bytes": 27629,
+      "sha256": "096edd0686a96f512a5016f37da9700cb62395f727dfa9cbc4912e4d68c74917"
+    },
+    {
+      "file": "qa-current-ios-es-tools.png",
+      "source": "test-results/rate-localization/qa-current-ios-es-tools.png",
+      "bytes": 528284,
+      "sha256": "1715579f885c02f0c1cdccbf2e1c6f423f0d962fa5e2807c012992e71e5f7a60"
+    },
+    {
+      "file": "qa-current-ios-es-tools.xml",
+      "source": "test-results/rate-localization/qa-current-ios-es-tools.xml",
+      "bytes": 23038,
+      "sha256": "030c6fc1f733a55e8a97ae292d8db937d121c4c7330ec5b6e426cba5d1332f10"
+    },
+    {
+      "file": "rate-spanish-localization.csv",
+      "source": "test-results/rate-localization/rate-spanish-localization.csv",
+      "bytes": 447315,
+      "sha256": "75ac147604f9f77355db8fb65a2a1e7e871b3cb28fe5e881dbb3fb57274a57a4"
+    },
+    {
+      "file": "spanish-translation-review-candidates.csv",
+      "source": "test-results/rate-localization/spanish-translation-review-candidates.csv",
+      "bytes": 2505,
+      "sha256": "78f1f86f6f90383d03cb9672df318b7a90aff8086e27c676fbf1d351c2dd4327"
+    },
+    {
+      "file": "untranslated-spanish-report.csv",
+      "source": "test-results/rate-localization/untranslated-spanish-report.csv",
+      "bytes": 709,
+      "sha256": "43f20f6840ee2aaa6bbd8048673417405559bc73cfa1fa26598b1404be140feb"
+    }
+  ]
+}

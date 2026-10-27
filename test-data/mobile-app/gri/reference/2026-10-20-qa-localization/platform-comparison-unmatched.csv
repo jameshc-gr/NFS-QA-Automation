@@ -1,0 +1,86 @@
+Screen,Status,iOS candidate,Android candidate,Correspondence limitation,iOS Spanish evidence,Android Spanish evidence
+accounts,NOT COMPARABLE,GRI QA,,Source: GRI QA; no corresponding bilingual mapping on Android.,qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,No hay nada que ver aquí.,,Source: Nothing to see here; no corresponding bilingual mapping on Android.,qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,No tienes ningún préstamo en curso. ¿Quieres cambiar eso?,,Source: You don't have any loans in progress. Want to change that?; no corresponding bilingual mapping on Android.,qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,Solicitar ahora,,Source: Apply now; no corresponding bilingual mapping on Android.,qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,"Regístrate para la garantía para el hogar de Rate., Recibe soporte para sistemas para el hogar y electrodomésticos.",,"Source: Sign up for Home Warranty, Get support for home systems and appliances.; no corresponding bilingual mapping on Android.",qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,Agregar,,Source: Add; no corresponding bilingual mapping on Android.,qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,Regístrate para la garantía para el hogar de Rate.,,Source: Sign up for Home Warranty; no corresponding bilingual mapping on Android.,qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,Recibe soporte para sistemas para el hogar y electrodomésticos.,,Source: Get support for home systems and appliances.; no corresponding bilingual mapping on Android.,qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,"Regístrate para el soporte técnico de Rate., Asistencia para reparaciones de aparatos electrónicos y electrodomésticos.",,"Source: Sign up for Rate Tech Support, Assistance for your electronics and appliance repairs.; no corresponding bilingual mapping on Android.",qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,Regístrate para el soporte técnico de Rate.,,Source: Sign up for Rate Tech Support; no corresponding bilingual mapping on Android.,qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,"Regístrate para la seguridad para el hogar., Garantiza una seguridad más inteligente para tu hogar.",,"Source: Sign up for home security, Lock in smarter security for your home.; no corresponding bilingual mapping on Android.",qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,,Regístrate para la seguridad para el hogar.,Source: Sign up for home security; no corresponding bilingual mapping on iOS.,qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,,Garantiza una seguridad más inteligente para tu hogar.,Source: Lock in smarter security for your home.; no corresponding bilingual mapping on iOS.,qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,"Barra de desplazamiento vertical, 2 páginas",,"Source: Vertical scroll bar, 2 pages; no corresponding bilingual mapping on Android.",qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,Barra de pestañas,,Source: Tab Bar; no corresponding bilingual mapping on Android.,qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,,Regístrate para el soporte técnico de Rate.,Source: Sign up for Tech Support; no corresponding bilingual mapping on iOS.,qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+accounts,NOT COMPARABLE,,Hola shilpa,Source: Hi shilpa; no corresponding bilingual mapping on iOS.,qa-current-ios-es-accounts.xml,qa-current-android-es-accounts.xml
+financial,NOT COMPARABLE,GRI QA,,Source: GRI QA; no corresponding bilingual mapping on Android.,qa-current-ios-es-financial.xml,qa-current-android-es-financial.xml
+financial,NOT COMPARABLE,"Búsqueda de vivienda, Encuentra la casa de tus sueños",,"Source: Home search, Find your dream home; no corresponding bilingual mapping on Android.",qa-current-ios-es-financial.xml,qa-current-android-es-financial.xml
+financial,NOT COMPARABLE,Encuentra la casa de tus sueños,,Source: Find your dream home; no corresponding bilingual mapping on Android.,qa-current-ios-es-financial.xml,qa-current-android-es-financial.xml
+financial,NOT COMPARABLE,Automóvil,,Source: Auto; no corresponding bilingual mapping on Android.,qa-current-ios-es-financial.xml,qa-current-android-es-financial.xml
+financial,NOT COMPARABLE,Vida,,Source: Life; no corresponding bilingual mapping on Android.,qa-current-ios-es-financial.xml,qa-current-android-es-financial.xml
+financial,NOT COMPARABLE,Barra de pestañas,,Source: Tab Bar; no corresponding bilingual mapping on Android.,qa-current-ios-es-financial.xml,qa-current-android-es-financial.xml
+financial,NOT COMPARABLE,,Explora los listados de propiedades y guarda tus favoritas,Source: Browse property listings and save your faves; no corresponding bilingual mapping on iOS.,qa-current-ios-es-financial.xml,qa-current-android-es-financial.xml
+financial,NOT COMPARABLE,,Buscar,Source: Search; no corresponding bilingual mapping on iOS.,qa-current-ios-es-financial.xml,qa-current-android-es-financial.xml
+financial,NOT COMPARABLE,,Hola shilpa,Source: Hi shilpa; no corresponding bilingual mapping on iOS.,qa-current-ios-es-financial.xml,qa-current-android-es-financial.xml
+home,NOT COMPARABLE,GRI QA,,Source: GRI QA; no corresponding bilingual mapping on Android.,qa-current-ios-es-home.xml,qa-current-android-es-home.xml
+home,NOT COMPARABLE,"Búsqueda de vivienda, Encuentra la casa de tus sueños",,"Source: Home search, Find your dream home; no corresponding bilingual mapping on Android.",qa-current-ios-es-home.xml,qa-current-android-es-home.xml
+home,NOT COMPARABLE,Encuentra la casa de tus sueños,,Source: Find your dream home; no corresponding bilingual mapping on Android.,qa-current-ios-es-home.xml,qa-current-android-es-home.xml
+home,NOT COMPARABLE,Empresas,,Source: Commercial; no corresponding bilingual mapping on Android.,qa-current-ios-es-home.xml,qa-current-android-es-home.xml
+home,NOT COMPARABLE,Paraguas,,Source: Umbrella; no corresponding bilingual mapping on Android.,qa-current-ios-es-home.xml,qa-current-android-es-home.xml
+home,NOT COMPARABLE,Mascota,,Source: Pet; no corresponding bilingual mapping on Android.,qa-current-ios-es-home.xml,qa-current-android-es-home.xml
+home,NOT COMPARABLE,Barra de pestañas,,Source: Tab Bar; no corresponding bilingual mapping on Android.,qa-current-ios-es-home.xml,qa-current-android-es-home.xml
+home,NOT COMPARABLE,,Explora los listados de propiedades y guarda tus favoritas,Source: Browse property listings and save your faves; no corresponding bilingual mapping on iOS.,qa-current-ios-es-home.xml,qa-current-android-es-home.xml
+home,NOT COMPARABLE,,Buscar,Source: Search; no corresponding bilingual mapping on iOS.,qa-current-ios-es-home.xml,qa-current-android-es-home.xml
+language-preference,NOT COMPARABLE,GRI QA,,Source: GRI QA; no corresponding bilingual mapping on Android.,qa-current-ios-es-language-preference.xml,qa-current-android-es-language-preference.xml
+language-preference,NOT COMPARABLE,Volver,,Source: Back; no corresponding bilingual mapping on Android.,qa-current-ios-es-language-preference.xml,qa-current-android-es-language-preference.xml
+personal,NOT COMPARABLE,GRI QA,,Source: GRI QA; no corresponding bilingual mapping on Android.,qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,New brands for better living,Source: New brands for better living; no corresponding bilingual mapping on iOS.,qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,Reserva tu próximo viaje y recibe reembolsos en efectivo,Source: Book your next trip and earn cash back; no corresponding bilingual mapping on iOS.,qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,Compra ropa deportiva para mujer y hombre,Source: Shop women and men's activewear; no corresponding bilingual mapping on iOS.,qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,,"Source: New, Imposter Syndrome, Mental wellness Anxiety, 5 Minutes; no corresponding bilingual mapping on either platform.",qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,,"Source: New, Nervous System Regulation, Mental wellness Anxiety, 5 Minutes; no corresponding bilingual mapping on either platform.",qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,,"Source: New, Deep Hip Release, Yoga yard Restorative, 10 Minutes; no corresponding bilingual mapping on either platform.",qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,,"Source: New, Flow & Fire, Power patio Sculpt, 10 Minutes; no corresponding bilingual mapping on either platform.",qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,,"Source: New, Balance & Breathe, Yoga yard Power flow, 10 Minutes; no corresponding bilingual mapping on either platform.",qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,,"Source: New, All Fours Core, Power patio Core strength, 5 Minutes; no corresponding bilingual mapping on either platform.",qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,,"Source: New, Breath of Joy, Zen den Breathwork, 5 Minutes; no corresponding bilingual mapping on either platform.",qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,,"Source: New, Energizing Flow, Yoga yard Power flow, 15 Minutes; no corresponding bilingual mapping on either platform.",qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,,"Source: New, Square to Sky, Yoga yard Power flow, 20 Minutes; no corresponding bilingual mapping on either platform.",qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,,"Source: New, Rest & Renew, Yoga yard Restorative, 5 Minutes; no corresponding bilingual mapping on either platform.",qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,"Barra de desplazamiento vertical, 3 páginas",,"Source: Vertical scroll bar, 7 pages; no corresponding bilingual mapping on Android.",qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,Barra de pestañas,,Source: Tab Bar; no corresponding bilingual mapping on Android.,qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,,Source: Imposter Syndrome; no corresponding bilingual mapping on either platform.,qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,,Source: Mental wellness : Anxiety&#10;5 Minutes; no corresponding bilingual mapping on either platform.,qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+personal,NOT COMPARABLE,,Hola shilpa,Source: Hi shilpa; no corresponding bilingual mapping on iOS.,qa-current-ios-es-personal.xml,qa-current-android-es-personal.xml
+profile,NOT COMPARABLE,GRI QA,,Source: GRI QA; no corresponding bilingual mapping on Android.,qa-current-ios-es-profile.xml,qa-current-android-es-profile.xml
+profile,NOT COMPARABLE,Volver,,Source: Back; no corresponding bilingual mapping on Android.,qa-current-ios-es-profile.xml,qa-current-android-es-profile.xml
+profile,NOT COMPARABLE,"Centro de mensajes, Hacer un seguimiento de alertas y mensajes",,"Source: Message center, Track alerts and messages; no corresponding bilingual mapping on Android.",qa-current-ios-es-profile.xml,qa-current-android-es-profile.xml
+profile,NOT COMPARABLE,"¿Eres un agente de bienes raíces?, Accede a funciones específicas para agentes",,"Source: Are you a real estate agent?, Access agent specific features; no corresponding bilingual mapping on Android.",qa-current-ios-es-profile.xml,qa-current-android-es-profile.xml
+profile,NOT COMPARABLE,"Desafíos, Ver lo que está activo y completado",,"Source: Challenges, View active and completed; no corresponding bilingual mapping on Android.",qa-current-ios-es-profile.xml,qa-current-android-es-profile.xml
+profile,NOT COMPARABLE,"Valor de la vivienda, Su valor",,"Source: Home value, What it’s worth; no corresponding bilingual mapping on Android.",qa-current-ios-es-profile.xml,qa-current-android-es-profile.xml
+profile,NOT COMPARABLE,"Viviendas guardadas, Explora y compra",,"Source: Saved homes, Browse and buy; no corresponding bilingual mapping on Android.",qa-current-ios-es-profile.xml,qa-current-android-es-profile.xml
+profile,NOT COMPARABLE,"Oficial de préstamos, Tu asesor hipotecario",,"Source: Loan officer, Your mortgage advisor; no corresponding bilingual mapping on Android.",qa-current-ios-es-profile.xml,qa-current-android-es-profile.xml
+profile,NOT COMPARABLE,"Poder de compra, Encuentra tu rango de precios",,"Source: Purchase power, Find your price range; no corresponding bilingual mapping on Android.",qa-current-ios-es-profile.xml,qa-current-android-es-profile.xml
+profile,NOT COMPARABLE,"Everything for your home, Ahorros y ofertas para ti",,"Source: Everything for your home, Savings and offers for you; no corresponding bilingual mapping on Android.",qa-current-ios-es-profile.xml,qa-current-android-es-profile.xml
+profile,NOT COMPARABLE,"Configuración, Personaliza tu experiencia",,"Source: Settings, Customize your experience; no corresponding bilingual mapping on Android.",qa-current-ios-es-profile.xml,qa-current-android-es-profile.xml
+settings,NOT COMPARABLE,GRI QA,,Source: GRI QA; no corresponding bilingual mapping on Android.,qa-current-ios-es-settings.xml,qa-current-android-es-settings.xml
+settings,NOT COMPARABLE,Volver,,Source: Back; no corresponding bilingual mapping on Android.,qa-current-ios-es-settings.xml,qa-current-android-es-settings.xml
+settings,NOT COMPARABLE,Mi membresía,,Source: My membership; no corresponding bilingual mapping on Android.,qa-current-ios-es-settings.xml,qa-current-android-es-settings.xml
+settings,NOT COMPARABLE,Face ID,,Source: Face ID; no corresponding bilingual mapping on Android.,qa-current-ios-es-settings.xml,qa-current-android-es-settings.xml
+settings,NOT COMPARABLE,Políticas de privacidad,,Source: Privacy policies; no corresponding bilingual mapping on Android.,qa-current-ios-es-settings.xml,qa-current-android-es-settings.xml
+settings,NOT COMPARABLE,"Barra de desplazamiento vertical, 2 páginas",,"Source: Vertical scroll bar, 2 pages; no corresponding bilingual mapping on Android.",qa-current-ios-es-settings.xml,qa-current-android-es-settings.xml
+settings,NOT COMPARABLE,,Políticas de privacidad,Source: Privacy policy & legal; no corresponding bilingual mapping on iOS.,qa-current-ios-es-settings.xml,qa-current-android-es-settings.xml
+settings,NOT COMPARABLE,,No vendan mi información personal,Source: Do not sell my personal information; no corresponding bilingual mapping on iOS.,qa-current-ios-es-settings.xml,qa-current-android-es-settings.xml
+settings,NOT COMPARABLE,,Accesibilidad,Source: Accessibility; no corresponding bilingual mapping on iOS.,qa-current-ios-es-settings.xml,qa-current-android-es-settings.xml
+settings,NOT COMPARABLE,,Licencias,Source: Licensing; no corresponding bilingual mapping on iOS.,qa-current-ios-es-settings.xml,qa-current-android-es-settings.xml
+tools,NOT COMPARABLE,GRI QA,,Source: GRI QA; no corresponding bilingual mapping on Android.,qa-current-ios-es-tools.xml,qa-current-android-es-tools.xml
+tools,NOT COMPARABLE,Puntuaciones crediticias,,Source: Credit scores; no corresponding bilingual mapping on Android.,qa-current-ios-es-tools.xml,qa-current-android-es-tools.xml
+tools,NOT COMPARABLE,Avalúo de viviendas,,Source: Home value; no corresponding bilingual mapping on Android.,qa-current-ios-es-tools.xml,qa-current-android-es-tools.xml
+tools,NOT COMPARABLE,"Barra de desplazamiento vertical, 1 página",,"Source: Vertical scroll bar, 1 page; no corresponding bilingual mapping on Android.",qa-current-ios-es-tools.xml,qa-current-android-es-tools.xml
+tools,NOT COMPARABLE,Barra de pestañas,,Source: Tab Bar; no corresponding bilingual mapping on Android.,qa-current-ios-es-tools.xml,qa-current-android-es-tools.xml
+tools,NOT COMPARABLE,,Valor de la vivienda,Source: Home valuation; no corresponding bilingual mapping on iOS.,qa-current-ios-es-tools.xml,qa-current-android-es-tools.xml
+tools,NOT COMPARABLE,,Hola shilpa,Source: Hi shilpa; no corresponding bilingual mapping on iOS.,qa-current-ios-es-tools.xml,qa-current-android-es-tools.xml
+tools-goal-prompt,NOT COMPARABLE,,,No verified Android Spanish capture,qa-current-ios-es-tools-goal-prompt.xml,

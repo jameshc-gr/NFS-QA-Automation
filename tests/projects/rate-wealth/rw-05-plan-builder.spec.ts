@@ -258,7 +258,7 @@ test.describe('RW-PLAN: financial plan creation, management and wizard @regressi
       await page.waitForTimeout(3500);
     }
     await page.getByRole('button', { name: /Review Plan/ }).click();
-    await expect(page.getByText(/Creating your financial plan/i)).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByRole('heading', { name: /Creating your financial plan|Validating your plan/i })).toBeVisible({ timeout: 15_000 });
     await expect(page.locator('body')).toContainText('Implement Plan', { timeout: 120_000 });
   }
 
@@ -274,5 +274,104 @@ test.describe('RW-PLAN: financial plan creation, management and wizard @regressi
     const name = uniqueName();
     await runToPreview(name);
     await expect(page.getByRole('heading', { name }).first()).toBeVisible({ timeout: 5000 });
+  });
+
+  test('RW-PLAN-020 Buying a Home scenario completes planning and renders the implemented goal chart', async () => {
+    await createPlan(page, uniqueName());
+    await page.getByRole('button', { name: /Add Life Event\/Goal/ }).click();
+    await page.getByRole('button', { name: 'Buying a Home', exact: true }).click();
+    await page.locator('input[name="cost"]').fill('450000');
+    await page.locator('input[name="down"]').fill('90000');
+    await nextStep(page).click();
+
+    const visited: string[] = [];
+    for (let i = 0; i < 14; i++) {
+      const headings = (await page.locator('h2, h3').allInnerTexts()).map((heading) => heading.trim());
+      for (const step of WIZARD_SUBSTEPS) {
+        if (headings.some((heading) => heading.startsWith(step)) && !visited.includes(step)) visited.push(step);
+      }
+      if (visited.includes('Goal Ranking')) break;
+      await nextStep(page).click();
+      await page.waitForTimeout(3500);
+    }
+    expect(visited).toEqual([
+      'Life Events/Goals',
+      'Day-to-Day Money',
+      'Money For Future Self',
+      'Risk Management',
+      'Emergency Fund',
+      'Goal Ranking',
+    ]);
+    await page.getByRole('button', { name: /Review Plan/ }).click();
+    await expect(page.getByRole('heading', { name: /Creating your financial plan|Validating your plan/i })).toBeVisible({ timeout: 15_000 });
+    await expect(page.locator('body')).toContainText('Implement Plan', { timeout: 120_000 });
+    const preview = await visibleText(page);
+    for (const label of ['Goal Summary', 'My Wealth Score', 'Projected Wealth Score']) expect(preview).toContain(label);
+    expect(preview).not.toMatch(/Complete All Steps/i);
+    await page.getByRole('button', { name: /Implement Plan/i }).click();
+    await expect(page).toHaveURL(/\/home$/, { timeout: 30_000 });
+    await expect(page.getByText('Progress Towards Your Top Goal')).toBeVisible();
+    await expect(page.getByText('Save for house down payment')).toBeVisible();
+    await expect(page.getByText('7%', { exact: true })).toBeVisible();
+    await expect(page.locator('svg[data-test-id="CircularProgressbar"]').filter({ hasText: '7%' })).toBeVisible();
+    await page.screenshot({ path: 'test-results/rw-plan-020-home-goal-card.png', fullPage: true });
+  });
+
+  test('RW-PLAN-021 edits to an in-progress home plan persist after save and reopen', async () => {
+    test.fail(true, 'RW-BUG-12: edited Buying a Home amounts revert to their prior values after Save and Exit');
+    const originalCost = '450000';
+    const updatedCost = '475000';
+    const updatedDownPayment = '95000';
+
+    await createPlan(page, uniqueName());
+    await page.getByRole('button', { name: /Add Life Event\/Goal/ }).click();
+    await page.getByRole('button', { name: 'Buying a Home', exact: true }).click();
+    await page.locator('input[name="cost"]').fill(originalCost);
+    await page.locator('input[name="down"]').fill('90000');
+    await nextStep(page).click();
+    const goalRow = page.getByRole('row', { name: /Buying a Home/ });
+    await expect(goalRow).toBeVisible();
+    await page.getByRole('button', { name: /Save and Exit/i }).first().click();
+    await expect(page).toHaveURL(/\/financial-plans/, { timeout: 20_000 });
+
+    await openActions(page);
+    await page.locator('[role=menuitem], .euiContextMenuItem').filter({ hasText: /^Edit$/ }).click();
+    const reopenedGoalRow = page.getByRole('row', { name: /Buying a Home/ });
+    await expect(reopenedGoalRow).toBeVisible();
+    await reopenedGoalRow.getByRole('button').first().click();
+    await expect(page.locator('input[name="cost"]')).toHaveValue('$450,000.00');
+    await page.locator('input[name="cost"]').fill(updatedCost);
+    await page.locator('input[name="down"]').fill(updatedDownPayment);
+    await nextStep(page).click();
+    await page.getByRole('button', { name: /Save and Exit/i }).first().click();
+    await expect(page).toHaveURL(/\/financial-plans/, { timeout: 20_000 });
+
+    await openActions(page);
+    await page.locator('[role=menuitem], .euiContextMenuItem').filter({ hasText: /^Edit$/ }).click();
+    await page.getByRole('row', { name: /Buying a Home/ }).getByRole('button').first().click();
+    await expect(page.locator('input[name="cost"]')).toHaveValue('$475,000.00');
+    await expect(page.locator('input[name="down"]')).toHaveValue('$95,000.00');
+  });
+
+  test('RW-PLAN-022 deleting a home plan does not restore its goal in a new plan', async () => {
+    const deletedPlanName = uniqueName();
+    const replacementPlanName = `${deletedPlanName}-NEW`;
+
+    await createPlan(page, deletedPlanName);
+    await page.getByRole('button', { name: /Add Life Event\/Goal/ }).click();
+    await page.getByRole('button', { name: 'Buying a Home', exact: true }).click();
+    await page.locator('input[name="cost"]').fill('450000');
+    await page.locator('input[name="down"]').fill('90000');
+    await nextStep(page).click();
+    await expect(page.getByRole('row', { name: /Buying a Home/ })).toBeVisible();
+    await page.getByRole('button', { name: /Save and Exit/i }).first().click();
+    await expect(page).toHaveURL(/\/financial-plans/, { timeout: 20_000 });
+
+    await openActions(page);
+    await page.locator('[role=menuitem], .euiContextMenuItem').filter({ hasText: /^Delete$/ }).click();
+    await expect(page.getByText(deletedPlanName)).toHaveCount(0);
+
+    await createPlan(page, replacementPlanName);
+    await expect(page.getByRole('row', { name: /Buying a Home/ })).toHaveCount(0);
   });
 });

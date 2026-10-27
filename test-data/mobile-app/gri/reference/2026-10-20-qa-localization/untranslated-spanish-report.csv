@@ -1,0 +1,3 @@
+Platform,Screen,Element type,English source string,Observed Spanish string,Occurrence count,English evidence,Spanish evidence,Review priority,Qualification
+android,personal,Text,New brands for better living,New brands for better living,1,qa-current-android-en-personal.xml,qa-current-android-es-personal.xml,HIGH,REVIEW: exact visible English phrase retained in a verified Spanish-mode destination; verify against approved localization source.
+ios,profile,Text,Everything for your home,Everything for your home,1,qa-current-ios-en-profile.xml,qa-current-ios-es-profile.xml,HIGH,REVIEW: exact visible English phrase retained in a verified Spanish-mode destination; verify against approved localization source.

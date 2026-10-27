@@ -1,7 +1,7 @@
 import { SelectorList } from '../selector-engine';
 
 function byText(text: string): string {
-  return `//android.widget.TextView[@text=${JSON.stringify(text)}]/..`;
+  return `//android.widget.TextView[@text=${JSON.stringify(text)}]`;
 }
 
 function byInputLabel(label: string): string {
@@ -9,15 +9,25 @@ function byInputLabel(label: string): string {
 }
 
 export const authSelectors = {
-  loginTab: byText('Log in'),
-  createAccountTab: byText('Create account'),
+  loginTab: [byText('Log in'), byText('Iniciar sesión')] as SelectorList,
+  createAccountTab: [byText('Create account'), byText('Crear cuenta')] as SelectorList,
 
   emailInput: [
+    'android=new UiSelector().className("android.widget.EditText").instance(0)',
+    '//android.widget.EditText[1]',
     byInputLabel('Email'),
+    '//android.widget.EditText[.//android.widget.TextView[@text="Email"]]',
+    '//android.widget.EditText[@text="Email"]',
+    byInputLabel('Correo electrónico'),
   ] as SelectorList,
 
   passwordInput: [
+    'android=new UiSelector().className("android.widget.EditText").instance(1)',
+    '//android.widget.EditText[@password="true"]',
     byInputLabel('Password'),
+    '//android.widget.EditText[.//android.widget.TextView[@text="Password"]]',
+    '//android.widget.EditText[@text="Password"]',
+    byInputLabel('Contraseña'),
   ] as SelectorList,
 
   loginButton: [
@@ -29,6 +39,10 @@ export const authSelectors = {
     `//*[contains(@text, "Go!") and @clickable="true"]`,
     `//*[contains(@text, "Log in") and @clickable="true"]`,
     `//*[contains(@text, "Log in")]`,
+    `//android.widget.ScrollView//android.view.View[.//android.widget.TextView[@text="Iniciar sesión"] and .//android.widget.Button and @clickable="true"]`,
+    `//android.widget.ScrollView//android.widget.Button[.//android.widget.TextView[@text="Iniciar sesión"]]`,
+    `//android.widget.TextView[@text="Iniciar sesión"]/..`,
+    `//*[contains(@text, "Iniciar sesión") and @clickable="true"]`,
   ] as SelectorList,
 
   forgotPasswordLink: [
@@ -41,38 +55,55 @@ export const authSelectors = {
 
   emailCodeInput: [
     byInputLabel('6-digit code'),
+    byInputLabel('Código de 6 dígitos'),
+    byInputLabel('Código de verificación'),
     `//android.widget.EditText[contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'code') or contains(translate(@hint, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'code') or contains(translate(@content-desc, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'code')]`,
     `//android.widget.EditText`,
   ] as SelectorList,
 
   phoneCodeInput: [
     byInputLabel('6-digit code'),
+    byInputLabel('Código de 6 dígitos'),
+    byInputLabel('Código de verificación'),
     `//android.widget.EditText[contains(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'code') or contains(translate(@hint, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'code') or contains(translate(@content-desc, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'code')]`,
     `//android.widget.EditText`,
   ] as SelectorList,
 
   emailVerifyButton: [
     byText('Verify'),
+    byText('Verificar'),
   ] as SelectorList,
 
   phoneCodeVerifyButton: [
     byText('Verify'),
     byText('Continue'),
+    byText('Verificar'),
+    byText('Continuar'),
   ] as SelectorList,
 
-  emailVerificationPrompt: byText('Email verification'),
+  emailVerificationPrompt: [byText('Email verification'), byText('Verificación de correo electrónico'), byText('Verificación de email'), byText('Verifica tu identidad')] as SelectorList,
 
   resetEmailCodeTitlePrompt: byText('Verification code via Email'),
 
   resetSmsCodeTitlePrompt: byText('Verification code via SMS'),
 
-  emailCodeSentPrompt: `//android.widget.TextView[contains(@text, "code we sent to your email")]`,
+  emailCodeSentPrompt: [
+    `//android.widget.TextView[contains(@text, "code we sent to your email")]`,
+    `//android.widget.TextView[contains(@text, "código que enviamos a tu correo")]`,
+    `//android.widget.TextView[contains(@text, "código que enviamos a tu email") or contains(@text, "enviamos un código a tu correo")]`,
+  ] as SelectorList,
 
-  genericEnterCodePrompt: `//android.widget.TextView[@text="6-digit code" or contains(@text, "digit code")]`,
+  genericEnterCodePrompt: [
+    `//android.widget.TextView[@text="6-digit code" or contains(@text, "digit code")]`,
+    `//android.widget.TextView[@text="Código de 6 dígitos" or contains(@text, "código de 6 dígitos")]`,
+  ] as SelectorList,
 
-  smsVerificationPrompt: byText('Phone verification'),
+  smsVerificationPrompt: [byText('Phone verification'), byText('Verificación del teléfono'), byText('Verificación por teléfono'), byText('Verificación telefónica')] as SelectorList,
 
-  smsCodeSentPrompt: `//android.widget.TextView[contains(@text, "we texted") or contains(@text, "sent to your phone")]`,
+  smsCodeSentPrompt: [
+    `//android.widget.TextView[contains(@text, "we texted") or contains(@text, "sent to your phone")]`,
+    `//android.widget.TextView[contains(@text, "enviamos un mensaje de texto") or contains(@text, "enviamos a tu teléfono")]`,
+  ] as SelectorList,
 
   smsEnterCodePrompt: byText('Enter the 6-digit code we texted to your phone number at'),
 
@@ -155,4 +186,3 @@ export const authSelectors = {
     `//*[contains(@text, "Log out") and @clickable="true"]`,
   ] as SelectorList,
 };
-

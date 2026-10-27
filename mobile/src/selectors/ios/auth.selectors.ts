@@ -5,19 +5,23 @@ function byText(text: string): string {
 }
 
 export const authSelectors = {
-  loginTab: '~Log in',
-  createAccountTab: '~Create account',
+  loginTab: ['~Log in', '~Iniciar sesión', '//XCUIElementTypeButton[contains(@name, "Iniciar sesión") or contains(@label, "Iniciar sesión")]'] as SelectorList,
+  createAccountTab: ['~Create account', '~Crear cuenta', '//XCUIElementTypeButton[contains(@name, "Crear cuenta") or contains(@label, "Crear cuenta")]'] as SelectorList,
 
   emailInput: [
     '//XCUIElementTypeTextField[@name="log_in.field.email"]',
+    '//XCUIElementTypeTextField[@name="Correo electrónico" or @label="Correo electrónico"]',
   ] as SelectorList,
 
   passwordInput: [
     '//XCUIElementTypeSecureTextField[@name="log_in.field.password"]|//XCUIElementTypeTextField[@name="log_in.field.password"]',
+    '//XCUIElementTypeSecureTextField[@name="Contraseña" or @label="Contraseña"]',
   ] as SelectorList,
 
   loginButton: [
     '~log_in.button.log_in',
+    '~Iniciar sesión',
+    '//XCUIElementTypeButton[@name="Iniciar sesión" or @label="Iniciar sesión"]',
   ] as SelectorList,
 
   forgotPasswordLink: [
@@ -45,6 +49,8 @@ export const authSelectors = {
   emailVerifyButton: [
     '~confirm_email.button.verify',
     '~log_in.button.verify',
+    '~Verificar',
+    '//XCUIElementTypeButton[@name="Verificar" or @label="Verificar"]',
     '//XCUIElementTypeButton[contains(@name, "verify") or @label="Verify"]',
   ] as SelectorList,
 
@@ -52,22 +58,39 @@ export const authSelectors = {
     '~verify_sms_number.button.verify',
     '~confirm_phone.button.verify',
     '~confirm_phone.button.continue',
+    '~Verificar',
+    '~Continuar',
     '//XCUIElementTypeButton[contains(@name, "verify") or contains(@name, "continue") or @label="Verify" or @label="Continue"]',
   ] as SelectorList,
 
-  emailVerificationPrompt: '//XCUIElementTypeStaticText[@name="Email verification" or @name="Verify it\u2019s you"]',
+  emailVerificationPrompt: [
+    '//XCUIElementTypeStaticText[@name="Email verification" or @name="Verify it\u2019s you"]',
+    '//XCUIElementTypeStaticText[@name="Verificación de correo electrónico" or @name="Verificación de email"]',
+  ] as SelectorList,
 
   resetEmailCodeTitlePrompt: '//XCUIElementTypeStaticText[@name="Verification code via Email"]',
 
   resetSmsCodeTitlePrompt: '//XCUIElementTypeStaticText[@name="Verification code via SMS"]',
 
-  emailCodeSentPrompt: '//XCUIElementTypeStaticText[contains(@name, "code we sent to your email") or contains(@name, "code we sent")]',
+  emailCodeSentPrompt: [
+    '//XCUIElementTypeStaticText[contains(@name, "code we sent to your email") or contains(@name, "code we sent")]',
+    '//XCUIElementTypeStaticText[contains(@name, "código que enviamos a tu correo") or contains(@name, "código que enviamos a tu email")]',
+  ] as SelectorList,
 
-  genericEnterCodePrompt: '//XCUIElementTypeStaticText[contains(@name, "digit code")]',
+  genericEnterCodePrompt: [
+    '//XCUIElementTypeStaticText[contains(@name, "digit code")]',
+    '//XCUIElementTypeStaticText[contains(@name, "código de 6 dígitos")]',
+  ] as SelectorList,
 
-  smsVerificationPrompt: '//XCUIElementTypeStaticText[@name="Phone verification"]',
+  smsVerificationPrompt: [
+    '//XCUIElementTypeStaticText[@name="Phone verification"]',
+    '//XCUIElementTypeStaticText[@name="Verificación del teléfono" or @name="Verificación por teléfono"]',
+  ] as SelectorList,
 
-  smsCodeSentPrompt: '//XCUIElementTypeStaticText[contains(@name, "we texted") or contains(@name, "sent to your phone")]',
+  smsCodeSentPrompt: [
+    '//XCUIElementTypeStaticText[contains(@name, "we texted") or contains(@name, "sent to your phone")]',
+    '//XCUIElementTypeStaticText[contains(@name, "enviamos un mensaje de texto") or contains(@name, "enviamos a tu teléfono")]',
+  ] as SelectorList,
 
   smsEnterCodePrompt: byText('Enter the 6-digit code we texted to your phone number at'),
 
@@ -148,4 +171,3 @@ export const authSelectors = {
     '//XCUIElementTypeButton[@name="Log out" or @label="Log out"]',
   ] as SelectorList,
 };
-

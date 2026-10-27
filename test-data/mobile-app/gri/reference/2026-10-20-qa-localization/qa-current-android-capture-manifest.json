@@ -1,0 +1,144 @@
+{
+  "capturedAt": "2026-10-20T15:47:09.898Z",
+  "environment": "qa",
+  "platform": "android",
+  "appVersion": "1.54",
+  "build": "105400085",
+  "records": [
+    {
+      "platform": "android",
+      "language": "en",
+      "screen": "home",
+      "xml": "qa-current-android-en-home.xml",
+      "png": "qa-current-android-en-home.png",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "android",
+      "language": "en",
+      "screen": "accounts",
+      "xml": "qa-current-android-en-accounts.xml",
+      "png": "qa-current-android-en-accounts.png",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "android",
+      "language": "en",
+      "screen": "tools",
+      "xml": "qa-current-android-en-tools.xml",
+      "png": "qa-current-android-en-tools.png",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "android",
+      "language": "en",
+      "screen": "financial",
+      "xml": "qa-current-android-en-financial.xml",
+      "png": "qa-current-android-en-financial.png",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "android",
+      "language": "en",
+      "screen": "personal",
+      "xml": "qa-current-android-en-personal.xml",
+      "png": "qa-current-android-en-personal.png",
+      "selectedTabVerified": "true"
+    },
+    {
+      "platform": "android",
+      "language": "en",
+      "screen": "profile",
+      "xml": "qa-current-android-en-profile.xml",
+      "png": "qa-current-android-en-profile.png"
+    },
+    {
+      "platform": "android",
+      "language": "en",
+      "screen": "settings",
+      "xml": "qa-current-android-en-settings.xml",
+      "png": "qa-current-android-en-settings.png"
+    },
+    {
+      "platform": "android",
+      "language": "en",
+      "screen": "language-preference",
+      "xml": "qa-current-android-en-language-preference.xml",
+      "png": "qa-current-android-en-language-preference.png"
+    },
+    {
+      "platform": "android",
+      "language": "es",
+      "screen": "language-preference",
+      "xml": "qa-current-android-es-language-preference.xml",
+      "png": "qa-current-android-es-language-preference.png",
+      "spanishToggleVerified": "true"
+    },
+    {
+      "platform": "android",
+      "language": "es",
+      "screen": "settings",
+      "xml": "qa-current-android-es-settings.xml",
+      "png": "qa-current-android-es-settings.png",
+      "spanishToggleVerified": "true"
+    },
+    {
+      "platform": "android",
+      "language": "es",
+      "screen": "profile",
+      "xml": "qa-current-android-es-profile.xml",
+      "png": "qa-current-android-es-profile.png",
+      "spanishToggleVerified": "true"
+    },
+    {
+      "platform": "android",
+      "language": "es",
+      "screen": "home",
+      "xml": "qa-current-android-es-home.xml",
+      "png": "qa-current-android-es-home.png",
+      "selectedTabVerified": "true",
+      "spanishToggleVerified": "true",
+      "localizedStringsPresent": "true"
+    },
+    {
+      "platform": "android",
+      "language": "es",
+      "screen": "accounts",
+      "xml": "qa-current-android-es-accounts.xml",
+      "png": "qa-current-android-es-accounts.png",
+      "selectedTabVerified": "true",
+      "spanishToggleVerified": "true",
+      "localizedStringsPresent": "true"
+    },
+    {
+      "platform": "android",
+      "language": "es",
+      "screen": "tools",
+      "xml": "qa-current-android-es-tools.xml",
+      "png": "qa-current-android-es-tools.png",
+      "selectedTabVerified": "true",
+      "spanishToggleVerified": "true",
+      "localizedStringsPresent": "true"
+    },
+    {
+      "platform": "android",
+      "language": "es",
+      "screen": "financial",
+      "xml": "qa-current-android-es-financial.xml",
+      "png": "qa-current-android-es-financial.png",
+      "selectedTabVerified": "true",
+      "spanishToggleVerified": "true",
+      "localizedStringsPresent": "true"
+    },
+    {
+      "platform": "android",
+      "language": "es",
+      "screen": "personal",
+      "xml": "qa-current-android-es-personal.xml",
+      "png": "qa-current-android-es-personal.png",
+      "selectedTabVerified": "true",
+      "spanishToggleVerified": "true",
+      "localizedStringsPresent": "true"
+    }
+  ]
+}

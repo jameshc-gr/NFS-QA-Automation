@@ -115,6 +115,32 @@ function loadYamlFile<T>(filePath: string, fallback: T): T {
   return decryptObjectSecrets(parsed);
 }
 
+function loadRuntimeConfig(filePath: string, fallback: RuntimeConfig): RuntimeConfig {
+  if (!existsSync(filePath)) return fallback;
+  const parsed = YAML.parse(readFileSync(filePath, 'utf8')) as RuntimeConfig | undefined;
+  if (!parsed) return fallback;
+
+  const environment = String(process.env.MOBILE_ENV || parsed.defaultEnvironment || 'prod').toLowerCase();
+  const selected = parsed.environments?.[environment] || {};
+  // Decrypt only active environment values. Legacy root-level ciphertext may
+  // have been encrypted under a retired key and is unused when env values exist.
+  const merged: RuntimeConfig = {
+    ...fallback,
+    ...parsed,
+    verification: { ...fallback.verification, ...parsed.verification, ...selected.verification },
+    googleVoice: { ...fallback.googleVoice, ...parsed.googleVoice },
+    outlook: selected.outlook || parsed.outlook || fallback.outlook,
+    environments: parsed.environments,
+  };
+  merged.environments = parsed.environments
+    ? { [environment]: decryptObjectSecrets(selected) }
+    : undefined;
+  merged.outlook = decryptObjectSecrets(merged.outlook);
+  merged.googleVoice = decryptObjectSecrets(merged.googleVoice);
+  merged.verification = decryptObjectSecrets(merged.verification);
+  return merged;
+}
+
 const authRoot = path.resolve(process.cwd(), 'test-data/mobile-app/gri/android');
 const createdAccountsPath = path.resolve(process.cwd(), 'test-data/mobile-app/created-accounts.json');
 
@@ -132,7 +158,7 @@ function _getDatedTestResultsPaths(): { accountsPath: string; recentPath: string
 }
 
 const loginConfig = loadYamlFile<LoginConfig>(path.join(authRoot, 'login.yml'), DEFAULT_LOGIN_CONFIG);
-const runtimeConfig = loadYamlFile<RuntimeConfig>(path.join(authRoot, 'config.yml'), DEFAULT_RUNTIME_CONFIG);
+const runtimeConfig = loadRuntimeConfig(path.join(authRoot, 'config.yml'), DEFAULT_RUNTIME_CONFIG);
 
 function loadCreatedAccounts(): CreatedAccountRecord[] {
   if (!existsSync(createdAccountsPath)) {
