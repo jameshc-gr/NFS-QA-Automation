@@ -2,6 +2,34 @@
 
 Playwright QA automation for the Student Loan Refinance flow.
 
+## Shared Git ignore policy
+
+Generated test results, reports, traces, logs, caches, coverage and saved browser
+sessions are local-only. Run scripts normally; do not force-add their output.
+The shared [.gitignore](.gitignore) applies to every checkout. It does not redirect
+writers: new execution evidence must still go under `test-results/`.
+Fixtures, reviewed CSV references, account registries/counters, build metadata,
+source and required application resources remain tracked.
+
+### 2026-11-02 - Prevent generated-output conflicts
+
+- Request: keep other users' test/script runs from creating Git conflicts.
+- Cause: existing ignore rules did not cover all runtime state, and previously
+  tracked diagnostics remained tracked despite matching ignore rules.
+- Added local session, log/cache/coverage/build-selection and narrowly scoped
+  legacy capture rules; removed generated captures and sessions from the Git
+  index only, preserving any existing local copies and reusable inputs.
+- See [test-data history](test-data/README.md#2026-11-02---local-only-generated-evidence)
+  and [memory history](memory/README.md#2026-11-02---shared-ignore-policy).
+- Validation: 22 generated-path and 12 source/input ignore checks passed;
+  99 generated files were untracked, four existing local session/temp captures
+  remained present, and `npm run check:root` and scoped whitespace checks passed.
+- Scope: reusable account registries/counters stay shared because existing
+  workflows reuse them; this cleanup does not change account allocation.
+- Existing clones should back up wanted tracked captures/sessions before pulling
+  the removal commit: Git may remove unchanged tracked copies on that first
+  pull. Ignoring files does not remove older commits or replace session setup.
+
 ## Continue From One Test-Data Guide
 
 Start future tasks with the [test-data continuation guide](test-data/README.md).

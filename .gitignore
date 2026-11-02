@@ -61,3 +61,26 @@ test-data/solution-finder/*
 
 # Local DMX dashboard templates, run configuration, and credential-bearing results
 test-data/DMX/dmx-dashboard-*.json
+
+# Local run state and generated evidence (shared rules for every checkout).
+# Ignore rules do not untrack existing files or redirect output writers.
+/auth.json
+/test-data/rate-wealth/rate-wealth-auth.json
+.current-build
+*.log
+*.tsbuildinfo
+coverage/
+.nyc_output/
+.cache/
+.npm/
+
+# Legacy captures only; do not blanket-ignore fixture images or application assets.
+/rate-wealth-yopmail-inbox-form.png
+/temp/simulator-screenshot*.png
+/test-data/rate-wealth/profile-builder-*.png
+/test-data/rate-wealth/rate-wealth-*.png
+/test-data/rate-wealth/RW-BUG-*-capture-*.txt
+/test-data/mobile-app/gri/reference/*/qa-current-*.png
+/test-data/mobile-app/gri/reference/*/qa-current-*.xml
+/test-data/mobile-app/gri/reference/*/qa-current-*-capture-manifest.json
+/test-data/mobile-app/gri/reference/*/localization-report-summary.txt

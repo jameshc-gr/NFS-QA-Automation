@@ -1,5 +1,18 @@
 # NFS-QA-Automation Repository Memory
 
+## 2026-11-02 Shared Ignore Policy
+- **Request / cause:** Avoid conflicts after teammates run scripts. Ignore rules
+  alone do not stop changes to already tracked generated evidence or sessions.
+- **Fix:** Share explicit session/capture rules plus log/cache/coverage ignores;
+  remove 99 generated files from the index only. Keep fixtures, reviewed CSVs,
+  account registries/counters, build metadata and required input resources.
+- **Verified:** 22 generated paths ignored, 12 source/input paths visible;
+  four previously present local session/temp captures preserved. Root hygiene
+  and scoped whitespace checks passed. No live browser/device tests were needed.
+- **Limits:** Back up wanted tracked captures/sessions before the first pull of
+  their removal. Existing history is not rewritten; new evidence still belongs
+  under test-results. Account allocation/reuse behavior is unchanged.
+
 ## 2026-10-27 Validated Cleanup and Canonical Next-Task Handoff
 - **Root cause / decision:** Accumulated generated results and uncommitted exploratory tooling obscured the supported workflows. The user selected pre-October-only generated result deletion, consented to removal of uncommitted exploratory files, and requested a summary guide preserving machine inputs.
 - **Canonical handoff:** Existing `test-data/README.md` is the single next-task guide: October input inventory and next-task commands, excluding outcomes. Machine-readable inputs are unchanged. This retirement supersedes all older crawler, backlog, and report-generation instructions below; those entries are historical context, not supported commands or current coverage.

@@ -1,5 +1,22 @@
 # Test Data Directory
 
+## 2026-11-02 - Local-only generated evidence
+
+- Request: prevent shared-checkout conflicts from generated test/script output.
+- Previously committed browser sessions and legacy screenshot/hierarchy captures
+  are removed from the Git index only; existing local files are not deleted.
+  Future evidence still belongs under `../test-results/`, not this directory.
+- The shared ignore rules target legacy capture names, not all images, JSON,
+  CSV or YAML. Reviewed localization CSV references, snapshot integrity data,
+  fixtures, account registries/counters and required build inputs remain tracked.
+- Saved browser sessions are machine-local; recreate them with the relevant
+  setup script. Back up wanted tracked sessions/captures before the first pull
+  containing their removal. Older Git history is not rewritten.
+- Validation: the ignore matrix kept 12 source/input paths visible and ignored
+  22 generated paths; all 99 selected generated files left the index, while
+  reusable account registries/counters stayed tracked and local sessions stayed
+  on disk. Root hygiene and scoped whitespace checks passed.
+
 ## October 2026 continuation guide
 
 Updated 2026-10-27. Start here for the reusable test inputs and next-task workflow.
