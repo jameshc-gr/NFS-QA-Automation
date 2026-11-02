@@ -1,0 +1,22 @@
+{
+  "gri": {
+    "label": "GRI",
+    "intakeUrl": "https://falcon.qa.fsp.rate.com/inquiry/intake/?playwright=true"
+  },
+  "owning": {
+    "label": "Owning",
+    "intakeUrl": "https://falcon.qa.fsp.owning.com/inquiry/intake/?playwright=true"
+  },
+  "citywide": {
+    "label": "Citywide",
+    "intakeUrl": "https://falcon.qa.fsp.citywidehm.com/inquiry/intake/?playwright=true"
+  },
+  "certainty": {
+    "label": "Certainty",
+    "intakeUrl": "https://falcon.qa.fsp.certaintyhomelending.com/inquiry/?playwright=true"
+  },
+  "onq": {
+    "label": "OnQ",
+    "intakeUrl": "https://falcon.qa.fsp.onqhomeloans.com/inquiry/intake/?playwright=true"
+  }
+}

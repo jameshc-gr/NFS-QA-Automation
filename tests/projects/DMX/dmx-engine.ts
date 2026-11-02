@@ -80,6 +80,21 @@ const dateOut = (days: number) => {
 };
 const digits = (s: string) => s.replace(/\D/g, '');
 
+async function fillResidenceDuration(page: Page, moveIn: string) {
+  const dateInput = page.locator('#user-residence-started-input');
+  if (await dateInput.isVisible()) {
+    await fillMasked(page, '#user-residence-started-input', digits(moveIn));
+    return;
+  }
+  const match = /^(\d{2})\/?(\d{4})$/.exec(moveIn);
+  if (!match || Number(match[1]) < 1 || Number(match[1]) > 12) throw new Error('Residence moveIn must be MM/YYYY');
+  const today = new Date();
+  const months = (today.getFullYear() - Number(match[2])) * 12 + today.getMonth() + 1 - Number(match[1]);
+  if (months < 0) throw new Error('Residence moveIn cannot be in the future');
+  await page.getByRole('textbox', { name: /^Years\*/, exact: false }).fill(String(Math.floor(months / 12)));
+  await page.getByRole('textbox', { name: /^Months\*/, exact: false }).fill(String(months % 12));
+}
+
 /** Wait for the rendered page, not network idleness from unrelated background requests. */
 export async function settle(page: Page, prev: string, timeout = 15000) {
   const started = Date.now();
@@ -102,93 +117,58 @@ export async function settle(page: Page, prev: string, timeout = 15000) {
 }
 
 /** Detect common Okta/login pages by hostname or page contents. */
-function looksLikeLoginUrl(u: string) {
+function looksLikeLoginUrl(u: string | URL) {
   try {
-    const h = new URL(u).hostname.toLowerCase();
+    const h = new URL(String(u)).hostname.toLowerCase();
     return h.includes('login') || h.includes('okta') || h.includes('auth') || h.includes('authorize');
   } catch (e) {
-    return /login|okta|auth|authorize/i.test(u);
+    return /login|okta|auth|authorize/i.test(String(u));
   }
 }
 
 /** Handle an on-the-fly login redirect. Supports manual MFA wait when DMX_MFA_MANUAL is set. */
-export async function handleLoginRedirect(page: Page, email: string, password: string) {
+export async function handleLoginRedirect(page: Page, email: string, password: string, entryUrl = ENTRY_URL) {
   const url = page.url();
   if (!looksLikeLoginUrl(url)) return false;
-  console.log('[DMX] detected login page:', url);
-  // If the page doesn't render any input fields (widget not present), bail back to ENTRY_URL.
-  const anyInputCount = await page.locator('input').count().catch(() => 0);
-  if (!anyInputCount) {
-    console.log('[DMX] no login form inputs detected on authorize page; navigating to ENTRY_URL as fallback');
-    await page.goto(ENTRY_URL, { waitUntil: 'domcontentloaded' }).catch(() => {});
-    return false;
-  }
-
-  // Try a few common Okta/login field selectors
-  const usernameSelectors = ['#okta-signin-username', 'input[name=username]', 'input[name=identifier]', 'input[type=email]'];
-  const passwordSelectors = ['#okta-signin-password', 'input[name=password]', 'input[name=credentials.passcode]'];
-  let filled = false;
-  for (const us of usernameSelectors) {
-    const u = page.locator(us);
-    if (await u.count().catch(() => 0)) {
-      try {
-        await u.fill(email, { timeout: 5000 });
-        filled = true;
-        break;
-      } catch { }
-    }
-  }
-  for (const ps of passwordSelectors) {
-    const p = page.locator(ps);
-    if (await p.count().catch(() => 0)) {
-      try {
-        await p.fill(password, { timeout: 5000 });
-        filled = true;
-        break;
-      } catch { }
-    }
-  }
-  // submit
-  const submit = page.locator('button[type=submit], input[type=submit], button:has-text("Sign In"), button:has-text("Sign in")').first();
-  if (await submit.count().catch(() => 0)) {
-    await clickAction(page, submit, 'Sign In');
-  } else if (filled) {
-    // fallback: press Enter
-    await page.keyboard.press('Enter').catch(() => {});
-  }
-
-  // After submit, detect MFA flows. If manual MFA configured, wait long for user to finish.
-  const manual = Boolean(process.env.DMX_MFA_MANUAL);
-  const mfaTimeout = Number(process.env.DMX_MFA_MANUAL_TIMEOUT ?? 600000); // default 10 minutes
-  try {
-    // Wait until URL no longer looks like a login page or we reach dashboard
-    await page.waitForFunction((looksFn) => !looksFn(location.href) || /\/loan\/[^/]+\/overview/.test(location.pathname), [looksLikeLoginUrl], { timeout: manual ? mfaTimeout : 30000 });
-  } catch (e) {
-    // If manual MFA requested, allow long wait by polling for change
-    if (manual) {
-      console.log('[DMX] waiting for manual MFA completion (operator intervention expected)');
-      await page.waitForFunction((looksFn) => !looksFn(location.href) || /\/loan\/[^/]+\/overview/.test(location.pathname), [looksLikeLoginUrl], { timeout: mfaTimeout }).catch(() => {});
-    } else {
-      throw new Error('Login did not complete within timeout; MFA may be required. Set DMX_MFA_MANUAL to allow manual completion.');
-    }
-  }
-  console.log('[DMX] login handler completed; current url=', page.url());
-  // If login handed us to MyAccount (existing loan), try to start a new application so the DMX flow can continue.
-  if (isDashboard(page)) {
-    console.log('[DMX] detected existing loan dashboard after login — attempting to start a new application');
-    const startBtn = page.locator('button, a').filter({ hasText: /start (a )?new (application|loan)/i }).first();
-    if (await startBtn.count().catch(() => 0)) {
-      try {
-        await clickAction(page, startBtn, 'Start new application');
-        // allow navigation back into apply flow
-        await page.waitForURL(u => /apply\//.test(u.pathname), { timeout: 20000 }).catch(() => {});
-      } catch (e) {
-        // fallback to direct entry URL navigation
-        await page.goto(ENTRY_URL, { waitUntil: 'domcontentloaded' }).catch(() => {});
+  console.log('[DMX] detected login page:', new URL(url).hostname);
+  const manual = /^(1|true)$/i.test(process.env.DMX_MFA_MANUAL ?? '');
+  const mfaTimeout = Number(process.env.DMX_MFA_MANUAL_TIMEOUT ?? 600000);
+  if (!Number.isFinite(mfaTimeout) || mfaTimeout <= 0) throw new Error('DMX_MFA_MANUAL_TIMEOUT must be a positive number');
+  await page.waitForFunction(() =>
+    !/login|okta|auth|authorize/i.test(location.hostname) ||
+    Array.from(document.querySelectorAll('input')).some(input => input.getClientRects().length > 0),
+    undefined, { timeout: 20000 });
+  if (looksLikeLoginUrl(page.url())) {
+    const username = page.locator('#okta-signin-username:visible, input[name="username"]:visible, input[name="identifier"]:visible, input[type="email"]:visible').first();
+    const passwordInput = page.locator('#okta-signin-password:visible, input[name="password"]:visible, input[name="credentials.passcode"]:visible').first();
+    const submit = page.locator('button[type="submit"]:visible, input[type="submit"]:visible').or(page.getByRole('button', { name: /^(sign in|next|verify)$/i })).first();
+    if (await username.isVisible()) {
+      await username.fill(email);
+      if (!(await passwordInput.isVisible())) {
+        await clickAction(page, submit, 'Next');
+        await passwordInput.waitFor({ state: 'visible', timeout: 20000 });
       }
-    } else {
-      await page.goto(ENTRY_URL, { waitUntil: 'domcontentloaded' }).catch(() => {});
     }
+    if (await passwordInput.isVisible()) {
+      await passwordInput.fill(password);
+      await clickAction(page, submit, 'Sign In');
+    }
+  }
+  if (manual) console.log('[DMX] waiting for sign-in; complete any MFA challenge in the browser');
+  try {
+    await page.waitForURL(destination => !looksLikeLoginUrl(destination), { timeout: manual ? mfaTimeout : 30000 });
+  } catch {
+    throw new Error(manual ? 'Manual MFA/sign-in did not complete within DMX_MFA_MANUAL_TIMEOUT' : 'Login did not complete; MFA may be required. Set DMX_MFA_MANUAL=1 for manual completion.');
+  }
+  if (isDashboard(page) || new URL(page.url()).pathname === '/loans') {
+    console.log('[DMX] existing loan dashboard; starting a new application');
+    const startBtn = page.locator('button, a').filter({ hasText: /start (a )?new (application|loan)/i }).first();
+    if (await startBtn.isVisible()) {
+      await clickAction(page, startBtn, 'Start new application');
+    } else {
+      await page.goto(entryUrl, { waitUntil: 'domcontentloaded' });
+    }
+    await page.waitForURL(destination => destination.pathname.startsWith('/apply/'), { timeout: 20000 });
   }
   return true;
 }
@@ -345,7 +325,7 @@ export const handlers: Record<string, Handler> = {
     await pressExact(p, '#refi-property-current-residence-radio', 'Yes');
     const county = p.locator('#property-potential-county-select');
     if ((await county.count()) && (await county.inputValue()) === '' && (await county.locator('option').count()) > 1) await county.selectOption({ index: 1 });
-    await fillMasked(p, '#user-residence-started-input', digits(l.moveIn ?? '012018'));
+    await fillResidenceDuration(p, l.moveIn ?? '012018');
     const no = p.locator('main button:visible').filter({ hasText: /^\s*No\s*$/ });
     await clickAction(p, no.nth(1), 'No taxes and insurance included'); // enters annual amounts
     await fillMasked(p, '#property-estimated-taxes-input', String(l.annualTaxes ?? 6000));
@@ -386,7 +366,7 @@ export const handlers: Record<string, Handler> = {
       await county.locator('option').nth(1).waitFor({ state: 'attached', timeout: 10000 }).catch(() => {});
       if ((await county.inputValue()) === '' && (await county.locator('option').count()) > 1) await county.selectOption({ index: 1 });
     }
-    await fillMasked(p, '#user-residence-started-input', digits(r.moveIn));
+    await fillResidenceDuration(p, r.moveIn);
     await pressExact(p, '#user-residence-status-radio', r.status);
     if (r.status === 'Rent') await fillMasked(p, '#estimated-monthly-expenses-rent-input', String(r.monthlyRent ?? 2000));
     else {
@@ -553,7 +533,7 @@ export async function register(page: Page, s: Scenario, email: string, password 
   await page.goto(entryUrl, { waitUntil: 'domcontentloaded' });
   // If the entry URL redirected to Okta/login, attempt to sign in on-the-fly.
   if (looksLikeLoginUrl(page.url())) {
-    await handleLoginRedirect(page, String(process.env.DMX_RUN_EMAIL ?? email), String(process.env.DMX_RUN_PASSWORD ?? password)).catch(e => { throw e; });
+    await handleLoginRedirect(page, email, password, entryUrl);
   }
   await page.locator('main').waitFor({ state: 'visible', timeout: 20000 });
   const cookie = page.locator('#onetrust-accept-btn-handler');
@@ -574,32 +554,15 @@ export async function register(page: Page, s: Scenario, email: string, password 
   await page.locator('#user-email-input').fill(email);
   await page.locator('#user-communication-method-select').selectOption('Email');
   await clickNext(page);
-  // After submitting the email, the app may redirect to an Okta login page when the
-  // email already exists. Detect that and attempt on-the-fly login so the flow can continue.
-  // After clickNext, either the personal-info-create-account page appears, or the app may
-  // redirect to an Okta authorize URL and then back to the apply flow with `icid=auth|login`.
-  // Wait briefly for either outcome and handle login if observed.
-  try {
-    const outcome = await Promise.race([
-      page.waitForURL('**/personal-info-create-account**', { timeout: 5000 }).then(() => 'create' as const).catch(() => 'timeout' as const),
-      page.waitForURL(u => looksLikeLoginUrl(u) || (u.search && u.includes('icid=auth')), { timeout: 5000 }).then(() => 'login' as const).catch(() => 'timeout' as const),
-    ]);
-    if (outcome === 'login') {
-      console.log('[DMX] register flow detected login redirect after email submit; attempting on-the-fly login');
-      await handleLoginRedirect(page, String(process.env.DMX_RUN_EMAIL ?? email), String(process.env.DMX_RUN_PASSWORD ?? password)).catch(err => { console.log('[DMX] on-the-fly login failed:', err.message); });
-      // Ensure we're back to a visible DMX page before continuing
-      await page.locator('main').waitFor({ state: 'visible', timeout: 20000 }).catch(() => {});
-      // If after login we land on an apply route with icid=auth|login, try navigating to ENTRY_URL to start fresh
-      if (page.url().includes('icid=auth|login') || page.url().includes('icid=auth%7Clogin')) {
-        await page.goto(ENTRY_URL, { waitUntil: 'domcontentloaded' }).catch(() => {});
-      }
-    } else {
-      // fall through to wait for the create-account page (longer timeout)
-      await page.waitForURL('**/personal-info-create-account**', { timeout: 45000 });
-    }
-  } catch (e) {
-    console.log('[DMX] error while detecting existing-account during register:', (e as Error).message);
-    await page.waitForURL('**/personal-info-create-account**', { timeout: 45000 });
+  await page.waitForURL(destination =>
+    destination.pathname.includes('/personal-info-create-account') || looksLikeLoginUrl(destination) ||
+    destination.searchParams.get('icid') === 'auth|login', { timeout: 45000 });
+  if (looksLikeLoginUrl(page.url())) await handleLoginRedirect(page, email, password, entryUrl);
+  if (!new URL(page.url()).pathname.includes('/personal-info-create-account')) {
+    await page.waitForURL(destination => destination.pathname.startsWith('/apply/') &&
+      !destination.pathname.includes('/user-info'), { timeout: 45000 });
+    await page.locator('main').waitFor({ state: 'visible', timeout: 15000 });
+    return;
   }
   await page.locator('#user-password-input').fill(password);
   await page.locator('#user-confirm-password-input').fill(password);
@@ -607,9 +570,8 @@ export async function register(page: Page, s: Scenario, email: string, password 
   await page.waitForURL(url => !url.pathname.includes('/personal-info-create-account') && !url.pathname.includes('/user-info') && !url.pathname.includes('/loan-purpose'), { timeout: 45000 });
   // If Okta presented an authentication step during register, allow handler to complete before continuing.
   if (looksLikeLoginUrl(page.url())) {
-    await handleLoginRedirect(page, String(process.env.DMX_RUN_EMAIL ?? email), String(process.env.DMX_RUN_PASSWORD ?? password)).catch(e => { throw e; });
+    await handleLoginRedirect(page, email, password, entryUrl);
   }
   await page.locator("text=/saving your loan details/i").waitFor({ state: 'hidden', timeout: 30000 }).catch(() => {});
-  await page.waitForFunction(() => !window.location.search.includes('icid='), { timeout: 20000 }).catch(() => {});
   await page.locator('main').waitFor({ state: 'visible', timeout: 15000 });
 }

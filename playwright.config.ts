@@ -64,6 +64,7 @@ const studentIDRMaxWorkers = testProject === 'student-IDR' ? (configuredWorkers 
 
 export default defineConfig({
   testDir: `./${testSuiteDir}`,
+  testIgnore: ['**/solution-finder/workbook-scenarios/**', '**/solution-finder/lab/**', '**/tests/unit/new-solution-finder.test.ts'],
   outputDir: `./test-results/${runDate}/${testProject}/runs`,
   timeout: testTimeoutMs,
   fullyParallel: true,

@@ -2,6 +2,9 @@
 const { spawnSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const { checkRepositoryRoot } = require('./check-repository-root');
+
+checkRepositoryRoot();
 
 const argv = process.argv.slice(2);
 const testProject = process.env.TEST_PROJECT || 'student-idr';
@@ -36,5 +39,6 @@ for (let index = 0; index < batches.length; index += 1) {
   const cmdArgs = ["test", ...baseArgs, ...batchFiles, "--workers=" + workers, outputArg];
   console.log("Running batch with " + workers + " worker(s): npx playwright " + cmdArgs.join(" "));
   const result = spawnSync("npx", ["playwright", ...cmdArgs], { stdio: "inherit", shell: false });
+  checkRepositoryRoot();
   if (result.status !== 0) process.exit(result.status || 1);
 }

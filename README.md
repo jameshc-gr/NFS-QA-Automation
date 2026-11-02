@@ -30,6 +30,130 @@ source and required application resources remain tracked.
   the removal commit: Git may remove unchanged tracked copies on that first
   pull. Ignoring files does not remove older commits or replace session setup.
 
+## Work History and Root Hygiene
+
+Assistant memory is selective and does **not** retain every detail of every task.
+Keep a dated work-history entry in each affected area/folder's README (create one
+if missing): request, root cause/decision, changes, validation and limitations.
+Preserve previous entries and link relevant histories here. Do not copy secrets,
+account data or raw response bodies into documentation. The tracked
+[repository memory](memory/webautomation.md) holds durable learnings; the optional
+external `/memories/repo/webautomation.md` mount is not available in this checkout.
+READMEs are summaries, not complete conversation archives or backups. Unrecorded
+past work cannot be reconstructed reliably.
+
+All generated diagnostics, snapshots, response captures, logs, screenshots and
+reports belong under `test-results/<YYYY-MM-DD>/<project>/<run>/`, including
+one-off shell/MCP work. Use explicit destinations, not cwd-relative bare names.
+For browser MCP providers supporting it, configure `--output-dir` to a directory
+under `test-results/` and restart the provider; otherwise pass explicit result
+paths. External provider launch settings are not controlled by this repository.
+Ignoring an output file does not redirect its writer.
+
+```bash
+npm run check:root
+npm run test:root-hygiene
+```
+
+The root guard checks an explicit source/config allowlist and rejects default
+reporter/MCP output folders. The shared Playwright wrapper checks before execution
+and after every batch, including failed batches; `npm test` also checks through
+lifecycle hooks. Browser CI jobs check even after failures. Direct commands and
+MCP sessions must run `npm run check:root` before completion. This is detection,
+not a filesystem sandbox; fix the writer rather than allowlisting evidence.
+
+### 2026-10-30 - Solution Finder project consolidation
+
+- Moved the 102-case workbook group under
+  [Solution Finder](tests/projects/solution-finder/workbook-scenarios/), its inputs
+  under [Solution Finder data](test-data/solution-finder/workbook-scenarios/), and
+  historical evidence under `test-results/<date>/solution-finder/workbook-scenarios/`.
+  New scenario sets and tenants must not create standalone project folders.
+- Updated runner imports, generators, fixture tracking and output paths. Existing
+  `test:solution-finder:new` commands remain supported; both runners use the
+  `solution-finder` project name and remain separately selectable.
+- Validation: 16 focused unit/environment tests and scoped typecheck passed;
+  discovery found 102 workbook cases and the original 25 cases separately.
+  Original regression files, both fixtures and all 4,281 moved result files
+  retained their hashes. Relocated HTML reports, screenshot links and the
+  interactive Playwright report were browser-verified locally. No new inquiries
+  were submitted, and historical execution metadata was not rewritten.
+- See [input history](test-data/README.md#work-history) and
+  [runner history](scripts/README.md#work-history).
+
+### 2026-10-30 - Root cleanup and durable history
+
+- Removed the tracked Firebase authentication debug log and the untracked
+  2026-10-28 Rate Wealth plan-list response capture from the root. The previously
+  deleted root screenshot was left deleted. Source/configuration and test inputs
+  were retained.
+- Relocated the generated `.playwright-mcp/` diagnostic directory beneath
+  `test-results/2026-10-30/maintenance/root-cleanup-2026-10-30/mcp-diagnostics/`,
+  including intentional deletions of tracked old generated logs from their
+  original location, preserving evidence without keeping it at the root.
+- Cause/attribution limits: default MCP diagnostic paths and cwd-relative ad hoc
+  captures bypass configured Playwright outputs. The Firebase log was legacy
+  authentication-tool output; obsolete troubleshooting advised root-level CLI
+  login. No active repository writer or available session history identified the
+  exact command that created the one-off JSON/log, so attribution is limited.
+  Existing Playwright reporter destinations already point into `test-results/`.
+- Added an intentional-file allowlist guard rejecting generated reporter/MCP
+  directories; the shared runner checks before and after each batch, even on
+  failure, npm main lifecycle hooks check, all three existing browser CI
+  workflows check with `if: always()`, and the existing results-root checker
+  includes the root guard. Replaced obsolete root-level Firebase CLI login
+  troubleshooting with existing browser profile setup/access checks.
+  README/AGENTS/framework context and the sync role now require dated
+  affected-area README histories because memory is selective.
+  See [scripts history](scripts/README.md),
+  [CI history](.github/workflows/README.md),
+  [agent guidance history](ai/jobs/README.md),
+  [test-data history](test-data/README.md#work-history) and
+  [memory history](memory/README.md).
+- Verification (completed evidence supplied for this documentation sync):
+  `npm run test:root-hygiene` passed all 7 Node tests: root configs preserved;
+  arbitrary diagnostic extensions rejected; default MCP/reporter directories
+  rejected; sorted names without reading contents; wrapper guard before/after
+  each batch; guard after failure preserving exit status; halt on root pollution.
+  `npm run check:root` passed. `node --check` passed for
+  `scripts/check-repository-root.js`, `scripts/check-test-results-root.js` and
+  `scripts/run-playwright.js`. All three modified browser CI workflow YAML files
+  parsed and their always-run guard steps were verified. Newly added README
+  relative links in `scripts/`, `.github/workflows/`, `ai/jobs/` and `memory/`
+  resolved; focused `git diff --check` passed.
+- Limits: no live browsers/devices, authentication sign-ins or GitHub jobs ran.
+  External browser MCP launch configuration must set `--output-dir` under
+  `test-results/` and restart externally; it is not repository-managed. The
+  guard detects violations but cannot intercept filesystem writes. This
+  documentation-only sync used supplied evidence without rerunning validation.
+
+## Screenshot Output Rule
+
+All generated screenshots must be saved only under the repository's
+`test-results/` directory, preferably
+`test-results/<YYYY-MM-DD>/<project>/<run>/`. This includes automated tests,
+exploratory/manual browser captures, MCP browser tools, failure diagnostics, and
+report previews. Create the destination directory and explicitly set the output
+path before capturing; do not rely on tool defaults. Never create screenshots in
+the repository root, `test-data/`, source directories, or outside `test-results/`.
+
+## Test Data Retention Rule
+
+Keep `test-data/` limited to inputs and supporting resources necessary to execute
+or reproduce tests: fixtures, scenario definitions, expected-data contracts,
+configuration, account registries/counters, and required application builds.
+Screenshots, execution reports, diagnostic captures, and other generated run
+evidence belong under `test-results/`, not `test-data/`. Preserve required input
+assets and application-bundle resources such as app icons; these are not
+screenshots or disposable test results.
+
+## Project Folder Rule
+
+Reuse the existing project folder under `tests/projects/`, `test-data/` and
+`test-results/<YYYY-MM-DD>/`. New scenario sets, workbooks, tenants and
+environments belong in descriptive subfolders of that project. Create a new
+project folder only when the user explicitly identifies a new project.
+
 ## Continue From One Test-Data Guide
 
 Start future tasks with the [test-data continuation guide](test-data/README.md).
@@ -84,7 +208,279 @@ Playwright specs live under `tests/projects/`. The active UI suites are:
 
 - `tests/projects/student-loan-refi` for Student Loan Refinance
 - `tests/projects/student-IDR` for Student IDR / forgiveness
-- `tests/projects/solution-finder` for Solution Finder inquiry and offers flows
+- `tests/projects/solution-finder` for Solution Finder inquiry and offers flows,
+  including the separately selectable `workbook-scenarios/` group
+
+### Solution Finder general regression
+
+Keep the existing specs and shared helper in
+[`tests/projects/solution-finder`](tests/projects/solution-finder/) as the single
+maintained original general regression suite. Do not merge or replace this set
+with the separate **New Solution Finder** workbook suite below. Additional
+spreadsheet revisions are not automatically promoted into either suite.
+
+```bash
+# General regression: runs the existing UI specs.
+TEST_PROJECT=solution-finder npx playwright test \
+  tests/projects/solution-finder --project=solution-finder --workers=1
+
+# Discovery only: does not submit inquiries.
+TEST_PROJECT=solution-finder npx playwright test \
+  tests/projects/solution-finder --project=solution-finder --list --reporter=list
+```
+
+For a narrow retirement check (five form-only birthday probes plus one real
+inquiry, no retries), run:
+
+```bash
+COMPANY=gri SOLUTION_FINDER_BASE_URL=https://falcon.qa.fsp.rate.com \
+  npm run test:project:solution-finder -- \
+  tests/projects/solution-finder/inquiry-occupancy-investment-retired-income.spec.ts --retries=0
+```
+
+Original, workbook and lab automation share an
+[exact income-source selector](tests/projects/solution-finder/helpers/README.md).
+Missing Retired SSI must fail, never silently select employment/another option.
+The [focused validation history](tests/projects/solution-finder/README.md#2026-11-02---original-retirement-automation-corrected-and-tested)
+records 49 offline checks and two passing live browser tests (one inquiry).
+
+### New Solution Finder: 102 workbook scenarios
+
+The separately maintained [workbook group](tests/projects/solution-finder/workbook-scenarios/) has
+one selectable spec per scenario from
+[the 102-case workbook](test-data/solution-finder/HELOAN_102_scenarios_with_Fannie_Mae_personas.xlsx).
+It uses the checked-in [scenario contracts](test-data/solution-finder/workbook-scenarios/scenarios.json),
+not Excel or historical inquiry IDs at execution time. All submissions are made
+through the browser UI; no backend submission scripts or mocked offers are used.
+
+Select the tenant with `SF_TENANT` (case-insensitive, default `gri`):
+
+| Value | Tenant | Intake URL |
+|---|---|---|
+| `gri` | GRI | https://falcon.qa.fsp.rate.com/inquiry/intake/?playwright=true |
+| `owning` | Owning | https://falcon.qa.fsp.owning.com/inquiry/intake/?playwright=true |
+| `citywide` | Citywide | https://falcon.qa.fsp.citywidehm.com/inquiry/intake/?playwright=true |
+| `certainty` | Certainty | https://falcon.qa.fsp.certaintyhomelending.com/inquiry/?playwright=true |
+| `onq` | OnQ | https://falcon.qa.fsp.onqhomeloans.com/inquiry/intake/?playwright=true |
+
+```bash
+# Full new suite; two workers, no automatic retries.
+SF_TENANT=gri npm run test:solution-finder:new
+SF_TENANT=owning npm run test:solution-finder:new
+SF_TENANT=citywide npm run test:solution-finder:new
+SF_TENANT=certainty npm run test:solution-finder:new
+SF_TENANT=onq npm run test:solution-finder:new
+
+# Select one scenario, discover tests, or validate offline.
+SF_TENANT=gri npm run test:solution-finder:new -- NSF-001.spec.ts --workers=1
+npm run test:solution-finder:new:list
+npm run test:solution-finder:new:unit
+npm run typecheck:solution-finder:new
+
+# Only after explicitly reviewing changed workbook expectations:
+npm run export:solution-finder:new
+npm run generate:solution-finder:new
+```
+
+The [dedicated config](playwright.new-solution-finder.config.ts) isolates this
+suite from the original runner. Unknown tenants fail explicitly. Certainty's
+distinct `/inquiry/` route is preserved. Use a unique `RUN_ID` if supplying one;
+by default a single timestamp is shared by the runner and workers.
+Both configurations use the existing `solution-finder` project name. The
+`test:solution-finder:new` commands remain available for this workbook group;
+they do not introduce a separate project.
+
+Each test checks form inputs before proceeding, captures the actual inquiry
+request/response and final DOM offers, and compares API-to-workbook,
+UI-to-API and UI-to-workbook. Comparisons are unordered by product, not by
+fixed card position. Per-run inquiry/offer/application IDs are recorded but
+excluded from equality checks; the new inquiry ID must match the browser URL.
+Fresh emails are used without modifying the saved scenario. Amounts, rates,
+payments, FICO, ratios, eligibility reasons, names and visible labels remain
+asserted. An explicit inactive no-offer placeholder is not an eligible offer.
+Missing APR requires both APR and monthly payment to show `Unknown`.
+
+Workbook APR comparisons ignore the hundredths and thousandths digits, comparing
+whole and tenths digits without rounding (for example, `8.449%` and `8.471%`
+match; `8.499%` and `8.500%` do not). This applies only to API/workbook and
+UI/workbook APR checks. UI/API APR equality stays exact, and all other pricing,
+amount, eligibility and label checks remain unchanged. Ignored APR differences
+are recorded in QA comments; saved expectations and raw captures are not changed.
+
+All workbook expectations were observed on **GRI**. Other tenants run against
+that baseline with an explicit unapproved-tenant-baseline note; differences
+fail and need tenant-specific review, not automatic baseline replacement.
+Fannie Mae no-match responses do not verify their published scores/freezes.
+Rounded summary DTI does not certify exact ECS debt thresholds. Every run
+includes a QA comment explaining comparisons and relevant limitations.
+
+Evidence stays under
+`test-results/<YYYY-MM-DD>/solution-finder/workbook-scenarios/<tenant>/<run-id>/`:
+`index.html` is a readable summary with expandable screenshots/artifact links;
+`playwright-report/` is the interactive Playwright report. Per-scenario
+artifacts include actual request/response, expected response/UI, captured
+UI offers, field-level comparison, step outcomes, QA comment and screenshot.
+Failures retain diagnostics and fail the test; snapshots are never silently
+updated to make a run pass.
+
+### Solution Finder Lab: paste JSON and inspect live offers
+
+The [local lab](scripts/solution-finder/lab/README.md) follows the DMX Lab
+workflow while staying inside the existing Solution Finder project:
+
+```bash
+npm run solution-finder:lab
+# Open http://127.0.0.1:4180
+# Optional alternative port: SF_LAB_PORT=4181 npm run solution-finder:lab
+
+npm run test:solution-finder:lab
+npm run typecheck:solution-finder:new
+```
+
+For coworkers who do not need the full repository, build a **standalone ZIP**:
+
+```bash
+npm run package:solution-finder:lab
+# ZIP + SHA-256: test-results/<date>/solution-finder/lab-distribution/
+npm run verify:solution-finder:lab -- <path-to-generated-ZIP>
+```
+
+The archive contains only compiled lab JavaScript, the UI, tenant routes,
+an exact dependency lockfile and [laptop setup instructions](scripts/solution-finder/lab/portable/README.md).
+Recipients install Node.js 22/24 LTS, extract it, then run `npm ci`,
+`npm run setup` and `npm start`; open `http://127.0.0.1:4180`.
+No Git, Copilot, TypeScript build or full repository is needed. QA/VPN access
+is still required. Share internally only.
+
+The portable copy deliberately excludes customer/workbook inputs, spreadsheets,
+credentials/auth state, account records, saved templates/runs and installed
+dependencies/browser binaries. It starts with no built-ins: paste approved
+QA JSON and save templates to build a local suite catalog. Normal repository
+mode retains all 125 cases. Re-share the clean original ZIP, not a used folder.
+Clean extraction/install, isolated modules, UI/template persistence, a two-case
+offline suite/report and compiled worker discovery were verified on macOS;
+Windows/Linux execution is not yet certified. See the
+[distribution validation history](scripts/solution-finder/lab/README.md#2026-11-02---compiled-standalone-distribution).
+
+Use **Reset / New run** at the top to clear request tables/JSON, previews,
+selections, confirmations and displayed results, restoring GRI and fresh-email
+defaults. Saved runs, suites and templates are retained. Reset is disabled
+during active execution or pending requests; it never cancels or submits.
+See the [reset validation history](scripts/solution-finder/lab/README.md#2026-11-02---reset-for-a-new-run).
+
+Choose **GRI, Owning, Citywide, Certainty or OnQ**, paste inquiry JSON (or load
+one of the **125 built-in cases** or your saved templates), and validate its parsed borrower/property/income data.
+The picker lists the original 23 workbook scenarios first as
+`SF-1-Original: Happy Path - secondary Residence` through `SF-23-Original`,
+followed by the unchanged 102 `NSF-*` cases in a separate group.
+Original source JSON is viewable alongside the mapped form input. Original 12
+now supports **Retired SSI / Social Security**, with the user-approved DOB
+correction to `1950-01-01` displayed in its load notice; source JSON is unchanged.
+Navigator exposes Retired SSI from the **62nd birthday**, verified in GRI across
+the day before/on/after the birthday and a leap-day DOB. The lab checks actual
+calendar age at each validation, not a hardcoded birth-year cutoff.
+This is **observed Navigator UI behavior**, not federal benefits eligibility:
+[Social Security retirement](https://www.ssa.gov/retirement) can start at 62
+with sufficient credits, while [SSI](https://www.ssa.gov/ssi/eligibility)
+age-based eligibility starts at 65; disability/blindness can qualify earlier.
+Navigator's "Retired SSI" label submitting `SOCIAL_SECURITY` needs Product
+clarification. The lab does not certify benefits eligibility or change the
+observed UI cutoff to 65 based on the label.
+See the [retirement/age validation history](scripts/solution-finder/lab/README.md#2026-11-02---retired-ssi-and-calendar-accurate-age).
+Original 22 has
+`N/A` source input, but now uses an explicitly authorized generated under-18
+request based on SF-1: January 1 of the current local year minus 17 (age 17),
+refreshed when loaded or queued, including after New Year without a restart.
+Its load notice distinguishes generated input from original workbook data.
+See the [underage-case history](scripts/solution-finder/lab/README.md#2026-11-02---authorized-underage-input-for-sf-22).
+Edit requests in the **Request data editor** tables for property/loan amounts,
+borrower details and income sources (including add/remove income rows).
+The **Paste or edit inquiry request JSON** copy/paste area is always visible
+above the tables, even before clicking Load, and remains synchronized with them.
+**Validate and preview parsed input** shows eight readable `Label = Value`
+lines: subject property, occupancy, mortgage/loan amounts, borrower name/address,
+SSN last four and total annual income. Addresses are joined and dollars formatted;
+source values are preserved. Primary occupancy requires matching addresses;
+**Use subject as borrower address** copies them only when explicitly selected.
+To reuse a variation, load a case, edit its table fields or JSON, enter a
+**New template name**, and click **Save as new template**. The validated copy
+appears under **Saved templates** and survives page/server restarts. Every save
+creates a new ID; built-ins and earlier copies are never overwritten.
+Saving creates no inquiry, expected-response baseline or automated test spec.
+Templates work with any selected tenant and are stored locally under
+`test-data/solution-finder/workbook-scenarios/lab-templates/` (gitignored;
+QA data only). Duplicate saved names and invalid inputs show explicit errors.
+Confirm QA creation, then launch one real browser submission. A fresh QA email
+is used by default; uncheck that option to preserve the pasted email.
+Routing metadata is controlled by the selected tenant UI, not injected from
+the pasted request. Unsupported/unrepresentable inputs are rejected explicitly.
+
+For batch execution, use **Run a scenario suite**: choose a tenant, check the
+checkbox beside each scenario (no Ctrl/Cmd-click needed), or select a group,
+then confirm authorization for the selected
+count, then **Run selected suite**. Scenarios run **sequentially**, with no
+retries and no overlapping single run. The first failure stops the queue and
+marks remaining scenarios skipped. **Stop after current scenario** finishes
+the current inquiry without launching the rest.
+The suite **Tenant** dropdown sits above **Scenario group** and synchronizes
+both ways with **Configure an inquiry > Tenant**. Either change updates the
+intake link and target-tenant display and clears both run confirmations;
+both selectors are locked while an inquiry/suite is active.
+The combined table shows pass/fail/skipped counts, borrower/email/IDs, offer
+counts and per-scenario request/response/UI/screenshot links; **View run details**
+opens the normal full result. Saved suite history survives restart, but
+interrupted suites never automatically resume.
+Use **Open all suite results in a new tab** to view the entire selected suite
+without replacing the single-case **Actual results** panel. Every scenario has
+its own offers/declines, borrower/IDs, raw request/response/UI comparison, logs
+and screenshot. The read-only tab updates while running and works for saved
+suite history after restart; it never creates or retries inquiries.
+Suites use saved inputs, not unsaved editor changes; save a template first
+for edited variations. All 23 originals are selectable, including corrected
+original 12 and generated original 22. All inputs are validated before
+the first inquiry. Lab suites check actual UI/API consistency, not placeholder
+workbook expectations or independent underwriting correctness.
+See the [suite workflow and validation history](scripts/solution-finder/lab/README.md#run-a-suite).
+Focused lifecycle/browser coverage is recorded in the
+[unit-test history](tests/unit/README.md#2026-11-02---solution-finder-lab-suite-regressions).
+
+The lab shows live checkpoints/logs, raw actual request/response JSON, parsed
+credit/ratios/offers, eligibility reasons, inquiry and internal application IDs,
+the Navigator link and the final-page screenshot. Saved runs reload after
+restart. Their picker labels include borrower name, captured email and returned
+IDs; selecting one shows its basic property/loan/income profile. Actual submitted
+email takes precedence over template email; until captured, input email is
+explicitly labeled. **Loan ID** is shown only when the API returns `loanId`;
+otherwise application/inquiry IDs keep their real labels, not invented loan IDs.
+If the page warns that its server is older, finish any active inquiry and restart
+`npm run solution-finder:lab`, then refresh. Old servers keep their original
+in-memory catalog until restarted; missing legacy group labels are displayed
+correctly rather than as `undefined`.
+Evidence and per-run input snapshots live only under
+`test-results/<date>/solution-finder/lab/<run-id>/`; reusable fixtures stay
+under `test-data/solution-finder/`.
+
+This creates an **inquiry and any applications returned by the inquiry API**,
+not a completed or funded loan. No offer is selected or sent to the borrower.
+Lab PASS means intended inputs and actual UI/API values agree; it does not
+certify pricing/underwriting, and a no-offer result may pass. Placeholder workbook
+expectations are not asserted in the lab. Its dedicated fixed runner uses one
+worker, no retries, and is excluded from both existing test sets.
+
+Verified with real GRI and Owning UI submissions, each HTTP 200 and zero UI/API
+differences; GRI returned one eligible offer and Owning three. All five tenant
+selectors were checked locally; new live submissions to Citywide, Certainty
+and OnQ were not performed for this change. See the
+[lab history](scripts/solution-finder/lab/README.md#work-history) and
+[test-group history](tests/projects/solution-finder/README.md#work-history).
+
+QA Engineer subsequently exercised **SF-1-Original on GRI** (3 eligible offers)
+and **SF-18-Original on Owning** (0 eligible offers; income/DTI and
+asset-prequalification declines). Both returned HTTP 200 with zero UI/API
+differences. The [original-catalog QA report with screenshots](test-results/2026-10-30/solution-finder/lab-qa/originals-2026-10-31T02-18-23-850Z-29252/index.html)
+includes request/response evidence, returned IDs and per-run observations.
+Mobile layout, saved-run reload/server-restart persistence, and all five tenant
+links were also checked; only GRI and Owning had live sample submissions.
 
 ## AI Framework Layout
 
@@ -229,6 +625,7 @@ To prevent and verify regression on [FAL-3673](https://rate.atlassian.net/browse
 - Latest Results: [test-data/student-IDR/FAL-3673-AMORTIZATION-TEST-RESULTS.md](test-data/student-IDR/FAL-3673-AMORTIZATION-TEST-RESULTS.md)
 
 ### DMX (Digital Mortgage Experience) End-to-End Loans
+- Maintenance history: [DMX](tests/projects/DMX/README.md) and [offline regressions](tests/unit/README.md).
 The DMX suite drives the Guaranteed Rate online application in DEV for purchase, refinance and pre-approval, single and co-borrower. The dashboard has a DEV LO selector for LO-A `DMX Testlo` (`emp-id=12657`), LO-B `DMX Testlo` (`emp-id=4723`) and LO-C `DMX Indu` (`emp-id=6068`, starts at `/apply/lo-selection`). A loan is complete only when DMX hands off to the MyAccount overview (`https://my.gr-dev.com/loan/<gr-loan-guid>/overview`) and the same loan appears as a card on `https://my.gr-dev.com/loans`.
 - Test Data: [test-data/DMX/dmx-scenarios.yml](test-data/DMX/dmx-scenarios.yml) (14 complete scenarios and 5 incomplete/resume cases). Borrower names, SSNs and credit tiers come only from [Test credit report characteristics Sept 2026.pdf](test-data/DMX/Test%20credit%20report%20characteristics%20Sept%202026.pdf) (Fannie Mae); birthdates, phones, employers, incomes and property prices are synthetic and not verified against Zillow.
 - Field/route map: [test-data/DMX/dmx.yml](test-data/DMX/dmx.yml). Test plan: [test-data/DMX/dmx-test-plan.md](test-data/DMX/dmx-test-plan.md).
@@ -239,6 +636,7 @@ The DMX suite drives the Guaranteed Rate online application in DEV for purchase,
 - Run Commands:
   ```bash
   npm run dmx:dashboard       # start local template editor, live runner and loan results at http://127.0.0.1:4179
+  npm run test:dmx:unit       # intercepted offline Chromium login and residence checks
   npm run test:dmx:complete   # 14 complete loans + loan officer attribution check
   npm run test:dmx:resume     # abandon, resume and finish 5 loans + logout/login variant
   npm run test:project:DMX    # everything (about 20 minutes, 5 workers)
@@ -251,7 +649,8 @@ The DMX suite drives the Guaranteed Rate online application in DEV for purchase,
 - Local dashboard: choose an automated catalog case and DEV loan officer, manually type/paste/edit the full scenario JSON, select `New template` to save under a fresh name, or choose a saved template to update it. Inline JSON validation blocks invalid input. You may intentionally reuse the same account email/password for multiple loans; the dashboard no longer rejects emails found in its registry, and the append-only account registry records each run/loan against that email. The flow still uses the create-account route, so the external app must accept the reused account or report its validation error; existing-account sign-in is not yet automated. Launches use a single Chromium worker; logs/progress stream live. Passed results show green with email/password, loan number, MyAccount GUID and overview URL. Failures show red with failed page/route, error and screenshot when the browser can capture one. The server binds to loopback only and keeps dashboard templates/history/config ignored and local. Dashboard history and the existing account registry contain plaintext credentials; protect this machine and never publish these files or run artifacts.
 - Rules and limits: no `555` phone numbers (rejected by the app); masked inputs need `fill(force)` plus `input`/`change`/`blur`; Continue can take 3-8 seconds. `my.gr-dev.com` has no session before the DMX handoff, and a direct login there for a new account showed a phone-SMS MFA enrollment screen. The logout/login test uses the DMX login path and skips unless `DMX_MFA_MANUAL=1` (headed, manual code) if that screen appears. Automating OTP delivery is a new auth provider and needs owner approval.
 - Button robustness: DMX route settling waits for visible app state rather than `networkidle` and fixed sleeps, which can stall on background requests or cost seconds after every button. Clicks have a bounded 12-second timeout with route/element diagnostics; long interactions are logged. Route-specific checkpoint logic verifies expected page progress.
-- Latest run: 21/21 passed on 2026-09-29 (before the specs were split into one file per case). After the split, `ENTRY-01`, `PUR-06` and `INC-02` were re-run and passed; the other 18 have only been checked with `--list`.
+- Historical run: 21/21 passed on 2026-09-29 (before the specs were split into one file per case). After the split, `ENTRY-01`, `PUR-06` and `INC-02` were re-run and passed; the other 18 had only been checked with `--list` at that time.
+- Latest focused verification (2026-10-30): 12/12 offline Chromium regressions, strict focused engine TypeScript and root hygiene passed. After repairing the residence form mismatch, fresh-account GRI Enhanced DEV LO-B PUR-01 passed 1/1 in two minutes with completion and the same-loan Accounts card. Loan Lab startup and read-only DEV entry checks passed. Existing-account live login/MFA remains unverified; other suites were not run. This supersedes the older unimplemented-login note above: login recovery now has offline coverage, not live certification. See the linked maintenance history for evidence.
 - Dashboard templates: select `+ Create new template` to open the field-based Template Workshop. Prefill any DMX catalog scenario, then edit labeled fields for borrower, co-borrower, residence, employment, assets, property, loan and expectations before naming and creating a new template. You can add/remove assets and add a co-borrower. Existing templates can still be loaded and edited in the scenario JSON editor. Loan runs that fail show red and capture page/route/error/screenshot; only complete/resumed-complete account records show green.
 
 ### Rate Wealth (FitBUX) Web Suite

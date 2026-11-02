@@ -98,6 +98,36 @@ const occupancyDisplayMap: Record<string, string> = {
   INVESTMENT: "Investment",
 };
 
+export async function selectInquiryIncomeSource(
+  page: Page,
+  container: Locator,
+  source: string,
+): Promise<void> {
+  const labels: Record<string, string> = {
+    EMPLOYED_FULL_TIME: "Employed full-time",
+    EMPLOYED_PART_TIME: "Employed part-time",
+    SELF_EMPLOYED: "Self-employed",
+    RETIRED_SSI: "Retired SSI",
+  };
+  const label = labels[source];
+  if (!label) throw new Error(`Unsupported inquiry income source: ${source}`);
+  const nativeSelect = container.locator("select").first();
+  if (await nativeSelect.isVisible()) {
+    await nativeSelect.selectOption({ value: source });
+    await expect(nativeSelect).toHaveValue(source);
+    return;
+  }
+  const trigger = container
+    .locator('button, [role="combobox"], [aria-haspopup="listbox"]')
+    .first();
+  await expect(trigger).toBeVisible({ timeout: 5000 });
+  await trigger.click();
+  const option = page.getByRole("option", { name: label, exact: true }).filter({ visible: true });
+  await expect(option).toBeVisible({ timeout: 5000 });
+  await option.click();
+  await expect(trigger).toContainText(label);
+}
+
 /**
  * Navigates to the inquiry intake page, fills the entire form, submits it, and
  * waits for the offers page with exactly 3 offer cards.
@@ -273,49 +303,7 @@ export async function fillAndSubmitInquiryForm(
   // Primary income source
   const incomeSourceField = page.getByTestId("inquiry-primary-income-source");
   await expect(incomeSourceField).toBeVisible({ timeout: 10000 });
-  const targetIncomeSource = incomeInput[0].incomeSource;
-
-  const nativeIncomeSelect = incomeSourceField.locator("select").first();
-  if (
-    await nativeIncomeSelect.isVisible({ timeout: 1000 }).catch(() => false)
-  ) {
-    const selected = await nativeIncomeSelect.selectOption({
-      value: targetIncomeSource,
-    });
-    if (!selected.length) {
-      const nonEmptyValue = await nativeIncomeSelect
-        .locator("option")
-        .evaluateAll((options) => {
-          const first = options.find(
-            (opt) => ((opt as HTMLOptionElement).value ?? "").trim().length > 0,
-          ) as HTMLOptionElement | undefined;
-          return first?.value ?? "";
-        });
-      if (nonEmptyValue) {
-        await nativeIncomeSelect.selectOption({ value: nonEmptyValue });
-      }
-    }
-  } else {
-    const incomeDropdownTrigger = incomeSourceField
-      .locator('button, [role="combobox"], [aria-haspopup="listbox"]')
-      .first();
-    await expect(incomeDropdownTrigger).toBeVisible({ timeout: 5000 });
-    await incomeDropdownTrigger.click();
-
-    const targetOption = page
-      .locator('[role="listbox"] [role="option"], [role="option"]')
-      .filter({ hasText: /Employed full-time|EMPLOYED_FULL_TIME/i })
-      .first();
-    if (await targetOption.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await targetOption.click();
-    } else {
-      const firstOption = page
-        .locator('[role="listbox"] [role="option"], [role="option"]')
-        .first();
-      await expect(firstOption).toBeVisible({ timeout: 5000 });
-      await firstOption.click();
-    }
-  }
+  await selectInquiryIncomeSource(page, incomeSourceField, incomeInput[0].incomeSource);
 
   // Primary annual income
   const annualIncomeInput = page
@@ -345,58 +333,7 @@ export async function fillAndSubmitInquiryForm(
       .locator("div.grid")
       .filter({ has: page.locator(`input[name="income-${addlIndex}"]`) })
       .first();
-    const additionalSourceSelect = additionalRow.locator("select").first();
-
-    if (
-      await additionalSourceSelect
-        .isVisible({ timeout: 2000 })
-        .catch(() => false)
-    ) {
-      const selected = await additionalSourceSelect.selectOption({
-        value: additionalIncome.incomeSource,
-      });
-      if (!selected.length) {
-        const nonEmptyValue = await additionalSourceSelect
-          .locator("option")
-          .evaluateAll((options) => {
-            const first = options.find(
-              (opt) =>
-                ((opt as HTMLOptionElement).value ?? "").trim().length > 0,
-            ) as HTMLOptionElement | undefined;
-            return first?.value ?? "";
-          });
-        if (nonEmptyValue) {
-          await additionalSourceSelect.selectOption({ value: nonEmptyValue });
-        }
-      }
-    } else {
-      // Fallback: custom dropdown
-      const additionalDropdownTrigger = additionalRow
-        .locator('button, [role="combobox"], [aria-haspopup="listbox"]')
-        .first();
-      if (
-        await additionalDropdownTrigger
-          .isVisible({ timeout: 2000 })
-          .catch(() => false)
-      ) {
-        await additionalDropdownTrigger.click();
-        const targetOption = page
-          .locator('[role="listbox"] [role="option"], [role="option"]')
-          .filter({ hasText: new RegExp(additionalIncome.incomeSource, "i") })
-          .first();
-        if (
-          await targetOption.isVisible({ timeout: 2000 }).catch(() => false)
-        ) {
-          await targetOption.click();
-        } else {
-          const firstOption = page
-            .locator('[role="listbox"] [role="option"], [role="option"]')
-            .first();
-          await expect(firstOption).toBeVisible({ timeout: 5000 });
-          await firstOption.click();
-        }
-      }
-    }
+    await selectInquiryIncomeSource(page, additionalRow, additionalIncome.incomeSource);
 
     await typeMaskedInput(
       additionalIncomeInput,

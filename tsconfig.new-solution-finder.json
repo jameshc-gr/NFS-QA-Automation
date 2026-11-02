@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "playwright.new-solution-finder.config.ts",
+    "scripts/new-solution-finder-*.ts",
+    "scripts/solution-finder/lab/**/*.ts",
+    "tests/projects/solution-finder/lab/**/*.ts",
+    "tests/projects/solution-finder/inquiry-occupancy-investment-retired-income.spec.ts",
+    "tests/projects/solution-finder/workbook-scenarios/**/*.ts",
+    "tests/unit/new-solution-finder.test.ts"
+  ]
+}

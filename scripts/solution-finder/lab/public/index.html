@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Solution Finder Lab</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header><a href="/">RATE <span>/ SOLUTION FINDER LAB</span></a><span class="badge">PRIVATE LOCAL RUNNER</span></header>
+  <main>
+    <section class="intro">
+      <div><p class="eyebrow">NAVIGATOR / QA WORKBENCH</p><h1>From inquiry JSON to real offers.</h1><p>Paste customer test inputs. Create a Navigator inquiry. Inspect the response and see exactly what the borrower sees.</p></div>
+      <div class="stamp">5 TENANTS<br><small>ONE BROWSER RUN AT A TIME</small></div>
+    </section>
+    <div class="section-title compact">
+      <button id="reset" class="quiet" type="button" disabled>Reset / New run</button>
+      <span class="hint">Clear this workspace. Saved runs and templates are kept. Available when the runner is idle.</span>
+    </div>
+    <div id="error" role="alert" hidden></div>
+    <p id="server-notice" class="guardrail" role="status" hidden></p>
+    <div class="workspace">
+      <section class="panel setup">
+        <div class="section-title"><div><p class="eyebrow">01 / INPUT</p><h2>Configure an inquiry</h2></div><span class="badge">QA ONLY</span></div>
+        <label for="tenant">Tenant</label><select id="tenant" disabled></select>
+        <a id="entry" target="_blank" rel="noreferrer">Open selected Navigator intake</a>
+        <label for="scenario">Start from an existing scenario <span class="muted">(optional)</span></label>
+        <div class="row"><select id="scenario" disabled><option value="">Paste your own JSON</option></select><button id="load" class="quiet" disabled>Load</button></div>
+        <p id="template-notice" class="hint" role="status" hidden></p>
+        <details id="source-section" hidden><summary>Original workbook request (before UI mapping)</summary><pre id="source-request"></pre></details>
+        <section id="request-json-section"><h3>Paste or edit inquiry request JSON</h3>
+          <div class="section-title compact"><label for="request">Inquiry request JSON</label><button id="format" class="text">Format JSON</button></div>
+          <textarea id="request" spellcheck="false" aria-label="Inquiry request JSON" placeholder='{"type":"SALES_INQUIRY","applicationInquiryInput":{...}}'></textarea>
+        </section>
+        <p id="editor-notice" class="hint" role="status">Select a scenario and click Load, or paste complete JSON above, to populate the request editor.</p>
+        <fieldset id="request-fields" disabled>
+          <legend>Request data editor</legend>
+          <p class="hint">Edit values below instead of JSON. Amounts are whole US dollars. Changes are synchronized with the JSON editor above.</p>
+          <h3>Subject property and loan</h3>
+          <table class="request-table"><tbody id="property-fields"></tbody></table>
+          <h3>Borrower profile</h3>
+          <button id="copy-address" class="text" type="button">Use subject as borrower address</button>
+          <p class="hint">Primary occupancy requires matching subject and borrower addresses.</p>
+          <table class="request-table"><tbody id="borrower-fields"></tbody></table>
+          <h3>Income sources</h3>
+          <p class="hint">"Retired SSI" is Navigator's label and submits Social Security income. Its observed age-62 UI threshold is not a determination of federal SSI benefit eligibility.</p>
+          <div id="income-fields"></div>
+          <button id="add-income" class="quiet" type="button">Add income source</button>
+        </fieldset>
+        <p class="hint">Use the full inquiry request object. Unsupported fields, invalid dates and inputs the UI cannot represent are rejected before launch. Only QA test identities.</p>
+        <button id="validate" class="quiet wide">Validate and preview parsed input</button>
+        <details id="preview-section" open><summary>Parsed input preview</summary><div id="preview" class="input-preview">Validate a request to preview its borrower, property, income and amounts.</div><ul id="notes"></ul></details>
+        <label for="template-name">New template name</label>
+        <input id="template-name" type="text" maxlength="120" placeholder="e.g. Low-income investment property" disabled>
+        <button id="save-template" class="quiet wide" disabled>Save as new template</button>
+        <p class="hint">Load a scenario, edit its JSON, and save a named copy. Originals stay unchanged. Saving validates inputs but does not create an inquiry or establish expected offers.</p>
+        <p id="save-status" class="hint" role="status" hidden></p>
+        <label class="check"><input id="fresh-email" type="checkbox" checked><span>Generate a fresh QA email for this run. Other borrower inputs are preserved; the exact submitted request is saved.</span></label>
+        <div class="guardrail"><strong>Creates real QA data through the browser.</strong><p>Tenant UI controls consent and routing metadata. An inquiry may return internal application IDs; it is not a completed or funded loan. No offer is selected or sent to the borrower.</p></div>
+        <label class="check"><input id="confirm" type="checkbox"><span>I confirm these are QA inputs and authorize creating one inquiry in the selected tenant.</span></label>
+        <button id="launch" class="primary wide" disabled>Create Navigator inquiry <span aria-hidden="true">&rarr;</span></button>
+      </section>
+      <div class="results-column">
+        <section class="panel" id="suite-panel">
+          <div class="section-title"><div><p class="eyebrow">BATCH / SUITE</p><h2>Run a scenario suite</h2></div></div>
+          <p class="hint">Select saved scenarios for the tenant below. Save edited JSON as a template first; suites use saved inputs, not unsaved editor changes. One browser at a time; stop on first failure.</p>
+          <label for="suite-tenant">Tenant</label>
+          <select id="suite-tenant" disabled></select>
+          <p class="hint">Synced with the Tenant in Configure an inquiry. Changing either updates both.</p>
+          <label for="suite-group">Scenario group</label>
+          <div class="row"><select id="suite-group"><option value="">All runnable scenarios</option></select><button id="suite-select-group" class="quiet" disabled>Select group</button><button id="suite-clear" class="text" disabled>Clear</button></div>
+          <p class="hint">Check each scenario to include it. No Ctrl/Cmd key needed.</p>
+          <fieldset id="suite-cases" disabled aria-describedby="suite-selection"><legend>Suite scenarios (check multiple)</legend></fieldset>
+          <p id="suite-selection" class="hint">0 scenarios selected.</p>
+          <p id="suite-unavailable" class="hint"></p>
+          <label class="check"><input id="suite-confirm" type="checkbox"><span>I authorize one real QA inquiry per selected scenario in the selected tenant. Fresh-email setting above applies to every run.</span></label>
+          <div class="row"><button id="suite-launch" class="primary" disabled>Run selected suite</button><button id="suite-stop" class="quiet" disabled>Stop after current scenario</button></div>
+          <label for="suite-history">Saved suite runs</label>
+          <select id="suite-history"><option value="">Choose a suite run</option></select>
+          <a id="suite-report-link" target="_blank" rel="noreferrer" hidden>Open all suite results in a new tab &nearr;</a>
+          <p id="suite-summary" role="status">No suite selected.</p>
+          <div class="suite-table-wrap"><table id="suite-results"><thead><tr><th>Scenario / result</th><th>Borrower / IDs / offers</th><th>Evidence</th></tr></thead><tbody></tbody></table></div>
+        </section>
+        <section class="panel">
+          <div class="section-title"><div><p class="eyebrow">02 / EXECUTION</p><h2>Run monitor</h2></div><span id="status" class="status">READY</span></div>
+          <p id="step" aria-live="polite">Validate JSON, then launch a run.</p>
+          <div class="row"><label for="history">Saved runs</label><select id="history"><option value="">Choose a run</option></select></div>
+          <p class="hint">Saved runs show borrower/email and loan IDs when returned; application and inquiry IDs keep their actual labels.</p>
+          <dl id="history-profile" aria-label="Saved run borrower profile"></dl>
+          <pre id="logs" class="logs" aria-label="Runner logs">Browser checkpoints and runner output will appear here.</pre>
+        </section>
+        <section class="panel" id="results" hidden>
+          <div class="section-title"><div><p class="eyebrow">03 / ACTUAL RESULTS</p><h2>Inquiry and offers</h2></div><a id="navigator" target="_blank" rel="noreferrer" hidden>Open in Navigator &nearr;</a></div>
+          <p id="result-summary"></p>
+          <p class="hint">PASS means submitted inputs and UI/API values matched. No-offer results can pass this check. Placeholder workbook expectations are not approval or pricing rules.</p>
+          <dl id="identifiers"></dl>
+          <div id="offers" class="offers"></div>
+          <details open><summary>Raw API response JSON</summary><pre id="response-json"></pre></details>
+          <details><summary>Parsed response / credit / ratios / application IDs</summary><pre id="parsed-json"></pre></details>
+          <details><summary>Actual request submitted by Navigator</summary><pre id="actual-request"></pre></details>
+          <details><summary>Captured UI offers and UI/API comparison</summary><pre id="ui-json"></pre></details>
+          <div id="artifacts" class="artifact-links"></div>
+          <div id="screenshot-section" hidden><h3 id="screenshot-title">Captured browser page</h3><a id="screenshot-link" target="_blank" rel="noreferrer"><img id="screenshot" alt="Captured Navigator page for the selected inquiry"></a></div>
+        </section>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,2633 @@
+{
+  "schemaVersion": 1,
+  "sourceWorkbook": "test-data/solution-finder/HELOAN_test_scenarios.xlsx",
+  "sourceSha256": "0d63e61a924b763a5d0c18c710aab65b0b50911231e6ff670495cef7a621ca4b",
+  "scenarios": [
+    {
+      "id": "SF-1-Original",
+      "name": "Happy Path - secondary Residence",
+      "workbookRow": 2,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "7547",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-happy-09890@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.141.27",
+            "phoneNumber": "3302741661",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2009-01-01"
+          },
+          "applicationInput": {
+            "applicationType": "HELOC"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Newtown Square",
+              "region": "PA",
+              "street": [
+                "49 Longview Ln"
+              ],
+              "address": "[49 Longview Ln], Newtown Square, PA, 19073, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "19073"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 200000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 200000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-happy-09890@yopmail.com",
+            "phoneNumber": "3302741661",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-2-Original",
+      "name": "Happy Path - Primary Residence",
+      "workbookRow": 100,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "isRestructure": true,
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "9084",
+          "basicInfoInput": {
+            "name": {
+              "last": "Bolt",
+              "first": "Mary",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "dolerica.ldrunnbbmbnq@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.128",
+            "phoneNumber": "0330274166",
+            "residenceAddress": {
+              "city": "Buena Park",
+              "region": "CA",
+              "street": [
+                "5417 Barrett Cir"
+              ],
+              "address": "[5417 Barrett Cir], Buena Park, CA, 90621, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "90621"
+            },
+            "residenceStartDate": "2016-10-03"
+          },
+          "propertyInputHeloc": {
+            "type": "PRIMARY",
+            "address": {
+              "city": "Buena Park",
+              "region": "CA",
+              "street": [
+                "5417 Barrett Cir"
+              ],
+              "address": "[5417 Barrett Cir], Buena Park, CA, 90621, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "90621"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 200000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2001-10-06",
+            "lastFourSSN": "0691"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "PRIMARY",
+            "requestedLoanAmount": 200000,
+            "address": {
+              "street": [
+                "5417 Barrett Cir"
+              ],
+              "city": "Buena Park",
+              "region": "CA",
+              "postalCode": "90621",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Bolt",
+              "first": "Mary",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "dolerica.ldrunnbbmbnq@yopmail.com",
+            "phoneNumber": "0330274166",
+            "residenceStartDate": "2016-10-03",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "5417 Barrett Cir"
+              ],
+              "city": "Buena Park",
+              "region": "CA",
+              "postalCode": "90621",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2001-10-06",
+            "lastFourSSN": "0691"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-3-Original",
+      "name": "Existing mortgage amount-0",
+      "workbookRow": 215,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "isRestructure": true,
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "9084",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "maortgagaezero@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.128",
+            "phoneNumber": "0330274166",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2015-10-08"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Newtown Square",
+              "region": "PA",
+              "street": [
+                "49 Longview Ln"
+              ],
+              "address": "[49 Longview Ln], Newtown Square, PA, 19073, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "19073"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 200000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1994-10-13",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 0
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 200000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "maortgagaezero@yopmail.com",
+            "phoneNumber": "0330274166",
+            "residenceStartDate": "2015-10-08",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1994-10-13",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 0
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-4-Original",
+      "name": "Credit freeze",
+      "workbookRow": 308,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "9079",
+          "basicInfoInput": {
+            "name": {
+              "last": "Night",
+              "first": "Les",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test.test3--ra@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.141.48",
+            "phoneNumber": "4692466072",
+            "residenceAddress": {
+              "city": "Juneau",
+              "region": "AK",
+              "street": [
+                "9200 Glacier Hwy"
+              ],
+              "address": "[9200 Glacier Hwy], Juneau, AK, 99801, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "99801"
+            },
+            "residenceStartDate": "2020-02-02"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "San Jose",
+              "region": "CA",
+              "street": [
+                "1066 Arbol Way"
+              ],
+              "address": "[1066 Arbol Way], San Jose, CA, 95126, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "95126"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 100000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1988-01-01",
+            "lastFourSSN": "1040"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 100000,
+            "address": {
+              "street": [
+                "1066 Arbol Way"
+              ],
+              "city": "San Jose",
+              "region": "CA",
+              "postalCode": "95126",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Night",
+              "first": "Les",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test.test3--ra@yopmail.com",
+            "phoneNumber": "4692466072",
+            "residenceStartDate": "2020-02-02",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "9200 Glacier Hwy"
+              ],
+              "city": "Juneau",
+              "region": "AK",
+              "postalCode": "99801",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1988-01-01",
+            "lastFourSSN": "1040"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-5-Original",
+      "name": "Property on Sale",
+      "workbookRow": 367,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "9079",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-test3--ra@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.141.48",
+            "phoneNumber": "4692466072",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2020-02-02"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Los Angeles",
+              "region": "CA",
+              "street": [
+                "645 N Avenue 50"
+              ],
+              "address": "[645 N Avenue 50], Los Angeles, CA, 90042, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "90042"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 100000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1997-01-01",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 100000,
+            "address": {
+              "street": [
+                "645 N Avenue 50"
+              ],
+              "city": "Los Angeles",
+              "region": "CA",
+              "postalCode": "90042",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-test3--ra@yopmail.com",
+            "phoneNumber": "4692466072",
+            "residenceStartDate": "2020-02-02",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1997-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-6-Original",
+      "name": "Low credit- 584",
+      "workbookRow": 437,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "9127",
+          "basicInfoInput": {
+            "name": {
+              "last": "Harvin",
+              "first": "Timothy",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-lowcredit584@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.130",
+            "phoneNumber": "0330274166",
+            "residenceAddress": {
+              "city": "Taft",
+              "region": "CA",
+              "street": [
+                "310 Fillmore St"
+              ],
+              "address": "[310 Fillmore St], Taft, CA, 93268, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "93268"
+            },
+            "residenceStartDate": "2000-01-01"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Newtown Square",
+              "region": "PA",
+              "street": [
+                "49 Longview Ln"
+              ],
+              "address": "[49 Longview Ln], Newtown Square, PA, 19073, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "19073"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 200000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "9376"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 200000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Harvin",
+              "first": "Timothy",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-lowcredit584@yopmail.com",
+            "phoneNumber": "0330274166",
+            "residenceStartDate": "2000-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "310 Fillmore St"
+              ],
+              "city": "Taft",
+              "region": "CA",
+              "postalCode": "93268",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "9376"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-7-Original",
+      "name": "More than 1 income (Part Time + Self Employed)",
+      "workbookRow": 496,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "isRestructure": true,
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 222222,
+              "incomeSource": "EMPLOYED_PART_TIME"
+            },
+            {
+              "annualIncome": 222222,
+              "incomeSource": "SELF_EMPLOYED"
+            }
+          ],
+          "loCostCenter": "9127",
+          "basicInfoInput": {
+            "name": {
+              "last": "Anderson",
+              "first": "Emerrill",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-morethan1income@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.130",
+            "phoneNumber": "4692466072",
+            "residenceAddress": {
+              "city": "Bakersfield",
+              "region": "CA",
+              "street": [
+                "4872 Putter Ln"
+              ],
+              "address": "[4872 Putter Ln], Bakersfield, CA, 93308, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "93308"
+            },
+            "residenceStartDate": "2009-01-01"
+          },
+          "propertyInputHeloc": {
+            "type": "PRIMARY",
+            "address": {
+              "city": "Bakersfield",
+              "region": "CA",
+              "street": [
+                "4872 Putter Ln"
+              ],
+              "address": "[4872 Putter Ln], Bakersfield, CA, 93308, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "93308"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 100000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2740"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "PRIMARY",
+            "requestedLoanAmount": 100000,
+            "address": {
+              "street": [
+                "4872 Putter Ln"
+              ],
+              "city": "Bakersfield",
+              "region": "CA",
+              "postalCode": "93308",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Anderson",
+              "first": "Emerrill",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-morethan1income@yopmail.com",
+            "phoneNumber": "4692466072",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "4872 Putter Ln"
+              ],
+              "city": "Bakersfield",
+              "region": "CA",
+              "postalCode": "93308",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2740"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 222222,
+              "incomeSource": "EMPLOYED_PART_TIME"
+            },
+            {
+              "annualIncome": 222222,
+              "incomeSource": "SELF_EMPLOYED"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-8-Original",
+      "name": "Unacceptable property type",
+      "workbookRow": 575,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "isRestructure": true,
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "9079",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test.test5-sdaers-ra@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.141.48",
+            "phoneNumber": "4692466072",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2019-02-02"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "West Sacramento",
+              "region": "CA",
+              "street": [
+                "1500 Overland Ct"
+              ],
+              "address": "[1500 Overland Ct], West Sacramento, CA, 95691, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "95691"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 100000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1988-01-01",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 100000,
+            "address": {
+              "street": [
+                "1500 Overland Ct"
+              ],
+              "city": "West Sacramento",
+              "region": "CA",
+              "postalCode": "95691",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test.test5-sdaers-ra@yopmail.com",
+            "phoneNumber": "4692466072",
+            "residenceStartDate": "2019-02-02",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1988-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-9-Original",
+      "name": "Highest Requested Loan Amount",
+      "workbookRow": 635,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "7547",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-higest-na24@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.228",
+            "phoneNumber": "3302741661",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2009-01-01"
+          },
+          "applicationInput": {
+            "applicationType": "HELOC"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Newtown Square",
+              "region": "PA",
+              "street": [
+                "49 Longview Ln"
+              ],
+              "address": "[49 Longview Ln], Newtown Square, PA, 19073, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "19073"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 800000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 800000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-higest-na24@yopmail.com",
+            "phoneNumber": "3302741661",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-10-Original",
+      "name": "Lowest Requested Loan Amount",
+      "workbookRow": 719,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "7547",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-na-24-3@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.141.27",
+            "phoneNumber": "3302741661",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2009-01-01"
+          },
+          "applicationInput": {
+            "applicationType": "HELOC"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Newtown Square",
+              "region": "PA",
+              "street": [
+                "49 Longview Ln"
+              ],
+              "address": "[49 Longview Ln], Newtown Square, PA, 19073, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "19073"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 19000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 19000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-na-24-3@yopmail.com",
+            "phoneNumber": "3302741661",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-11-Original",
+      "name": "Property type-CONDOMINIUM",
+      "workbookRow": 803,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "9127",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "scen11-propetycondo@yopmail.con",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.130",
+            "phoneNumber": "0330274166",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2000-01-01"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Miami",
+              "region": "FL",
+              "street": [
+                "1100 Biscayne Blvd",
+                "5404"
+              ],
+              "address": "[1100 Biscayne Blvd, 5404], Miami, FL, 33132, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "33132",
+              "unitNumber": "5404"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 100000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 100000,
+            "address": {
+              "street": [
+                "1100 Biscayne Blvd",
+                "5404"
+              ],
+              "city": "Miami",
+              "region": "FL",
+              "postalCode": "33132",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "scen11-propetycondo@yopmail.con",
+            "phoneNumber": "0330274166",
+            "residenceStartDate": "2000-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-12-Original",
+      "name": "\"Occupancy Type- Investment DOB- 01/01/1950 Income Source- Retired SSI\"",
+      "workbookRow": 918,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "isRestructure": true,
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "incomeType": "SOCIAL_SECURITY",
+              "annualIncome": 444444,
+              "incomeSource": "RETIRED_SSI"
+            }
+          ],
+          "loCostCenter": "9084",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-ximw1wssna-2323@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.128",
+            "phoneNumber": "3302741661",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2009-01-01"
+          },
+          "propertyInputHeloc": {
+            "type": "INVESTMENT",
+            "address": {
+              "city": "Newtown Square",
+              "region": "PA",
+              "street": [
+                "49 Longview Ln"
+              ],
+              "address": "[49 Longview Ln], Newtown Square, PA, 19073, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "19073"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 100000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1962-01-02",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "INVESTMENT",
+            "requestedLoanAmount": 100000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-ximw1wssna-2323@yopmail.com",
+            "phoneNumber": "3302741661",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1962-01-02",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "incomeType": "SOCIAL_SECURITY",
+              "annualIncome": 444444,
+              "incomeSource": "RETIRED_SSI"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-13-Original",
+      "name": "HELOC Offers Declined - Collateral Property",
+      "workbookRow": 1031,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "9084",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "collateral@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.128",
+            "phoneNumber": "0330274166",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2013-10-03"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Long Beach",
+              "region": "CA",
+              "street": [
+                "34 Ximeno Ave"
+              ],
+              "address": "[34 Ximeno Ave], Long Beach, CA, 90803, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "90803"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 200000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2002-10-16",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 80000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 200000,
+            "address": {
+              "street": [
+                "34 Ximeno Ave"
+              ],
+              "city": "Long Beach",
+              "region": "CA",
+              "postalCode": "90803",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "collateral@yopmail.com",
+            "phoneNumber": "0330274166",
+            "residenceStartDate": "2013-10-03",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2002-10-16",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 80000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-14-Original",
+      "name": "HELOC Offers Declined - More liens Property",
+      "workbookRow": 1112,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "7547",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "retes-decline-heloan-11@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.228",
+            "phoneNumber": "3302741661",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2009-01-01"
+          },
+          "applicationInput": {
+            "applicationType": "HELOC"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Brecksville",
+              "region": "OH",
+              "street": [
+                "6658 Farview Rd"
+              ],
+              "address": "[6658 Farview Rd], Brecksville, OH, 44141, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "44141"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 100000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 100000,
+            "address": {
+              "street": [
+                "6658 Farview Rd"
+              ],
+              "city": "Brecksville",
+              "region": "OH",
+              "postalCode": "44141",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "retes-decline-heloan-11@yopmail.com",
+            "phoneNumber": "3302741661",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-15-Original",
+      "name": "Experian credit- 597",
+      "workbookRow": 1186,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "7547",
+          "basicInfoInput": {
+            "name": {
+              "last": "Bolthouse",
+              "first": "Robert",
+              "middle": "L",
+              "suffix": ""
+            },
+            "emailId": "test-626-credit-xpn@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.141.27",
+            "phoneNumber": "3302741661",
+            "residenceAddress": {
+              "city": "Fresno",
+              "region": "CA",
+              "street": [
+                "1016 W Princeton Ave"
+              ],
+              "address": "[1016 W Princeton Ave], Fresno, CA, 93705, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "93705"
+            },
+            "residenceStartDate": "2009-01-01"
+          },
+          "applicationInput": {
+            "applicationType": "HELOC"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Newtown Square",
+              "region": "PA",
+              "street": [
+                "49 Longview Ln"
+              ],
+              "address": "[49 Longview Ln], Newtown Square, PA, 19073, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "19073"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 99314
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "9370"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 99314,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Bolthouse",
+              "first": "Robert",
+              "middle": "L",
+              "suffix": ""
+            },
+            "emailId": "test-626-credit-xpn@yopmail.com",
+            "phoneNumber": "3302741661",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "1016 W Princeton Ave"
+              ],
+              "city": "Fresno",
+              "region": "CA",
+              "postalCode": "93705",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "9370"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Decoded CSV-style quote escaping in the original request cell.",
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-16-Original",
+      "name": "Experian credit -656",
+      "workbookRow": 1208,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "7547",
+          "basicInfoInput": {
+            "name": {
+              "last": "Baker",
+              "first": "Curtis",
+              "middle": "J",
+              "suffix": ""
+            },
+            "emailId": "test-credit648-najul1@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.141.27",
+            "phoneNumber": "3302741661",
+            "residenceAddress": {
+              "city": "Los Angeles",
+              "region": "CA",
+              "street": [
+                "814 E 92nd St"
+              ],
+              "address": "[814 E 92nd St], Los Angeles, CA, 90002, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "90002"
+            },
+            "residenceStartDate": "2009-01-01"
+          },
+          "applicationInput": {
+            "applicationType": "HELOC"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "San Jose",
+              "region": "CA",
+              "street": [
+                "1066 Arbol Way"
+              ],
+              "address": "[1066 Arbol Way], San Jose, CA, 95126, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "95126"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 70000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "0150"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 70000,
+            "address": {
+              "street": [
+                "1066 Arbol Way"
+              ],
+              "city": "San Jose",
+              "region": "CA",
+              "postalCode": "95126",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Baker",
+              "first": "Curtis",
+              "middle": "J",
+              "suffix": ""
+            },
+            "emailId": "test-credit648-najul1@yopmail.com",
+            "phoneNumber": "3302741661",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "814 E 92nd St"
+              ],
+              "city": "Los Angeles",
+              "region": "CA",
+              "postalCode": "90002",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "0150"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-17-Original",
+      "name": "Condominium property Address without unit number",
+      "workbookRow": 1283,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "9127",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "oct30-gri-17@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.130",
+            "phoneNumber": "0330274166",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2009-01-01"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Miami",
+              "region": "FL",
+              "street": [
+                "1100 Biscayne Blvd"
+              ],
+              "address": "[1100 Biscayne Blvd], Miami, FL, 33132, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "33132"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 200000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 200000,
+            "address": {
+              "street": [
+                "1100 Biscayne Blvd"
+              ],
+              "city": "Miami",
+              "region": "FL",
+              "postalCode": "33132",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "oct30-gri-17@yopmail.com",
+            "phoneNumber": "0330274166",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-18-Original",
+      "name": "Insufficient income",
+      "workbookRow": 1376,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "incomeInput": [
+            {
+              "annualIncome": 1000,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "7547",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-less-na-income@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.228",
+            "phoneNumber": "3302741661",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2009-01-01"
+          },
+          "applicationInput": {
+            "applicationType": "HELOC"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Newtown Square",
+              "region": "PA",
+              "street": [
+                "49 Longview Ln"
+              ],
+              "address": "[49 Longview Ln], Newtown Square, PA, 19073, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "19073"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 100000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 100000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "test-less-na-income@yopmail.com",
+            "phoneNumber": "3302741661",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 1000,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Decoded CSV-style quote escaping in the original request cell.",
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-19-Original",
+      "name": "Occupancy Type = Secondary, Current address = Subject property address",
+      "workbookRow": 1404,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "isRestructure": true,
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "9127",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "oct27-scen19@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.130",
+            "phoneNumber": "3302741661",
+            "residenceAddress": {
+              "city": "Newtown Square",
+              "region": "PA",
+              "street": [
+                "49 Longview Ln"
+              ],
+              "address": "[49 Longview Ln], Newtown Square, PA, 19073, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "19073"
+            },
+            "residenceStartDate": "2009-01-01"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Newtown Square",
+              "region": "PA",
+              "street": [
+                "49 Longview Ln"
+              ],
+              "address": "[49 Longview Ln], Newtown Square, PA, 19073, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "19073"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 200000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 200000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "oct27-scen19@yopmail.com",
+            "phoneNumber": "3302741661",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-20-Original",
+      "name": "Adresss with apt e",
+      "workbookRow": 1464,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "9127",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "oct28-scen20@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.130",
+            "phoneNumber": "3302741661",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2009-01-01"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Chicago",
+              "region": "IL",
+              "street": [
+                "1729 N Clybourn Ave",
+                "apt e"
+              ],
+              "address": "[1729 N Clybourn Ave, apt e], Chicago, IL, 60614, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "60614",
+              "unitNumber": "apt e"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 200000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 200000,
+            "address": {
+              "street": [
+                "1729 N Clybourn Ave",
+                "apt e"
+              ],
+              "city": "Chicago",
+              "region": "IL",
+              "postalCode": "60614",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "oct28-scen20@yopmail.com",
+            "phoneNumber": "3302741661",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-21-Original",
+      "name": "same email id",
+      "workbookRow": 1542,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "9127",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "oct28-test-happy-99@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.130",
+            "phoneNumber": "3302741661",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2009-01-01"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Newtown Square",
+              "region": "PA",
+              "street": [
+                "49 Longview Ln"
+              ],
+              "address": "[49 Longview Ln], Newtown Square, PA, 19073, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "19073"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 200000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 200000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "oct28-test-happy-99@yopmail.com",
+            "phoneNumber": "3302741661",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2000-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    },
+    {
+      "id": "SF-22-Original",
+      "name": "Borrower DOB < 18",
+      "workbookRow": 1616,
+      "sourceRequest": null,
+      "request": null,
+      "notes": [
+        "The original workbook has no Inquiry Request (N/A). Supply QA input manually; no borrower or DOB has been invented."
+      ]
+    },
+    {
+      "id": "SF-23-Original",
+      "name": "DOB is later than residency start date",
+      "workbookRow": 1621,
+      "sourceRequest": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "loId": "6068",
+          "channel": "ConsumerDirect",
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "loCostCenter": "9127",
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "oct28-scen24@yopmail.com",
+            "isAgreed": true,
+            "ipAddress": "10.144.140.130",
+            "phoneNumber": "7819214925",
+            "residenceAddress": {
+              "city": "Menlo Park",
+              "region": "CA",
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "address": "[409 Glenwood Ave], Menlo Park, CA, 94025, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "94025"
+            },
+            "residenceStartDate": "2000-01-01"
+          },
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "address": {
+              "city": "Newtown Square",
+              "region": "PA",
+              "street": [
+                "49 Longview Ln"
+              ],
+              "address": "[49 Longview Ln], Newtown Square, PA, 19073, ",
+              "country": "US",
+              "complete": true,
+              "postalCode": "19073"
+            },
+            "loanOfficerId": 6068,
+            "requestedLoanAmount": 200000
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2005-01-01",
+            "lastFourSSN": "2955"
+          },
+          "existingMortgageAmount": 70000
+        }
+      },
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 200000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "last": "Lambert",
+              "first": "Erica",
+              "middle": "",
+              "suffix": ""
+            },
+            "emailId": "oct28-scen24@yopmail.com",
+            "phoneNumber": "7819214925",
+            "residenceStartDate": "2000-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 Glenwood Ave"
+              ],
+              "city": "Menlo Park",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "2005-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 444444,
+              "incomeSource": "EMPLOYED_FULL_TIME"
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "notes": [
+        "Prepared the original business inputs for the current browser form. Legacy LO/application routing, IP address and address-display/completeness metadata are not injected; selected tenant UI controls them. The original source JSON is shown separately."
+      ]
+    }
+  ]
+}

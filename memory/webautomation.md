@@ -1,5 +1,123 @@
 # NFS-QA-Automation Repository Memory
 
+## 2026-11-02 Standalone Solution Finder Lab Distribution
+- **Decision:** Build a privacy-safe compiled ZIP with an explicit runtime
+  allowlist, minimal exact npm lockfile, tenant routes, UI and Node launcher.
+  Exclude customer/workbook inputs, secrets, accounts, templates/run history,
+  unrelated tooling and installed dependencies/browser binaries.
+- **Mechanism:** Packaged launcher explicitly enables SF_LAB_PORTABLE=1.
+  Skip reading both source datasets and show an empty-catalog notice; paste
+  approved inputs/save templates for local suites. Normal repo mode retains
+  all 125 cases and strict missing/corrupt-source errors. JS worker/config for
+  compiled packages; TS for repo execution.
+- **Commands:** npm run package:solution-finder:lab; npm run
+  verify:solution-finder:lab -- <ZIP>. Archive/hash/verification stay under
+  dated Solution Finder lab-distribution results.
+- **Verified:** 50 focused checks and scoped typecheck passed; clean extracted
+  dependency install, isolated modules, UI/template persistence, offline suite/
+  report/reset and compiled worker discovery passed without live inquiries.
+  macOS verified; Windows/Linux execution not certified.
+
+## 2026-11-02 Original Retirement Automation and Program Distinction
+- **Root cause:** The original retired-income spec selected employment in the
+  custom widget; legacy shared helpers could choose the first available source.
+- **Mechanism:** One exact native/custom income selector now serves original,
+  workbook and lab paths, including additional income. Missing options fail;
+  actual submitted DOB/income source/type/amount are asserted.
+- **Invariant:** Navigator's observed age-62 Retired SSI option mapping to
+  SOCIAL_SECURITY is not federal SSI benefits eligibility. Social Security
+  retirement and SSI are distinct programs; flag label ambiguity for Product
+  rather than silently changing the application's observed cutoff.
+- **Verified:** 49 focused checks, scoped typecheck and two targeted live GRI
+  browser tests passed (five form-only calendar probes, one real inquiry, no
+  retries). Full suites, other tenants and benefits eligibility not certified.
+
+## 2026-11-02 Retired Income and Calendar-Age Validation
+- **Decision:** Support RETIRED_SSI / SOCIAL_SECURITY through lab validation,
+  editor, shared browser runner and actual submitted-income-type checks.
+  SF-12's title-aligned DOB correction is explicit; original source unchanged.
+- **Mechanism:** Navigator automatically sets Social Security for Retired SSI;
+  validate age 62+ using local calendar birthday, not elapsed days or a fixed
+  birth-year cutoff. Re-evaluate age per validation and generate SF-22's
+  age-17 input per load/queue, so New Year needs no server restart.
+- **Verified:** GRI form-only clock probes confirmed exact 62nd-birthday and
+  leap-day behavior; request interception confirmed type mapping. All 48
+  focused checks, scoped typecheck and syntax passed. No live inquiries.
+- **Limitations:** Retirement thresholds were not separately probed on other
+  tenants; no pricing, underwriting or offer-baseline correctness claimed.
+
+## 2026-11-02 Authorized Generated SF-22 Input
+- **Decision:** Explicit user approval replaces the lab's missing SF-22 input
+  with an SF-1-derived request: DOB January 1 of startup year minus 17.
+  Residence start is clamped to DOB if needed. Single/suite selection enabled.
+- **Invariant:** Original workbook and exported null source/request remain
+  untouched; visible notes identify generated data and no response baseline.
+  SF-12 unsupported retired income is unchanged. Normal fail-fast checks apply.
+- **Verified:** All 45 focused checks and scoped typecheck passed, including
+  age 17, editable input, preview and persisted single/suite DOB snapshots.
+  Offline fixtures only; no live minor eligibility/rejection result claimed.
+
+## 2026-11-02 Lab Workspace Reset
+- **Decision:** Top-level Reset / New run clears unsaved editor state,
+  previews/source notices, authorizations, selected histories and displayed
+  results, restoring GRI/fresh-email defaults.
+- **Invariant:** Retain saved runs/suites/templates; no submit/delete/cancel
+  calls. Disable reset during active work and pending UI requests so late
+  responses cannot refill a cleared workspace.
+- **Verified:** All 44 focused checks, scoped typecheck and browser syntax
+  passed. Offline Chromium checks covered retained history, busy/pending
+  blocking and mobile layout; no new live inquiry was needed.
+
+## 2026-11-02 Read-Only Full-Suite Results Tab
+- **Decision:** Preserve the original single-case Actual results panel and add
+  a separate all-suite-results tab for every scenario's full evidence.
+- **Mechanism:** A suite-ID URL loads all case offers/declines, profiles/typed
+  IDs, raw request/response/UI comparison, logs and screenshots. Running suites
+  auto-update; completed child responses are cached. Open JSON remains open,
+  failed/skipped states/errors are explicit, and saved history is reloadable.
+- **Invariant:** The report is GET-only and never creates/retries/resumes
+  inquiries or selects offers.
+- **Verified:** All 43 focused checks and scoped typecheck passed. Read-only
+  live verification of an existing four-case suite rendered all4 cases,
+  12 product cards and4 screenshot references with zero errors/mobile overflow;
+  no new live inquiry execution was claimed.
+
+## 2026-11-02 Shared Suite and Inquiry Tenant Selection
+- **Decision:** Suite Tenant sits above Scenario group and shares state with
+  Configure an inquiry Tenant; neither is an independent execution environment.
+- **Invariant:** Either control updates both selectors, routing link and target
+  label, resets both authorizations and preserves checkbox selections. Both
+  selectors lock during execution.
+- **Verified:** All 41 focused checks and scoped typecheck passed, covering all
+  five tenants in both directions, actual suite API target and busy controls.
+  Validation used offline workers, not new live inquiries.
+
+## 2026-11-02 Suite Selection Uses Explicit Checkboxes
+- **Cause / decision:** Native multi-select required obscure Ctrl/Cmd gestures;
+  replace it with individually labeled grouped checkboxes and selected styling.
+- **Behavior:** Ordinary clicks accumulate selections; group/Clear, disabled
+  unavailable inputs, selected count and authorization reset remain unchanged.
+- **Verified:** All 40 focused checks and scoped typecheck passed. Chromium
+  selected two independent checkboxes without modifier keys, then exercised
+  batch results, stop/history and mobile behavior with offline workers only.
+
+## 2026-11-02 Solution Finder Lab Sequential Suites
+- **Request / decision:** Batch selected saved scenarios for one tenant instead
+  of launching them individually; reuse the fixed actual-UI/API lab runner.
+- **Mechanism:** Grouped multi-select/count authorization, full prevalidation
+  and immutable input snapshots, sequential queue shared with the single-run
+  mutex, combined profile/offer/JSON/screenshot results and persistent suite
+  history. Edited variations must be saved as templates before selecting.
+- **Invariants:** Stop at first failed case and skip pending cases; explicit
+  stop finishes the current inquiry first. Shutdown/restart never launches
+  queued cases or auto-resumes interrupted suites. Unsupported/missing original
+  inputs remain visibly unavailable, never counted as passes. Suite state,
+  snapshots and summaries live only under dated Solution Finder lab results.
+- **Verified:** All 40 focused checks, scoped typecheck and root hygiene passed.
+  Chromium covered selection/authorization/results/details/reload/mobile/stop;
+  offline lifecycle checks covered immutable queues, max-one worker, errors,
+  ownership and interrupted restart. No new live tenant execution was claimed.
+
 ## 2026-11-02 Shared Ignore Policy
 - **Request / cause:** Avoid conflicts after teammates run scripts. Ignore rules
   alone do not stop changes to already tracked generated evidence or sessions.
@@ -12,6 +130,163 @@
 - **Limits:** Back up wanted tracked captures/sessions before the first pull of
   their removal. Existing history is not rewritten; new evidence still belongs
   under test-results. Account allocation/reuse behavior is unchanged.
+
+## 2026-10-30 Solution Finder Visible Paste and Runtime Version Consistency
+- **Cause / decision:** An older running lab's 102-case in-memory catalog lacked
+  group labels while its static route read newer page files, producing undefined
+  groups. The collapsed JSON area was also too hard to discover.
+- **Fix:** Keep the copy/paste JSON area always visible above synchronized tables,
+  including before Load. Recognize legacy case groups by IDs with a visible
+  restart notice; invalid case IDs/names are explicit errors. New servers snapshot
+  page assets at startup with their API implementation to avoid mixed versions.
+- **Verified:** All 33 focused checks and strict scoped typecheck passed,
+  including old-bootstrap reproduction, paste-before-Load and synchronized edits.
+  A server restart is needed for newly implemented catalog/API features;
+  wait for active inquiries rather than restarting during a run.
+
+## 2026-10-30 Structured Solution Finder Editing and Saved Profiles
+- **Request / decision:** Provide request tables instead of JSON-only editing,
+  readable input preview, and saved-run identification by borrower/email and
+  actual returned identifiers.
+- **Mechanism:** Property, borrower and repeatable-income controls synchronize
+  with advanced JSON and the existing validated save-as-copy/run flow. Eight
+  formatted preview lines use actual request values, explicit name order,
+  currency/address formatting and string-preserved SSN last four. Address
+  copying is explicit; edits invalidate previews/authorization and late preview
+  responses cannot overwrite newer inputs.
+- **History invariant:** Derive profiles from persisted submitted request and
+  response, including older runs. Use actual submitted email; label input email
+  when not captured. Only actual returned loanId fields are loan IDs; missing
+  loan IDs are explicit and application/inquiry IDs keep their own labels.
+  SSN last four is not added to multi-run history metadata.
+- **Verified:** All 31 focused checks and scoped strict typecheck passed.
+  Chromium covered table/JSON/save/reload, income/address handling, invalid
+  inputs, stale races, exact preview output and restarted profile/ID history.
+  Read-only desktop/390px verification of prior real history had zero page
+  errors/overflow and created no new inquiries. Source fixtures are unchanged.
+
+## 2026-10-30 Editable Solution Finder Lab Templates
+- **Request / decision:** Edit existing scenario JSON and save a named reusable
+  copy, not an overwrite of the original set or an approved response baseline.
+- **Mechanism:** The lab's protected template API validates names/requests and
+  atomically saves new UUID-identified input files with source-case lineage in
+  the existing Solution Finder fixture subtree. Local ad hoc inputs are
+  gitignored. The **Saved templates** picker group persists across restarts
+  and remains independent of selected tenant.
+- **Invariants:** Built-ins and previous copies remain unchanged; duplicate
+  saved names, unsupported data and storage failures are explicit errors.
+  Saving creates no inquiry, response expectation or regression spec and
+  resets creation authorization. All execution evidence stays in test-results.
+- **Verification:** All 27 focused tests and strict scoped typecheck passed,
+  including Chromium edit/save/fork/reload, server persistence, mobile layout,
+  validated errors, isolated disposable inputs and zero inquiry launches
+  during template-only operations.
+
+## 2026-10-30 Original Solution Finder Lab Catalog
+- **Request / decision:** Show the original 23 workbook scenarios first in the
+  lab as `SF-N-Original: scenario name`, separately from the additional 102.
+- **Mechanism:** The lab-local `export-originals.cjs` snapshots the untouched
+  original workbook into the existing Solution Finder fixture directory.
+  The combined catalog preserves source JSON, business fields and original
+  order. Form projection excludes legacy metadata controlled by the tenant UI;
+  load notices disclose the mapping rather than silently dropping fields.
+- **Limits:** Original12 retains unsupported retired-SSI income; original22
+  has source request `N/A` and cannot load invented borrower data. Loading
+  templates never submits and resets creation confirmation. Existing102
+  templates and original25 regression specs remain separate and unchanged.
+- **Verified:** All 24 focused tests and strict scoped typecheck passed,
+  including source hash, names, business-input fidelity, grouped picker,
+  all23 load endpoints and explicit missing/unsupported notices. Original
+  and workbook discovery remain25/102; root hygiene passed.
+- **Independent UI QA:** Team QA Engineer submitted exactly two original
+  samples via the lab UI: Original1/GRI returned HTTP200 and 3 eligible offers;
+  Original18/Owning returned HTTP200 and 0 eligible with DTI/income and
+  asset-prequalification reasons. Both had zero UI/API differences. Actual
+  request mapping, parsed offers/IDs, screenshots, logs and Navigator links
+  passed. All five tenant URLs, 390px layout, saved-run reload and server-restart
+  persistence were verified. Other tenants had link checks only; consistency
+  does not certify decisioning/pricing or completed loans. Evidence:
+  `test-results/2026-10-30/solution-finder/lab-qa/originals-2026-10-31T02-18-23-850Z-29252/index.html`.
+
+## 2026-10-30 DMX-Style Solution Finder JSON Lab
+- **Request / decision:** Reuse the DMX local lab workflow for pasted Solution
+  Finder JSON, parsed inputs/results, tenant selection, actual Navigator
+  inquiry creation and viewable screenshots. Keep it inside the existing
+  Solution Finder project, not a new project directory.
+- **Implementation:** `npm run solution-finder:lab` starts the root-checked,
+  loopback-only server at port 4180 (`SF_LAB_PORT` override). Source is under
+  `scripts/solution-finder/lab/`; the fixed spec is under
+  `tests/projects/solution-finder/lab/`, excluded from original discovery.
+  It reuses the workbook browser flow with explicit actual-UI/API mode,
+  no provisional response expectations, optional fresh email and atomic
+  progress/history writes. Input parsing rejects unsupported fields and data
+  that the UI cannot represent instead of silently dropping them.
+- **Boundaries:** Existing five-tenant QA registry, fixed one-worker/no-retry
+  runner, confirmation/token/same-origin checks and restricted artifact routes.
+  Routing metadata stays tenant-UI controlled. Input snapshots, requests,
+  responses, screenshots, logs and history stay only under dated
+  `solution-finder/lab/` results. A live owning PID prevents a second instance
+  from rewriting a running inquiry; missing/unfinished results are failures.
+- **Verification:** 23 focused unit/environment/server/browser tests and scoped
+  strict typecheck passed. All 102 request templates validate. Original and
+  workbook discovery remain 25/102 separately. Actual GRI and Owning lab-UI
+  submissions returned HTTP 200 and zero UI/API differences, with one and three
+  eligible offers respectively. GRI Figure products reported
+  `WAITING_FOR_LIEN_DATA`, retained as actual reasons. Desktop/mobile layout,
+  saved-history reload, screenshot/JSON retrieval and documented CLI startup
+  were verified. Root hygiene, relevant links and scoped whitespace checks
+  passed; temporary browsers/servers were stopped.
+- **Limitations:** Other three tenant selectors/URLs were checked locally,
+  without new live submissions. Lab PASS validates submitted inputs and
+  actual UI/API consistency, not eligibility/pricing correctness; no-offer
+  responses may pass. It creates inquiries/returned internal applications,
+  not completed/funded loans, and never selects or sends an offer.
+  Canonical guides, affected-folder histories and this tracked memory were
+  synchronized; the unavailable external memory mount was not created.
+
+## 2026-10-30 Solution Finder Project Consolidation
+- **Decision:** Reuse existing project folders across tests, inputs and dated
+  results. Create a new project folder only when the user explicitly identifies
+  a new project; another workbook, scenario group, tenant or environment does
+  not qualify.
+- **Layout:** The 102-case group is now
+  `tests/projects/solution-finder/workbook-scenarios/`; its inputs are in
+  `test-data/solution-finder/workbook-scenarios/`, with outputs under
+  `test-results/<date>/solution-finder/workbook-scenarios/<tenant>/<run-id>/`.
+  Original regression specs remain separate and unchanged. Both configurations
+  use `solution-finder`; existing `test:solution-finder:new` commands are retained.
+- **Fix:** Updated imports, output construction, exporter/generator destinations,
+  typecheck/discovery paths and fixture ignore exceptions. Removed obsolete
+  standalone directories by moving their contents, not deleting evidence.
+- **Verification:** 16 focused tests and strict scoped typecheck passed;
+  discovery selected 102 workbook cases and 25 original cases independently.
+  Export/generate preserved fixture/spec contents. All 4,281 moved result files,
+  both fixtures and 26 original regression files retained their hashes.
+  Relocated reports, screenshot links and the original interactive Playwright
+  report loaded locally. No new inquiries were submitted or old execution
+  metadata rewritten. Canonical rules and affected existing README histories
+  were synchronized; the unavailable external memory mount was not created.
+
+## 2026-10-30 DMX Login and Residence Reliability
+
+- Repaired delayed/two-step login, Okta passcode selector, invalid browser wait,
+  swallowed manual MFA expiry and registration URL handling. Preserve selected
+  entry fallback; residence supports elapsed Years*/Months* plus legacy dates.
+- `npm run test:dmx:unit`: 12/12 intercepted Chromium checks passed. Strict
+  focused engine compile and root hygiene passed. After the initial live
+  residence failure, fresh-account DEV LO-B PUR-01 passed with completion and
+  matching Accounts-card assertions. Loan Lab startup and read-only entry passed.
+- Live existing-account login/MFA and other suites remain unverified. No
+  production mutations. See [DMX history](../tests/projects/DMX/README.md) and
+  [unit history](../tests/unit/README.md) for evidence and coverage limits.
+
+## 2026-10-30 Root Hygiene and Durable Affected-Area History
+- **Decision / root-cause limits:** Generated root diagnostics bypassed configured result destinations through default/cwd-relative output paths. The tracked Firebase debug log was legacy authentication diagnostics; no active source writer was found and the exact one-off JSON/log creation command is not recoverable from available source/session history. Playwright reporter outputs were already correct; do not attribute these files to the reporter.
+- **Cleanup:** Removed root `firebase-debug.log` and the untracked `rate-wealth-mortgage-retry-2026-10-28-plan-list-response.json`; preserved the prior root PNG deletion. Moved the entire generated `.playwright-mcp/` directory to `test-results/2026-10-30/maintenance/root-cleanup-2026-10-30/mcp-diagnostics/`, intentionally deleting tracked old generated logs at their former paths. Existing source/configuration/test inputs were preserved.
+- **Prevention:** The root guard allowlists intentional files and rejects generated reporter/MCP directories. The shared runner checks before and after each batch, including failures; npm main lifecycle hooks and all three existing browser CI workflows enforce checks (`if: always()` in CI). The existing results-root checker includes the root guard. Test-data troubleshooting now uses existing browser profile setup/access checks instead of root-level Firebase CLI login.
+- **Durable documentation:** README/AGENTS/framework context and the sync role require dated affected-area README histories recording request, cause/decision, changes, validation and limitations; preserve older history and link it from root README. Memory is selective, not a complete work archive.
+- **Verification outcome (supplied completed evidence):** `npm run test:root-hygiene` passed all 7 Node tests: root configs preserved; arbitrary diagnostic extensions rejected; default MCP/reporter directories rejected; sorted names without reading contents; wrapper guard before/after each batch; guard after failure preserving exit status; halt on root pollution. `npm run check:root` passed. `node --check` passed `scripts/check-repository-root.js`, `scripts/check-test-results-root.js` and `scripts/run-playwright.js`. All three modified browser CI workflow YAML files parsed and always-run guard steps were verified. Newly added README relative links in `scripts/`, `.github/workflows/`, `ai/jobs/` and `memory/` resolved; focused `git diff --check` passed.
+- **Operational limits / sync scope:** No live browsers/devices, authentication sign-ins or GitHub jobs ran. External browser MCP launch settings are not repository-managed: set `--output-dir` under `test-results/` and restart externally. The guard detects violations; it cannot intercept filesystem writes. This documentation-only sync updates root `README.md`, `scripts/README.md` and this tracked memory using supplied evidence, without rereading source/payloads or rerunning checks. External `/memories/repo/webautomation.md` is verified absent and was not created.
 
 ## 2026-10-27 Validated Cleanup and Canonical Next-Task Handoff
 - **Root cause / decision:** Accumulated generated results and uncommitted exploratory tooling obscured the supported workflows. The user selected pre-October-only generated result deletion, consented to removal of uncommitted exploratory files, and requested a summary guide preserving machine inputs.

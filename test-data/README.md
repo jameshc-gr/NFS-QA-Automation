@@ -17,6 +17,15 @@
   reusable account registries/counters stayed tracked and local sessions stayed
   on disk. Root hygiene and scoped whitespace checks passed.
 
+## Retention rule
+
+Store only inputs and supporting resources necessary to execute or reproduce
+tests here: fixtures, scenarios, expected-data contracts, configuration, account
+registries/counters, and required application builds. Do not store screenshots,
+execution reports, diagnostic captures, or generated run evidence here; use
+`../test-results/` instead. Required input assets and resources inside application
+bundles (for example app icons) must be preserved.
+
 ## October 2026 continuation guide
 
 Updated 2026-10-27. Start here for the reusable test inputs and next-task workflow.
@@ -34,6 +43,7 @@ Older project notes remain reference material, not separate required handoffs.
 | Rate Wealth focused regression, added October 26 | [rate-wealth-regression-test-plan-2026-10-26.csv](rate-wealth/rate-wealth-regression-test-plan-2026-10-26.csv) | Seven cases covering registration copy, signup activation, plan preview/chart/edit/delete isolation, and Plaid linking. Reuse preconditions, steps, expected behavior, spec mapping, and command columns; do not carry forward observed results/status. Activation is manual; the signup smoke spec is not activation coverage. |
 | Rate Wealth automation map, updated October | [rate-wealth-automation-catalog.csv](rate-wealth/rate-wealth-automation-catalog.csv) and [rate-wealth.yml](rate-wealth/rate-wealth.yml) | 172 catalog entries mapping IDs to specs/modes; shared profile inputs. Catalog size is not a count of verified tests or coverage. |
 | Solution Finder address regression, added October 9 | [inquiry specs](../tests/projects/solution-finder/) and [dashboard-auth.yml](one-loan-rtl/dashboard-auth.yml) | Separate cases for Miami address/unit, apartment number, leading-zero ZIP, no unit, and restructured inquiry. The Playwright config uses the shared One Loan dashboard config as a base-URL fallback. Keep per-spec inputs and existing account recording; no new consolidated runtime data format is introduced. |
+| Solution Finder additional inquiry fixtures | [102-case workbook](solution-finder/HELOAN_102_scenarios_with_Fannie_Mae_personas.xlsx), [Fannie Mae persona inputs](solution-finder/fannie-mae-personas.json), and [runnable scenario contracts](solution-finder/workbook-scenarios/scenarios.json) | One scenario per row with exactly four columns: Scenario, Inquiry Request, Inquiry Response, UI offers. The separate Personas sheet keeps the requested eight columns; cell notes hold source characteristics, public address sources, QA-assigned fields and provider limitations. SSN last four digits remain text, including leading zeros. The separately selectable Solution Finder workbook group uses exported JSON; these provisional expectations are not independent eligibility certification. |
 | One Loan workbook, added October 27 | [CFEN_Encompass_fields.xlsx](one-loan-rtl/CFEN_Encompass_fields.xlsx) | Existing `Sheet1` template: loan numbers in column A, field IDs in row 2 from column C onward, descriptions in row 3, loan data starting at row 4. Preserve duplicate field-ID columns, descriptions, formatting, and other sheets. Do not copy borrower values into this guide. |
 | One Loan RTL fixtures | [one-loan-rtl/](one-loan-rtl/) | Existing per-loan `*-rtl-patches.yml` fixtures and dashboard auth configuration remain inputs for extraction. Keep these separate from generated result files. |
 | Mobile build selection, updated October | [Android config](mobile-app/gri/android/config.yml) and [iOS config](mobile-app/gri/ios/config.yml) | Select named builds explicitly. Android includes `qa`, `qa-local`, `stage`, `dev`, `prod`; iOS includes `qa-simulator`, `qa-31.3-simulator`, `stage-simulator`, `dev-simulator`, `prod-simulator`, and IPA/TestFlight profiles. Do not infer the installed version from a profile name; inspect its current config and versioned `build-info.json`. |
@@ -73,6 +83,52 @@ tolerance `+/- $500`; these are planning inputs, not blanket acceptance of a
 current calculation. Do not report those planned cases as automated coverage.
 
 ### Solution Finder and DMX: next task
+
+Use the existing [Solution Finder specs](../tests/projects/solution-finder/)
+as the original general regression set, following the
+[canonical run commands](../README.md#solution-finder-general-regression).
+Keep them separate from the explicitly requested
+[Solution Finder workbook group](../tests/projects/solution-finder/workbook-scenarios/), whose
+[commands and tenant choices](../README.md#new-solution-finder-102-workbook-scenarios)
+use the [102 exported contracts](solution-finder/workbook-scenarios/scenarios.json) and
+[five tenant URLs](solution-finder/workbook-scenarios/environments.json).
+Reuse existing project folders; create a new project folder only for an
+explicitly identified new project, not for another workbook or environment.
+Do not regenerate approved expectations from failed execution output.
+Workbook APR checks ignore hundredths/thousandths without rounding, while
+UI/API APR equality remains exact. Ignored APR values are logged in QA comments;
+all other pricing, eligibility and product-identity checks remain unchanged.
+
+For ad hoc pasted JSON, use the
+[Solution Finder Lab](../scripts/solution-finder/lab/README.md)
+(`npm run solution-finder:lab`). It can load these cases as input templates
+without treating their provisional responses as approved baselines. Its actual
+submitted inputs, responses, screenshots and saved run history belong only in
+dated `test-results/.../solution-finder/lab/`, not in test-data.
+The lab also loads the separate
+[original 23-case snapshot](solution-finder/workbook-scenarios/original-scenarios.json)
+as `SF-1-Original` through `SF-23-Original`, ahead of the additional 102.
+Original source requests are retained; unsupported retired income and the
+original underage case's `N/A` request are flagged explicitly.
+Use the lab's property/borrower/income tables or synchronized advanced JSON to
+edit inputs. Validate the readable address/currency/SSN-last-four preview.
+Edited lab requests can be saved as named reusable copies via **Save as new
+template**. Their input-only JSON is stored locally in
+`solution-finder/workbook-scenarios/lab-templates/`, gitignored for borrower-data
+hygiene. Built-in inputs and previously saved copies are never overwritten;
+execution evidence and response expectations are not stored with these copies.
+
+Fannie Mae identities are fictitious DU test profiles and are each submitted as
+a single borrower, including people listed as co-borrowers in the source.
+Their source scores, freezes and credit events must not be presented as live
+Navigator results unless the providers actually return them. The source does
+not supply income, DOB or addresses; these are explicitly QA-assigned.
+DTI probes reference FAL-3356 and occupancy/Max LTV probes reference FAL-3147.
+Rounded summary DTI is not exact ECS debt, and the UI's Max CLTV label is not
+proof of a universal provider cutoff. Ignore offer ordering; verify product
+identity and displayed data. Explicit no-offer placeholder cards are not
+additional eligible offers. Screenshot links in cell notes/contents point
+outside test-data to test-results; no screenshots are embedded in the workbook.
 
 ```bash
 # Discovery only: no loan creation or sign-in.
@@ -339,6 +395,79 @@ env:
     npm run build:mobile:ios -- --download v30.3-qa --env qa
 ```
 
+## Work history
+
+### 2026-10-30 - Structured lab editing preserves source fixtures
+
+- Request tables now edit the same reusable request used by preview/save/run;
+  formatting does not rewrite original fixtures or adopt example borrower values.
+- Invalid/unsupported fields remain available for explicit correction.
+  SSN last four preserves leading zeros; multiple incomes remain separate inputs.
+  Existing saved-run identification derives from results, not fixture changes.
+- All 31 focused tests and scoped typecheck passed; source fixtures remained
+  unchanged and UI screenshots/verification logs stayed under test-results.
+
+### 2026-10-30 - Reusable edited lab templates
+
+- Added local input-only storage beneath the existing Solution Finder fixture
+  subtree for validated, named scenario copies, with source ID and creation time.
+- These ad hoc inputs are gitignored; source originals and approved fixtures
+  are untouched. Screenshots, responses, logs and other run evidence remain in
+  test-results, not template files.
+- All 27 focused checks and scoped typecheck passed, including independent
+  copy/fork storage, server restart, duplicate/invalid input and visible failure
+  paths. Tests isolate and remove their own temporary inputs.
+
+### 2026-10-30 - Original 23 Solution Finder lab inputs
+
+- Added only a reusable original-case JSON snapshot under the existing Solution
+  Finder fixture folder. The source workbook and additional 102-case JSON were
+  preserved.
+- Kept original names/numbering, source requests and mapped form inputs.
+  Decoded two CSV-escaped request cells without changing business values.
+  Missing/unsupported cases stay visible with notices.
+- All 24 focused tests and scoped typecheck passed; source hashes and original
+  fields were verified. Live sample execution evidence stays in test-results.
+- Independent QA submitted only Original1/GRI and Original18/Owning through the
+  lab UI, verifying actual request values, HTTP200 and zero UI/API differences.
+  Their 3/0 eligible-offer outcomes and screenshots are in the
+  [readable QA report](../test-results/2026-10-30/solution-finder/lab-qa/originals-2026-10-31T02-18-23-850Z-29252/index.html);
+  no generated evidence was added to test-data.
+
+### 2026-10-30 - Solution Finder Lab input reuse
+
+- The local lab loads existing workbook requests as templates; no fixture copies
+  or generated evidence were added to test-data. All 102 input requests validate.
+- The lab separates provisional response expectations from actual UI/API checks.
+  Run input snapshots, JSON responses, logs, screenshots and history are written
+  only beneath dated Solution Finder lab results.
+- Real GRI and Owning runs were verified; no other-tenant live submissions or
+  completed-loan coverage is claimed.
+
+### 2026-10-30 - Solution Finder workbook inputs consolidated
+
+- Request: keep new scenarios within the existing Solution Finder project,
+  rather than creating another project folder for a workbook or environment.
+- Moved the two runtime JSON inputs to
+  [solution-finder/workbook-scenarios/](solution-finder/workbook-scenarios/).
+  Added targeted ignore exceptions so they remain trackable; private/local
+  extraction files keep their existing ignore rules.
+- Updated the exporter, contract loader and five-tenant registry. Export/generate
+  commands were exercised and both JSON files remained byte-identical.
+- Validation: 16 unit/environment tests and scoped typecheck passed. Original
+  and workbook discovery stayed separate at 25 and 102 cases. Source workbooks
+  were not changed and no new live inquiries were submitted.
+
+### 2026-10-30 - Root-output cleanup
+
+- Replaced the obsolete repository-root `firebase login` troubleshooting advice
+  with the existing saved-browser-profile setup/access-check commands.
+- Firebase CLI diagnostics were present in the repository root. Separate CLI
+  investigations must run from an explicit `test-results/` directory.
+- Reusable inputs, app resources, saved sessions and account registries were
+  preserved. No authentication or mobile business rules changed; no live
+  sign-in/device tests ran.
+
 ## Troubleshooting
 
 ### "Build not found" error
@@ -363,10 +492,14 @@ rm -rf test-data/mobile-app/gri/ios/30.3/qa/*.app
 
 **Android + Firebase:**
 ```bash
-firebase login
-# or set GOOGLE_APPLICATION_CREDENTIALS
-export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
+npm run setup:gv-session
+npm run verify:firebase-access
 ```
+
+Use the existing saved Google browser profile; sign in manually. Do not run
+`firebase login` from the repository root: CLI authentication diagnostics can
+create `firebase-debug.log` there. If a separate CLI investigation is required,
+run it from an explicitly created directory under `test-results/`.
 
 **iOS + GitHub:**
 ```bash

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Solution Finder Lab / All suite results</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/suite-results.js" defer></script>
+</head>
+<body>
+  <header><a href="/">RATE <span>/ SOLUTION FINDER LAB</span></a><span class="badge">READ-ONLY SUITE RESULTS</span></header>
+  <main id="suite-report">
+    <h1>All suite results</h1>
+    <p>Every scenario stays visible here. This tab updates while the suite runs; it never creates or retries an inquiry.</p>
+    <p class="hint">PASS means actual input/UI/API consistency, not independent pricing or eligibility certification. Pending/skipped cases have no completed offers to display.</p>
+    <div id="error" role="alert" hidden></div>
+    <p id="suite-report-summary" role="status">Loading suite...</p>
+    <p id="suite-report-id" class="hint"></p>
+    <button id="report-refresh" class="quiet">Refresh results</button>
+    <div id="suite-report-cases"></div>
+  </main>
+</body>
+</html>

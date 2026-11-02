@@ -31,9 +31,127 @@ Rules
 - Propose changes before making them unless the user explicitly asked for edits.
 
 Current Framework Notes
+- Root hygiene: `npm run check:root` rejects unexpected root files and default
+  reporter/MCP output directories. `npm test` and the shared Playwright wrapper
+  check the root; browser CI jobs check it even after failure. Direct commands
+  and MCP sessions must also use explicit `test-results/` destinations and run
+  the guard on completion. Ignoring output does not redirect its writer.
+- Memory is selective, not a full archive. Append dated request/change/validation
+  history to affected-folder READMEs and link from root README; use tracked
+  `memory/webautomation.md` when the external memory mount is unavailable.
 - Profile values are loaded through `tests/projects/student-loan-refi/test-setup.ts` from suffix-based env vars such as `FIRST_NAME_LK1`.
 - Specialized profiles use uppercase enum-style values for dropdowns where possible.
 - Narrow test runs are preferred before broad suite runs.
+- Reuse existing project folders across `tests/projects/`, `test-data/` and
+  `test-results/<date>/`. Create a new project folder only when the user
+  explicitly identifies a new project; scenario sets and tenants are subfolders.
+- Solution Finder has two intentionally separate sets: the original
+  `tests/projects/solution-finder/` general regression suite, and the explicitly
+  requested 102-case `tests/projects/solution-finder/workbook-scenarios/` group.
+  Do not merge or replace the original tests. The new suite uses
+  `playwright.new-solution-finder.config.ts` and checked-in inputs from
+  `test-data/solution-finder/workbook-scenarios/`; the original config excludes it.
+  Both runners use the `solution-finder` project name; existing `:new` commands
+  select the workbook group without creating a separate project.
+  Run `SF_TENANT=gri npm run test:solution-finder:new` (also `owning`,
+  `citywide`, `certainty`, `onq`; default GRI, unknown values error).
+  Certainty uses `/inquiry/?playwright=true`, not `/inquiry/intake/`.
+  Expectations are GRI-observed: other tenants are flagged as unapproved
+  baselines and differences are not silently ignored. Tests submit only
+  through UI, compare actual API and DOM offers with workbook expectations,
+  ignore generated IDs and product ordering but retain numeric/eligibility
+  checks. Workbook APR comparisons ignore hundredths/thousandths without
+  rounding (8.449% matches 8.471%, but not 8.500%); UI/API APR remains exact.
+  Ignored APR values are recorded in QA comments, not rewritten in baselines.
+  Tests save a QA comment plus evidence for every run under
+  `test-results/<date>/solution-finder/workbook-scenarios/<tenant>/<run-id>/`.
+  Validate with `npm run test:solution-finder:new:unit` and
+  `npm run typecheck:solution-finder:new`; regenerate specs only from
+  explicitly reviewed fixture changes.
+- Solution Finder Lab: `npm run solution-finder:lab` serves
+  `http://127.0.0.1:4180` (override `SF_LAB_PORT`). Source lives in
+  `scripts/solution-finder/lab/`; its fixed spec is under
+  `tests/projects/solution-finder/lab/` and excluded from original discovery.
+  It validates pasted JSON, previews inputs, runs one UI inquiry for a selected
+  existing QA tenant, and shows actual JSON, parsed offers/IDs and screenshots.
+  Its picker has 125 input templates: original23 first as `SF-N-Original`,
+  then existing102 `NSF-*` cases. Original source JSON/mapping notices remain
+  visible; original12 now uses the user-approved title-aligned retirement DOB
+  with an explicit correction notice and preserved source. Retired SSI maps
+  automatically to SOCIAL_SECURITY in Navigator; validate calendar age 62+
+  and the source/type pairing, and compare actual submitted income type.
+  GRI form-only clock probes verified exact birthday/leap boundaries.
+  This is observed Navigator behavior, not federal SSI eligibility: Social
+  Security retirement and age-based SSI are distinct programs. Flag the
+  "Retired SSI" / SOCIAL_SECURITY label ambiguity for Product; never infer a
+  benefits rule or silently replace the observed UI cutoff with age 65.
+  Original, workbook and lab paths reuse selectInquiryIncomeSource from
+  the original form helper for exact native/custom primary/additional income
+  selection. Missing options fail; never choose employment/first available.
+  The original retirement spec asserts the real submitted DOB and income
+  source/type/amount and includes permanent form-only browser clock probes.
+  Original22 source is N/A, but user-authorized lab input clones SF-1 with DOB
+  January 1 of current local year minus 17, refreshed per load/queue;
+  clamp residence start to DOB when needed. It is selectable,
+  with an explicit generated-data notice, not an original customer request.
+  Use property/borrower/repeatable-income tables or the always-visible JSON
+  copy/paste area above them. Paste works before Load; selecting a case still
+  requires Load. Old servers get a visible restart notice and correct legacy
+  group labels. New servers snapshot page assets at startup so API/static
+  versions remain consistent; restart after code changes, not during a run.
+  Top-level **Reset / New run** clears workspace inputs/selections/results,
+  resets GRI/fresh-email defaults and keeps saved runs/suites/templates.
+  Disable it during active execution or pending UI requests; never submit,
+  delete persisted work or cancel a running inquiry as part of reset.
+  Validation shows eight readable address/currency/name/SSN-last-four/income
+  lines; values come from the actual request. Edits invalidate stale previews.
+  Saved-run labels/profile derive borrower, actual submitted email and returned
+  identifiers from persisted evidence. A true `loanId` is never synthesized
+  from internalAppId, inquiryId, offerId or officer IDs; missing loan ID is
+  explicit and application/inquiry fallbacks retain their real labels.
+  Edit loaded/pasted inputs and use **Save as new template** for validated named
+  copies in the persisted **Saved templates** group. Each gets a new
+  `SF-CUSTOM-<UUID>`; originals/previous copies are never overwritten.
+  Input-only JSON lives in gitignored
+  `test-data/solution-finder/workbook-scenarios/lab-templates/`; no run evidence
+  belongs there. Saving never executes or creates a response baseline/spec.
+  **Run a scenario suite** uses explicit grouped checkboxes for saved
+  original/NSF/custom inputs; no modifier-key multi-select. It targets one tenant,
+  with group/Clear controls and separate count/tenant authorization.
+  Suite Tenant (above Scenario group) and Configure an inquiry Tenant sync
+  bidirectionally with intake/target labels and reset both confirmations.
+  Both selectors lock while an inquiry or suite is active.
+  Prevalidate/snapshot all requests before launching; all 23 originals are
+  selectable. Use one fixed browser child at a time, mutually exclusive
+  with single runs. First failure stops the queue and skips pending cases;
+  stop-after-current never interrupts the current inquiry. No retries/resume.
+  Combined results/history link each child profile, offers, JSON and screenshot;
+  **Open all suite results in a new tab** opens a read-only, auto-updating
+  full-suite report with every case/offer/decline/JSON/log/screenshot, including
+  saved history. It makes GET requests only; opening a report never re-executes.
+  The existing Actual results panel still inspects one child at a time.
+  suite snapshots/summaries stay under dated `solution-finder/lab/sf-suite-*`
+  results, not test-data. Interrupted suites fail/skip rather than auto-submit.
+  Unsaved editor variations must be saved as templates before batch selection.
+  It reuses the workbook browser flow with `compareWorkbook: false`; placeholder
+  expected responses do not decide lab PASS. Exact UI/API checks remain.
+  Default fresh emails are explicit/optional; UI-controlled routing metadata
+  is recorded, not injected. A returned internal application ID is not a
+  completed loan. All input snapshots/history/evidence stay in
+  `test-results/<date>/solution-finder/lab/<run-id>/`.
+  Validate with `npm run test:solution-finder:lab` and the scoped typecheck.
+  Standalone distribution: `npm run package:solution-finder:lab` compiles an
+  explicit runtime allowlist into a ZIP beneath dated Solution Finder
+  lab-distribution results. Include minimal pinned npm dependencies, UI,
+  tenant registry and Node launcher; never customer/workbook inputs, secrets,
+  account records, saved runs/templates or installed modules/browser binaries.
+  Packaged launcher sets SF_LAB_PORTABLE=1, skips both datasets and displays an
+  empty-catalog notice; recipients paste approved JSON and save local templates.
+  Normal mode still requires its original sources. Compiled worker/config use
+  JS while repo mode uses TS. `npm run verify:solution-finder:lab -- <ZIP>`
+  installs/exercises the extracted copy with module-isolation enforcement;
+  no live inquiries. Recipients need Node 22/24 LTS, npm ci, npm run setup,
+  npm start and QA/VPN access. macOS verified; Windows/Linux not certified.
 - Start continuation tasks from `test-data/README.md` for the October 2026
   reusable-input inventory and focused commands. Do not use prior test results
   as current coverage. One-off exploration/capture/probe specs, media report
@@ -110,6 +228,11 @@ Recent changes (2026-07-31)
   it reuses the Google Voice browser profile, so tester access is sufficient.
 - iOS/Android create-user specs verified green end to end, including SMS
   verification and dismissing the "working with someone from Rate?" modal.
+
+Recent changes (2026-10-30)
+- DMX login waits for delayed fields, quotes the Okta passcode selector, supports separate username/password screens and waits for URL completion without serializing Node functions. Expired manual MFA must fail, not report login success.
+- Registration uses a typed URL predicate rather than competing waits, skips password entry on authenticated application routes and preserves the selected entry in dashboard fallback. Residence supports current Years*/Months* controls derived from MM/YYYY and legacy date controls.
+- `npm run test:dmx:unit` covers these paths offline with intercepted Chromium fixtures. Fresh-account DEV LO-B PUR-01 passed live; existing-account live login/MFA remains unverified. See `tests/projects/DMX/README.md` for dated evidence and limitations.
 
 Recent changes (2026-09-30)
 - Added the local DMX Loan Lab dashboard for scenario templates, serialized single-case launches, streamed logs/progress and local loan/account results. It binds to `127.0.0.1`; do not expose it or publish its ignored credential-bearing files.

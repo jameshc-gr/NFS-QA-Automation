@@ -1,7 +1,9 @@
 const fs = require('fs')
 const path = require('path')
+const { checkRepositoryRoot } = require('./check-repository-root')
 
 const repoRoot = process.env.GIT_ROOT || path.resolve(__dirname, '..')
+checkRepositoryRoot(repoRoot)
 const testResults = path.join(repoRoot, 'test-results')
 
 function fail(msg) {

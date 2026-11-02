@@ -2,7 +2,43 @@
 
 This repo's latest human-readable guidance lives in [README.md](README.md). Treat that file as the source of truth for commands, profile rules, test layout, and agent references.
 
+## Screenshot Output Rule
+
+- Save all generated screenshots only under the repository's `test-results/` directory, preferably `test-results/<YYYY-MM-DD>/<project>/<run>/`.
+- This applies to automated tests, exploratory/manual browser captures, MCP browser tools, failure diagnostics, and report previews.
+- Before capturing, create the destination directory and explicitly set a screenshot path resolving inside `test-results/`. Never rely on a tool's default output location.
+- Never create screenshots in the repository root, `test-data/`, source directories, or any location outside `test-results/`.
+
+## Test Data Retention Rule
+
+- Keep `test-data/` limited to inputs and supporting resources necessary to execute or reproduce tests: fixtures, scenario definitions, expected-data contracts, configuration, account registries/counters, and required application builds.
+- Do not store screenshots, execution reports, diagnostic captures, or other generated run evidence in `test-data/`; put them under `test-results/`.
+- Preserve required input assets and application-bundle resources (such as app icons); these are not screenshots or disposable test results.
+
+## Project Folder Rule
+
+- Reuse the existing project folder in `tests/projects/`, `test-data/`, and
+  `test-results/<YYYY-MM-DD>/`. Add scenario groups, tenants and runs beneath it.
+- Create a new project folder only when the user explicitly identifies a new
+  project. A new scenario set, workbook, tenant or environment is not a new project.
+- Solution Finder workbook scenarios belong under
+  `tests/projects/solution-finder/workbook-scenarios/`, with inputs under
+  `test-data/solution-finder/workbook-scenarios/` and evidence under
+  `test-results/<YYYY-MM-DD>/solution-finder/workbook-scenarios/`.
+
 ## Agent Bootstrap
+
+- Memory is selective context, not a complete work archive. For every completed
+  task, append a dated work-history entry to each affected area/folder's README
+  (create one if missing), recording the request, root cause/decision, changes,
+  validation and remaining limitations. Link detailed records from the root
+  README. Preserve older entries; distinguish historical outcomes from current
+  behavior. Never copy secrets, account data or raw response payloads into history.
+- All generated diagnostics, snapshots, response captures, logs and reports must
+  resolve under `test-results/`, including one-off shell and MCP work. Configure
+  browser MCP providers with `--output-dir` under `test-results/` when supported;
+  otherwise pass explicit result paths. Run `npm run check:root` before reporting
+  completion; ignoring a file is not output routing.
 
 - Read [README.md](README.md) first, then [ai/jobs/skills/playwright-framework-context/SKILL.md](ai/jobs/skills/playwright-framework-context/SKILL.md) when you need the current framework mechanics.
 - For ANY mobile testing task, [docs/mobile-testing-rules.md](docs/mobile-testing-rules.md) is the permanent, canonical rule set (email formats, verification routing, account recording, page-verbiage assertions). It must not be relaxed or reinterpreted without explicit user approval.

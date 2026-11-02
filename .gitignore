@@ -26,6 +26,8 @@ blob-report/
 
 # Local Playwright MCP snapshots and logs
 .playwright-mcp/
+# Local Firebase CLI diagnostics must not be committed.
+firebase-debug*.log
 
 # Environment variables (contains sensitive test data)
 .env
@@ -58,6 +60,10 @@ mobile/.builds/
 # Local Solution Finder loan extraction artifacts
 test-data/solution-finder/*
 !test-data/solution-finder/dashboard-auth.yml
+!test-data/solution-finder/workbook-scenarios/
+!test-data/solution-finder/workbook-scenarios/*.json
+# Ad hoc lab inputs may contain borrower data; review explicitly before sharing.
+test-data/solution-finder/workbook-scenarios/lab-templates/
 
 # Local DMX dashboard templates, run configuration, and credential-bearing results
 test-data/DMX/dmx-dashboard-*.json

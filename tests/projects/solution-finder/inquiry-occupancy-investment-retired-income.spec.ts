@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import {
   formatCurrency,
   generateUniqueEmail,
+  selectInquiryIncomeSource,
   toCalendarInputDateDigits,
   typeMaskedInput,
 } from "./helpers/inquiry-form";
@@ -61,9 +62,33 @@ const inquiryConfig = {
   },
 } as const;
 
+test("Navigator retirement-source visibility follows the 62nd birthday", async ({ page }) => {
+  for (const [today, dob, available] of [
+    ["2026-06-30", "1964-07-01", false],
+    ["2026-07-01", "1964-07-01", true],
+    ["2026-07-02", "1964-07-01", true],
+    ["2026-02-28", "1964-02-29", false],
+    ["2026-03-01", "1964-02-29", true],
+  ] as const) {
+    await page.clock.setFixedTime(new Date(`${today}T12:00:00`));
+    await page.goto("/inquiry/intake/?playwright=true");
+    await expect(page.getByTestId("new-inquiry-page")).toBeVisible();
+    const birthDate = page.locator("input#date");
+    await typeMaskedInput(birthDate, toCalendarInputDateDigits(dob));
+    const [year, month, day] = dob.split("-");
+    await expect(birthDate).toHaveValue(`${month}/${day}/${year}`);
+    const source = page.getByRole("combobox", { name: "Primary income source*", exact: true });
+    await source.click();
+    await expect(source).toHaveAttribute("aria-expanded", "true");
+    await expect(page.getByRole("option", { name: "Retired SSI", exact: true }))
+      .toHaveCount(available ? 1 : 0);
+    await page.keyboard.press("Escape");
+  }
+});
+
 test("Occupancy type is investment and income source is Retired SSI", async ({
   page,
-}) => {
+}, testInfo) => {
   const uniqueEmail = generateUniqueEmail();
   const config = {
     ...inquiryConfig,
@@ -284,56 +309,13 @@ test("Occupancy type is investment and income source is Retired SSI", async ({
   // Scroll to income section
   await page.getByTestId("income-information-section").scrollIntoViewIfNeeded();
 
-  // Primary income source - select configured source (or first non-empty option)
+  // Never substitute employment if the age-gated retirement option is missing.
   const incomeSourceField = page.getByTestId("inquiry-primary-income-source");
   await expect(incomeSourceField).toBeVisible({ timeout: 10000 });
   const targetIncomeSource =
     config.applicationInquiryInput.incomeInput[0].incomeSource;
 
-  const nativeIncomeSelect = incomeSourceField.locator("select").first();
-  if (
-    await nativeIncomeSelect.isVisible({ timeout: 1000 }).catch(() => false)
-  ) {
-    const selected = await nativeIncomeSelect.selectOption({
-      value: targetIncomeSource,
-    });
-    if (!selected.length) {
-      const nonEmptyValue = await nativeIncomeSelect
-        .locator("option")
-        .evaluateAll((options) => {
-          const first = options.find((option) => {
-            const value = (option as HTMLOptionElement).value;
-            return value && value.trim().length > 0;
-          }) as HTMLOptionElement | undefined;
-          return first?.value || "";
-        });
-      if (nonEmptyValue) {
-        await nativeIncomeSelect.selectOption({ value: nonEmptyValue });
-      }
-    }
-  } else {
-    const incomeDropdownTrigger = incomeSourceField
-      .locator('button, [role="combobox"], [aria-haspopup="listbox"]')
-      .first();
-    await expect(incomeDropdownTrigger).toBeVisible({ timeout: 5000 });
-    await incomeDropdownTrigger.click();
-
-    const targetIncomeOption = page
-      .locator('[role="listbox"] [role="option"], [role="option"]')
-      .filter({ hasText: /Employed full-time|EMPLOYED_FULL_TIME/i })
-      .first();
-    if (
-      await targetIncomeOption.isVisible({ timeout: 2000 }).catch(() => false)
-    ) {
-      await targetIncomeOption.click();
-    } else {
-      const firstIncomeOption = page
-        .locator('[role="listbox"] [role="option"], [role="option"]')
-        .first();
-      await expect(firstIncomeOption).toBeVisible({ timeout: 5000 });
-      await firstIncomeOption.click();
-    }
-  }
+  await selectInquiryIncomeSource(page, incomeSourceField, targetIncomeSource);
 
   // Annual Income
   const annualIncomeInput = page
@@ -369,7 +351,28 @@ test("Occupancy type is investment and income source is Retired SSI", async ({
   await submitButton.scrollIntoViewIfNeeded();
   await expect(submitButton).toBeVisible({ timeout: 10000 });
   await expect(submitButton).toBeEnabled({ timeout: 10000 });
-  await submitButton.click();
+  const [inquiryResponse] = await Promise.all([
+    page.waitForResponse(response =>
+      new URL(response.url()).pathname === "/api/application/inquiry" &&
+      response.request().method() === "POST",
+      { timeout: 3 * 60 * 1000 },
+    ),
+    submitButton.click(),
+  ]);
+  expect(inquiryResponse.status()).toBe(200);
+  const actualRequest = inquiryResponse.request().postDataJSON();
+  await testInfo.attach("actual-inquiry-request", {
+    body: Buffer.from(JSON.stringify(actualRequest, null, 2)),
+    contentType: "application/json",
+  });
+  await testInfo.attach("actual-inquiry-response", {
+    body: await inquiryResponse.body(),
+    contentType: "application/json",
+  });
+  expect(actualRequest.applicationInquiryInput.basicInfoUpdateInput.dateOfBirth)
+    .toBe(config.applicationInquiryInput.basicInfoUpdateInput.dateOfBirth);
+  expect(actualRequest.applicationInquiryInput.incomeInput)
+    .toEqual(config.applicationInquiryInput.incomeInput);
 
   // Wait for navigation to prequalify/offers page (can take up to 3 minutes)
   await page.waitForURL(/\/inquiry\/prequalify/, { timeout: 3 * 60 * 1000 });
@@ -442,23 +445,22 @@ test("Occupancy type is investment and income source is Retired SSI", async ({
   }
   console.log("Inquiry summary:", JSON.stringify(capturedSummary, null, 2));
 
-  // Offer cards render in a fixed product order: Fixed HELOC, Variable HELOC, HELOAN
-  const expectedOfferOrder = [
+  const expectedOfferTitles = [
     "Fixed Rate HELOC",
     "Variable Rate HELOC",
     "HELOAN",
   ];
   const capturedOffers: string[] = [];
-  for (let i = 0; i < expectedOfferOrder.length; i++) {
-    const card = page.getByTestId(`inquiry-offer-card-${i}`);
+  const offerCards = page.locator('[data-testid^="inquiry-offer-card-"]');
+  for (const title of expectedOfferTitles) {
+    const card = offerCards.filter({ has: page.getByText(title, { exact: true }) });
+    await expect(card).toHaveCount(1);
     await expect(card).toBeVisible();
-    await expect(card).toContainText(expectedOfferOrder[i]);
     capturedOffers.push(((await card.innerText()) ?? "").trim());
   }
 
-  // Both HELOC offers (cards 0 and 1) should show a rate, loan amount, term and details
-  for (const cardIndex of [0, 1]) {
-    const card = page.getByTestId(`inquiry-offer-card-${cardIndex}`);
+  for (const title of ["Fixed Rate HELOC", "Variable Rate HELOC"]) {
+    const card = offerCards.filter({ has: page.getByText(title, { exact: true }) });
     await expect(card.getByText(/^\d+\.\d{2,3}%$/).first()).toBeVisible();
     await expect(card).toContainText("Loan Amount");
     await expect(card).toContainText(/\$[\d,]+/);
@@ -471,6 +473,7 @@ test("Occupancy type is investment and income source is Retired SSI", async ({
   }
 
   console.log("Captured offers:\n" + capturedOffers.join("\n---\n"));
+  await page.screenshot({ path: testInfo.outputPath("offers.png"), fullPage: true });
 
   console.log(
     `✅ Test completed successfully with email: ${uniqueEmail}, inquiry ID: ${inquiryId}`,
