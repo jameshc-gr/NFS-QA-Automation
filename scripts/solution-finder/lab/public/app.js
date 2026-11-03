@@ -55,11 +55,12 @@ function tenantChanged(value = $('tenant').value) {
 function controls() {
   const busy = !!activeRun || !!activeSuiteId || suiteLaunching;
   $('reset').disabled = !bootstrap || busy || saving || pendingActions > 0;
-  $('launch').disabled = busy || saving || !$('confirm').checked;
-  for (const id of ['tenant', 'suite-tenant', 'scenario', 'load', 'fresh-email', 'template-name']) $(id).disabled = busy || saving;
+  $('launch').disabled = busy || saving || pendingActions > 0 || !$('confirm').checked;
+  for (const id of ['tenant', 'suite-tenant', 'fresh-email', 'template-name']) $(id).disabled = busy || saving;
+  for (const id of ['scenario', 'load']) $(id).disabled = busy || saving || pendingActions > 0;
   for (const id of ['request', 'format', 'validate', 'confirm']) $(id).disabled = saving;
   $('request-fields').disabled = saving || !editorRequest;
-  $('save-template').disabled = busy || saving || !bootstrap;
+  $('save-template').disabled = busy || saving || pendingActions > 0 || !bootstrap;
   const selected = $('suite-cases').querySelectorAll('input:checked').length;
   const suitesAvailable = Array.isArray(bootstrap?.suites);
   for (const id of ['suite-cases', 'suite-group', 'suite-select-group', 'suite-clear', 'suite-confirm']) {
@@ -89,6 +90,7 @@ function resetWorkspace() {
   $('screenshot-title').textContent = 'Captured browser page';
   $('source-section').open = false; $('preview-section').open = true;
   $('editor-notice').textContent = 'Select a scenario and click Load, or paste complete JSON above, to populate the request editor.';
+  renderProfileReference(null);
   $('preview').textContent = 'Validate a request to preview its borrower, property, income and amounts.';
   $('suite-results').tBodies[0].replaceChildren();
   $('suite-summary').textContent = 'No suite selected.';
@@ -96,6 +98,48 @@ function resetWorkspace() {
   $('step').textContent = 'Validate JSON, then launch a run.';
   $('logs').textContent = 'Browser checkpoints and runner output will appear here.';
   controls();
+}
+const referenceScore = (value, missing = 'N/A') => value == null ? missing : String(value);
+function caseLabel(scenario) {
+  const label = `${scenario.id}: ${scenario.name}`;
+  const reference = scenario.profileReference;
+  if (!reference) return label;
+  const scores = ['TU', 'XPN', 'EFX'].map(bureau => `${bureau} ${referenceScore(reference.expectedFico[bureau])}`).join(' / ');
+  const pending = reference.offers.filter(offer => offer.status === 'Pending').length;
+  return `${label} | Chart SSN last 4 ${reference.lastFourSSN} | Source ${scores} | Prior offers: ${reference.eligibleProducts.join(', ') || 'None'}${pending ? `; ${pending} pending` : ''}`;
+}
+function renderProfileReference(reference) {
+  $('profile-reference').hidden = !reference;
+  $('profile-reference-values').replaceChildren();
+  $('profile-reference-offers').tBodies[0].replaceChildren();
+  if (!reference) return;
+  $('profile-reference-title').textContent = `${reference.profileId} - IR chart reference`;
+  $('profile-reference-context').textContent = `Selected source template only: click Load to use its inputs. Historical chart results are not current-run results or guaranteed offers. ${reference.context} Source: ${reference.sourceWorkbook.split('/').pop()} (${reference.observedOn}).`;
+  const scoreLine = (values, missing = 'N/A') => ['TU', 'XPN', 'EFX'].map(bureau => `${bureau}: ${referenceScore(values[bureau], missing)}`).join(' / ');
+  const values = [
+    ['Chart SSN scenario (last four only)', reference.lastFourSSN],
+    ['Source workbook TU / XPN / EFX', scoreLine(reference.expectedFico)],
+    ['Previously returned TU / XPN / EFX', scoreLine(reference.returnedFico, 'Not returned')],
+    ['Previously returned usable credit score', reference.creditReturned ? 'Y' : 'N'],
+    ['Previously eligible offers', reference.eligibleProducts.join(', ') || 'None']
+  ];
+  for (const [label, value] of values) {
+    const term = document.createElement('dt'); term.textContent = label;
+    const detail = document.createElement('dd'); detail.textContent = value;
+    $('profile-reference-values').append(term, detail);
+  }
+  for (const offer of reference.offers) {
+    const row = $('profile-reference-offers').tBodies[0].insertRow();
+    row.insertCell().textContent = `${offer.product} / ${offer.status}${offer.applicationType ? ` / ${offer.applicationType}` : ''}`;
+    row.insertCell().textContent = [
+      offer.loanAmount == null ? null : `Amount: ${money(offer.loanAmount)}`,
+      offer.rate == null ? null : `Rate: ${offer.rate}%`,
+      offer.apr == null ? null : `APR: ${offer.apr}%`,
+      offer.term == null ? null : `Term: ${offer.term} years`,
+      offer.monthlyPayment == null ? null : `Monthly: ${offer.monthlyPayment.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    ].filter(Boolean).join('\n') || 'No priced offer returned';
+    row.insertCell().textContent = offer.reasons.join('\n') || 'None returned';
+  }
 }
 function caseOption(scenario) {
   if (typeof scenario.id !== 'string' || !scenario.id.trim() ||
@@ -108,7 +152,8 @@ function caseOption(scenario) {
   if (!group) {
     group = document.createElement('optgroup'); group.label = groupLabel; $('scenario').append(group);
   }
-  group.append(new Option(`${scenario.id}: ${scenario.name}`, scenario.id));
+  const label = caseLabel(scenario);
+  const option = new Option(label, scenario.id); option.title = label; group.append(option);
   let suiteGroup = [...$('suite-cases').children].find(element => element.dataset.group === groupLabel);
   if (!suiteGroup) {
     suiteGroup = document.createElement('div'); suiteGroup.dataset.group = groupLabel;
@@ -119,7 +164,7 @@ function caseOption(scenario) {
   const suiteLabel = document.createElement('label'); suiteLabel.className = 'suite-case';
   const suiteOption = document.createElement('input'); suiteOption.type = 'checkbox'; suiteOption.value = scenario.id;
   suiteOption.disabled = scenario.runnable === false;
-  const text = document.createElement('span'); text.textContent = `${scenario.id}: ${scenario.name}`;
+  const text = document.createElement('span'); text.textContent = label;
   suiteLabel.title = scenario.unavailableReason || '';
   suiteLabel.append(suiteOption, text); suiteGroup.append(suiteLabel);
   if (scenario.runnable === false) {
@@ -236,7 +281,7 @@ function editField(table, labelText, object, key, settings = {}) {
       settings.nullable && control.value === '' ? null : control.value;
     if (settings.onChange) settings.onChange();
     formChanged();
-    if (settings.onChange) renderEditor();
+    if (settings.onChange || settings.rerender) renderEditor();
   });
   cell.append(control); row.append(heading, cell);
 }
@@ -266,11 +311,14 @@ function renderEditor() {
     controls(); return;
   }
   editorRequest = value;
-  $('editor-notice').textContent = 'Edit the request tables below. Validate to refresh the readable preview; unsupported data still requires correction.';
   const property = fields.propertyInputHeloc;
+  $('editor-notice').textContent = property.type === 'PRIMARY'
+    ? 'Edit any valid subject property. For PRIMARY occupancy, Navigator uses that subject as the borrower residence; validation updates the request and preview automatically.'
+    : 'Edit the request tables below. Validate to refresh the readable preview; unsupported data still requires correction.';
   addressFields($('property-fields'), 'Subject', property.address);
   editField($('property-fields'), 'Occupancy Type', property, 'type', {
-    options: [['', 'Select occupancy'], ['PRIMARY', 'Primary'], ['SECONDARY', 'Secondary'], ['INVESTMENT', 'Investment']]
+    options: [['', 'Select occupancy'], ['PRIMARY', 'Primary'], ['SECONDARY', 'Secondary'], ['INVESTMENT', 'Investment']],
+    rerender: true
   });
   editField($('property-fields'), 'Existing Mortgage Amount', fields, 'existingMortgageAmount', { type: 'number' });
   editField($('property-fields'), 'Requested Loan Amount', property, 'requestedLoanAmount', { type: 'number' });
@@ -480,6 +528,7 @@ $('load').addEventListener('click', action(async () => {
   $('save-status').hidden = true;
   $('request').value = data.request ? pretty(data.request) : '';
   renderEditor();
+  renderProfileReference(data.profileReference);
   $('template-notice').textContent = data.notes.join('\n');
   $('template-notice').hidden = !data.notes.length;
   $('source-section').hidden = !data.sourceRequest;
@@ -507,6 +556,7 @@ $('save-template').addEventListener('click', action(async () => {
     bootstrap.cases.push(template); caseOption(template);
     $('request').value = pretty(template.request);
     renderEditor();
+    renderProfileReference(template.profileReference);
     $('scenario').value = template.id; loadedCaseId = template.id;
     $('template-name').value = `${template.name.slice(0, 115)} copy`;
     $('source-section').hidden = true; $('source-request').textContent = '';
@@ -536,13 +586,19 @@ $('history').addEventListener('change', action(async () => {
 $('request').addEventListener('input', () => {
   changed(); renderEditor();
 });
+$('scenario').addEventListener('change', () => {
+  renderProfileReference(bootstrap.cases.find(scenario => scenario.id === $('scenario').value)?.profileReference);
+});
 action(async () => {
   bootstrap = await api('/api/bootstrap');
   if (bootstrap.protocolVersion !== 1 || !Array.isArray(bootstrap.suites)) {
     $('server-notice').textContent = 'This lab server is running an older version. Restart npm run solution-finder:lab, then refresh this page to enable the full scenario catalog and latest save/profile features.';
     $('server-notice').hidden = false;
+  } else if (bootstrap.internalDistribution) {
+    $('server-notice').textContent = 'Restricted internal QA copy: original scenarios, financial variations and named IR profiles are included, with original inquiry data. Select a case and click Load, or use the suite checkboxes. Authorized internal recipients only; do not publish or expose this lab. SF-12 and SF-22 retain their documented lab-specific adjustments.';
+    $('server-notice').hidden = false;
   } else if (bootstrap.portable) {
-    $('server-notice').textContent = 'Standalone privacy-safe copy: workbook/customer inputs, credentials and prior runs are not included. Paste company-approved QA JSON and save templates to build your local scenario catalog and suites.';
+    $('server-notice').textContent = 'Standalone privacy-safe copy: five synthetic starter scenarios are available. Original workbook/customer inputs, credentials and prior runs are not included. Select a starter and click Load; replace placeholder identities/addresses with company-approved QA data before live submission.';
     $('server-notice').hidden = false;
   }
   for (const tenant of bootstrap.tenants) {

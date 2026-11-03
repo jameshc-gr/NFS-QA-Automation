@@ -1,5 +1,84 @@
 # Unit Tests
 
+## 2026-11-02 - IR reference and action-gate regressions
+
+- IR normalization/table tests moved from scripts to the existing
+  `tests/projects/solution-finder/workbook-scenarios/tri-bureau-40/` folder,
+  alongside importer/runtime and lab browser tests. Utilities remain in scripts;
+  completed live `screening.spec.ts` was not duplicated or rerun.
+- Added all40 reference joins/source-versus-returned-score/status coverage and
+  deterministic overlapping Load/selection regression. Scenario/load/launch/
+  save controls disable while actions are pending, preventing stale UI updates.
+- Final `npm run test:solution-finder:lab` passed93/93; scoped typecheck and JS
+  syntax passed. Live comparison verified all40 source rows/120 product counts
+  with zero POSTs/page errors; clean internal165 extraction passed integrity,
+  isolation, persistence, offline suite and worker discovery.
+- Prior products remain historical context, not expected new-run offers.
+  This documentation sync uses supplied evidence; no suite rerun.
+
+## 2026-11-02 - Named IR controls and editable PRIMARY subjects
+
+- Expanded catalog tests from125 to165 choices, preserving the prior groups
+  and adding all40 existing IR inputs by profile ID/name. Source equality,
+  last-four-only data, separate suite choices and synthetic5 isolation checked.
+- PRIMARY tests reproduce differing valid subject/residence input before
+  validation, then assert mapped preview/tables/JSON, saved/load copies and
+  mock-run snapshots. SECONDARY/INVESTMENT and originals remain unchanged.
+- 65 combined checks and scoped typecheck passed. Clean165/internal and
+  five/synthetic installs passed offline browser/persistence/discovery checks.
+  Final live-lab preview also passed without creating application inquiries.
+  A verification-locator scope error was corrected and its focused probe passed.
+- No pricing/eligibility approval or new live screening was performed.
+
+## 2026-11-02 - Portable IR and reporter unit coverage
+
+- Added all102 report-row checks for comparison modes, exact IR IDs and pending
+  pricing/eligibility approval notices, plus obsolete/reordered catalog rejection.
+  Expanded malformed IR provenance checks before browser execution.
+- Replaced historical-response-dependent table unit inputs with controlled
+  normalized-profile fixtures. Historical/raw-workbook audits run when present
+  and disclose absence; unit contracts do not invent missing evidence.
+- 62 combined checks passed with zero failures/skips in this checkout; scoped
+  typecheck passed. Missing-local-assets simulation also passed, explicitly
+  skipping the unavailable source-only IR audit. No live inquiries or baseline
+  approvals; the original regression suite and125 lab inventory are preserved.
+
+## 2026-11-02 - IR replacement contracts and offline coverage
+
+- Split 50 typed workbook baseline comparisons from 52 explicit no-baseline IR
+  scenarios. Test unknown modes, missing/malformed baselines, stale expectations,
+  option conflicts, full-flow wiring and pending-provenance guards.
+- Verify exact all40 identity/last-four mapping against supplied source, preserved
+  first50/original23 hashes, permitted financial/DOB/property differences,
+  renamed workbook SHA, lossless export and 102 generated specs.
+- Lab still has125 runnable inputs and now exposes IR context; offline no-offer
+  report mocks use unchanged NSF-042, not discarded IR expectations.
+- 18 new-unit tests and all53 lab tests passed; scoped typecheck/root guard and
+  discovery passed. No new live submissions; 52 variants not yet live rerun.
+  See [migration history](../../test-data/solution-finder/workbook-scenarios/README.md).
+
+## 2026-11-02 - Explicit internal 125-case packaging
+
+- Added checks that original-data packaging uses a boolean opt-in, includes
+  exactly two catalog files, and rejects misspelled/extra CLI flags.
+  Existing synthetic isolation and normal 125-case contracts remain intact.
+- All 51 focused checks and scoped typecheck passed. Clean ZIP verification
+  checked source-byte equality, all 125 case loads/previews/suite checkboxes and
+  stale environment-mode override. Internal and default editions passed isolated
+  install, template restart, offline suite/results/reset and compiled discovery.
+  No live inquiries; macOS only.
+
+## 2026-11-02 - Synthetic portable starter catalog
+
+- Initial portable catalog was empty by design. The isolation subprocess now
+  expects five labeled synthetic starters, validates all payloads/provenance and
+  underage year rollover, and still forbids reading the two original datasets.
+  Normal 125-case contracts are unchanged.
+- All 50 focused checks and scoped typecheck passed. Independent archive
+  verification loaded/previewed every starter and confirmed suite availability,
+  persisted templates, offline suite/results/reset and worker discovery. No
+  live inquiries; Windows/Linux not certified.
+
 ## 2026-11-02 - Portable lab data isolation
 
 - Added a subprocess regression that forbids reads of both customer/workbook

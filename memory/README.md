@@ -10,6 +10,38 @@ entries and keep secrets and raw account/response data out of documentation.
 
 ## Work history
 
+### 2026-11-02 - IR chart-reference sync
+
+- Synced root/current framework guidance and affected histories for40 sanitized
+  chart contexts on165 existing lab inputs, four internal v1.4.1 JSONs, isolated
+  synthetic5/legacy125 and pending-action Load/selection race protection.
+- Recorded historical source/returned scores, credit Y/N and120 product statuses
+  without copying personal/account details or raw chart/response captures.
+  References are not current offers, guarantees or approved baselines.
+- Supplied validation:93/93 lab checks, scoped typecheck/JS syntax, live all40/
+  120 comparison with zero POSTs/page errors and clean165 extraction/runtime
+  verification passed. No live screening duplicated/rerun during metadata work.
+- Earlier history retained; external `/memories` mount absent, so only tracked
+  memory updated. Parent owns archive cleanup and final repository-root guard.
+
+### 2026-11-02 - PRIMARY inputs and165 named lab choices
+
+- Synchronized verified PRIMARY automatic-residence mapping and named40 IR
+  templates to the root guide, framework context and tracked memory.
+- 65 combined checks/typecheck, internal165/synthetic5 extraction and idle-only
+  live-lab refresh/PRIMARY preview passed. Histories and source datasets remain
+  intact; no remote application submissions or new financial baselines.
+
+### 2026-11-02 - Solution Finder IR script synchronization
+
+- Ran documentation-memory synchronization after validated schema/report/test
+  changes; root guide, framework context and tracked memory now describe
+  per-case modes/profiles, strict IR mapping and portable offline unit commands.
+- Verification: 62 combined checks/typecheck,102 workbook/26 original discovery,
+  clean v1.2.1 internal125 ZIP and idle-only local restart passed.
+- Kept earlier history and completed reports; no live inquiries or approval of
+  replacement52 financial baselines. External memory mount remains unavailable.
+
 ### 2026-11-02 - Shared ignore policy
 
 - Synced the validated generated-output cleanup to root/input documentation and

@@ -56,9 +56,24 @@ Current Framework Notes
   Run `SF_TENANT=gri npm run test:solution-finder:new` (also `owning`,
   `citywide`, `certainty`, `onq`; default GRI, unknown values error).
   Certainty uses `/inquiry/?playwright=true`, not `/inquiry/intake/`.
-  Expectations are GRI-observed: other tenants are flagged as unapproved
+  Current source is HELOAN_102_scenarios_with_Tri_Bureau_IR_profiles.xlsx.
+  NSF-001..050 are unchanged workbook-baselined cases; NSF-051..102 replace
+  Fannie borrowers with all40 IR profiles while preserving scenario variations.
+  NSF-063..102 -> TB-001..040; NSF-051..062 -> TB-001..012.
+  Replacement52 explicitly declare actual-ui-api mode and provenance, with no
+  old response/UI baselines; unknown modes/missing workbook baselines fail.
+  Runtime rejects unordered/all-workbook catalogs, incorrect IR slot/profile/
+  source-row mapping, mismatched DOB provenance and invalid PRIMARY mappings.
+  Generated reports expose per-case mode/profile and pending variant baselines.
+  Combined lab/new unit commands include offline IR/table/reporter checks;
+  local historical captures are not unit dependencies. Source-only audit checks
+  report missing restricted workbooks explicitly rather than fabricate results.
+  DOB is an assumption or age-specific variation, not supplied by IR workbook;
+  PRIMARY subjects mirror IR residence. Prior financial expectations invalid.
+  Retained first50 expectations are GRI-observed: other tenants are flagged as unapproved
   baselines and differences are not silently ignored. Tests submit only
-  through UI, compare actual API and DOM offers with workbook expectations,
+  through UI, compare actual API and DOM offers (plus workbook expectations only
+  for retained baseline cases),
   ignore generated IDs and product ordering but retain numeric/eligibility
   checks. Workbook APR comparisons ignore hundredths/thousandths without
   rounding (8.449% matches 8.471%, but not 8.500%); UI/API APR remains exact.
@@ -74,8 +89,16 @@ Current Framework Notes
   `tests/projects/solution-finder/lab/` and excluded from original discovery.
   It validates pasted JSON, previews inputs, runs one UI inquiry for a selected
   existing QA tenant, and shows actual JSON, parsed offers/IDs and screenshots.
-  Its picker has 125 input templates: original23 first as `SF-N-Original`,
-  then existing102 `NSF-*` cases. Original source JSON/mapping notices remain
+  Its picker has 165 input templates: original23 first as `SF-N-Original`,
+  then existing102 `NSF-*` cases and40 existing `TB-*` IR profiles by borrower
+  name. These named controls retain their normalized setup/assumed DOB and
+  have no copied offer baselines. Sanitized profile-reference.json joins all40
+  from the provided IR_profile-offer-table.xlsx. Dropdown/suite labels show
+  last-four-only SSN, source TU/XPN/EFX and previously eligible products.
+  A separate historical panel distinguishes source from returned scores,
+  credit Y/N and120 product records (63 eligible/55 declined/2 pending),
+  with pricing/reasons. References are never current/guaranteed offers or
+  approved eligibility/pricing baselines. Original source JSON/mapping notices remain
   visible; original12 now uses the user-approved title-aligned retirement DOB
   with an explicit correction notice and preserved source. Retired SSI maps
   automatically to SOCIAL_SECURITY in Navigator; validate calendar age 62+
@@ -96,9 +119,16 @@ Current Framework Notes
   with an explicit generated-data notice, not an original customer request.
   Use property/borrower/repeatable-income tables or the always-visible JSON
   copy/paste area above them. Paste works before Load; selecting a case still
-  requires Load. Old servers get a visible restart notice and correct legacy
+  requires Load. Scenario selection, Load, launch and save disable while UI
+  actions are pending to prevent overlapping Load/selection races. Old servers
+  get a visible restart notice and correct legacy
   group labels. New servers snapshot page assets at startup so API/static
   versions remain consistent; restart after code changes, not during a run.
+  Custom PRIMARY subject edits are accepted without manual residence matching.
+  parseLabRequest derives residence from the entered valid subject after
+  validation; preview/editor notices disclose this and JSON fields synchronize.
+  Save, single/suite runs and the worker use the same mapping. SECONDARY/
+  INVESTMENT keep independent residences; source templates are never mutated.
   Top-level **Reset / New run** clears workspace inputs/selections/results,
   resets GRI/fresh-email defaults and keeps saved runs/suites/templates.
   Disable it during active execution or pending UI requests; never submit,
@@ -143,15 +173,47 @@ Current Framework Notes
   Standalone distribution: `npm run package:solution-finder:lab` compiles an
   explicit runtime allowlist into a ZIP beneath dated Solution Finder
   lab-distribution results. Include minimal pinned npm dependencies, UI,
-  tenant registry and Node launcher; never customer/workbook inputs, secrets,
+  tenant registry and Node launcher; default excludes customer/workbook inputs.
+  Explicit -- --include-scenarios builds a restricted internal-165 edition with
+  unchanged original-scenarios.json, scenarios.json and normalized40 profiles;
+  v1.4.1 adds sanitized profile-reference.json (four JSONs total).
+  All are last-four-only; never package full SSNs or the raw source chart. Authorized internal
+  QA recipients/approved channels only. Never include secrets,
   account records, saved runs/templates or installed modules/browser binaries.
-  Packaged launcher sets SF_LAB_PORTABLE=1, skips both datasets and displays an
-  empty-catalog notice; recipients paste approved JSON and save local templates.
+  Launcher reads sfLabCatalog; the current internal marker selects165 inputs
+  with SF_LAB_PORTABLE=0 and an internal notice. Legacy original125 archives
+  retain their own compiled behavior; synthetic5 skips all private datasets.
+  Overrides stale environment mode; unknown markers fail. Default displays a
+  synthetic-starter notice; five SF-DEMO cases come from the allowlisted
+  test-data/solution-finder/portable-scenarios.json, not the original 125 cases.
+  Select and Load, then replace dummy profiles/addresses before live submission.
+  Recipients can paste approved JSON and save local templates.
   Normal mode still requires its original sources. Compiled worker/config use
   JS while repo mode uses TS. `npm run verify:solution-finder:lab -- <ZIP>`
   installs/exercises the extracted copy with module-isolation enforcement;
   no live inquiries. Recipients need Node 22/24 LTS, npm ci, npm run setup,
   npm start and QA/VPN access. macOS verified; Windows/Linux not certified.
+- Tri-Bureau 40 screening execution is separate from original/102 suites.
+  Its reusable normalized40 inputs also appear as named lab templates; the
+  completed screening evidence is never copied as a lab offer baseline.
+  Input workbook is test-data/solution-finder/Tri-Bureau_TestCases_40_IR.xlsx;
+  normalized inputs/spec config stay in existing workbook-scenarios/tri-bureau-40/
+  folders. All IR test scripts live in
+  tests/projects/solution-finder/workbook-scenarios/tri-bureau-40/: moved
+  normalization/table unit test, chart importer/runtime tests and lab browser
+  test. Utilities remain in scripts/solution-finder/. Import reference context
+  with npm run import:solution-finder:ir-reference; reuse the completed
+  screening.spec.ts, never duplicate/rerun it for metadata.
+  Reuse runScenario(compareWorkbook:false), one independent profile per
+  test, no retries; fail the current profile without skipping unrelated ones.
+  Classify actual offer discovery independently from UI/API PASS, and compare
+  only returned bureau values. Preserve names/residence/SSN suffixes; workbook
+  has no DOB, so assumptions must be visible, never treated as verified identity.
+  Completed live phases have no-repeat guards checked before evidence cleanup.
+  Do not rerun them or overwrite their results; future authorization requires
+  a reviewed new destination. Offline report/validation commands are safe.
+  All evidence stays under dated solution-finder/workbook-scenarios/tri-bureau-40/.
+  Use scripts/solution-finder/README.md for commands and completed validation.
 - Start continuation tasks from `test-data/README.md` for the October 2026
   reusable-input inventory and focused commands. Do not use prior test results
   as current coverage. One-off exploration/capture/probe specs, media report

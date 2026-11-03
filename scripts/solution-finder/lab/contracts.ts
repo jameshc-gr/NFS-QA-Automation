@@ -58,21 +58,16 @@ export const labRequestSchema = requestSchema.extend({
         message: 'Employment/self-employment income type must be null or omitted.' });
     }
   });
-  if (fields.propertyInputHeloc.type === 'PRIMARY') {
-    const subject = fields.propertyInputHeloc.address;
-    const residence = fields.basicInfoInput.residenceAddress;
-    if (JSON.stringify({ ...subject, country: subject.country ?? 'US' }) !==
-        JSON.stringify({ ...residence, country: residence.country ?? 'US' })) {
-      context.addIssue({ code: z.ZodIssueCode.custom, path: ['applicationInquiryInput', 'basicInfoInput', 'residenceAddress'],
-        message: 'For PRIMARY occupancy, the UI uses the subject property as the primary residence. Supply matching addresses.' });
-    }
-  }
 });
 
 export function parseLabRequest(value: unknown): InquiryRequest {
   const parsed = labRequestSchema.parse(value);
   for (const address of [parsed.applicationInquiryInput.propertyInputHeloc.address, parsed.applicationInquiryInput.basicInfoInput.residenceAddress]) {
     address.country ??= 'US';
+  }
+  if (parsed.applicationInquiryInput.propertyInputHeloc.type === 'PRIMARY') {
+    parsed.applicationInquiryInput.basicInfoInput.residenceAddress =
+      structuredClone(parsed.applicationInquiryInput.propertyInputHeloc.address);
   }
   return parsed;
 }

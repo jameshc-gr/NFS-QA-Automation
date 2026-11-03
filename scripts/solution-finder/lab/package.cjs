@@ -18,9 +18,16 @@ const runtimeFiles = [
   'tests/projects/solution-finder/workbook-scenarios/helpers/comparison.js',
   'tests/projects/solution-finder/workbook-scenarios/helpers/scenario.js',
   'tests/projects/solution-finder/lab/inquiry.spec.js',
-  'test-data/solution-finder/workbook-scenarios/environments.json'
+  'test-data/solution-finder/workbook-scenarios/environments.json',
+  'test-data/solution-finder/portable-scenarios.json'
 ];
 const publicFiles = ['index.html', 'app.js', 'style.css', 'suite-results.html', 'suite-results.js'];
+const scenarioFiles = [
+  'test-data/solution-finder/workbook-scenarios/original-scenarios.json',
+  'test-data/solution-finder/workbook-scenarios/scenarios.json',
+  'test-data/solution-finder/workbook-scenarios/tri-bureau-40/profiles.json',
+  'test-data/solution-finder/workbook-scenarios/tri-bureau-40/profile-reference.json'
+];
 
 function command(program, args, cwd) {
   const result = spawnSync(program, args, { cwd, encoding: 'utf8', env: process.env });
@@ -34,7 +41,8 @@ function filesIn(directory, base = directory) {
     return entry.isDirectory() ? filesIn(file, base) : [path.relative(base, file).split(path.sep).join('/')];
   }).sort();
 }
-function buildPortableLab() {
+function buildPortableLab({ includeScenarios = false } = {}) {
+  if (typeof includeScenarios !== 'boolean') throw new Error('includeScenarios must be a boolean.');
   checkRepositoryRoot();
   const today = new Date();
   const date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
@@ -42,7 +50,7 @@ function buildPortableLab() {
   fs.mkdirSync(output, { recursive: true });
   const build = fs.mkdtempSync(path.join(output, 'build-'));
   const directory = path.join(build, 'solution-finder-lab');
-  const archive = path.join(output, `solution-finder-lab-${today.toISOString().replace(/[:.]/g, '-')}.zip`);
+  const archive = path.join(output, `solution-finder-lab-${includeScenarios ? 'internal-165-' : ''}${today.toISOString().replace(/[:.]/g, '-')}.zip`);
   try {
     const entrypoints = [
       'scripts/solution-finder/lab/server.ts',
@@ -65,6 +73,14 @@ function buildPortableLab() {
     if (JSON.stringify(emitted) !== JSON.stringify([...runtimeFiles].sort())) {
       throw new Error(`Compiler output differs from the explicit runtime allowlist:\n${emitted.join('\n')}`);
     }
+    if (includeScenarios) {
+      for (const file of scenarioFiles) {
+        const source = path.join(root, file);
+        if (!fs.lstatSync(source).isFile()) throw new Error(`Scenario input must be a regular file: ${file}`);
+        fs.mkdirSync(path.dirname(path.join(directory, file)), { recursive: true });
+        fs.copyFileSync(source, path.join(directory, file));
+      }
+    }
     for (const name of publicFiles) {
       const target = path.join(directory, 'scripts/solution-finder/lab/public', name);
       fs.mkdirSync(path.dirname(target), { recursive: true });
@@ -72,10 +88,16 @@ function buildPortableLab() {
     }
     fs.mkdirSync(path.join(directory, 'launcher'));
     fs.copyFileSync(path.join(__dirname, 'portable/start.cjs'), path.join(directory, 'launcher/start.cjs'));
-    fs.copyFileSync(path.join(__dirname, 'portable/README.md'), path.join(directory, 'README.md'));
+    fs.copyFileSync(path.join(__dirname, includeScenarios ? 'portable/README-internal.md' : 'portable/README.md'),
+      path.join(directory, 'README.md'));
     const manifest = {
-      name: 'solution-finder-lab', version: '1.0.0', private: true,
-      description: 'Standalone local Solution Finder QA lab; no customer inputs or credentials included.',
+      name: 'solution-finder-lab', version: '1.4.1', private: true,
+      description: includeScenarios
+        ? 'Restricted internal Solution Finder QA lab with original 23, additional 102 and separately selectable 40 normalized Tri-Bureau IR profiles; no credentials.'
+        : 'Standalone local Solution Finder QA lab; no customer inputs or credentials included.',
+      sfLabCatalog: includeScenarios ? 'internal165' : 'synthetic5',
+      sfLabProfileSource: includeScenarios ? 'tri-bureau-ir' : 'synthetic',
+      ...(includeScenarios ? { sfLabReferenceSource: 'ir-profile-offer-chart' } : {}),
       engines: { node: '>=22' },
       scripts: { start: 'node launcher/start.cjs', 'solution-finder:lab': 'npm start', setup: 'playwright install chromium' },
       dependencies: {
@@ -87,7 +109,7 @@ function buildPortableLab() {
     if (!process.env.npm_execpath) throw new Error('Run the packager using npm run package:solution-finder:lab.');
     command(process.execPath, [process.env.npm_execpath,
       'install', '--package-lock-only', '--ignore-scripts', '--no-audit', '--no-fund'], directory);
-    const allowed = [...runtimeFiles,
+    const allowed = [...runtimeFiles, ...(includeScenarios ? scenarioFiles : []),
       ...publicFiles.map(name => `scripts/solution-finder/lab/public/${name}`),
       'launcher/start.cjs', 'README.md', 'package.json', 'package-lock.json'
     ].sort();
@@ -106,5 +128,11 @@ function buildPortableLab() {
   }
 }
 
-module.exports = { buildPortableLab, runtimeFiles, publicFiles };
-if (require.main === module) console.log(JSON.stringify(buildPortableLab(), null, 2));
+module.exports = { buildPortableLab, runtimeFiles, publicFiles, scenarioFiles };
+if (require.main === module) {
+  const args = process.argv.slice(2);
+  if (args.length > 1 || (args.length === 1 && args[0] !== '--include-scenarios')) {
+    throw new Error('Use npm run package:solution-finder:lab [-- --include-scenarios].');
+  }
+  console.log(JSON.stringify(buildPortableLab({ includeScenarios: args.length === 1 }), null, 2));
+}

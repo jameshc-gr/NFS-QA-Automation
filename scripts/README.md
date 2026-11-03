@@ -16,6 +16,73 @@ Use the [root guide](../README.md) for supported suite commands.
 
 ## Work history
 
+### 2026-11-02 - Sanitized IR reference tooling
+
+- Added `import:solution-finder:ir-reference` for the supplied IR chart;
+  utilities stay under `scripts/solution-finder/`, all IR test scripts under
+  the existing `tests/projects/solution-finder/workbook-scenarios/tri-bureau-40/`.
+  The normalization/table test moved there; live screening was not duplicated
+  or rerun.
+- Lab joins 40 sanitized references to existing165 inputs, separating source/
+  returned scores and historical product statuses. Internal v1.4.1 packages
+  four sanitized JSONs, never full SSNs/raw chart; synthetic5/legacy125 isolated.
+- Fixed pending-action Load/selection race; 93/93 lab checks, scoped typecheck/
+  JS syntax, zero-POST all40/120 live comparison and clean165 extraction/runtime
+  verification passed. References are not current offers or baselines.
+  See [IR utility history](solution-finder/README.md#2026-11-02---sanitized-chart-reference-import).
+
+### 2026-11-02 - All Solution Finder scripts synchronized
+
+- Request: update all related cases/scripts after the IR replacement.
+- Corrected reporter-wide workbook wording; JSON/HTML rows now carry actual
+  comparison mode/profile and pending-approval notices for the replacement52.
+  Shared runtime schema rejects stale catalogs, wrong slot/source-row mapping,
+  DOB provenance drift and invalid PRIMARY subject/residence mapping.
+- Regenerated all102 specs through the reviewed workbook exporter/generator;
+  preserved original suite/input scope. npm unit commands now include IR/table/
+  reporter checks; added offline report/table/validation aliases.
+- Validation: 62 combined checks, scoped typecheck, 102 workbook discovery and
+  26 tests in25 original files passed. Missing-local-evidence simulation passed
+  with an explicit restricted-workbook audit skip. v1.2.1 clean ZIP verification
+  and idle-only local restart verified all125 inputs and52 IR mappings.
+- No new inquiries, approved variant baselines or historical report rewrites.
+  See [unit history](../tests/unit/README.md) and [lab history](solution-finder/lab/README.md).
+
+### 2026-11-02 - Offline 52-slot IR source migration
+
+- Added bounded XLSX migration/archive tooling; exporter reads the renamed
+  source with lossless comparison-mode/provenance/notes metadata. Generator
+  requires 50 strict baseline plus 52 explicit no-baseline cases; 102 specs stay.
+- Lab additional-case notes expose profile/DOB assumption/pending baseline and
+  PRIMARY adjustment context while preserving group labels/count125.
+- 18 focused new-unit and 53 lab tests passed; scoped typecheck/root guard,
+  source SHA/export round-trip and 102-case discovery passed. No new live
+  submissions, package rebuild or server restart by this migration.
+  See [input history](../test-data/solution-finder/workbook-scenarios/README.md);
+  all 52 financial variants remain unrerun and unbaselined.
+
+### 2026-11-02 - Actual 125-case internal lab edition
+
+- User requested actual inputs, not synthetic substitutes. Added explicit
+  `package:solution-finder:lab -- --include-scenarios`, copying only the two
+  catalog datasets, with an internal archive name, mode marker and restricted
+  notice/setup guide. No credentials or previous execution data included.
+- 51 focused checks/typecheck passed. Clean internal ZIP loaded/previewed all
+  125 cases with source-byte equality and suite availability. Both editions
+  passed isolated install, persistence/offline suite/report and worker discovery;
+  zero live inquiries, macOS only. See the
+  [internal guide/history](solution-finder/lab/README.md#2026-11-02---internal-zip-with-the-actual-125-scenarios).
+
+### 2026-11-02 - Starter-enabled standalone Solution Finder Lab
+
+- Coworkers found no scenarios in the initial privacy-safe ZIP. Added five
+  synthetic inputs, a portable-only catalog and visible Load/upgrade instructions.
+  Original customer/workbook inputs remain excluded; normal mode is unchanged.
+- Expanded packaging and clean-extraction verification for every starter.
+  All 50 focused checks, scoped typecheck, isolated install/UI/template/offline
+  suite/report and worker discovery passed. No live inquiries; macOS only.
+  See the [replacement history/download](solution-finder/lab/README.md#2026-11-02---synthetic-starters-for-the-portable-copy).
+
 ### 2026-11-02 - Standalone Solution Finder Lab archive
 
 - Added `package:solution-finder:lab` and `verify:solution-finder:lab`: explicit

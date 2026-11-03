@@ -1,0 +1,2581 @@
+{
+  "schemaVersion": 1,
+  "sourceWorkbook": "test-data/solution-finder/Tri-Bureau_TestCases_40_IR.xlsx",
+  "sourceSha256": "ea15dcdb48295effc91f9d5b78a9dcd034bfc5972809fdcd13b451987bf995b8",
+  "subjectTemplate": "SF-1-Original",
+  "assumptions": {
+    "DOB": "1980-01-01 (assumed, NOT verified)",
+    "email": "fresh sfqa-gri profile/time/UUID @yopmail.com; no mailbox access",
+    "phone": "fictional QA 202-555-0148",
+    "occupancy": "SECONDARY",
+    "requestedLoan": 50000,
+    "existingMortgage": 70000,
+    "annualIncome": 250000,
+    "income": "EMPLOYED_FULL_TIME",
+    "residenceStart": "unchanged SF-1 value",
+    "subjectProperty": "unchanged SF-1 property",
+    "SSN": "normalize nine digits preserving zeros, retain/submit last four only"
+  },
+  "profiles": [
+    {
+      "id": "TB-001",
+      "name": "TB-001",
+      "workbookRow": 2,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "ERICA",
+              "middle": "E",
+              "last": "LAMBERT",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-001@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "409 GLENWOOD"
+              ],
+              "city": "MENLO PARK",
+              "region": "CA",
+              "postalCode": "94025",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "2955"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 804,
+        "XPN": 825,
+        "EFX": 617
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-002",
+      "name": "TB-002",
+      "workbookRow": 3,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "DOLORES",
+              "middle": "A",
+              "last": "BENE",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-002@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "474 7TH"
+              ],
+              "city": "CLOVIS",
+              "region": "CA",
+              "postalCode": "93612",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "2229"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 719,
+        "XPN": 783,
+        "EFX": 708
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-003",
+      "name": "TB-003",
+      "workbookRow": 4,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "TIMOTHY",
+              "middle": "J",
+              "last": "HARVIN",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-003@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "310 FILLMORE"
+              ],
+              "city": "TAFT",
+              "region": "CA",
+              "postalCode": "93268",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "9376"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 584,
+        "XPN": 830,
+        "EFX": 588
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-004",
+      "name": "TB-004",
+      "workbookRow": 5,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "EMERRILL",
+              "middle": "",
+              "last": "ANDERSON",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-004@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "4872 PUTTER"
+              ],
+              "city": "BAKERSFIELD",
+              "region": "CA",
+              "postalCode": "93308",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "2740"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 781,
+        "XPN": 696,
+        "EFX": 735
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-005",
+      "name": "TB-005",
+      "workbookRow": 6,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "JUDY",
+              "middle": "A",
+              "last": "IRELAND",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-005@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "PO BOX 1093"
+              ],
+              "city": "MANHATTAN BEACH",
+              "region": "CA",
+              "postalCode": "90267",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "2910"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 518,
+        "XPN": 673,
+        "EFX": 603
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-006",
+      "name": "TB-006",
+      "workbookRow": 7,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "BEATRICE",
+              "middle": "",
+              "last": "BELLOMY",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-006@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "14747 PIONEER"
+              ],
+              "city": "NORWALK",
+              "region": "CA",
+              "postalCode": "90650",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "4369"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 722,
+        "XPN": 505,
+        "EFX": 669
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-007",
+      "name": "TB-007",
+      "workbookRow": 8,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "SHIRLEY",
+              "middle": "J",
+              "last": "BAZEMORE",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-007@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "3400 ATLAS ROAD 3520"
+              ],
+              "city": "RICHMOND",
+              "region": "CA",
+              "postalCode": "94806",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "5035"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": null,
+        "XPN": null,
+        "EFX": 653
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-008",
+      "name": "TB-008",
+      "workbookRow": 9,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "VALERIE",
+              "middle": "F",
+              "last": "BRENT",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-008@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "116 E VANDALIA"
+              ],
+              "city": "PORTERVILLE",
+              "region": "CA",
+              "postalCode": "93257",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "3725"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 798,
+        "XPN": 546,
+        "EFX": 659
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-009",
+      "name": "TB-009",
+      "workbookRow": 10,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "KATHY",
+              "middle": "L",
+              "last": "BAILEY",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-009@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "7655 ELSIE"
+              ],
+              "city": "SACRAMENTO",
+              "region": "CA",
+              "postalCode": "95828",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "5832"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 712,
+        "XPN": 842,
+        "EFX": 720
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-010",
+      "name": "TB-010",
+      "workbookRow": 11,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "MICHAEL",
+              "middle": "P",
+              "last": "JOHNSON",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-010@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "PO BOX 1014"
+              ],
+              "city": "ATASCADERO",
+              "region": "CA",
+              "postalCode": "93423",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "6406"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 761,
+        "XPN": 689,
+        "EFX": 627
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-011",
+      "name": "TB-011",
+      "workbookRow": 12,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "BONNIE",
+              "middle": "J",
+              "last": "EARL",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-011@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "20954 PARTHENIA"
+              ],
+              "city": "CANOGA PARK",
+              "region": "CA",
+              "postalCode": "91304",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "0706"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 806,
+        "XPN": 609,
+        "EFX": 679
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-012",
+      "name": "TB-012",
+      "workbookRow": 13,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "KERRY",
+              "middle": "",
+              "last": "BAYENS",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-012@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "330 S BARRINGTON"
+              ],
+              "city": "LOS ANGELES",
+              "region": "CA",
+              "postalCode": "90049",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "9342"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 800,
+        "XPN": 825,
+        "EFX": 627
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-013",
+      "name": "TB-013",
+      "workbookRow": 14,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "MELANIE",
+              "middle": "A",
+              "last": "ENO",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-013@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "12062 MARLOWE"
+              ],
+              "city": "GARDEN GROVE",
+              "region": "CA",
+              "postalCode": "92841",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "0080"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 807,
+        "XPN": 689,
+        "EFX": 671
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-014",
+      "name": "TB-014",
+      "workbookRow": 15,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "JOHN",
+              "middle": "A",
+              "last": "MCGREAHAM",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-014@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "1333 STROVEN"
+              ],
+              "city": "SANTA ROSA",
+              "region": "CA",
+              "postalCode": "95407",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "4359"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 687,
+        "XPN": 803,
+        "EFX": 738
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-015",
+      "name": "TB-015",
+      "workbookRow": 16,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "CHAMAN",
+              "middle": "L",
+              "last": "AGGARWAL",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-015@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "PO BOX 2066"
+              ],
+              "city": "GOLETA",
+              "region": "CA",
+              "postalCode": "93118",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "7042"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 701,
+        "XPN": null,
+        "EFX": 592
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-016",
+      "name": "TB-016",
+      "workbookRow": 17,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "SHEILA",
+              "middle": "K",
+              "last": "BENTLEY",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-016@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "500 ORACLE"
+              ],
+              "city": "REDWOOD CITY",
+              "region": "CA",
+              "postalCode": "94065",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "8094"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": null,
+        "XPN": 762,
+        "EFX": null
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-017",
+      "name": "TB-017",
+      "workbookRow": 18,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "MELANIE",
+              "middle": "L",
+              "last": "HAGUE",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-017@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "844 S FEDORA"
+              ],
+              "city": "ALAHAMBRA",
+              "region": "CA",
+              "postalCode": "90005",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "2043"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 782,
+        "XPN": 786,
+        "EFX": 593
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-018",
+      "name": "TB-018",
+      "workbookRow": 19,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "PETER",
+              "middle": "L",
+              "last": "LIBBY",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-018@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "1234 S LOARA"
+              ],
+              "city": "ANAHEIM",
+              "region": "CA",
+              "postalCode": "92802",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "3274"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": null,
+        "XPN": 522,
+        "EFX": 641
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-019",
+      "name": "TB-019",
+      "workbookRow": 20,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "MARY",
+              "middle": "",
+              "last": "BAS",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-019@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "1038 N HARPER"
+              ],
+              "city": "LOS ANGELES",
+              "region": "CA",
+              "postalCode": "90046",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "5373"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 776,
+        "XPN": 754,
+        "EFX": 583
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-020",
+      "name": "TB-020",
+      "workbookRow": 21,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "JODIE",
+              "middle": "L",
+              "last": "HOLTZ",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-020@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "519 E 5TH"
+              ],
+              "city": "LONG BEACH",
+              "region": "CA",
+              "postalCode": "90802",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "4031"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": null,
+        "XPN": 578,
+        "EFX": 654
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-021",
+      "name": "TB-021",
+      "workbookRow": 22,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "LIONEL",
+              "middle": "",
+              "last": "FOX",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-021@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "25358 RONADA"
+              ],
+              "city": "VALENCIA",
+              "region": "CA",
+              "postalCode": "91355",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "3800"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 520,
+        "XPN": 801,
+        "EFX": null
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-022",
+      "name": "TB-022",
+      "workbookRow": 23,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "LATONYA",
+              "middle": "D",
+              "last": "BRYANT",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-022@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "352 ORANGE"
+              ],
+              "city": "MOUNTAIN VIEW",
+              "region": "CA",
+              "postalCode": "94043",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "8372"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 687,
+        "XPN": 635,
+        "EFX": 752
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-023",
+      "name": "TB-023",
+      "workbookRow": 24,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "PEARL",
+              "middle": "B",
+              "last": "BRENNEMAN",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-023@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "211 GILBERT"
+              ],
+              "city": "MATHER AFB",
+              "region": "CA",
+              "postalCode": "95655",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "3154"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 703,
+        "XPN": 693,
+        "EFX": 745
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-024",
+      "name": "TB-024",
+      "workbookRow": 25,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "GEORGE",
+              "middle": "B",
+              "last": "MURPHY",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-024@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "16715 ROAD 37"
+              ],
+              "city": "MADERA",
+              "region": "CA",
+              "postalCode": "93638",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "4150"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 782,
+        "XPN": 839,
+        "EFX": 604
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-025",
+      "name": "TB-025",
+      "workbookRow": 26,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "MARGARET",
+              "middle": "",
+              "last": "GOETZ",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-025@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "825 BATH"
+              ],
+              "city": "SANTA BARBARA",
+              "region": "CA",
+              "postalCode": "93101",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "5766"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": null,
+        "XPN": 687,
+        "EFX": 799
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-026",
+      "name": "TB-026",
+      "workbookRow": 27,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "RICHARD",
+              "middle": "D",
+              "last": "BUSH",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-026@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "8564 WASHINGTON"
+              ],
+              "city": "CULVER CITY",
+              "region": "CA",
+              "postalCode": "90232",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "3065"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 763,
+        "XPN": 787,
+        "EFX": 549
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-027",
+      "name": "TB-027",
+      "workbookRow": 28,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "ROBERT",
+              "middle": "L",
+              "last": "BOLTHOUSE",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-027@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "1016 W PRINCETON"
+              ],
+              "city": "FRESNO",
+              "region": "CA",
+              "postalCode": "93705",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "5103"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 823,
+        "XPN": 615,
+        "EFX": 679
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-028",
+      "name": "TB-028",
+      "workbookRow": 29,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "ANGELA",
+              "middle": "",
+              "last": "BEATIE",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-028@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "1450 CLAY"
+              ],
+              "city": "SAN FRANCISCO",
+              "region": "CA",
+              "postalCode": "94109",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "8651"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": null,
+        "XPN": 832,
+        "EFX": 658
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-029",
+      "name": "TB-029",
+      "workbookRow": 30,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "ROBIN",
+              "middle": "A",
+              "last": "BARDROFF",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-029@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "448 SCODIE"
+              ],
+              "city": "KERNVILLE",
+              "region": "CA",
+              "postalCode": "93238",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "9766"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 771,
+        "XPN": 793,
+        "EFX": 525
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-030",
+      "name": "TB-030",
+      "workbookRow": 31,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "CINDY",
+              "middle": "",
+              "last": "FORD",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-030@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "5107 SURFRIDER"
+              ],
+              "city": "OXNARD",
+              "region": "CA",
+              "postalCode": "93035",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "5552"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 795,
+        "XPN": 774,
+        "EFX": 687
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-031",
+      "name": "TB-031",
+      "workbookRow": 32,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "CURTIS",
+              "middle": "J",
+              "last": "BAKER",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-031@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "814 E 92ND"
+              ],
+              "city": "LOS ANGELES",
+              "region": "CA",
+              "postalCode": "90002",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "0150"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 792,
+        "XPN": 648,
+        "EFX": 708
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-032",
+      "name": "TB-032",
+      "workbookRow": 33,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "PATTI",
+              "middle": "A",
+              "last": "BARROW",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-032@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "489 W NORTH"
+              ],
+              "city": "DINUBA",
+              "region": "CA",
+              "postalCode": "93618",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "0120"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": null,
+        "XPN": 837,
+        "EFX": 787
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-033",
+      "name": "TB-033",
+      "workbookRow": 34,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "JAMES",
+              "middle": "C",
+              "last": "BARRETT",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-033@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "1110 ELM"
+              ],
+              "city": "TEHACHAPI",
+              "region": "CA",
+              "postalCode": "93561",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "4316"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 770,
+        "XPN": 704,
+        "EFX": 724
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-034",
+      "name": "TB-034",
+      "workbookRow": 35,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "HENRY",
+              "middle": "W",
+              "last": "CAREY",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-034@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "701 HERNDON"
+              ],
+              "city": "CLOVIS",
+              "region": "CA",
+              "postalCode": "93612",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "5534"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 768,
+        "XPN": 751,
+        "EFX": 596
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-035",
+      "name": "TB-035",
+      "workbookRow": 36,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "CAROL",
+              "middle": "",
+              "last": "GERBER",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-035@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "962 MIRAMONTE"
+              ],
+              "city": "SANTA BARBARA",
+              "region": "CA",
+              "postalCode": "93109",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "6366"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 630,
+        "XPN": 801,
+        "EFX": 760
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-036",
+      "name": "TB-036",
+      "workbookRow": 37,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "STACEY",
+              "middle": "",
+              "last": "BROWN",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-036@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "2716 LAUREL"
+              ],
+              "city": "BAKERSFIELD",
+              "region": "CA",
+              "postalCode": "93304",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "6728"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 788,
+        "XPN": 620,
+        "EFX": 613
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-037",
+      "name": "TB-037",
+      "workbookRow": 38,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "EVAN",
+              "middle": "D",
+              "last": "EVANS",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-037@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "2600 HALEY"
+              ],
+              "city": "BAKERSFIELD",
+              "region": "CA",
+              "postalCode": "93305",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "7927"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 800,
+        "XPN": 707,
+        "EFX": 618
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-038",
+      "name": "TB-038",
+      "workbookRow": 39,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "KENT",
+              "middle": "D",
+              "last": "AARON",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-038@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "2200 SYCAMORE"
+              ],
+              "city": "ANTIOCH",
+              "region": "CA",
+              "postalCode": "94509",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "7574"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 796,
+        "XPN": 671,
+        "EFX": 597
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-039",
+      "name": "TB-039",
+      "workbookRow": 40,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "MARY",
+              "middle": "J",
+              "last": "BOLT",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-039@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "5417 BARRETT"
+              ],
+              "city": "BUENA PARK",
+              "region": "CA",
+              "postalCode": "90621",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "0691"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": 761,
+        "XPN": 700,
+        "EFX": 731
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    },
+    {
+      "id": "TB-040",
+      "name": "TB-040",
+      "workbookRow": 41,
+      "request": {
+        "type": "SALES_INQUIRY",
+        "applicationInquiryInput": {
+          "propertyInputHeloc": {
+            "type": "SECONDARY",
+            "requestedLoanAmount": 50000,
+            "address": {
+              "street": [
+                "49 Longview Ln"
+              ],
+              "city": "Newtown Square",
+              "region": "PA",
+              "postalCode": "19073",
+              "country": "US"
+            }
+          },
+          "basicInfoInput": {
+            "name": {
+              "first": "MATTHEW",
+              "middle": "",
+              "last": "FELCHINGRAHAM",
+              "suffix": ""
+            },
+            "emailId": "sfqa-gri-tb-040@yopmail.com",
+            "phoneNumber": "2025550148",
+            "residenceStartDate": "2009-01-01",
+            "isAgreed": true,
+            "residenceAddress": {
+              "street": [
+                "6357 W 6TH"
+              ],
+              "city": "LOS ANGELES",
+              "region": "CA",
+              "postalCode": "90048",
+              "country": "US"
+            }
+          },
+          "basicInfoUpdateInput": {
+            "dateOfBirth": "1980-01-01",
+            "lastFourSSN": "1491"
+          },
+          "incomeInput": [
+            {
+              "annualIncome": 250000,
+              "incomeSource": "EMPLOYED_FULL_TIME",
+              "incomeType": null
+            }
+          ],
+          "existingMortgageAmount": 70000
+        }
+      },
+      "bureau": {
+        "TU": null,
+        "XPN": 781,
+        "EFX": 688
+      },
+      "notes": [
+        "DOB assumed, not verified bureau identity; no-match is not definitive ineligibility."
+      ]
+    }
+  ]
+}

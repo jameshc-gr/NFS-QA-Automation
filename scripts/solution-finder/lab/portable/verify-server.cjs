@@ -3,7 +3,6 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
 const { randomUUID } = require('node:crypto');
-process.env.SF_LAB_PORTABLE = '1';
 const { createLabServer } = require('../scripts/solution-finder/lab/server.js');
 
 const lab = createLabServer({

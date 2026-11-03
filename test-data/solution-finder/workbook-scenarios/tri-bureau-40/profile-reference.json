@@ -1,0 +1,2262 @@
+{
+  "schemaVersion": 1,
+  "sourceWorkbook": "test-data/solution-finder/IR_profile-offer-table.xlsx",
+  "sourceSha256": "fbfa6d1b6f24fca0143dd0c5863ae4487f43d25a15fcb408e1cde33b7ce0a8eb",
+  "observedOn": "2026-11-02",
+  "context": "Prior GRI QA screening; secondary occupancy, 50k request/70k mortgage/250k income, DOB1980 assumed; editing inputs/tenant may change outcomes. Reference only, not current results/eligibility approval.",
+  "profiles": [
+    {
+      "profileId": "TB-001",
+      "lastFourSSN": "2955",
+      "expectedFico": {
+        "TU": 804,
+        "XPN": 825,
+        "EFX": 617
+      },
+      "returnedFico": {
+        "TU": 804,
+        "XPN": 824,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN",
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.125,
+          "apr": 9.124,
+          "term": 30,
+          "monthlyPayment": 371.25,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.35,
+          "apr": 9.35,
+          "term": 10,
+          "monthlyPayment": 642.89,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.6,
+          "apr": 9.6,
+          "term": 10,
+          "monthlyPayment": 649.73,
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "profileId": "TB-002",
+      "lastFourSSN": "2229",
+      "expectedFico": {
+        "TU": 719,
+        "XPN": 783,
+        "EFX": 708
+      },
+      "returnedFico": {
+        "TU": 726,
+        "XPN": 723,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN",
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.1,
+          "apr": 10.1,
+          "term": 10,
+          "monthlyPayment": 663.53,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.375,
+          "apr": 9.389,
+          "term": 30,
+          "monthlyPayment": 380.04,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.85,
+          "apr": 9.85,
+          "term": 10,
+          "monthlyPayment": 656.61,
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "profileId": "TB-003",
+      "lastFourSSN": "9376",
+      "expectedFico": {
+        "TU": 584,
+        "XPN": 830,
+        "EFX": 588
+      },
+      "returnedFico": {
+        "TU": 586,
+        "XPN": null,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Representative Credit Score < 660"
+          ]
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "No credit profile match found; cannot generate offers without manual intervention/resubmission."
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "No credit profile match found; cannot generate offers without manual intervention/resubmission."
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-004",
+      "lastFourSSN": "2740",
+      "expectedFico": {
+        "TU": 781,
+        "XPN": 696,
+        "EFX": 735
+      },
+      "returnedFico": {
+        "TU": 781,
+        "XPN": 699,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN",
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.125,
+          "apr": 9.124,
+          "term": 30,
+          "monthlyPayment": 371.25,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 11.1,
+          "apr": 11.1,
+          "term": 10,
+          "monthlyPayment": 691.58,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.85,
+          "apr": 10.85,
+          "term": 10,
+          "monthlyPayment": 684.51,
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "profileId": "TB-005",
+      "lastFourSSN": "2910",
+      "expectedFico": {
+        "TU": 518,
+        "XPN": 673,
+        "EFX": 603
+      },
+      "returnedFico": {
+        "TU": 518,
+        "XPN": 634,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Representative Credit Score < 660"
+          ]
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "NEAR_PRIME_OCCUPANCY_STATUS",
+            "Your credit score is below our minimum requirement"
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "NEAR_PRIME_OCCUPANCY_STATUS",
+            "Your credit score is below our minimum requirement"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-006",
+      "lastFourSSN": "4369",
+      "expectedFico": {
+        "TU": 722,
+        "XPN": 505,
+        "EFX": 669
+      },
+      "returnedFico": {
+        "TU": 722,
+        "XPN": 517,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.375,
+          "apr": 9.389,
+          "term": 30,
+          "monthlyPayment": 380.04,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-007",
+      "lastFourSSN": "5035",
+      "expectedFico": {
+        "TU": null,
+        "XPN": null,
+        "EFX": 653
+      },
+      "returnedFico": {
+        "TU": null,
+        "XPN": null,
+        "EFX": null
+      },
+      "creditReturned": false,
+      "eligibleProducts": [],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "TU Soft pull was not successful"
+          ]
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "No credit profile match found; cannot generate offers without manual intervention/resubmission."
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "No credit profile match found; cannot generate offers without manual intervention/resubmission."
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-008",
+      "lastFourSSN": "3725",
+      "expectedFico": {
+        "TU": 798,
+        "XPN": 546,
+        "EFX": 659
+      },
+      "returnedFico": {
+        "TU": 798,
+        "XPN": 573,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Income Verification Type is not Investor - DSCR, And DTI Ratio = 0"
+          ]
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-009",
+      "lastFourSSN": "5832",
+      "expectedFico": {
+        "TU": 712,
+        "XPN": 842,
+        "EFX": 720
+      },
+      "returnedFico": {
+        "TU": 712,
+        "XPN": 838,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN",
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.625,
+          "apr": 9.655,
+          "term": 30,
+          "monthlyPayment": 388.89,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.35,
+          "apr": 9.35,
+          "term": 10,
+          "monthlyPayment": 642.89,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.6,
+          "apr": 9.6,
+          "term": 10,
+          "monthlyPayment": 649.73,
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "profileId": "TB-010",
+      "lastFourSSN": "6406",
+      "expectedFico": {
+        "TU": 761,
+        "XPN": 689,
+        "EFX": 627
+      },
+      "returnedFico": {
+        "TU": 761,
+        "XPN": 680,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN",
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.125,
+          "apr": 9.124,
+          "term": 30,
+          "monthlyPayment": 371.25,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.85,
+          "apr": 10.85,
+          "term": 10,
+          "monthlyPayment": 684.51,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.6,
+          "apr": 10.6,
+          "term": 10,
+          "monthlyPayment": 677.48,
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "profileId": "TB-011",
+      "lastFourSSN": "0706",
+      "expectedFico": {
+        "TU": 806,
+        "XPN": 609,
+        "EFX": 679
+      },
+      "returnedFico": {
+        "TU": 806,
+        "XPN": 573,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.125,
+          "apr": 9.124,
+          "term": 30,
+          "monthlyPayment": 371.25,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-012",
+      "lastFourSSN": "9342",
+      "expectedFico": {
+        "TU": 800,
+        "XPN": 825,
+        "EFX": 627
+      },
+      "returnedFico": {
+        "TU": 793,
+        "XPN": 819,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN",
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.125,
+          "apr": 9.124,
+          "term": 30,
+          "monthlyPayment": 371.25,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.35,
+          "apr": 9.35,
+          "term": 10,
+          "monthlyPayment": 642.89,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.6,
+          "apr": 9.6,
+          "term": 10,
+          "monthlyPayment": 649.73,
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "profileId": "TB-013",
+      "lastFourSSN": "0080",
+      "expectedFico": {
+        "TU": 807,
+        "XPN": 689,
+        "EFX": 671
+      },
+      "returnedFico": {
+        "TU": 820,
+        "XPN": 712,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.3,
+          "apr": 10.3,
+          "term": 10,
+          "monthlyPayment": 669.09,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.05,
+          "apr": 10.05,
+          "term": 10,
+          "monthlyPayment": 662.14,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Income Verification Type is not Investor - DSCR, And DTI Ratio = 0"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-014",
+      "lastFourSSN": "4359",
+      "expectedFico": {
+        "TU": 687,
+        "XPN": 803,
+        "EFX": 738
+      },
+      "returnedFico": {
+        "TU": 687,
+        "XPN": 834,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN",
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.875,
+          "apr": 9.921,
+          "term": 30,
+          "monthlyPayment": 397.82,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.35,
+          "apr": 9.35,
+          "term": 10,
+          "monthlyPayment": 642.89,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.6,
+          "apr": 9.6,
+          "term": 10,
+          "monthlyPayment": 649.73,
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "profileId": "TB-015",
+      "lastFourSSN": "7042",
+      "expectedFico": {
+        "TU": 701,
+        "XPN": null,
+        "EFX": 592
+      },
+      "returnedFico": {
+        "TU": 701,
+        "XPN": null,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.625,
+          "apr": 9.655,
+          "term": 30,
+          "monthlyPayment": 388.89,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "No credit profile match found; cannot generate offers without manual intervention/resubmission."
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "No credit profile match found; cannot generate offers without manual intervention/resubmission."
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-016",
+      "lastFourSSN": "8094",
+      "expectedFico": {
+        "TU": null,
+        "XPN": 762,
+        "EFX": null
+      },
+      "returnedFico": {
+        "TU": null,
+        "XPN": 735,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.1,
+          "apr": 10.1,
+          "term": 10,
+          "monthlyPayment": 663.53,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.85,
+          "apr": 9.85,
+          "term": 10,
+          "monthlyPayment": 656.61,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "TU Soft pull was not successful"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-017",
+      "lastFourSSN": "2043",
+      "expectedFico": {
+        "TU": 782,
+        "XPN": 786,
+        "EFX": 593
+      },
+      "returnedFico": {
+        "TU": 782,
+        "XPN": 791,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN",
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.125,
+          "apr": 9.124,
+          "term": 30,
+          "monthlyPayment": 371.25,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.7,
+          "apr": 9.7,
+          "term": 10,
+          "monthlyPayment": 652.48,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.45,
+          "apr": 9.45,
+          "term": 10,
+          "monthlyPayment": 645.62,
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "profileId": "TB-018",
+      "lastFourSSN": "3274",
+      "expectedFico": {
+        "TU": null,
+        "XPN": 522,
+        "EFX": 641
+      },
+      "returnedFico": {
+        "TU": null,
+        "XPN": 539,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "TU Soft pull was not successful"
+          ]
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-019",
+      "lastFourSSN": "5373",
+      "expectedFico": {
+        "TU": 776,
+        "XPN": 754,
+        "EFX": 583
+      },
+      "returnedFico": {
+        "TU": 776,
+        "XPN": null,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Income Verification Type is not Investor - DSCR, And DTI Ratio = 0"
+          ]
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "No credit profile match found; cannot generate offers without manual intervention/resubmission."
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "No credit profile match found; cannot generate offers without manual intervention/resubmission."
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-020",
+      "lastFourSSN": "4031",
+      "expectedFico": {
+        "TU": null,
+        "XPN": 578,
+        "EFX": 654
+      },
+      "returnedFico": {
+        "TU": null,
+        "XPN": 620,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "TU Soft pull was not successful"
+          ]
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "NEAR_PRIME_OCCUPANCY_STATUS",
+            "Credit utilization is above the threshold for which we extend credit",
+            "Your credit score is below our minimum requirement"
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "NEAR_PRIME_OCCUPANCY_STATUS",
+            "Credit utilization is above the threshold for which we extend credit",
+            "Your credit score is below our minimum requirement"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-021",
+      "lastFourSSN": "3800",
+      "expectedFico": {
+        "TU": 520,
+        "XPN": 801,
+        "EFX": null
+      },
+      "returnedFico": {
+        "TU": 520,
+        "XPN": 818,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.35,
+          "apr": 9.35,
+          "term": 10,
+          "monthlyPayment": 642.89,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.6,
+          "apr": 9.6,
+          "term": 10,
+          "monthlyPayment": 649.73,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Representative Credit Score < 660"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-022",
+      "lastFourSSN": "8372",
+      "expectedFico": {
+        "TU": 687,
+        "XPN": 635,
+        "EFX": 752
+      },
+      "returnedFico": {
+        "TU": 687,
+        "XPN": 679,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.875,
+          "apr": 9.921,
+          "term": 30,
+          "monthlyPayment": 397.82,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-023",
+      "lastFourSSN": "3154",
+      "expectedFico": {
+        "TU": 703,
+        "XPN": 693,
+        "EFX": 745
+      },
+      "returnedFico": {
+        "TU": null,
+        "XPN": 733,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.1,
+          "apr": 10.1,
+          "term": 10,
+          "monthlyPayment": 663.53,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.85,
+          "apr": 9.85,
+          "term": 10,
+          "monthlyPayment": 656.61,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "TU Soft pull was not successful"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-024",
+      "lastFourSSN": "4150",
+      "expectedFico": {
+        "TU": 782,
+        "XPN": 839,
+        "EFX": 604
+      },
+      "returnedFico": {
+        "TU": 782,
+        "XPN": 801,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.35,
+          "apr": 9.35,
+          "term": 10,
+          "monthlyPayment": 642.89,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.6,
+          "apr": 9.6,
+          "term": 10,
+          "monthlyPayment": 649.73,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Income Verification Type is not Investor - DSCR, And DTI Ratio = 0"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-025",
+      "lastFourSSN": "5766",
+      "expectedFico": {
+        "TU": null,
+        "XPN": 687,
+        "EFX": 799
+      },
+      "returnedFico": {
+        "TU": null,
+        "XPN": 685,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.85,
+          "apr": 10.85,
+          "term": 10,
+          "monthlyPayment": 684.51,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.6,
+          "apr": 10.6,
+          "term": 10,
+          "monthlyPayment": 677.48,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "TU Soft pull was not successful"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-026",
+      "lastFourSSN": "3065",
+      "expectedFico": {
+        "TU": 763,
+        "XPN": 787,
+        "EFX": 549
+      },
+      "returnedFico": {
+        "TU": 763,
+        "XPN": 797,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Income Verification Type is not Investor - DSCR, And DTI Ratio = 0"
+          ]
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Pending",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "WAITING_FOR_INITIAL_OFFERS"
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Pending",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "WAITING_FOR_INITIAL_OFFERS"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-027",
+      "lastFourSSN": "5103",
+      "expectedFico": {
+        "TU": 823,
+        "XPN": 615,
+        "EFX": 679
+      },
+      "returnedFico": {
+        "TU": 823,
+        "XPN": 597,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.125,
+          "apr": 9.124,
+          "term": 30,
+          "monthlyPayment": 371.25,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-028",
+      "lastFourSSN": "8651",
+      "expectedFico": {
+        "TU": null,
+        "XPN": 832,
+        "EFX": 658
+      },
+      "returnedFico": {
+        "TU": null,
+        "XPN": 802,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.35,
+          "apr": 9.35,
+          "term": 10,
+          "monthlyPayment": 642.89,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.6,
+          "apr": 9.6,
+          "term": 10,
+          "monthlyPayment": 649.73,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "TU Soft pull was not successful"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-029",
+      "lastFourSSN": "9766",
+      "expectedFico": {
+        "TU": 771,
+        "XPN": 793,
+        "EFX": 525
+      },
+      "returnedFico": {
+        "TU": 771,
+        "XPN": 832,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.35,
+          "apr": 9.35,
+          "term": 10,
+          "monthlyPayment": 642.89,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.6,
+          "apr": 9.6,
+          "term": 10,
+          "monthlyPayment": 649.73,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Income Verification Type is not Investor - DSCR, And DTI Ratio = 0"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-030",
+      "lastFourSSN": "5552",
+      "expectedFico": {
+        "TU": 795,
+        "XPN": 774,
+        "EFX": 687
+      },
+      "returnedFico": {
+        "TU": 795,
+        "XPN": 752,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN",
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.125,
+          "apr": 9.124,
+          "term": 30,
+          "monthlyPayment": 371.25,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.6,
+          "apr": 9.6,
+          "term": 10,
+          "monthlyPayment": 649.73,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.85,
+          "apr": 9.85,
+          "term": 10,
+          "monthlyPayment": 656.61,
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "profileId": "TB-031",
+      "lastFourSSN": "0150",
+      "expectedFico": {
+        "TU": 792,
+        "XPN": 648,
+        "EFX": 708
+      },
+      "returnedFico": {
+        "TU": 792,
+        "XPN": 655,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Income Verification Type is not Investor - DSCR, And DTI Ratio = 0"
+          ]
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-032",
+      "lastFourSSN": "0120",
+      "expectedFico": {
+        "TU": null,
+        "XPN": 837,
+        "EFX": 787
+      },
+      "returnedFico": {
+        "TU": null,
+        "XPN": 827,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.35,
+          "apr": 9.35,
+          "term": 10,
+          "monthlyPayment": 642.89,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.6,
+          "apr": 9.6,
+          "term": 10,
+          "monthlyPayment": 649.73,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "TU Soft pull was not successful"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-033",
+      "lastFourSSN": "4316",
+      "expectedFico": {
+        "TU": 770,
+        "XPN": 704,
+        "EFX": 724
+      },
+      "returnedFico": {
+        "TU": 770,
+        "XPN": 719,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.3,
+          "apr": 10.3,
+          "term": 10,
+          "monthlyPayment": 669.09,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.05,
+          "apr": 10.05,
+          "term": 10,
+          "monthlyPayment": 662.14,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Income Verification Type is not Investor - DSCR, And DTI Ratio = 0"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-034",
+      "lastFourSSN": "5534",
+      "expectedFico": {
+        "TU": 768,
+        "XPN": 751,
+        "EFX": 596
+      },
+      "returnedFico": {
+        "TU": 768,
+        "XPN": 748,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.6,
+          "apr": 9.6,
+          "term": 10,
+          "monthlyPayment": 649.73,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.85,
+          "apr": 9.85,
+          "term": 10,
+          "monthlyPayment": 656.61,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Income Verification Type is not Investor - DSCR, And DTI Ratio = 0"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-035",
+      "lastFourSSN": "6366",
+      "expectedFico": {
+        "TU": 630,
+        "XPN": 801,
+        "EFX": 760
+      },
+      "returnedFico": {
+        "TU": 630,
+        "XPN": 784,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.7,
+          "apr": 9.7,
+          "term": 10,
+          "monthlyPayment": 652.48,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.45,
+          "apr": 9.45,
+          "term": 10,
+          "monthlyPayment": 645.62,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Representative Credit Score < 660"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-036",
+      "lastFourSSN": "6728",
+      "expectedFico": {
+        "TU": 788,
+        "XPN": 620,
+        "EFX": 613
+      },
+      "returnedFico": {
+        "TU": 788,
+        "XPN": 657,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.125,
+          "apr": 9.124,
+          "term": 30,
+          "monthlyPayment": 371.25,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-037",
+      "lastFourSSN": "7927",
+      "expectedFico": {
+        "TU": 800,
+        "XPN": 707,
+        "EFX": 618
+      },
+      "returnedFico": {
+        "TU": 800,
+        "XPN": 673,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Income Verification Type is not Investor - DSCR, And DTI Ratio = 0"
+          ]
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-038",
+      "lastFourSSN": "7574",
+      "expectedFico": {
+        "TU": 796,
+        "XPN": 671,
+        "EFX": 597
+      },
+      "returnedFico": {
+        "TU": 796,
+        "XPN": 689,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN",
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.125,
+          "apr": 9.124,
+          "term": 30,
+          "monthlyPayment": 371.25,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.85,
+          "apr": 10.85,
+          "term": 10,
+          "monthlyPayment": 684.51,
+          "reasons": []
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 10.6,
+          "apr": 10.6,
+          "term": 10,
+          "monthlyPayment": 677.48,
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "profileId": "TB-039",
+      "lastFourSSN": "0691",
+      "expectedFico": {
+        "TU": 761,
+        "XPN": 700,
+        "EFX": 731
+      },
+      "returnedFico": {
+        "TU": 761,
+        "XPN": 679,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "HELOAN"
+      ],
+      "offers": [
+        {
+          "product": "HELOAN",
+          "status": "Eligible",
+          "applicationType": "HELOAN",
+          "loanAmount": 50000,
+          "rate": 8.125,
+          "apr": 9.124,
+          "term": 30,
+          "monthlyPayment": 371.25,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        },
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Declined",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "Your credit score is below our minimum requirement"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "TB-040",
+      "lastFourSSN": "1491",
+      "expectedFico": {
+        "TU": null,
+        "XPN": 781,
+        "EFX": 688
+      },
+      "returnedFico": {
+        "TU": null,
+        "XPN": 815,
+        "EFX": null
+      },
+      "creditReturned": true,
+      "eligibleProducts": [
+        "VARIABLE_RATE_HELOC",
+        "FIXED_RATE_HELOC"
+      ],
+      "offers": [
+        {
+          "product": "VARIABLE_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.35,
+          "apr": 9.35,
+          "term": 10,
+          "monthlyPayment": 642.89,
+          "reasons": []
+        },
+        {
+          "product": "FIXED_RATE_HELOC",
+          "status": "Eligible",
+          "applicationType": "FIGURE_HELOC",
+          "loanAmount": 50000,
+          "rate": 9.6,
+          "apr": 9.6,
+          "term": 10,
+          "monthlyPayment": 649.73,
+          "reasons": []
+        },
+        {
+          "product": "HELOAN",
+          "status": "Declined",
+          "applicationType": "HELOAN",
+          "loanAmount": null,
+          "rate": null,
+          "apr": null,
+          "term": null,
+          "monthlyPayment": null,
+          "reasons": [
+            "TU Soft pull was not successful"
+          ]
+        }
+      ]
+    }
+  ]
+}

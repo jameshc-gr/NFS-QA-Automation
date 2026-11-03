@@ -1,5 +1,27 @@
 # Test Data Directory
 
+## 2026-11-02 - Restricted internal 125-case lab distribution
+
+- User explicitly requested actual scenarios rather than synthetic substitutes.
+  The opt-in internal ZIP copies existing original/NSF source datasets unchanged;
+  default packaging still excludes them. No credentials or prior run evidence.
+- Byte equality and all 125 loads/previews/suite selections were verified in a
+  clean extraction. All 51 focused checks/typecheck and both-edition isolated
+  install/offline suite/report passed. No live inquiries; macOS only.
+- Inquiry data is restricted to authorized internal QA recipients and approved
+  sharing channels. See [input history](solution-finder/README.md).
+
+## 2026-11-02 - Synthetic standalone lab starters
+
+- The original standalone lab excluded all customer/workbook inputs, leaving
+  recipients without built-ins. Added five synthetic definitions under the
+  existing Solution Finder input folder; private original datasets stay excluded.
+- Portable mode validates/loads these starters, with dynamic underage DOB.
+  Normal 125-case inputs remain unchanged. No responses or run evidence stored here.
+- All 50 focused checks and scoped typecheck passed; every starter loaded/previewed
+  in a clean extracted ZIP, with offline suite/report and no live inquiries.
+  See [input history](solution-finder/README.md). macOS only.
+
 ## 2026-11-02 - Local-only generated evidence
 
 - Request: prevent shared-checkout conflicts from generated test/script output.

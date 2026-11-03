@@ -5,8 +5,8 @@ import { resolve } from 'node:path';
 import { z } from 'zod';
 import { assertNewSolutionFinderOutputPath } from '../../../../../scripts/new-solution-finder-environment';
 import {
-  scenarios, requestSchema, responseSchema,
-  type Scenario, type InquiryRequest, type InquiryResponse, type UiCard, type Comparison
+  scenarios, requestSchema, responseSchema, workbookScenarioSchema, actualUiApiScenarioSchema,
+  type Scenario, type WorkbookScenario, type InquiryRequest, type InquiryResponse, type UiCard, type Comparison
 } from './contracts';
 import { compareRun, compareUiToApi, qaComments, uiSnapshot } from './comparison';
 import { selectInquiryIncomeSource } from '../../helpers/inquiry-form';
@@ -84,11 +84,38 @@ function assertSubmittedInput(actual: InquiryRequest, intended: InquiryRequest, 
 export function defineScenario(id: string) {
   const scenario = scenarios.find(value => value.id === id);
   if (!scenario) throw new Error(`Unknown New Solution Finder scenario: ${id}`);
-  test(`${scenario.id} - ${scenario.name}`, async ({ page }, testInfo) => runScenario(page, testInfo, scenario));
+  test(`${scenario.id} - ${scenario.name}`, async ({ page }, testInfo) =>
+    runScenario(page, testInfo, scenario, { compareWorkbook: scenario.comparisonMode === 'workbook' }));
 }
 
 export type InquiryScenario = Pick<Scenario, 'id' | 'name' | 'request' | 'notes'> &
-  Partial<Pick<Scenario, 'workbookRow' | 'expectedResponse' | 'expectedUi'>>;
+  Partial<Pick<WorkbookScenario, 'workbookRow' | 'expectedResponse' | 'expectedUi'>> & {
+    comparisonMode?: Scenario['comparisonMode'];
+    provenance?: Scenario['provenance'];
+  };
+
+export function resolveScenarioComparison(scenario: InquiryScenario, compareWorkbookOption?: boolean) {
+  if (scenario.comparisonMode !== undefined && !['workbook', 'actual-ui-api'].includes(scenario.comparisonMode)) {
+    throw new Error('Unknown scenario comparison mode.');
+  }
+  const declared = scenario.comparisonMode === undefined ? undefined : scenario.comparisonMode === 'workbook';
+  if (declared !== undefined && compareWorkbookOption !== undefined && declared !== compareWorkbookOption) {
+    throw new Error('Comparison option conflicts with declared scenario mode.');
+  }
+  const compareWorkbook = declared ?? compareWorkbookOption !== false;
+  if (!compareWorkbook) {
+    if (scenario.comparisonMode === 'actual-ui-api' && ('expectedResponse' in scenario || 'expectedUi' in scenario)) {
+      throw new Error('UI/API-only scenarios must not contain stale workbook expectations.');
+    }
+    if (scenario.comparisonMode === 'actual-ui-api' && !actualUiApiScenarioSchema.safeParse(scenario).success) {
+      throw new Error('UI/API-only scenarios require valid explicit provenance.');
+    }
+    return { compareWorkbook, workbookScenario: undefined };
+  }
+  const parsed = workbookScenarioSchema.safeParse(scenario);
+  if (!parsed.success) throw new Error('Workbook comparisons require complete, valid scenario expectations.');
+  return { compareWorkbook, workbookScenario: parsed.data };
+}
 
 export async function runScenario(
   page: Page, testInfo: TestInfo, scenario: InquiryScenario,
@@ -98,10 +125,7 @@ export async function runScenario(
     onStep?: (name: string, status: 'RUNNING' | 'PASS' | 'FAIL') => void;
   } = {}
 ) {
-  const compareWorkbook = options.compareWorkbook !== false;
-  const workbookScenario = scenario.expectedResponse && scenario.expectedUi && scenario.workbookRow != null
-    ? { ...scenario, expectedResponse: scenario.expectedResponse, expectedUi: scenario.expectedUi, workbookRow: scenario.workbookRow } : undefined;
-  if (compareWorkbook && !workbookScenario) throw new Error('Workbook comparisons require complete scenario expectations.');
+  const { compareWorkbook, workbookScenario } = resolveScenarioComparison(scenario, options.compareWorkbook);
   assertNewSolutionFinderOutputPath(root, testInfo.outputDir);
   mkdirSync(testInfo.outputDir, { recursive: true });
   const metadata = metadataSchema.parse(testInfo.project.metadata);
@@ -247,8 +271,9 @@ export async function runScenario(
     const comments = compareWorkbook && workbookScenario
       ? qaComments(workbookScenario, metadata.tenant, response, comparison, failure ? errorText(failure) : undefined)
       : [
-        `Solution Finder Lab: ${scenario.name}; tenant ${metadata.tenant}.`,
-        'Live UI submission; no placeholder workbook expectations asserted. UI/API agreement does not independently certify pricing or eligibility.',
+        `Solution Finder actual-ui-api: ${scenario.id}; tenant ${metadata.tenant}.`,
+        'No approved variant baseline. Live UI submission; UI/API agreement does not independently certify pricing, credit scores or eligibility.',
+        ...scenario.notes,
         `UI/API differences: ${comparison?.uiApi.length ?? 'not compared'}.`,
         `Eligible offers: ${response?.offers.filter(offer => offer.loanAmount != null && !offer.ineligibleReasons?.length).length ?? 'unavailable'}.`,
         'Inquiry and returned internal application IDs do not establish a completed or funded loan.',
@@ -270,6 +295,7 @@ export async function runScenario(
       scenarioId: scenario.id, scenarioName: scenario.name, workbookRow: scenario.workbookRow,
       ...metadata, baselineApprovedForTenant: compareWorkbook && metadata.tenant === 'gri',
       comparisonMode: compareWorkbook ? 'workbook' : 'actual-ui-api',
+      provenance: scenario.provenance,
       started, finished: new Date().toISOString(), status: failure ? 'FAIL' : 'PASS',
       email, endpoint, httpStatus, inquiryId: response?.inquiryId, navigatorUrl: page.url(), steps, comparison,
       qaComments: comments, browserErrors, networkErrors, diagnosticsErrors,

@@ -29,6 +29,14 @@
         <label for="scenario">Start from an existing scenario <span class="muted">(optional)</span></label>
         <div class="row"><select id="scenario" disabled><option value="">Paste your own JSON</option></select><button id="load" class="quiet" disabled>Load</button></div>
         <p id="template-notice" class="hint" role="status" hidden></p>
+        <section id="profile-reference" class="profile-reference" hidden aria-labelledby="profile-reference-title">
+          <h3 id="profile-reference-title">IR chart reference</h3>
+          <p id="profile-reference-context" class="hint"></p>
+          <dl id="profile-reference-values"></dl>
+          <div class="suite-table-wrap">
+            <table id="profile-reference-offers"><caption>Previously observed products, not current run results</caption><thead><tr><th>Product / status</th><th>Prior offer</th><th>Reasons</th></tr></thead><tbody></tbody></table>
+          </div>
+        </section>
         <details id="source-section" hidden><summary>Original workbook request (before UI mapping)</summary><pre id="source-request"></pre></details>
         <section id="request-json-section"><h3>Paste or edit inquiry request JSON</h3>
           <div class="section-title compact"><label for="request">Inquiry request JSON</label><button id="format" class="text">Format JSON</button></div>
@@ -42,7 +50,7 @@
           <table class="request-table"><tbody id="property-fields"></tbody></table>
           <h3>Borrower profile</h3>
           <button id="copy-address" class="text" type="button">Use subject as borrower address</button>
-          <p class="hint">Primary occupancy requires matching subject and borrower addresses.</p>
+          <p class="hint">For Primary occupancy, enter any valid subject address. Validation automatically uses it as the borrower residence; no manual matching is required.</p>
           <table class="request-table"><tbody id="borrower-fields"></tbody></table>
           <h3>Income sources</h3>
           <p class="hint">"Retired SSI" is Navigator's label and submits Social Security income. Its observed age-62 UI threshold is not a determination of federal SSI benefit eligibility.</p>

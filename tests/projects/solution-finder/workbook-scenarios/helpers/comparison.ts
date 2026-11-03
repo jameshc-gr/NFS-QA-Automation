@@ -1,4 +1,4 @@
-import type { Comparison, Difference, InquiryResponse, Offer, Scenario, UiCard } from './contracts';
+import type { Comparison, Difference, InquiryResponse, Offer, WorkbookScenario, UiCard } from './contracts';
 
 export const productTitles = {
   HELOAN: 'HELOAN', FIXED_RATE_HELOC: 'Fixed Rate HELOC',
@@ -157,7 +157,7 @@ export function compareUiToApi(cards: UiCard[], response: InquiryResponse): Diff
   return diffs;
 }
 
-export function compareRun(response: InquiryResponse, cards: UiCard[], ui: string, scenario: Scenario): Comparison {
+export function compareRun(response: InquiryResponse, cards: UiCard[], ui: string, scenario: WorkbookScenario): Comparison {
   return {
     apiBaseline: differences(normalizeResponse(responseSubset(response)), normalizeResponse(responseSubset(scenario.expectedResponse))),
     uiApi: compareUiToApi(cards, response),
@@ -169,7 +169,7 @@ function responseSubset(response: InquiryResponse) {
   return { offers: response.offers, summary: response.summary, inquiryId: response.inquiryId };
 }
 
-export function qaComments(scenario: Scenario, tenant: string, response?: InquiryResponse, comparison?: Comparison, failure?: string) {
+export function qaComments(scenario: WorkbookScenario, tenant: string, response?: InquiryResponse, comparison?: Comparison, failure?: string) {
   const comments: string[] = [
     `${scenario.id}: ${scenario.name}. Baseline: GRI workbook row ${scenario.workbookRow}; execution tenant: ${tenant}.`
   ];
@@ -195,10 +195,6 @@ export function qaComments(scenario: Scenario, tenant: string, response?: Inquir
         comments.push(`PRICING BASELINE DIFFERENCES: ${pricing.map(diff => `${diff.path}: expected ${JSON.stringify(diff.expected)}, actual ${JSON.stringify(diff.actual)}`).join('; ')}.`);
         if (!comparison.uiApi.length) comments.push('The UI correctly displays the current API quote. Review pricing/fee/date assumptions behind the changed quote before classifying this as a UI defect; the saved expectation remains unchanged.');
       }
-    }
-    if (scenario.notes.some(note => note.includes('Fictitious Fannie Mae test identity')) &&
-        !Object.values(response.summary.fico).some(score => score != null)) {
-      comments.push('Fannie Mae identity returned no credit match. Published source scores, freezes and credit events were NOT exercised by Navigator; this is negative-response coverage only.');
     }
     if ((response.summary.highestDti ?? response.summary.lowestDti ?? 0) > 50 && eligible.some(offer => offer.productType === 'HELOAN')) {
       comments.push('REVIEW: summary DTI exceeds 50% while HELOAN is offered. Exact ECS debt/representative DTI is unavailable, so FAL-3356 violation is not confirmed.');

@@ -19,7 +19,9 @@ active run whose owning process is still alive.
 2. Paste the complete `type` / `applicationInquiryInput` request, or load a
    workbook case as an input template. The **Original 23 scenarios** group
    appears first, labeled `SF-1-Original: scenario name` through `SF-23-Original`,
-   followed by the unchanged **Additional 102 scenarios** (`NSF-*`).
+   followed by the preserved **Additional 102 scenarios** (`NSF-*`) and separate
+   **Tri-Bureau IR 40 profiles** (`TB-*`): 165 total. The added group shows
+   PROFILE ID and BORROWER FULL NAME in both single and suite choices.
    Loading never submits data.
 3. Edit the **Request data editor** tables, then validate the readable parsed
    borrower/address/occupancy/amount/income preview. Validation performs no
@@ -46,8 +48,10 @@ Social Security retirement can start at 62 with enough work credits; age-based
 SSI starts at 65 (disability/blindness can qualify younger). Product should
 clarify the "Retired SSI" label submitting Social Security. Do not silently
 change the UI-compatibility check to 65 or claim the lab certifies federal SSI.
-For PRIMARY occupancy, the subject and
-residence must match because the UI uses the subject as the residence.
+For PRIMARY occupancy, enter any valid subject address; validation automatically
+maps it to borrower residence in tables, JSON and preview, with an explanatory
+note. Before validation, the prior residence can remain visible. Secondary and
+investment inputs keep their separate residence; source inputs are not mutated.
 Unknown fields and unsupported income types are rejected, not silently dropped.
 
 The selected tenant UI controls request type, consent, channel and loan-officer/
@@ -274,6 +278,8 @@ checks; they do not submit live inquiries.
 
 ```bash
 npm run package:solution-finder:lab
+# Authorized internal distribution of the actual catalog:
+npm run package:solution-finder:lab -- --include-scenarios
 npm run verify:solution-finder:lab -- <generated-ZIP-path>
 ```
 
@@ -285,28 +291,231 @@ These tools are needed by the package maintainer, not recipients.
 The packager compiles only the fixed lab runtime dependency closure and checks
 an explicit file allowlist. It includes a pinned standalone npm lockfile and
 platform-neutral Node launcher. No TypeScript source/build, `.env`, auth state,
-customer/workbook scenario files, account registry, templates, run evidence,
-original spreadsheets, node_modules or browser binaries are copied.
+account registry, templates, run evidence,
+original spreadsheets, node_modules or browser binaries are copied. Original
+scenario datasets are excluded by default; only the explicit internal edition
+copies four allowlisted JSON inputs: three unchanged catalog datasets and a
+sanitized prior-screening reference. Added profile/reference inputs retain
+last-four SSN only; full-SSN workbooks, the full chart and raw captures are excluded.
 
 Recipients follow the [included setup guide](portable/README.md):
 Node.js 22/24 LTS, extract, `npm ci`, `npm run setup`, `npm start`, then
 `http://127.0.0.1:4180`. QA access/VPN and installation downloads are still
 required; the package does not grant application permissions. Share internally.
-The portable copy starts with no scenarios; paste approved QA inputs and save
-templates before selecting suites. All editing/execution/reporting features
+The default portable copy includes five **Synthetic starter scenarios** (SF-DEMO-01
+through SF-DEMO-05). Select one and click **Load**. Replace dummy
+identities/addresses with approved QA inputs before live submission, or paste
+approved JSON and save templates. These are not the internal 165 catalog cases
+or expected eligibility/pricing baselines. All editing/execution/reporting features
 remain available. Do not send a used working folder containing local QA data.
 
-Portable mode is explicitly enabled by the packaged launcher
-(`SF_LAB_PORTABLE=1`); it skips reading both source datasets and shows a notice.
-Normal mode retains all 125 cases and still rejects missing/corrupt source files.
+The **internal-165** v1.4.1 edition includes **Original 23 scenarios**,
+**Additional 102 scenarios**, and a separately selectable **Tri-Bureau IR 40 profiles**
+group. Each added choice shows PROFILE ID and BORROWER FULL NAME in the single
+picker and suite checklist. Select and **Load**, or check suite cases.
+TB choices additionally show last-four SSN, source TU/XPN/EFX and prior eligible
+products/pending count. The reference panel distinguishes source scores from
+previously returned scores and shows all prior offer statuses/pricing/reasons.
+The observation is prior GRI QA screening on 2026-11-02: secondary occupancy,
+50k request/70k mortgage/250k income and assumed DOB1980. Changing inputs/tenant
+may change outcomes. Reference only, not current results, a baseline or approval.
+TB-007 remains included without usable credit; TB-026 retains waiting states.
+The current revision keeps NSF-001..050 and replaces Fannie borrower data in
+NSF-051..102 with the supplied 40 IR profiles. These existing 125 slots are
+preserved; all 40 normalized TB-001..040 requests are added irrespective of
+screening outcome, for 165 runnable choices. The added group retains normalized
+financial setup and assumed/not IR-certified DOB, without response/UI baselines.
+For custom PRIMARY inputs, validation maps the entered subject to residence
+without changing source inputs; secondary/investment residences stay separate.
+Loaded notes expose profile ID, DOB assumptions, address adjustments and pending
+new baselines; the original 23 and existing financial variations are preserved.
+It contains original borrower/contact/property data and is restricted to
+authorized internal QA recipients through approved company channels.
+See its [included guide](portable/README-internal.md). The existing SF-12
+user-authorized DOB correction and SF-22 generated age-17 input are preserved;
+source datasets are not rewritten or replaced with demo profiles.
+
+The launcher reads the explicit `sfLabCatalog` package marker. Synthetic mode
+sets `SF_LAB_PORTABLE=1` and skips all four private source datasets. Internal mode sets it
+to `0`, loads four datasets and shows a restricted-data notice, overriding stale
+portable environment settings. Unknown catalog markers fail.
+Normal mode exposes 165 cases and still rejects missing/corrupt source files.
+Legacy `original125` archives retain their 125-case marker/launcher semantics;
+extract v1.4.1 separately rather than overlaying or reinterpreting an older ZIP.
 Compiled config/spec discovery uses `.js`; repository execution still uses `.ts`.
 Verification rejects module imports outside the extracted copy, works in a
-folder with spaces, checks clean startup, two saved templates across restart,
+folder with spaces, checks every included case's load/preview/suite availability,
+byte-identical internal sources, clean startup, two saved templates across restart,
 an offline two-case suite/full results tab/reset and fixed worker discovery.
 It creates no live inquiries and cleans its exact temporary install folder.
 macOS is verified; Windows/Linux execution is not certified.
 
 ## Work history
+
+### 2026-11-02 - Internal165 v1.4.1 release patch
+
+- Packaged the parent-supplied overlapping Load/selection race fix. Parent
+  reports a passing deterministic gated HTTP browser regression; this follow-up
+  performed packaging/extraction verification only, without reviewing parent code.
+- Bumped package and current portable-guide surfaces to1.4.1; reference-required
+  verification covers both1.4.0 and1.4.1. Catalog inputs/reference data unchanged.
+- Final [internal v1.4.1 ZIP](../../../test-results/2026-11-02/solution-finder/lab-distribution/solution-finder-lab-internal-165-2026-11-03T00-55-12-319Z.zip)
+  SHA-256: `3947b040bda768ca7206a8a49032691f94ce0a3df1c3fd32b77fe9829c19524f`.
+  [Clean-extraction evidence](../../../test-results/2026-11-02/solution-finder/lab-distribution/solution-finder-lab-internal-165-2026-11-03T00-55-12-319Z.zip.verification.json)
+  passed all165 loads/previews, all40 reference panels/120 offers, four
+  byte-identical datasets, isolated dependency restore, template persistence,
+  offline two-case suite/report and one compiled-worker discovery test.
+- Zero live inquiries. Existing ZIPs and the live lab were left untouched;
+  cleanup/restart belongs to the parent. Verified on macOS only.
+
+### 2026-11-02 - Bounded IR chart data/reference packaging v1.4.0
+
+- Request: expose SSN scenario/source scores and prior offers, not names alone.
+  Added a sanitized fixture covering all40 canonical IDs and all120 detail rows.
+- Import with `node scripts/solution-finder/import-ir-profile-reference.cjs`.
+  The local XLSX library reads the chart; identity/last-four/source-score joins,
+  unique/count checks, product/status/reason validation and summary/usable-credit
+  conflicts fail explicitly without private raw values. Full chart stays local.
+- Catalog exports typed strict reference schemas, validates startup alignment,
+  and attaches historical data/provenance only to new40 TB objects. Existing125
+  inputs/names/notes and TB full names are unchanged. Legacy125/synthetic5
+  skip profile/reference reads. No workbook runtime dependency.
+- Internal1.4 adds only the fourth allowlisted JSON and manifest marker
+  `sfLabReferenceSource: ir-profile-offer-chart`; default excludes private data.
+  Extraction checks exact source/returned labels, values, product-keyed offer
+  rows and rich dropdown/suite summaries without requiring row order.
+- Validation: 27 focused importer/runtime/isolation tests passed via
+  `node --test tests/projects/solution-finder/workbook-scenarios/tri-bureau-40/profile-reference.test.cjs`;
+  catalog strict typecheck and importer/packager/verifier syntax checks passed.
+- After parent readiness, combined offline lab checks passed **93/93** and scoped
+  typecheck passed. Final [internal1.4 ZIP](../../../test-results/2026-11-02/solution-finder/lab-distribution/solution-finder-lab-internal-165-2026-11-03T00-49-54-928Z.zip)
+  SHA-256: `0025c6281b3b8aba33486d59b7e7ce56fc62affee671350419cc2fb2984037f4`.
+  [Extraction evidence](../../../test-results/2026-11-02/solution-finder/lab-distribution/solution-finder-lab-internal-165-2026-11-03T00-49-54-928Z.zip.verification.json)
+  passed all165 loads/previews, all40 reference panels/120 offers, four
+  byte-identical datasets, isolated restore, saved templates, offline suite/report
+  and compiled-worker discovery. Source null is N/A; returned null is Not returned.
+- One prior extraction attempt timed out at TB-008 borrower-preview rendering;
+  unchanged-archive rerun passed with diagnostic-only instrumentation, with no
+  weakened assertions. Cause remains unconfirmed. No live inquiries; no live lab
+  stopped or existing archive deleted. Root/docs and shared lab-test assertions
+  belong to the parent. macOS only; Windows/Linux not certified.
+
+### 2026-11-02 - Separate normalized IR group, internal v1.3.0
+
+- Request: add all 40 existing normalized IR profiles separately without
+  replacing the 125 built-ins or filtering by prior screening.
+- Added PROFILE ID/full-name choices only in UI/input, assumed DOB/normalized
+  financial-source notes and no baselines. Internal packaging allowlists the
+  third last-four-only JSON; synthetic default remains five private-data-free
+  starters. Full-SSN workbooks remain excluded.
+- Updated catalog/launcher markers to 165, preserving legacy original125
+  semantics and historical outcomes below. Added custom PRIMARY unit/HTTP/
+  browser mapping coverage, save/load and offline launch checks.
+- Validation: combined `npm run test:solution-finder:lab` passed **65/65**;
+  `npm run typecheck:solution-finder:new` passed. Clean-extraction verifiers
+  passed **165 internal / 5 synthetic** loads/previews, all40 named single/
+  suite choices, three byte-identical internal source files, isolated install,
+  two-template persistence, offline two-case suite/report and one compiled
+  worker test per edition. Custom PRIMARY screenshot uses only synthetic data
+  at `test-results/2026-11-02/solution-finder/lab/custom-primary/before-validation.png`.
+- Final [internal v1.3.0 ZIP](../../../test-results/2026-11-02/solution-finder/lab-distribution/solution-finder-lab-internal-165-2026-11-02T23-25-14-088Z.zip)
+  was rebuilt and clean-verified by the parent after correcting the static
+  PRIMARY hint: enter any valid subject; validation uses it as residence
+  automatically, with no manual matching.
+  SHA-256: `33115bfa47c6bf5c7f5dcf24b203321ab9b5949047b1b14e001840c1393152b6`;
+  adjacent `.sha256` and `.verification.json` contain aggregate evidence.
+- Parent-supplied readiness evidence: the owned loopback lab was safely
+  restarted while idle; HTTP verified 165 choices and 40 named profiles.
+  Actual browser custom PRIMARY editing successfully validated preview,
+  JSON/residence mapping and corrected static/dynamic hints, with zero remote
+  submissions. Screenshot:
+  `test-results/2026-11-02/solution-finder/lab-verification/primary-property/live-primary-preview.png`.
+- This follow-up only updates documentation using supplied evidence; no
+  tests/builds were rerun. Original sources remain unchanged. Parent owns
+  previous candidate/synthetic/125 ZIP cleanup and final canonical sync.
+- Limits: offline QA fixtures do not certify IR DOB, eligibility/pricing or
+  other operating systems. Root/framework/memory sync and live-server lifecycle
+  remain parent-owned.
+
+### 2026-11-02 - IR script synchronization v1.2.1
+
+- Request: propagate reviewed IR data and comparison rules to all related
+  cases/scripts. Compiled shared runtime rejects stale catalog composition,
+  wrong profile/source-row assignments, DOB drift and PRIMARY mapping errors.
+- Rebuilt the historical [v1.2.1 internal125 ZIP](../../../test-results/2026-11-02/solution-finder/lab-distribution/solution-finder-lab-internal-125-2026-11-02T22-59-33-942Z.zip)
+  with its updated guide. Clean extraction verified all125 load/preview/suite
+  selections, all52 mappings, source equality, isolated dependencies, template
+  persistence, offline suite/report/reset and worker discovery.
+- 62 combined checks, scoped typecheck and102-case discovery passed. Owned
+  loopback lab restarted only after idle and HTTP-verified all125 inputs.
+  Superseded v1.2.0 ZIP/sidecars removed; historical execution evidence retained.
+- No new live inquiries, no approved variant baselines; refresh the browser.
+  macOS verified, Windows/Linux not certified.
+
+### 2026-11-02 - IR-backed 125-case distribution
+
+- User requested replacing Fannie profiles with Tri-Bureau IR profiles. Source
+  migration replaced exactly NSF-051..102, using all40 IR profiles; first50
+  and original23 remain unchanged. Old inputs were archived, not left active.
+- Updated standalone v1.2.0 guide/profile marker and verifier. Both source JSONs
+  are byte-identical to current repository inputs. Verified all52 mappings,
+  absent obsolete response/UI baselines, visible IR notes and all125 loads/
+  previews/suite checkboxes in clean extraction; default synthetic copy remains
+  isolated. Template persistence/offline suite/report and worker discovery pass.
+- Validation: 53 focused checks, scoped typecheck and 102-case discovery passed.
+  Changed52 declare actual-ui-api; no new live submissions or approved variant
+  baselines. Two PRIMARY subjects now match IR residence as UI requires.
+- This v1.2.0 archive was superseded by the v1.2.1 ZIP linked above.
+  Superseded Fannie-containing ZIP and validation-only synthetic ZIP removed.
+- The existing local server had active work, so restart was deferred until idle.
+  Then restarted the owned server safely on port 4180; all52 IR mappings/notes
+  and125 built-ins were verified without submitting inquiries. Refresh the
+  browser to load the updated options. Active historical/saved runs were kept.
+
+### 2026-11-02 - Superseded ZIP cleanup
+
+- Request: delete previous lab ZIPs. Removed the three older empty/synthetic
+  archives and their six checksum/verification sidecars; retained the verified
+  internal 125-case ZIP and its sidecars. Unrelated reports and inputs remain.
+- Removed obsolete chat download entries and historical broken archive links.
+  Older validation entries below remain historical evidence, not downloads.
+- Validation: only the current lab ZIP remains; its checksum and root hygiene
+  passed. No application code or scenario data changed.
+
+### 2026-11-02 - Internal ZIP with the actual 125 scenarios
+
+- Request: the user rejected synthetic substitutes and requested the actual
+  125-case catalog. Added opt-in `--include-scenarios`, an internal-125 archive
+  name, two strictly allowlisted source files and a separate restricted-data guide.
+- Launcher selects the packaged edition and overrides stale environment mode;
+  missing/corrupt original datasets are not hidden. Added a visible internal
+  notice. Default synthetic edition and normal repository mode are preserved.
+- Validation: 51 focused checks and scoped typecheck passed. Clean extraction
+  verified all 125 original/NSF IDs, loaded requests/previews and enabled suite
+  checkboxes; both packaged source files are byte-identical to repository files.
+  Isolated install, template restart, two-case offline suite/report/reset and
+  compiled worker discovery passed in both internal and synthetic editions.
+  No live inquiries; macOS verified, Windows/Linux not certified.
+- This first internal ZIP was superseded and deleted after the IR profile
+  replacement. The current download is linked in the IR-backed history above.
+  Prior synthetic/empty ZIPs described below were deleted at the user's request.
+
+### 2026-11-02 - Synthetic starters for the portable copy
+
+- Request: coworkers could not find existing scenarios. The first ZIP deliberately
+  excluded borrower/workbook inputs and its catalog was empty.
+- Added five strict synthetic starter definitions and an explicitly labeled
+  portable-only group. Original customer data remains excluded; normal repository
+  mode retains 125 cases. Underage DOB refreshes on load/queue to remain 17;
+  retirement uses the observed Social Security pairing, not federal SSI eligibility.
+- Updated the privacy notice, included setup guide and upgrade instructions.
+  Expanded compiler allowlist and independent verifier for the safe fixture.
+- Validation: 50 focused checks and scoped typecheck passed. Clean extracted
+  install/module isolation, all five starter loads/previews and suite checkboxes,
+  saved templates/restart, offline suite/report/reset and compiled worker discovery
+  passed on macOS. No live inquiries; Windows/Linux not certified.
+- The starter-enabled ZIP was superseded by the internal 125-case edition and
+  deleted on 2026-11-02. Validation above describes that historical edition.
 
 ### 2026-11-02 - Compiled standalone distribution
 
@@ -321,8 +530,8 @@ macOS is verified; Windows/Linux execution is not certified.
 - Validation: 50 focused regression checks, scoped typecheck and JS syntax
   passed. The normal 125-case catalog remains intact. Clean archive checks
   passed on macOS; Windows/Linux were not executed.
-- ZIP and checksum/verification record:
-  [standalone distribution](../../../test-results/2026-11-02/solution-finder/lab-distribution/solution-finder-lab-2026-11-02T19-00-51-300Z.zip).
+- The initial empty-catalog ZIP and its checksum/verification sidecars were
+  superseded and deleted on 2026-11-02.
   Standard borrower/workbook inputs must be reviewed/shared separately, not
   inferred to be safe merely because they are test fixtures.
 

@@ -9,9 +9,12 @@ const { createLabServer } = require('../../scripts/solution-finder/lab/server');
 const { selectInquiryIncomeSource } = require('../projects/solution-finder/helpers/inquiry-form');
 const { parseLabRequest, labDirectory, validateLabDirectory, parsedInput, parsedResponse, borrowerAge, root } = require('../../scripts/solution-finder/lab/contracts');
 const { scenarios } = require('../projects/solution-finder/workbook-scenarios/helpers/contracts');
+// Offline report fixture from an unchanged, approved workbook case; never an IR baseline.
+const noOfferBaseline = scenarios.find(scenario => scenario.id === 'NSF-042').expectedResponse;
 const { labCases, getLabCases } = require('../../scripts/solution-finder/lab/catalog');
 const originalData = require('../../test-data/solution-finder/workbook-scenarios/original-scenarios.json');
 const { createHash } = require('node:crypto');
+const { isDeepStrictEqual } = require('node:util');
 const { tmpdir } = require('node:os');
 const fixture = () => structuredClone(scenarios[0].request);
 const templateDirectories = [];
@@ -29,21 +32,63 @@ test('portable mode does not read or preload customer/workbook datasets', () => 
     const fs = require('node:fs');
     const read = fs.readFileSync;
     fs.readFileSync = function(file, ...args) {
-      if (/(?:original-scenarios|scenarios)\\.json$/.test(String(file))) throw new Error('Forbidden dataset read');
+      if (['original-scenarios.json','scenarios.json','profiles.json','profile-reference.json'].includes(require('node:path').basename(String(file)))) throw new Error('Forbidden dataset read');
       return read.call(this, file, ...args);
     };
     const { getLabCases } = require('./scripts/solution-finder/lab/catalog');
     const { scenarios } = require('./tests/projects/solution-finder/workbook-scenarios/helpers/contracts');
-    if (getLabCases().length || scenarios.length) throw new Error('Portable data was not empty');
+    const cases = getLabCases();
+    if (cases.length !== 5 || cases.some(c => !c.id.startsWith('SF-DEMO-')) || scenarios.length) throw new Error('Only synthetic starters should be preloaded');
+    const { parseLabRequest, borrowerAge } = require('./scripts/solution-finder/lab/contracts');
+    for (const c of cases) {
+      parseLabRequest(c.request);
+      if (c.sourceRequest !== null || !c.notes[0].includes('Synthetic demo only')) throw new Error('Starter provenance missing');
+      const basic = c.request.applicationInquiryInput.basicInfoInput;
+      if (basic.emailId !== 'qa.demo@example.invalid' || basic.name.first !== 'Demo') throw new Error('Unexpected starter identity');
+    }
+    for (const today of [new Date(2026,11,31), new Date(2027,0,1)]) {
+      const underage = getLabCases(today).find(c => c.id === 'SF-DEMO-05');
+      if (borrowerAge(underage.request.applicationInquiryInput.basicInfoUpdateInput.dateOfBirth,today) !== 17) throw new Error('Underage starter aged out');
+    }
     console.log('Portable mode loaded without reading customer inputs.');
   `], { cwd: root, env: { ...process.env, SF_LAB_PORTABLE: '1' }, encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /without reading customer inputs/);
 });
 
-test('lab catalog preserves all 23 original names/business inputs before the unchanged 102 workbook cases', () => {
-  assert.equal(labCases.length, 125);
-  assert.equal(new Set(labCases.map(item => item.id)).size, 125);
+test('legacy original125 catalog marker does not add profiles or reinterpret an older archive', () => {
+  const result = spawnSync(process.execPath, ['--require', 'ts-node/register', '-e', `
+    const fs = require('node:fs'), read = fs.readFileSync;
+    fs.readFileSync = function(file, ...args) {
+      if (['profiles.json','profile-reference.json'].includes(require('node:path').basename(String(file)))) throw new Error('Legacy catalog read added private dataset');
+      return read.call(this, file, ...args);
+    };
+    const cases = require('./scripts/solution-finder/lab/catalog').getLabCases();
+    if (cases.length !== 125 || cases.some(c => c.id.startsWith('TB-'))) throw new Error('Legacy catalog changed');
+  `], { cwd: root, env: { ...process.env, SF_LAB_PORTABLE: '0', SF_LAB_CATALOG: 'original125' }, encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test('internal inquiry data packaging is explicit and restricted to four sanitized catalog files', () => {
+  const { buildPortableLab, scenarioFiles } = require('../../scripts/solution-finder/lab/package.cjs');
+  assert.deepEqual(scenarioFiles, [
+    'test-data/solution-finder/workbook-scenarios/original-scenarios.json',
+    'test-data/solution-finder/workbook-scenarios/scenarios.json',
+    'test-data/solution-finder/workbook-scenarios/tri-bureau-40/profiles.json',
+    'test-data/solution-finder/workbook-scenarios/tri-bureau-40/profile-reference.json'
+  ]);
+  assert.throws(() => buildPortableLab({ includeScenarios: 'true' }), /must be a boolean/);
+  for (const args of [['--include-scenraios'], ['--include-scenarios', 'extra']]) {
+    const result = spawnSync(process.execPath, ['scripts/solution-finder/lab/package.cjs', ...args],
+      { cwd: root, encoding: 'utf8' });
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /Use npm run package:solution-finder:lab/);
+  }
+});
+
+test('lab catalog preserves original23 and all102 inputs with visible IR migration context', () => {
+  assert.equal(labCases.length, 165);
+  assert.equal(new Set(labCases.map(item => item.id)).size, 165);
   assert.equal(createHash('sha256').update(fs.readFileSync(path.join(root, originalData.sourceWorkbook))).digest('hex'),
     originalData.sourceSha256);
   assert.equal(originalData.scenarios.filter(item => item.sourceRequest).length, 22);
@@ -95,6 +140,14 @@ test('lab catalog preserves all 23 original names/business inputs before the unc
     assert.equal(labCases[index + 23].id, existing.id);
     assert.equal(labCases[index + 23].name, existing.name);
     assert.deepEqual(labCases[index + 23].request, existing.request);
+    const notes = labCases[index + 23].notes;
+    if (index < 50) assert.deepEqual(notes, []);
+    else {
+      assert.ok(notes.some(note => note.includes(existing.provenance.profileId)));
+      assert.ok(notes.some(note => note.includes('DOB') && note.includes('not IR-certified')));
+      assert.ok(notes.some(note => note.includes('pending approved variant baseline')));
+      assert.ok(notes.includes(existing.notes.find(note => note.includes('PRIMARY requires') || note.includes('Subject property and financial inputs retained'))));
+    }
   }
 });
 
@@ -110,7 +163,6 @@ test('lab input validates supported browser fields without discarding unknown or
     input => { input.applicationInquiryInput.incomeInput[0].incomeSource = 'RETIRED'; },
     input => { input.applicationInquiryInput.propertyInputHeloc.requestedLoanAmount = -1; },
     input => { input.applicationInquiryInput.propertyInputHeloc.address.country = 'CA'; },
-    input => { input.applicationInquiryInput.propertyInputHeloc.type = 'PRIMARY'; },
     input => { input.applicationInquiryInput.basicInfoInput.name.first = ''; },
     input => { input.applicationInquiryInput.unknownField = true; },
     input => { input.applicationInquiryInput.basicInfoInput.extraBorrower = {}; }
@@ -209,14 +261,14 @@ test('lab directories cannot escape dated Solution Finder evidence and parsed of
   assert.equal(parsed.eligibleOfferCount, 3);
   assert.equal(parsed.inquiryId, scenarios[0].expectedResponse.inquiryId);
   assert.ok(parsed.offers.find(offer => offer.product === 'HELOAN').internalAppId);
-  const noMatch = scenarios.find(scenario => scenario.id === 'NSF-051');
-  assert.equal(parsedResponse(noMatch.expectedResponse).eligibleOfferCount, 0);
+  assert.equal(parsedResponse(noOfferBaseline).eligibleOfferCount, 0);
 });
 
 test('parsed input uses explicit first/middle/last name order and preserves SSN last-four strings', () => {
   const request = structuredClone(labCases[0].request);
   const parsed = parsedInput(parseLabRequest(request));
-  assert.equal(parsed.borrower, 'Erica Lambert');
+  assert.equal(parsed.borrower, ['first', 'middle', 'last', 'suffix']
+    .map(key => request.applicationInquiryInput.basicInfoInput.name[key]).filter(Boolean).join(' '));
   assert.equal(parsed.lastFourSSN, '2955');
   assert.equal(parsed.existingMortgage, 70000);
   assert.equal(parsed.requestedAmount, 200000);
@@ -289,10 +341,129 @@ async function fixtureLab(work, settings = {}) {
   }
 }
 
+test('all40 normalized IR profiles are separate named single/suite choices with exact source inputs and no baselines', async () => {
+  const file = path.join(root, 'test-data/solution-finder/workbook-scenarios/tri-bureau-40/profiles.json');
+  const before = fs.readFileSync(file);
+  const profiles = JSON.parse(before).profiles;
+  await fixtureLab(async ({ base, bootstrap, post, launches }) => {
+    const cases = labCases.slice(125);
+    assert.equal(cases.length, 40);
+    assert.equal(bootstrap.cases.filter(item => item.group === 'Tri-Bureau IR 40 profiles').length, 40);
+    for (const [index, profile] of profiles.entries()) {
+      const item = cases[index];
+      assert.equal(item.id, `TB-${String(index + 1).padStart(3, '0')}`);
+      const fullName = ['first', 'middle', 'last', 'suffix']
+        .map(key => profile.request.applicationInquiryInput.basicInfoInput.name[key]).filter(Boolean).join(' ');
+      // Boolean assertions deliberately keep private identity/input values out of console failures.
+      assert.ok(item.name === fullName, `${item.id}: full name differs`);
+      assert.ok(isDeepStrictEqual(item.request, profile.request), `${item.id}: normalized setup differs`);
+      assert.equal(item.sourceRequest, null);
+      for (const key of ['expectedResponse', 'expectedUi']) assert.equal(item[key], undefined);
+      assert.match(item.request.applicationInquiryInput.basicInfoUpdateInput.lastFourSSN, /^\d{4}$/);
+      const response = await fetch(`${base}/api/cases/${item.id}`);
+      assert.equal(response.status, 200);
+      const loaded = await response.json();
+      assert.ok(isDeepStrictEqual(loaded.request, profile.request), `${item.id}: HTTP input differs`);
+      const preview = await post('/api/preview', { request: loaded.request });
+      assert.equal(preview.status, 200);
+      const data = await preview.json();
+      assert.ok(data.parsed.borrower === fullName, `${item.id}: preview name differs`);
+      assert.ok(data.parsed.lastFourSSN === profile.request.applicationInquiryInput.basicInfoUpdateInput.lastFourSSN,
+        `${item.id}: last-four differs`);
+      assert.ok(item.notes.some(note => note.includes('not IR-certified')));
+      assert.ok(item.notes.some(note => note.includes('irrespective of screening outcome')));
+    }
+    assert.equal(launches(), 0);
+  });
+  assert.ok(fs.readFileSync(file).equals(before), 'Normalized source was rewritten');
+});
+
+test('custom PRIMARY subject edits map preview/JSON/residence without mutation; other occupancies retain residence', async () => {
+  const sourceFiles = [
+    'original-scenarios.json', 'scenarios.json', 'tri-bureau-40/profiles.json'
+  ].map(file => path.join(root, 'test-data/solution-finder/workbook-scenarios', file));
+  const sourceBytes = sourceFiles.map(file => fs.readFileSync(file));
+  const custom = structuredClone(require('../../test-data/solution-finder/portable-scenarios.json').baseRequest);
+  const subject = { street: ['876 Custom Subject Way', 'Unit 7'], city: 'Testville', region: 'AZ', postalCode: '85001', country: 'US' };
+  const residence = { street: ['321 Separate Residence Rd'], city: 'Demoville', region: 'CA', postalCode: '90210', country: 'US' };
+  custom.applicationInquiryInput.propertyInputHeloc.address = subject;
+  custom.applicationInquiryInput.basicInfoInput.residenceAddress = residence;
+  await fixtureLab(async ({ base, post, launches, directories }) => {
+    const browser = await chromium.launch({ headless: true });
+    try {
+      const page = await browser.newPage();
+      await page.goto(base);
+      for (const occupancy of ['SECONDARY', 'INVESTMENT', 'PRIMARY']) {
+        custom.applicationInquiryInput.propertyInputHeloc.type = occupancy;
+        const before = structuredClone(custom);
+        const parsed = parseLabRequest(custom);
+        const expected = occupancy === 'PRIMARY' ? subject : residence;
+        assert.deepEqual(parsed.applicationInquiryInput.basicInfoInput.residenceAddress, expected);
+        assert.notEqual(parsed.applicationInquiryInput.basicInfoInput.residenceAddress,
+          parsed.applicationInquiryInput.propertyInputHeloc.address);
+        assert.deepEqual(custom, before);
+        const response = await post('/api/preview', { request: custom });
+        assert.equal(response.status, 200);
+        const data = await response.json();
+        assert.deepEqual(data.request, parsed);
+        assert.deepEqual(data.parsed.subjectProperty, subject);
+        assert.deepEqual(data.parsed.primaryResidence, expected);
+        assert.equal(data.notes.some(note => note.startsWith('PRIMARY occupancy:')), occupancy === 'PRIMARY');
+        await page.locator('#request').fill(JSON.stringify(custom));
+        await expect(page.getByLabel('Occupancy Type', { exact: true })).toHaveValue(occupancy);
+        await page.locator('#validate').click();
+        await expect(page.getByRole('alert')).toBeHidden();
+        await expect(page.locator('#preview')).toContainText(`Borrower Address = ${expected.street.join(', ')}`);
+        await expect.poll(async () => isDeepStrictEqual(JSON.parse(await page.locator('#request').inputValue()), parsed)).toBe(true);
+      }
+      await page.getByLabel('Occupancy Type', { exact: true }).selectOption('SECONDARY');
+      await expect(page.locator('#editor-notice')).not.toContainText('For PRIMARY');
+      await page.getByLabel('Occupancy Type', { exact: true }).selectOption('PRIMARY');
+      await expect(page.locator('#editor-notice')).toContainText('validation updates');
+      await page.getByLabel('Subject street line 1', { exact: true }).fill('999 Newly Edited Subject Ave');
+      // Reproduce the custom-edit state: residence still holds the previous address until validation.
+      await expect(page.getByLabel('Borrower street line 1', { exact: true })).toHaveValue(subject.street[0]);
+      const beforeValidation = JSON.parse(await page.locator('#request').inputValue()).applicationInquiryInput;
+      assert.equal(beforeValidation.basicInfoInput.residenceAddress.street[0], subject.street[0]);
+      assert.equal(beforeValidation.propertyInputHeloc.address.street[0], '999 Newly Edited Subject Ave');
+      const evidence = path.join(root, 'test-results/2026-11-02/solution-finder/lab/custom-primary');
+      fs.mkdirSync(evidence, { recursive: true });
+      await page.locator('#request-fields').screenshot({ path: path.join(evidence, 'before-validation.png') });
+      await page.locator('#validate').click();
+      await expect(page.getByRole('alert')).toBeHidden();
+      await expect(page.locator('#preview')).toContainText('Borrower Address = 999 Newly Edited Subject Ave');
+      await expect(page.getByLabel('Borrower street line 1', { exact: true })).toHaveValue('999 Newly Edited Subject Ave');
+      await expect(page.locator('#notes')).toContainText('PRIMARY occupancy:');
+      const edited = JSON.parse(await page.locator('#request').inputValue()).applicationInquiryInput;
+      assert.deepEqual(edited.basicInfoInput.residenceAddress, edited.propertyInputHeloc.address);
+      assert.equal(edited.propertyInputHeloc.address.street[0], '999 Newly Edited Subject Ave');
+      assert.equal(launches(), 0);
+      await page.locator('#template-name').fill('Synthetic custom PRIMARY mapping');
+      await page.locator('#save-template').click();
+      await expect(page.locator('#save-status')).toContainText('Saved');
+      const savedId = await page.locator('#scenario').inputValue();
+      await page.reload();
+      await page.locator('#scenario').selectOption(savedId);
+      await page.locator('#load').click();
+      await expect(page.getByLabel('Borrower street line 1', { exact: true })).toHaveValue('999 Newly Edited Subject Ave');
+      assert.deepEqual(JSON.parse(await page.locator('#request').inputValue()).applicationInquiryInput, edited);
+      await page.locator('#validate').click();
+      await expect(page.locator('#notes')).toContainText('PRIMARY occupancy:');
+      await page.locator('#fresh-email').uncheck();
+      await page.locator('#confirm').check();
+      await page.locator('#launch').click();
+      await expect(page.locator('#status')).toHaveText('PASSED', { timeout: 15000 });
+      assert.equal(launches(), 1);
+      assert.deepEqual(JSON.parse(fs.readFileSync(path.join(directories[0], 'input.json'))).request.applicationInquiryInput, edited);
+    } finally { await browser.close(); }
+  });
+  for (const [index, file] of sourceFiles.entries()) assert.ok(fs.readFileSync(file).equals(sourceBytes[index]), 'Original input rewritten');
+});
+
 test('lab HTTP routes enforce tenant allowlist, same-origin token, confirmation and strict input validation', async () => {
   await fixtureLab(async ({ base, bootstrap, post, launches }) => {
     assert.equal(bootstrap.tenants.length, 5);
-    assert.equal(bootstrap.cases.length, 125);
+    assert.equal(bootstrap.cases.length, 165);
     assert.equal(bootstrap.cases[0].id, 'SF-1-Original');
     assert.equal(bootstrap.cases[22].id, 'SF-23-Original');
     for (const item of labCases.slice(0, 23)) {
@@ -364,7 +535,7 @@ test('suite prevalidation rejects invalid, unknown or unauthorized selections be
       [{ ...valid, caseIds: ['NSF-001', 'NSF-001'] }, {}, 400],
       [{ ...valid, caseIds: ['NSF-001', 'missing'] }, {}, 400]
     ]) assert.equal((await post('/api/suites', body, headers)).status, status);
-    assert.equal(bootstrap.cases.filter(item => item.runnable).length, 125);
+    assert.equal(bootstrap.cases.filter(item => item.runnable).length, 165);
     assert.equal(bootstrap.cases.find(item => item.id === 'SF-12-Original').runnable, true);
     assert.equal(bootstrap.cases.find(item => item.id === 'SF-22-Original').runnable, true);
     assert.equal(launches(), 0);
@@ -662,7 +833,7 @@ test('all-suite report updates every case with distinct offers/no-offer reasons,
       await expect(second).toContainText('NO OFFER');
       await expect(raw).toHaveAttribute('open', '');
       await expect(page.locator('.suite-report-screenshot')).toHaveCount(2);
-      await expect(second).toContainText(scenarios.find(scenario => scenario.id === 'NSF-051').expectedResponse.inquiryId);
+      await expect(second).toContainText(noOfferBaseline.inquiryId);
       assert.deepEqual(errors, []); assert.deepEqual(writes, []); assert.equal(launches(), 2);
       await page.reload();
       await expect(first.locator('.offer')).toHaveCount(3);
@@ -674,7 +845,7 @@ test('all-suite report updates every case with distinct offers/no-offer reasons,
       await page.screenshot({ path: path.join(evidence, 'offline-all-suite-results-mobile.png'), fullPage: true });
     } finally { await browser.close(); }
   }, { delay: 1500, responseFor: request => request.applicationInquiryInput.propertyInputHeloc.requestedLoanAmount === 75000
-    ? scenarios[0].expectedResponse : scenarios.find(scenario => scenario.id === 'NSF-051').expectedResponse });
+    ? scenarios[0].expectedResponse : noOfferBaseline });
 });
 
 test('all-suite report clearly displays failed/skipped scenarios and missing-suite errors', async () => {
@@ -740,7 +911,7 @@ test('legacy lab bootstrap never renders undefined groups and keeps JSON copy/pa
         const response = await route.fetch();
         const data = await response.json();
         delete data.protocolVersion;
-        data.cases = data.cases.slice(23).map(({ id, name }) => ({ id, name }));
+        data.cases = data.cases.slice(23, 125).map(({ id, name }) => ({ id, name }));
         await route.fulfill({ response, json: data });
       });
       await page.goto(base);
@@ -828,8 +999,8 @@ test('named template copies validate, persist across servers, preserve originals
     try {
       const origin = `http://127.0.0.1:${reopened.server.address().port}`;
       const restored = await (await fetch(origin + '/api/bootstrap')).json();
-      assert.equal(restored.cases.length, 128);
-      assert.deepEqual(restored.cases.slice(0, 125), bootstrap.cases);
+      assert.equal(restored.cases.length, 168);
+      assert.deepEqual(restored.cases.slice(0, 165), bootstrap.cases);
       assert.ok(restored.cases.some(item => item.id === template.id && item.group === 'Saved templates'));
       assert.deepEqual((await (await fetch(`${origin}/api/cases/${template.id}`)).json()).request, request);
       assert.deepEqual(restored.history, bootstrap.history);
@@ -893,8 +1064,8 @@ test('lab UI loads cases and tenants, previews JSON, shows errors, and renders a
       page.on('pageerror', error => errors.push(error.message));
       await page.goto(base);
       await expect(page.locator('#tenant option')).toHaveCount(5);
-      await expect(page.locator('#scenario option')).toHaveCount(126);
-      await expect(page.locator('#scenario optgroup')).toHaveCount(2);
+      await expect(page.locator('#scenario option')).toHaveCount(166);
+      await expect(page.locator('#scenario optgroup')).toHaveCount(3);
       await expect(page.locator('#scenario option').nth(1)).toHaveText('SF-1-Original: Happy Path - secondary Residence');
       for (const tenant of ['gri', 'owning', 'citywide', 'certainty', 'onq']) {
         await page.locator('#tenant').selectOption(tenant);
@@ -1074,9 +1245,7 @@ test('structured request tables synchronize JSON, format the exact readable prev
       assert.equal(raw.applicationInquiryInput.propertyInputHeloc.requestedLoanAmount, 250001);
       assert.equal(raw.applicationInquiryInput.incomeInput.length, 2);
       await page.getByLabel('Occupancy Type', { exact: true }).selectOption('PRIMARY');
-      await page.locator('#validate').click();
-      await expect(page.getByRole('alert')).toContainText('matching addresses');
-      await page.locator('#copy-address').click();
+      await expect(page.locator('#editor-notice')).toContainText('validation updates');
       await page.locator('#validate').click();
       await expect(page.getByRole('alert')).toBeHidden();
       await expect(page.locator('#preview')).toContainText('Borrower Address = 49 Longview Ln, Newtown Square, PA, 19073');
@@ -1237,8 +1406,8 @@ test('lab UI edits, saves and reloads separate reusable copies without changing 
       await page.locator('#save-template').click();
       await expect(page.locator('#save-status')).toContainText('Saved "Edited boundary <b>copy</b>"');
       await expect(page.locator('#save-status b')).toHaveCount(0);
-      await expect(page.locator('#scenario option')).toHaveCount(127);
-      await expect(page.locator('#scenario optgroup')).toHaveCount(3);
+      await expect(page.locator('#scenario option')).toHaveCount(167);
+      await expect(page.locator('#scenario optgroup')).toHaveCount(4);
       await expect(page.locator('#confirm')).not.toBeChecked();
       await expect(page.locator('#launch')).toBeDisabled();
       const firstId = await page.locator('#scenario').inputValue();
@@ -1255,7 +1424,7 @@ test('lab UI edits, saves and reloads separate reusable copies without changing 
       const secondId = await page.locator('#scenario').inputValue();
       assert.notEqual(firstId, secondId);
       await page.reload();
-      await expect(page.locator('#scenario option')).toHaveCount(128);
+      await expect(page.locator('#scenario option')).toHaveCount(168);
       await page.locator('#tenant').selectOption('owning');
       for (const [id, amount] of [[firstId, 75001], [secondId, 77000], ['NSF-001', 75000]]) {
         await page.locator('#scenario').selectOption(id);
@@ -1309,6 +1478,6 @@ test('no-credit-match decisions stay visible and a UI/API failure retains raw re
       assert.ok(saved.artifacts.find(artifact => artifact.name === 'offers.png'));
       assert.ok(saved.artifacts.find(artifact => artifact.name === 'actual-inquiry-response.json'));
       if (fail) assert.equal(saved.error, 'Simulated UI/API mismatch');
-    }, { response: scenarios.find(scenario => scenario.id === 'NSF-051').expectedResponse, fail });
+    }, { response: noOfferBaseline, fail });
   }
 });

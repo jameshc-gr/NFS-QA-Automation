@@ -109,7 +109,14 @@ export function createLabServer(options: {
       }
     }).sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id));
   }
-  const cases = () => [...getLabCases(), ...readTemplates()];
+  const reference = (scenario: object | undefined) =>
+    scenario && 'profileReference' in scenario ? scenario.profileReference : null;
+  const cases = () => {
+    const builtins = getLabCases();
+    return [...builtins, ...readTemplates().map(template => ({
+      ...template, profileReference: reference(builtins.find(scenario => scenario.id === template.sourceCaseId))
+    }))];
+  };
   const runs = new Map<string, Run>();
   const directories = new Map<string, string>();
   const suites = new Map<string, Suite>();
@@ -339,9 +346,12 @@ export function createLabServer(options: {
     }
     if (url.pathname === '/api/bootstrap' && request.method === 'GET') {
       return send(200, {
-        protocolVersion: 1, portable: process.env.SF_LAB_PORTABLE === '1', token, tenants, cases: cases().map(({ id, name, group, request }) => {
+        protocolVersion: 1, portable: process.env.SF_LAB_PORTABLE === '1',
+        internalDistribution: ['internal-125', 'internal-165'].includes(process.env.SF_LAB_DISTRIBUTION || ''),
+        token, tenants, cases: cases().map(scenario => {
+          const { id, name, group, request } = scenario;
           const checked = labRequestSchema.safeParse(request);
-          return { id, name, group, runnable: checked.success,
+          return { id, name, group, profileReference: reference(scenario), runnable: checked.success,
             unavailableReason: checked.success ? null : request === null
               ? 'No Inquiry Request is available. Supply valid input and save it as a new template first.'
               : checked.error.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`).join('; ') };
@@ -358,7 +368,7 @@ export function createLabServer(options: {
     const template = /^\/api\/cases\/([^/]+)$/.exec(url.pathname);
     if (template && request.method === 'GET') {
       const scenario = cases().find(value => value.id === template[1]);
-      return scenario ? send(200, { request: scenario.request, sourceRequest: scenario.sourceRequest, notes: scenario.notes })
+      return scenario ? send(200, { request: scenario.request, sourceRequest: scenario.sourceRequest, notes: scenario.notes, profileReference: reference(scenario) })
         : send(404, { error: 'Unknown scenario.' });
     }
     if (url.pathname === '/api/templates' && request.method === 'POST') {
@@ -377,7 +387,8 @@ export function createLabServer(options: {
       });
       mkdirSync(templateDirectory, { recursive: true, mode: 0o700 });
       save(join(templateDirectory, `${template.id}.json`), template);
-      return send(201, { template: { id: template.id, name: template.name, group: 'Saved templates', request: template.request } });
+      return send(201, { template: { id: template.id, name: template.name, group: 'Saved templates', request: template.request,
+        profileReference: reference(catalog.find(scenario => scenario.id === input.sourceCaseId)) } });
     }
     if (url.pathname === '/api/preview' && request.method === 'POST') {
       const requestBody = z.object({ request: z.unknown() }).strict().parse(await body(request));
@@ -385,6 +396,9 @@ export function createLabServer(options: {
       return send(200, {
         request: inquiry, parsed: parsedInput(inquiry),
         notes: [
+          ...(inquiry.applicationInquiryInput.propertyInputHeloc.type === 'PRIMARY' ? [
+            'PRIMARY occupancy: Navigator uses the subject property as the borrower residence. The request and preview use your entered subject address for both; no manual address matching is required.'
+          ] : []),
           'Creates a real QA inquiry through Navigator, not a direct API replay or a completed loan.',
           'Consent, channel, type and loan-officer/cost-center routing are controlled by the selected tenant UI; pasted routing metadata is not injected.',
           'No placeholder response expectations are used. Actual submitted inputs and UI/API values are checked.'

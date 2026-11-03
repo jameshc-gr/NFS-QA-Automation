@@ -248,10 +248,22 @@ records 49 offline checks and two passing live browser tests (one inquiry).
 
 The separately maintained [workbook group](tests/projects/solution-finder/workbook-scenarios/) has
 one selectable spec per scenario from
-[the 102-case workbook](test-data/solution-finder/HELOAN_102_scenarios_with_Fannie_Mae_personas.xlsx).
+[the IR-backed 102-case workbook](test-data/solution-finder/HELOAN_102_scenarios_with_Tri_Bureau_IR_profiles.xlsx).
 It uses the checked-in [scenario contracts](test-data/solution-finder/workbook-scenarios/scenarios.json),
 not Excel or historical inquiry IDs at execution time. All submissions are made
 through the browser UI; no backend submission scripts or mocked offers are used.
+
+NSF-001–050 retain their existing inputs and baselines. NSF-051–102 now use
+the supplied 40 Tri-Bureau IR profiles instead of Fannie Mae profiles, preserving
+financial/DOB variations and all 102 selectable IDs. NSF-063–102 map one-to-one
+to TB-001–040; NSF-051–062 reuse TB-001–012. The original 23-case suite is
+unchanged. Profile provenance and assumed DOB are visible in the lab.
+Two PRIMARY subjects changed to the IR residence to satisfy the UI's matching
+address rule. New pricing/eligibility baselines for the changed 52 are unapproved.
+The owned local lab was restarted only after it became idle; refresh the browser
+to load the new IR options. Saved/historical runs remain unchanged.
+See [migration history](test-data/solution-finder/workbook-scenarios/README.md)
+and [updated lab ZIP](scripts/solution-finder/lab/README.md#2026-11-02---ir-backed-125-case-distribution).
 
 Select the tenant with `SF_TENANT` (case-insensitive, default `gri`):
 
@@ -291,8 +303,12 @@ Both configurations use the existing `solution-finder` project name. The
 they do not introduce a separate project.
 
 Each test checks form inputs before proceeding, captures the actual inquiry
-request/response and final DOM offers, and compares API-to-workbook,
-UI-to-API and UI-to-workbook. Comparisons are unordered by product, not by
+request/response and final DOM offers. The unchanged first 50 compare
+API-to-workbook, UI-to-API and UI-to-workbook. The replacement 52 explicitly use
+`comparisonMode: actual-ui-api`, with no copied old response/UI baselines:
+they still fill/verify UI fields, click Submit and compare rendered offers to
+the actual API. Unknown modes or missing workbook baselines fail explicitly.
+Comparisons are unordered by product, not by
 fixed card position. Per-run inquiry/offer/application IDs are recorded but
 excluded from equality checks; the new inquiry ID must match the browser URL.
 Fresh emails are used without modifying the saved scenario. Amounts, rates,
@@ -307,10 +323,11 @@ UI/workbook APR checks. UI/API APR equality stays exact, and all other pricing,
 amount, eligibility and label checks remain unchanged. Ignored APR differences
 are recorded in QA comments; saved expectations and raw captures are not changed.
 
-All workbook expectations were observed on **GRI**. Other tenants run against
+The retained first-50 workbook expectations were observed on **GRI**. Other tenants run against
 that baseline with an explicit unapproved-tenant-baseline note; differences
 fail and need tenant-specific review, not automatic baseline replacement.
-Fannie Mae no-match responses do not verify their published scores/freezes.
+IR observations from the completed 40-profile screen do not certify different
+financial/DOB variants or other tenants. No-match is not definitive ineligibility.
 Rounded summary DTI does not certify exact ECS debt thresholds. Every run
 includes a QA comment explaining comparisons and relevant limitations.
 
@@ -318,12 +335,145 @@ Evidence stays under
 `test-results/<YYYY-MM-DD>/solution-finder/workbook-scenarios/<tenant>/<run-id>/`:
 `index.html` is a readable summary with expandable screenshots/artifact links;
 `playwright-report/` is the interactive Playwright report. Per-scenario
-artifacts include actual request/response, expected response/UI, captured
+artifacts include actual request/response, expected response/UI when baselined, captured
 UI offers, field-level comparison, step outcomes, QA comment and screenshot.
 Failures retain diagnostics and fail the test; snapshots are never silently
 updated to make a run pass.
 
+### Solution Finder IR script synchronization
+
+All 102 generated specs use the current IR-backed dataset; the original
+regression suite and original125 lab inputs remain preserved. The lab now also
+includes40 named IR controls as described below, for165 built-in inputs.
+Runtime checks reject old all-workbook catalogs, incorrect IR profile/source-row
+mappings, stale DOB provenance and invalid PRIMARY subject/residence mappings.
+New reports expose each case's comparison mode and IR profile: only the first
+50 have GRI workbook baselines; a replacement-case pass is UI/API consistency,
+not approval of pricing or eligibility.
+
+```bash
+npm run export:solution-finder:new
+npm run generate:solution-finder:new
+npm run test:solution-finder:lab
+npm run typecheck:solution-finder:new
+```
+
+The combined command includes IR normalization/table tests and all102 reporter
+rows. Unit tests no longer require local historical responses or restricted
+source workbooks; missing source-only audits are explicitly reported. Offline
+commands `report:solution-finder:ir`, `table:solution-finder:ir` and
+`validate:solution-finder:ir` target the completed40 run, not new inquiries.
+Validation on 2026-11-02: 62 checks passed; 102 workbook and 26 original tests
+discovered; scoped typecheck passed. The refreshed v1.2.1 internal ZIP and
+safe idle-only lab restart were verified without new live submissions.
+See [script history](scripts/README.md#2026-11-02---all-solution-finder-scripts-synchronized),
+[unit history](tests/unit/README.md#2026-11-02---portable-ir-and-reporter-unit-coverage)
+and [current ZIP](scripts/solution-finder/lab/README.md#2026-11-02---ir-script-synchronization-v121).
+The changed52 financial variants remain unrerun and have no approved baselines;
+historical reports, including the supplied profile table, are not rewritten.
+
+### Tri-Bureau 40-profile offer screening
+
+The separate [screening group](tests/projects/solution-finder/workbook-scenarios/tri-bureau-40/README.md)
+uses [the supplied workbook](test-data/solution-finder/Tri-Bureau_TestCases_40_IR.xlsx)
+and [normalized inputs](test-data/solution-finder/workbook-scenarios/tri-bureau-40/README.md).
+It does not replace the original/102 suites. Its normalized40 inputs are now
+also available as named lab controls; completed responses are not lab baselines.
+
+The completed GRI run submitted all 40 profiles exactly once: **30 profiles
+returned 63 eligible offers**, and 10 had no eligible offers at capture.
+Products: 17 HELOAN, 23 fixed-rate HELOC, 23 variable-rate HELOC.
+All 40 UI/API comparisons passed; no Figure product relabeling was observed.
+See the [readable report with all screenshots and JSON](test-results/2026-11-02/solution-finder/workbook-scenarios/tri-bureau-40/gri/tri-bureau-40-20261102T2135Z/index.html)
+and [tooling/validation history](scripts/solution-finder/README.md).
+
+This is one controlled secondary-residence inquiry per profile, with a $50,000
+request, $70,000 existing mortgage and $250,000 full-time annual income.
+Workbook DOB/contact fields are absent: DOB 1980-01-01 is an explicit assumption,
+with fresh QA email and fictional phone. Names/residence and SSN suffixes were
+preserved. No-match or initial-offer-waiting responses are not definitive denials.
+Bureau comparisons differ from UI/API consistency: 27 matched, 40 differed,
+53 were not comparable (including unreturned Equifax). Review differences with
+test-data owners before claiming the intended credit identity was verified.
+
+Safe offline commands:
+
+```bash
+node --require ts-node/register --test tests/projects/solution-finder/workbook-scenarios/tri-bureau-40/*.test.cjs
+npm run import:solution-finder:ir-reference
+node --require ts-node/register scripts/solution-finder/tri-bureau-40.cjs report
+node scripts/solution-finder/tri-bureau-40.cjs table
+node scripts/solution-finder/tri-bureau-40-validate.cjs
+```
+
+Do not repeat the completed live phases. No-repeat guards preserve existing
+evidence; a future authorized screening needs a reviewed new run destination.
+The source workbook was unchanged. Validation confirmed 40 unique inquiries,
+40 browser-viewable screenshots and 400 artifact references; 17 focused/canonical
+unit checks and the scoped typecheck passed.
+
+The requested [Excel profile/offer table](test-results/2026-11-02/solution-finder/workbook-scenarios/tri-bureau-40/gri/tri-bureau-40-20261102T2135Z/profile-offer-table.xlsx)
+and [readable HTML table](test-results/2026-11-02/solution-finder/workbook-scenarios/tri-bureau-40/gri/tri-bureau-40-20261102T2135Z/profile-offer-table.html)
+include all 11 source columns, actual returned scores, credit Y/N, eligible
+products and separate decline/pending reasons. Excel also contains 120 detailed
+product records. **Restricted internal QA: includes full SSNs.**
+Seven focused checks and all 40 x 19 exported/browser cells passed; 39 credit Y,
+one N. No additional live inquiries. See the
+[table work history](scripts/solution-finder/README.md#2026-11-02---source-column-creditoffer-table).
+
 ### Solution Finder Lab: paste JSON and inspect live offers
+
+#### 2026-11-02 - Sanitized IR chart references and action gating
+
+- Joined all 40 rows from the provided `IR_profile-offer-table.xlsx` into
+  sanitized `profile-reference.json`, adding context without adding inputs:
+  the catalog remains **165 = 23 + 102 + 40**. Dropdown/suite labels show
+  SSN last four only, source TU/XPN/EFX and previously eligible products.
+  A separate reference panel distinguishes source from actually returned
+  scores, credit Y/N and 120 historical product records: 63 eligible,
+  55 declined, two pending, with pricing/reasons.
+- These are historical references, never current/guaranteed offers or approved
+  eligibility/pricing baselines. No full SSNs or raw source chart are packaged.
+  Internal v1.4.1 includes four sanitized catalog/reference JSONs; synthetic5
+  and legacy125 stay isolated.
+- Fixed overlapping Load/selection actions by disabling scenario selection,
+  Load, launch and save while UI actions are pending; deterministic regression
+  passed. Validation: `test:solution-finder:lab` **93/93**, scoped typecheck
+  and JS syntax passed. Live localhost:4180 compared all 40 source rows and
+  120 product counts with zero POSTs/page errors. The initial probe needed
+  HTTP-completion waits and numeric/string/Not returned/N/A normalization;
+  corrected verification passed. Evidence:
+  [live validation](test-results/2026-11-02/solution-finder/lab-verification/ir-chart-reference/live-validation.json).
+- Clean extraction/runtime verification passed all 165 cases, 40 references,
+  120 offers, dataset integrity, isolation, persistence, offline suite and
+  worker discovery. Current
+  [internal v1.4.1 ZIP](test-results/2026-11-02/solution-finder/lab-distribution/solution-finder-lab-internal-165-2026-11-03T00-55-12-319Z.zip)
+  SHA-256: `3947b040bda768ca7206a8a49032691f94ce0a3df1c3fd32b77fe9829c19524f`.
+  The completed live screening was reused, never duplicated or rerun.
+- Histories: [scripts](scripts/README.md#2026-11-02---sanitized-ir-reference-tooling),
+  [IR utilities](scripts/solution-finder/README.md#2026-11-02---sanitized-chart-reference-import),
+  [unit tests](tests/unit/README.md#2026-11-02---ir-reference-and-action-gate-regressions),
+  [IR tests](tests/projects/solution-finder/workbook-scenarios/tri-bureau-40/README.md#2026-11-02---chart-context-without-repeat-screening),
+  [IR inputs](test-data/solution-finder/workbook-scenarios/tri-bureau-40/README.md#2026-11-02---sanitized-historical-chart-reference),
+  [agent guidance](ai/jobs/README.md#2026-11-02---ir-chart-reference-guidance),
+  [tracked memory](memory/README.md#2026-11-02---ir-chart-reference-sync).
+  Earlier version/count entries below are historical, not the current release.
+
+#### 2026-11-02 - PRIMARY edits and named IR controls
+
+- Removed the manual PRIMARY subject/residence blocker. Enter any valid subject
+  property; visible editor/preview notes explain Navigator's automatic
+  residence mapping. Validation, saved copies and executions use that same
+  mapped request. SECONDARY/INVESTMENT keep separate residence inputs.
+- Added all40 existing IR controls with profile ID and borrower name, keeping
+  the prior125 choices for165 built-ins. No source workbook/data or historical
+  responses were rewritten; DOB assumptions remain visible and uncertified.
+- Validation:65 combined unit/HTTP/browser checks, scoped typecheck, clean
+  internal165/synthetic5 package checks and final live-lab browser preview passed.
+  The final v1.3.0 internal ZIP includes the corrected static PRIMARY hint.
+  Owned lab restarted only after idle; no application inquiries were submitted.
+- See [lab history and current ZIP](scripts/solution-finder/lab/README.md#work-history)
+  and [unit history](tests/unit/README.md). Refresh the browser after restart.
 
 The [local lab](scripts/solution-finder/lab/README.md) follows the DMX Lab
 workflow while staying inside the existing Solution Finder project:
@@ -341,26 +491,46 @@ For coworkers who do not need the full repository, build a **standalone ZIP**:
 
 ```bash
 npm run package:solution-finder:lab
+# Restricted internal edition with the actual 165-case catalog:
+npm run package:solution-finder:lab -- --include-scenarios
 # ZIP + SHA-256: test-results/<date>/solution-finder/lab-distribution/
 npm run verify:solution-finder:lab -- <path-to-generated-ZIP>
 ```
 
-The archive contains only compiled lab JavaScript, the UI, tenant routes,
-an exact dependency lockfile and [laptop setup instructions](scripts/solution-finder/lab/portable/README.md).
+Both editions contain compiled lab JavaScript, the UI, tenant routes, an exact
+dependency lockfile and laptop setup instructions:
+[synthetic edition](scripts/solution-finder/lab/portable/README.md) /
+[internal 165-case edition](scripts/solution-finder/lab/portable/README-internal.md).
 Recipients install Node.js 22/24 LTS, extract it, then run `npm ci`,
 `npm run setup` and `npm start`; open `http://127.0.0.1:4180`.
 No Git, Copilot, TypeScript build or full repository is needed. QA/VPN access
 is still required. Share internally only.
 
-The portable copy deliberately excludes customer/workbook inputs, spreadsheets,
-credentials/auth state, account records, saved templates/runs and installed
-dependencies/browser binaries. It starts with no built-ins: paste approved
-QA JSON and save templates to build a local suite catalog. Normal repository
-mode retains all 125 cases. Re-share the clean original ZIP, not a used folder.
-Clean extraction/install, isolated modules, UI/template persistence, a two-case
-offline suite/report and compiled worker discovery were verified on macOS;
-Windows/Linux execution is not yet certified. See the
-[distribution validation history](scripts/solution-finder/lab/README.md#2026-11-02---compiled-standalone-distribution).
+- Default: five synthetic starters, no original borrower/workbook datasets.
+  Replace dummy identities/addresses with approved QA inputs before live use.
+- Explicit `--include-scenarios`: an **internal-165** ZIP with the actual
+  **Original 23 scenarios + Additional 102 scenarios + 40 named IR profiles**,
+  copying three last-four-only input JSONs plus sanitized `profile-reference.json`
+  (four catalog/reference JSONs total).
+  It preserves existing SF-12/SF-22 lab adjustments.
+  Contains borrower/contact/property information: authorized internal QA
+  recipients only, through approved company channels; never publish it.
+- Both exclude credentials/auth state, account registries, original spreadsheets,
+  saved templates/runs and installed dependencies/browser binaries.
+
+Select a case and click **Load**, or use the suite checkboxes. Stop any older lab,
+extract the desired edition into a new folder, install/start there and refresh.
+Re-share only the appropriate clean ZIP, never a used folder. Normal repository
+mode remains unchanged. Workbook expectations do not decide lab PASS.
+The current 165 internal inputs, 40 chart references and five isolated default
+starters were verified in clean extractions; source bytes, isolated install, template persistence, offline
+suite/report/reset and compiled worker discovery passed. No live inquiries;
+macOS verified, Windows/Linux not certified. See the
+[internal ZIP and validation history](scripts/solution-finder/lab/README.md#2026-11-02---internal-zip-with-the-actual-125-scenarios)
+and [input history](test-data/solution-finder/README.md).
+Only the current internal ZIP is retained; previous empty/synthetic
+lab ZIPs and their sidecars were removed at the user's request. See the
+[cleanup history](scripts/solution-finder/lab/README.md#2026-11-02---superseded-zip-cleanup).
 
 Use **Reset / New run** at the top to clear request tables/JSON, previews,
 selections, confirmations and displayed results, restoring GRI and fresh-email
@@ -369,10 +539,17 @@ during active execution or pending requests; it never cancels or submits.
 See the [reset validation history](scripts/solution-finder/lab/README.md#2026-11-02---reset-for-a-new-run).
 
 Choose **GRI, Owning, Citywide, Certainty or OnQ**, paste inquiry JSON (or load
-one of the **125 built-in cases** or your saved templates), and validate its parsed borrower/property/income data.
+one of the **165 built-in cases** or your saved templates), and validate its parsed borrower/property/income data.
 The picker lists the original 23 workbook scenarios first as
 `SF-1-Original: Happy Path - secondary Residence` through `SF-23-Original`,
-followed by the unchanged 102 `NSF-*` cases in a separate group.
+followed by the unchanged 102 `NSF-*` cases and 40 existing `TB-*` IR profiles
+in separate groups. Each added IR choice shows its profile ID and borrower name;
+the source's assumed DOB and screening setup are disclosed, not certified.
+IR dropdown/suite labels also show last-four-only SSN, source TU/XPN/EFX and
+previously eligible products. The separate historical-reference panel shows
+source versus returned scores, credit Y/N, and eligible/declined/pending products
+with pricing/reasons. These references never decide a new run's PASS or offers.
+Scenario selection, Load, launch and save lock while UI actions are pending.
 Original source JSON is viewable alongside the mapped form input. Original 12
 now supports **Retired SSI / Social Security**, with the user-approved DOB
 correction to `1950-01-01` displayed in its load notice; source JSON is unchanged.
@@ -397,6 +574,12 @@ Edit requests in the **Request data editor** tables for property/loan amounts,
 borrower details and income sources (including add/remove income rows).
 The **Paste or edit inquiry request JSON** copy/paste area is always visible
 above the tables, even before clicking Load, and remains synchronized with them.
+For **PRIMARY**, enter any valid US subject address; no manual match with the
+previous borrower residence is required. Navigator uses the subject as the
+residence, so validation explicitly previews that mapping and updates the JSON
+and borrower-address fields. Saving or running uses the same mapped input.
+SECONDARY/INVESTMENT keep their independently entered residence. Original
+templates remain unchanged; save edits as a new template.
 **Validate and preview parsed input** shows eight readable `Label = Value`
 lines: subject property, occupancy, mortgage/loan amounts, borrower name/address,
 SSN last four and total annual income. Addresses are joined and dollars formatted;
