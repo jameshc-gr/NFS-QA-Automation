@@ -127,6 +127,16 @@ not a filesystem sandbox; fix the writer rather than allowlisting evidence.
   guard detects violations but cannot intercept filesystem writes. This
   documentation-only sync used supplied evidence without rerunning validation.
 
+### 2026-11-04 - Solution Finder lab root diagnostic
+
+- The lab startup preflight found an ignored `firebase-debug.log` at the
+  repository root. Preserved it under
+  `test-results/2026-11-04/solution-finder/lab-startup/`; generated diagnostics
+  remain in test results rather than the project source tree.
+- `npm run check:root` passed and `npm run test:root-hygiene` passed 7/7.
+  No Firebase operations or live inquiries were run.
+- See [scripts history](scripts/README.md#2026-11-04---solution-finder-lab-diagnostic-relocation).
+
 ## Screenshot Output Rule
 
 All generated screenshots must be saved only under the repository's

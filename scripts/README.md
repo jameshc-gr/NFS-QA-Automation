@@ -185,6 +185,16 @@ Use the [root guide](../README.md) for supported suite commands.
 - The log was already tracked in the worktree, so relocating it appears as a
   root-file deletion in Git; the diagnostic contents remain in local results.
 
+### 2026-11-04 - Solution Finder lab diagnostic relocation
+
+- The lab startup preflight again found `firebase-debug.log` at the repository
+  root. Preserved this ignored local diagnostic, without reading its contents,
+  at `test-results/2026-11-04/solution-finder/lab-startup/firebase-debug.log`.
+- Kept the root guard unchanged; generated logs must remain under
+  `test-results/`, not the project source folder.
+- Validation: `npm run check:root` passed and `npm run test:root-hygiene`
+  passed all 7 tests. No Firebase operations or live inquiries were run.
+
 ### 2026-10-30 - Lab paste visibility and version-consistent assets
 
 - Restored the always-visible JSON paste/editor area above request tables.
