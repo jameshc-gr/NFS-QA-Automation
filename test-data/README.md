@@ -522,6 +522,9 @@ Use the existing saved Google browser profile; sign in manually. Do not run
 `firebase login` from the repository root: CLI authentication diagnostics can
 create `firebase-debug.log` there. If a separate CLI investigation is required,
 run it from an explicitly created directory under `test-results/`.
+The Solution Finder lab startup preserves this exact root diagnostic under its
+dated `test-results/` folder before applying the normal root guard; this does
+not make the repository root a valid location for Firebase CLI output.
 
 **iOS + GitHub:**
 ```bash

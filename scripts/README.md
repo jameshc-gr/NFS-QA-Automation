@@ -195,6 +195,18 @@ Use the [root guide](../README.md) for supported suite commands.
 - Validation: `npm run check:root` passed and `npm run test:root-hygiene`
   passed all 7 tests. No Firebase operations or live inquiries were run.
 
+### 2026-11-06 - Recurring lab diagnostic
+
+- The root preflight again stopped `npm run solution-finder:lab` because an
+  ignored `firebase-debug.log` was already present. The lab command checks the
+  root before invoking its server; it did not create this log.
+- The lab does not use Firebase CLI. Updated its startup to preserve any
+  existing root `firebase-debug.log` under dated
+  `test-results/<date>/solution-finder/lab-startup/` before running the same
+  root guard. Other unexpected root files continue to fail.
+- Focused startup tests and lab startup verification passed. The external
+  process that may create the root log remains unknown.
+
 ### 2026-10-30 - Lab paste visibility and version-consistent assets
 
 - Restored the always-visible JSON paste/editor area above request tables.

@@ -137,6 +137,16 @@ not a filesystem sandbox; fix the writer rather than allowlisting evidence.
   No Firebase operations or live inquiries were run.
 - See [scripts history](scripts/README.md#2026-11-04---solution-finder-lab-diagnostic-relocation).
 
+### 2026-11-06 - Recurring Solution Finder lab root diagnostic
+
+- The lab startup preflight again found a root `firebase-debug.log`, preventing
+  server startup. Since the lab itself does not use Firebase CLI, updated its
+  startup command to preserve this exact diagnostic under dated Solution Finder
+  results before running the unchanged root guard; other unexpected root files
+  still fail.
+- Focused startup tests and lab startup verification passed. See
+  [scripts history](scripts/README.md#2026-11-06---recurring-lab-diagnostic).
+
 ## Screenshot Output Rule
 
 All generated screenshots must be saved only under the repository's

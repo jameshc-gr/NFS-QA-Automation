@@ -1,5 +1,15 @@
 # NFS-QA-Automation Repository Memory
 
+## 2026-11-06 Solution Finder lab startup diagnostic routing
+- **Decision:** The lab does not require Firebase CLI. Its startup now moves only
+  an existing root `firebase-debug.log` into dated
+  `test-results/<date>/solution-finder/lab-startup/` before running the
+  unchanged root guard. Other unexpected root files still block startup.
+- **Validation:** Focused preservation/collision tests passed; the complete
+  `npm run test:solution-finder:lab` suite passed 95/95; `npm run check:root`
+  and `git diff --check` passed; `npm run solution-finder:lab` served HTTP 200.
+  The process that originally writes the root log remains unknown.
+
 ## 2026-11-02 IR chart references and pending-action gates
 - **Current mechanics:**165 existing inputs (23+102+40), with40 chart-reference
   joins from supplied IR_profile-offer-table.xlsx into sanitized

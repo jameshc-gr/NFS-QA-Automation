@@ -6,6 +6,7 @@ const { spawn, spawnSync } = require('node:child_process');
 const http = require('node:http');
 const { chromium, expect } = require('@playwright/test');
 const { createLabServer } = require('../../scripts/solution-finder/lab/server');
+const { preserveRootFirebaseDebugLog } = require('../../scripts/solution-finder/lab/prepare-startup.cjs');
 const { selectInquiryIncomeSource } = require('../projects/solution-finder/helpers/inquiry-form');
 const { parseLabRequest, labDirectory, validateLabDirectory, parsedInput, parsedResponse, borrowerAge, root } = require('../../scripts/solution-finder/lab/contracts');
 const { scenarios } = require('../projects/solution-finder/workbook-scenarios/helpers/contracts');
@@ -17,6 +18,39 @@ const { createHash } = require('node:crypto');
 const { isDeepStrictEqual } = require('node:util');
 const { tmpdir } = require('node:os');
 const fixture = () => structuredClone(scenarios[0].request);
+test('lab startup preserves a root Firebase diagnostic under dated Solution Finder results', t => {
+  const directory = fs.mkdtempSync(path.join(tmpdir(), 'sf-lab-startup-'));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  const source = path.join(directory, 'firebase-debug.log');
+  fs.writeFileSync(source, 'diagnostic fixture');
+
+  const preserved = preserveRootFirebaseDebugLog(directory, new Date(2026, 10, 6));
+
+  assert.equal(preserved, path.join('test-results', '2026-11-06', 'solution-finder',
+    'lab-startup', 'firebase-debug.log'));
+  assert.equal(fs.readFileSync(path.join(directory, preserved), 'utf8'), 'diagnostic fixture');
+  assert.equal(fs.existsSync(source), false);
+  assert.doesNotThrow(() => require('../../scripts/check-repository-root').checkRepositoryRoot(directory));
+});
+
+test('lab startup leaves later Firebase diagnostics intact when a dated copy already exists', t => {
+  const directory = fs.mkdtempSync(path.join(tmpdir(), 'sf-lab-startup-'));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  const results = path.join(directory, 'test-results', '2026-11-06', 'solution-finder', 'lab-startup');
+  fs.mkdirSync(results, { recursive: true });
+  fs.writeFileSync(path.join(results, 'firebase-debug.log'), 'earlier diagnostic');
+  const source = path.join(directory, 'firebase-debug.log');
+  fs.writeFileSync(source, 'later diagnostic');
+
+  const preserved = preserveRootFirebaseDebugLog(directory, new Date(2026, 10, 6));
+
+  assert.notEqual(preserved, path.join('test-results', '2026-11-06', 'solution-finder',
+    'lab-startup', 'firebase-debug.log'));
+  assert.equal(fs.readFileSync(path.join(results, 'firebase-debug.log'), 'utf8'), 'earlier diagnostic');
+  assert.equal(fs.readFileSync(path.join(directory, preserved), 'utf8'), 'later diagnostic');
+  assert.equal(fs.existsSync(source), false);
+});
+
 const templateDirectories = [];
 function templateDirectory() {
   const directory = fs.mkdtempSync(path.join(tmpdir(), 'sf-lab-templates-'));

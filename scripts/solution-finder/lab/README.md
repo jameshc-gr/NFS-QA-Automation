@@ -6,6 +6,11 @@
 npm run solution-finder:lab
 ```
 
+Before checking root hygiene, startup moves any existing root-level
+`firebase-debug.log` into the dated `test-results/<YYYY-MM-DD>/solution-finder/lab-startup/`
+folder so the diagnostic is preserved and does not block the lab. Other
+unexpected root files still fail the unchanged root guard.
+
 Open `http://127.0.0.1:4180`. `SF_LAB_PORT` selects another port. The server
 binds only to loopback; do not expose it through a network proxy or tunnel.
 Use one lab instance at a time. Stop with Ctrl+C; an active runner receives
