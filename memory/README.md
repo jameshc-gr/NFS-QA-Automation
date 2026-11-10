@@ -24,6 +24,16 @@ entries and keep secrets and raw account/response data out of documentation.
 - See the [root history](../README.md#2026-11-10---credential-exposure-reduction)
   for scope and caveats.
 
+### 2026-11-10 - Mobile Postman source sync
+
+- Compared the local collection to the external `qa` source and replaced only
+  the corporate reset request's literal values with GraphQL variables. Refreshed
+  from revision `c9a0074`, purged the old July collection from the current index,
+  and staged the dated replacement. Preserved all Yopmail test references.
+- JSON/source-parity and root checks passed. The upstream source still contains
+  the literal and needs a coordinated source-repository fix; details are in the
+  [mobile collection history](../api/postman/mobile/README.md#work-history).
+
 ### 2026-11-02 - IR chart-reference sync
 
 - Synced root/current framework guidance and affected histories for40 sanitized

@@ -14,6 +14,17 @@ This folder contains Postman collections, API mappings, and test case definition
   rewritten; see the [root history](../README.md#2026-11-10---credential-exposure-reduction)
   for the limitation and validation summary.
 
+### 2026-11-10 - Mobile collection source sync
+
+- Compared the local mobile collection with `fsp-api-gateway`'s `qa` collection;
+  the files matched before the edit. Refreshed from latest fetched revision
+  `c9a0074`, purged the older July collection from the current Git index, and
+  staged the dated replacement. The local corporate reset request uses GraphQL
+  variables, and its Yopmail test references are unchanged.
+- The upstream collection still contains the corporate reset literal and was
+  not modified. See the [mobile collection history](postman/mobile/README.md#work-history)
+  for validation and remaining action.
+
 ## Quick Start
 
 ```bash

@@ -26,6 +26,13 @@ source and required application resources remain tracked.
   credential that may still be valid, and coordinate a history purge if these
   commits were pushed. See [API history](api/README.md#work-history) and
   [memory history](memory/README.md#work-history).
+- Follow-up: the local mobile Postman collection was compared with the `qa`
+  source, refreshed from revision `c9a0074`, and the corporate reset request was
+  converted to runtime variables. The obsolete July collection was removed from
+  the current index, and the dated replacement is staged. All Yopmail test
+  references remain unchanged. The upstream source still contains the literal
+  and needs a coordinated source-repository fix. See the
+  [mobile Postman history](api/postman/mobile/README.md#work-history).
 
 ### 2026-11-02 - Prevent generated-output conflicts
 
