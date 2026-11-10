@@ -2,6 +2,18 @@
 
 This folder contains Postman collections, API mappings, and test case definitions.
 
+## Work History
+
+### 2026-11-10 - Credential hygiene
+
+- API reset-password examples use variables instead of literal account or
+  credential values. The generated `api-configs/gateway-api-config.json` and
+  root `jira.env` are local-only and ignored; keep populated tokens out of Git.
+- The tracked generated API config and Jira environment were removed from the
+  index without deleting their local copies. Existing Git history was not
+  rewritten; see the [root history](../README.md#2026-11-10---credential-exposure-reduction)
+  for the limitation and validation summary.
+
 ## Quick Start
 
 ```bash

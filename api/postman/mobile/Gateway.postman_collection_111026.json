@@ -1,9 +1,9 @@
 {
   "info": {
-    "_postman_id": "0718fc52-50ca-491a-9a73-82702888ac45",
-    "name": "Gateway-API-Latest-Jul-29-2026",
+    "_postman_id": "cfd4931f-2b66-432b-9e2b-b22cc6261a1b",
+    "name": "Gateway-API-Latest-Nov-05-2026",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "39258899"
+    "_exporter_id": "38258438"
   },
   "item": [
     {
@@ -542,8 +542,8 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "mutation{\n  setPassword(emailId: \"James1.Gosling12374@rate.com\",token:\"ffcdbedf-4c50-4676-bf22-9e792f6f5414\",newPassword:\"GRPwd@1237\"){\n    status\n  }\n}",
-            "variables": ""
+            "query": "mutation SetPasswordExample($emailId: String!, $token: String!, $newPassword: String!) {\n  setPassword(emailId: $emailId, token: $token, newPassword: $newPassword) {\n    status\n  }\n}",
+            "variables": "{\n  \"emailId\": \"{{RESET_EMAIL}}\",\n  \"token\": \"{{RESET_TOKEN}}\",\n  \"newPassword\": \"{{NEW_PASSWORD}}\"\n}"
           }
         },
         "url": {
@@ -676,7 +676,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{fetchAllProductAccounts \n {\npersonalLoans {\n    productId\n    productType\n    nextPaymentDate\n    loanAmount\n    loanStatus\n    loanNumber\n    isRefinance\n    isHeloc\n    isPersonalLoan\n    isMortgageLoan\n    canNavigateToApplication\n    canNavigateToMyAccount \n    redirectUrl\n    isInProgress\n    isInProgressAndEditable \n    isApplicationExpired \n    isApplicationNotEditable\n}\nmortgages {\n    productId\n    productType\n    lastModifiedDate\n    loanStatus\n    loanNumber\n    applicationStatus\n    contacts{\n    id\n    name\n    title\n    subTitle\n    email\n    fax\n    phone\n    avatarUrl\n    }\n    address{\n    streetAddress\n    city\n    state\n    zip\n    }\n    isRefinance\n    isHeloc\n    isPersonalLoan\n    isMortgageLoan\n    canNavigateToApplication\n    canNavigateToMyAccount \n    redirectUrl\n    loanServicingDetails{\n        isPayNowEligible\n        loanServicingRedirectURL\n        manageLoanAccountEligible\n        loanServicingNumber\n    }\n    isInProgress\n    isInProgressAndEditable \n    isApplicationExpired \n    isApplicationNotEditable\n    scheduledClosingDate\n    closingDate\n    mortgageBaseLoanAmount\n    mortgageInterestRate\n    applicationDate\n    fundedDate\n    isApplicationDelayed\n\n}\nhelocs {\n    productId\n    productType\n    loanAmount\n    loanStatus\n    loanNumber\n    address{\n    streetAddress\n    city\n    state\n    zip\n    }\n    isRefinance\n    isHeloc\n    isPersonalLoan\n    isMortgageLoan\n    canNavigateToApplication\n    canNavigateToMyAccount \n    redirectUrl\n    isInProgress\n    isInProgressAndEditable \n    isApplicationExpired \n    isApplicationNotEditable\n}\n}\n}",
+            "query": "{fetchAllProductAccounts \n {\npersonalLoans {\n    productId\n    productType\n    nextPaymentDate\n    loanAmount\n    loanStatus\n    loanNumber\n    isRefinance\n    isHeloc\n    isPersonalLoan\n    isMortgageLoan\n    canNavigateToApplication\n    canNavigateToMyAccount \n    redirectUrl\n    isInProgress\n    isInProgressAndEditable \n    isApplicationExpired \n    isApplicationNotEditable\n}\nmortgages {\n    productId\n    productType\n    lastModifiedDate\n    loanStatus\n    loanNumber\n    applicationStatus\n    contacts{\n    id\n    name\n    title\n    subTitle\n    email\n    fax\n    phone\n    avatarUrl\n    }\n    address{\n    streetAddress\n    city\n    state\n    zip\n    }\n    isRefinance\n    isHeloc\n    isPersonalLoan\n    isMortgageLoan\n    canNavigateToApplication\n    canNavigateToMyAccount \n    redirectUrl\n    loanServicingDetails{\n        isPayNowEligible\n        loanServicingRedirectURL\n        manageLoanAccountEligible\n        loanServicingNumber\n        mortgageBalance\n    }\n    isInProgress\n    isInProgressAndEditable \n    isApplicationExpired \n    isApplicationNotEditable\n    scheduledClosingDate\n    closingDate\n    mortgageBaseLoanAmount\n    mortgageInterestRate\n    applicationDate\n    fundedDate\n    isApplicationDelayed\n\n}\nhelocs {\n    productId\n    productType\n    loanAmount\n    loanStatus\n    loanNumber\n    address{\n    streetAddress\n    city\n    state\n    zip\n    }\n    isRefinance\n    isHeloc\n    isPersonalLoan\n    isMortgageLoan\n    canNavigateToApplication\n    canNavigateToMyAccount \n    redirectUrl\n    isInProgress\n    isInProgressAndEditable \n    isApplicationExpired \n    isApplicationNotEditable\n}\n}\n}",
             "variables": ""
           }
         },
@@ -848,7 +848,65 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{\n  fetchBorrower {\n    borrowerGuid\n    isFirstTimeHomeBuyer\n    isAgent\n    agent {\n      id\n      attributes {\n        firstName\n        lastName\n        professionalEmail\n        title\n        brokerageName\n        photoUrl\n      }\n    }\n    isRateHomesLeadCreated\n    borrowerVersion\n    loginCount\n    name {\n      first\n      middle\n      last\n    }\n    postalAddress {\n      street\n      city\n      state\n      zip\n    }\n    phoneNumbers {\n      mobile\n      home\n    }\n    emailAddressCollection {\n      primary\n    }\n    contact {\n      name\n      id\n      title\n      subTitle\n      email\n      phone\n      mobile\n      avatarUrl\n      fax\n      displayRates\n      bio\n      schedulerLink\n      languages\n      address {\n        region\n        city\n      }\n    }\n    attributes {\n      rateAppUser\n    }\n    lastLoginDate\n\n    membershipDetails {\n      membershipDate\n      badges {\n        badgeTitle\n        badgeDate\n        badgeImage\n      }\n    }\n    isFirstTimeHomeBuyer\n    appTrackingConsentData {\n      advertisementId\n      allowTracking\n      deviceType\n    }\n  }\n}\n",
+            "query": "{\n  fetchBorrower {\n    borrowerGuid\n    isFirstTimeHomeBuyer\n    isAgent\n    agent {\n      id\n      attributes {\n        firstName\n        lastName\n        professionalEmail\n        title\n        brokerageName\n        photoUrl\n      }\n    }\n    # isRateHomesLeadCreated\n    borrowerVersion\n    loginCount\n    name {\n      first\n      middle\n      last\n    }\n    postalAddress {\n      street\n      city\n      state\n      zip\n    }\n    phoneNumbers {\n      mobile\n      home\n    }\n    emailAddressCollection {\n      primary\n    }\n    contact {\n      name\n      id\n      title\n      subTitle\n      email\n      phone\n      mobile\n      avatarUrl\n      fax\n      displayRates\n      bio\n      schedulerLink\n      languages\n      address {\n        region\n        city\n      }\n    }\n    attributes {\n      rateAppUser\n    }\n    lastLoginDate\n\n    membershipDetails {\n      membershipDate\n      badges {\n        badgeTitle\n        badgeDate\n        badgeImage\n      }\n    }\n    isFirstTimeHomeBuyer\n    appTrackingConsentData {\n      advertisementId\n      allowTracking\n      deviceType\n    }\n  }\n}\n",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4.1 - Fetch Borrower V2",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "gri",
+            "type": "default"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "default"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "{\n  fetchBorrowerV2 {\n    borrowerDetails {\n        borrowerGuid\n        borrowerVersion\n        name {\n            first\n            middle\n            last\n        }\n        phoneNumbers {\n            mobile\n            home\n        }\n        postalAddress {\n            street\n            city\n            state\n            zip\n        }\n        emailAddressCollection {\n            primary\n        }\n        lastLoginDate\n        loginCount\n        attributes {\n            rateAppUser\n        }\n    }\n    agentDetails {\n        isAgent\n        agent {\n            id\n            attributes {\n                firstName\n                lastName\n                professionalEmail\n                title\n                brokerageName\n                photoUrl\n            }\n        }\n        hasConsentedToOneTrust\n    }\n    isRateHomesLeadCreated\n    loanOfficerDetails {\n        contact {\n            name\n            id\n            title\n            subTitle\n            email\n            phone\n            mobile\n            avatarUrl\n            fax\n            displayRates\n            bio\n            schedulerLink\n            languages\n            address {\n                region\n                city\n            }\n        }\n    }\n    userPersona {\n        isFirstTimeHomeBuyer\n        hasUserConsented\n        isOnboardingQuestionnaireEligible\n    }\n    membershipDetails {\n      membershipDate\n      badges {\n        badgeTitle\n        badgeDate\n        badgeImage\n      }\n    }\n    appTrackingConsentData {\n      advertisementId\n      allowTracking\n      deviceType\n    }\n  }\n}\n",
             "variables": ""
           }
         },
@@ -1943,7 +2001,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{\n  fetchOktaToken(\n    auth: {\n    userName: \"qa-bns-1112a@yopmail.com\",\n      password: \"NewGR@123\",\n    }\n  ) {\n    factors{\n        id\n        factorType\n    }\n    userId\n    sessionToken\n    accessToken\n    status\n    stateToken\n    idToken\n    sid\n  }\n}\n",
+            "query": "{\n  fetchOktaToken(\n    auth: {\n    userName: \"qa-bns-1912a@yopmail.com\",\n      password: \"NewGR@123\",\n      # Use agentInviteId only when user open the Rate App using Agent Invite Kochava URL\n    #   agentInviteId: \"ebd3c1cc-caf3-4b42-9607-030f9081c026\"\n    }\n  ) {\n    factors{\n        id\n        factorType\n    }\n    userId\n    sessionToken\n    accessToken\n    status\n    stateToken\n    idToken\n    sid\n  }\n}\n",
             "variables": ""
           }
         },
@@ -2331,7 +2389,8 @@
               ""
             ],
             "type": "text/javascript",
-            "packages": {}
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -2358,7 +2417,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "{\n  verifyEnroll(factorId:\"emf9fmjqwePIdMxQU1d7\",\n    transaction: {\n      stateToken: \"00K8gC7PU0PeONDca9F_y2z71mQCVzBED_sQ1Ua5qv\",\n      passCode: \"360729\"\n    }) {\n    status\n    stateToken\n    accessToken\n    sessionToken\n    factors{\n        id\n        factorType\n    }\n    userId\n  }\n}",
+            "query": "{\n  verifyEnroll(factorId:\"emf9fmjqwePIdMxQU1d7\",\n    transaction: {\n      stateToken: \"00K8gC7PU0PeONDca9F_y2z71mQCVzBED_sQ1Ua5qv\",\n      passCode: \"360729\"\n    },\n    # Use agentInviteId only when user open the Rate App using Agent Invite Kochava URL\n    # agentInviteId: \"ebd3c1cc-caf3-4b42-9607-030f9081c026\"\n    ) {\n    \n    status\n    stateToken\n    accessToken\n    sessionToken\n    factors{\n        id\n        factorType\n    }\n    userId\n  }\n}",
             "variables": ""
           }
         },
@@ -3880,25 +3939,22 @@
         "header": [
           {
             "key": "X-GR-FSP-TENANT-ID",
-            "value": "gri",
-            "type": "text"
+            "value": "gri"
           },
           {
             "key": "X-Request-ID",
-            "value": "$${{$guid}}",
-            "type": "text"
+            "value": "$${{$guid}}"
           },
           {
             "key": "Accept-Language",
             "value": "en",
-            "type": "text",
             "disabled": true
           }
         ],
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "\n{\n  gatewayMetadata(validationInput: { appType: \"ios\", appBuildNumber: 168 }) {\n    status\n    gatewayUrls {\n      oktaUrl\n      myAccountUrl\n      dmxUrl\n      plUrl\n      helocUrl\n      agentOktaUrl\n      agentAdvantageUrl\n      agentClosings\n      agentDashboard\n      agentHelp\n      agentProfessionalProfile\n      agentReferClient\n      agentMarketingRequest\n      westLakeUrl\n      westLakePreqlUrl\n      studentLoanUrl\n      loanServicingServiceMacUrl\n      agentsBranchRedirectUrl\n      rateAlertUrl\n      mlsUrl\n      rateTravelUrl\n      healthyMindsUrl\n      rentersInsuranceUrl\n      autoLoanRefiUrl\n      creditMonitoringUrl\n    }\n    gatewayFeatureFlags {\n      mlsEnabled\n      agentLoginEnabled\n      mlsEnabledOnHomeScreen\n      userPersonaEnabled\n      tlacEnabled\n      messageCenterEnabled\n      westLakeEnabled\n      mortgageCalcWebViewEnabled\n      studentLoanEnabled\n      loShareEnabled\n      videoShareEnabled\n      rateTravelEnabled\n      healthyMindsEnabled\n      loanServicingServiceMacEnabled\n      rentersInsuranceEnabled\n      autoLoanRefiEnabled\n      creditMonitoringEnabled\n      rateHomesEnabled\n    }\n    gatewayUIFlags {\n      blackButtonsEnabled\n    }\n    gatewayLegalLinks {\n    aboutUs\n    privacyPolicy\n    accessibility\n    doNotSellMyInformation\n    faqs\n    licensing\n    smsTerms\n    contactCenter\n    personalLoansDisclosure\n    termsAndConditions\n    }\n    gatewayCalcLinks {\n    mortgageRatesUrl\n    mortgagePaymentsUrl\n    mortgageHomeAffordability\n    }\n    gatewayNewLabelFlags {\n        showRateTravelNewLabel\n        showHealthyMindsNewLabel\n        showAutoLoanNewLabel\n        showStudentLoanNewLabel\n        showRentersInsuranceNewLabel\n    }\n    gatewayIdx {\n        oidc {\n            agent {\n                clientId\n                redirectUri\n            }\n            alpWeb{\n                clientId\n                redirectUri\n            }\n            autoDm{\n                clientId\n                redirectUri\n            }\n            autoFlp{\n                clientId\n                redirectUri\n            }\n            comeHome{\n                clientId\n                redirectUri\n            }\n            dmx{\n                clientId\n                redirectUri\n            }\n            myAccount{\n                clientId\n                redirectUri\n            }\n            myAccountV2{\n                clientId\n                redirectUri\n            }\n            studentLoanForgiveness{\n                clientId\n                redirectUri\n            }\n            wildfire{\n                clientId\n                redirectUri\n            }\n        }\n        saml {\n            agilant {\n                appId\n                ssoUrl\n            }\n            laasy {\n                appId\n                ssoUrl\n            }\n            osConnect {\n                appId\n                ssoUrl\n            }\n            serviceMac {\n                appId\n                ssoUrl\n            }\n            talkuments {\n                appId\n                ssoUrl\n            }\n        }\n    }\n  }\n}\n",
+            "query": "\n{\n  gatewayMetadata(validationInput: { appType: \"ios\", appBuildNumber: 168 }) {\n    status\n    gatewayUrls {\n      oktaUrl\n      myAccountUrl\n      dmxUrl\n      plUrl\n      helocUrl\n      agentOktaUrl\n      agentAdvantageUrl\n      agentClosings\n      agentDashboard\n      agentHelp\n      agentProfessionalProfile\n      agentReferClient\n      agentMarketingRequest\n      westLakeUrl\n      westLakePreqlUrl\n      studentLoanUrl\n      loanServicingServiceMacUrl\n      agentsBranchRedirectUrl\n      rateAlertUrl\n      mlsUrl\n      rateTravelUrl\n      healthyMindsUrl\n      rentersInsuranceUrl\n      autoLoanRefiUrl\n      creditMonitoringUrl\n      reverseMortgageUrl\n    }\n    gatewayFeatureFlags {\n      mlsEnabled\n      agentLoginEnabled\n      mlsEnabledOnHomeScreen\n      userPersonaEnabled\n      tlacEnabled\n      messageCenterEnabled\n      westLakeEnabled\n      mortgageCalcWebViewEnabled\n      studentLoanEnabled\n      loShareEnabled\n      videoShareEnabled\n      rateTravelEnabled\n      healthyMindsEnabled\n      loanServicingServiceMacEnabled\n      rentersInsuranceEnabled\n      autoLoanRefiEnabled\n      creditMonitoringEnabled\n      rateHomesEnabled\n      onboardingQuestionnaireEnabled\n      wellnessFeedEnabled\n      containedVideoEnabled\n      recommendedVideoEnabled\n    }\n    gatewayUIFlags {\n      blackButtonsEnabled\n    }\n    gatewayLegalLinks {\n    aboutUs\n    privacyPolicy\n    accessibility\n    doNotSellMyInformation\n    faqs\n    licensing\n    smsTerms\n    contactCenter\n    personalLoansDisclosure\n    termsAndConditions\n    }\n    gatewayCalcLinks {\n    mortgageRatesUrl\n    mortgagePaymentsUrl\n    mortgageHomeAffordability\n    }\n    gatewayNewLabelFlags {\n        showRateTravelNewLabel\n        showHealthyMindsNewLabel\n        showAutoLoanNewLabel\n        showStudentLoanNewLabel\n        showRentersInsuranceNewLabel\n    }\n    gatewayIdx {\n        oidc {\n            agent {\n                clientId\n                redirectUri\n            }\n            alpWeb{\n                clientId\n                redirectUri\n            }\n            autoDm{\n                clientId\n                redirectUri\n            }\n            autoFlp{\n                clientId\n                redirectUri\n            }\n            comeHome{\n                clientId\n                redirectUri\n            }\n            dmx{\n                clientId\n                redirectUri\n            }\n            myAccount{\n                clientId\n                redirectUri\n            }\n            myAccountV2{\n                clientId\n                redirectUri\n            }\n            studentLoanForgiveness{\n                clientId\n                redirectUri\n            }\n            wildfire{\n                clientId\n                redirectUri\n            }\n        }\n        saml {\n            agilant {\n                appId\n                ssoUrl\n            }\n            laasy {\n                appId\n                ssoUrl\n            }\n            osConnect {\n                appId\n                ssoUrl\n            }\n            serviceMac {\n                appId\n                ssoUrl\n            }\n            talkuments {\n                appId\n                ssoUrl\n            }\n        }\n    }\n    splashScreenMetaData {\n        image\n        staticImage\n        logo\n        header\n        body\n        cta\n    }\n  }\n}\n",
             "variables": ""
           }
         },
@@ -5188,7 +5244,7 @@
         "body": {
           "mode": "graphql",
           "graphql": {
-            "query": "mutation {\n    createRateHomesLead(rateHomesLeadRequest :{\n        firstName: \"Andy\",\n        lastName: \"America\",\n        email: \"qa-bns-2107a@yopmail\",\n        phoneNumber: \"905-997-2011\",\n        zipCode: \"95630\",\n        city: \"Mountian View\",\n        state: \"CA\"\n    }){\n        status\n    }\n}",
+            "query": "mutation {\n    createRateHomesLead(rateHomesLeadRequest :{\n        firstName: \"Andy\",\n        lastName: \"America\",\n        email: \"qa-bns-2107a@yopmail.com\",\n        phoneNumber: \"905-997-2011\",\n        zipCode: \"95630\",\n        city: \"Mountian View\",\n        state: \"CA\"\n    }){\n        status\n    }\n}",
             "variables": ""
           }
         },
@@ -5201,6 +5257,573 @@
             "graphql"
           ]
         }
+      },
+      "response": []
+    },
+    {
+      "name": "80 - FetchCreditMonitoringBorrower",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}",
+            "type": "text"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "text"
+          },
+          {
+            "key": "X-GR-Client-Type",
+            "value": "web",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query fetchCreditMonitoringBorrower{\n  fetchCreditMonitoringBorrower(borrowerId: \"68b259b9-b377-48e4-9760-51707ddb3f6b\") {\n    registered\n    userToken\n  }\n}",
+            "variables": "{\n  \"borrowerId\": \"{{borrowerId}}\"\n}"
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "81 - RegisterCreditMonitoringUser",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}",
+            "type": "text"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "text"
+          },
+          {
+            "key": "X-GR-Client-Type",
+            "value": "web",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation registerCreditMonitoringUser {\n  registerCreditMonitoringUser(borrowerId: \"68b259b9-b377-48e4-9760-51707ddb3f6b\", userId: \"36218abf-dae5-4976-b504-4b5990084d45\") {\n    status\n  }\n}",
+            "variables": "{\n  \"borrowerId\": \"{{borrowerId}}\",\n  \"userId\": \"{{userId}}\",\n  \"userToken\": \"{{userToken}}\"\n}"
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "82 - FetchCreditMonitoringScore",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "es",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query{\n  fetchCreditMonitoringScore {\n    score\n    scoreDate\n    customBanner {\n        partnerName\n        dashboardPartnerName\n        title\n        secondaryTitle\n        subTitle\n        overviewImageUrl\n        detailedImageUrl\n        bannerUrl\n        navigationRoute {\n            title\n            linkText\n            androidNavigationRoute\n            iOSNavigationRoute\n            analyticsName\n            view\n            args\n        }\n        newLabel\n    }\n  }\n}",
+            "variables": "{\n  \"borrowerId\": \"{{borrowerId}}\"\n}"
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "83 - Questionnaire",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "gri"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$$d3ef1d6d-b607-45fe-93c2-06520d84a024"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query {\n  fetchQuestionnaire(type: ONBOARDING) {\n    questionnaireVersion\n    intro {\n      id  \n      title\n      subTitle\n      categories {\n        id\n        title\n        subTitle\n        iconUrl\n      }\n    }\n    overview {\n      id  \n      title\n      subTitle\n      categories {\n        id\n        title\n        subTitle\n        iconUrl\n        questions {\n          id  \n          title\n          subTitle\n          questionKey\n          options {\n            id\n            title\n            subTitle\n            optionKey\n          }\n        }\n      }\n    }\n  }\n}",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "84 - Fetch OneTrust Profiles",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}",
+            "type": "text"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "{\n    fetchOneTrustProfiles {\n        enabled\n    }\n}",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "85 - Update OneTrust",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}",
+            "type": "text"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation {\n    updateOneTrust(enable: true, token: \"token\") {\n        status\n    }\n}",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "86 - Fetch User Homes (full details)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}",
+            "type": "text"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query FetchUserHomes($homeId: String) {\n  fetchUserHomes(homeId: $homeId) {\n    screenTitle\n    homeId\n    propertyImage\n    ownership\n    ownershipLabel\n    homeType\n    homeTypeLabel\n    address { addressKey street city state zip addressLine1 addressLine2 }\n    questions {\n      questionKey\n      title\n      step\n      totalSteps\n      options { optionKey title }\n    }\n    sections {\n      __typename\n      sectionEnum\n      title\n      subTitle\n      newSection\n      ... on EstimatedValueSection {\n        rangeSelectors { value label }\n        valuation {\n          estimatedValue\n          estimatedValueDisplay\n          rangeMin\n          rangeMax\n          rangeDisplay\n          yoyChangeAmount\n          yoyChangePercent\n          yoyDirection\n          yoyDisplay\n          history {\n            oneYear { label value }\n            fiveYear { label value }\n            max { label value }\n          }\n        }\n      }\n      ... on PropertyDetailsSection {\n        propertyDetails {\n          livingAreaSqft\n          livingAreaDisplay\n          lotSizeAcres\n          beds\n          baths\n          yearBuilt\n          stories\n          foundation\n          roof\n          parking\n          heatingCooling\n          items { label value }\n        }\n      }\n      ... on RecommendedSection {\n        recommendations {\n          title\n          subTitle\n          displayIcon\n          altText\n          displayType\n          navigationRoute { title linkText androidNavigationRoute iOSNavigationRoute view analyticsName args }\n        }\n      }\n      ... on ComparablesSection {\n        disclaimer\n        altText\n        altIcon\n        comparables {\n          propertyImage\n          address\n          soldPrice\n          beds\n          sqft\n          summary\n          soldDate\n        }\n      }\n    }\n  }\n}\n",
+            "variables": "{\n  \"homeId\": null\n}"
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        },
+        "description": "**Scenario: Member opens the Home experience.**\n\n- `homeId = null` -> returns ALL saved homes (PRIMARY first).\n- `homeId = <id>` -> **Details screen**: returns just that one home, with the value history series and the `COMPARABLES` (recently-sold nearby) section.\n\nReturns `UserHomeDetailsV2`: the screen body is an ordered `sections` list (ESTIMATED_VALUE, PROPERTY_DETAILS, RECOMMENDED, COMPARABLES) — read each via `__typename` + inline fragments. Section order/copy is CMS/config-driven.\n\nLoan-servicing data (mortgage balance + pay/manage eligibility) is NOT returned here - it is served via product accounts only. Home value is resolved for every home; the history series is fetched only when `EstimatedValueSection.valuation.history` is in the selection set (details screen)."
+      },
+      "response": []
+    },
+    {
+      "name": "87 - Add User Home",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "const homeId = res && res.data && res.data.addUserHome && res.data.addUserHome.homeId;",
+              "if (homeId) {",
+              "    pm.collectionVariables.set(\"userHomeId\", homeId);",
+              "    console.log(\"Saved userHomeId =\", homeId);",
+              "}",
+              "pm.test(\"addUserHome returns a homeId\", function () {",
+              "    pm.expect(homeId, \"homeId\").to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}",
+            "type": "text"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation {\n  addUserHome(\n    address: {street: [\"2217 W Grace St\"], city: \"Richmond\", state: \"VA\", zip: \"23220\"}\n  ) {\n    homeId\n    ownership\n    ownershipLabel\n    homeType\n    homeTypeLabel\n    address { addressKey street city state zip }\n    questions {\n      questionKey\n      title\n      step\n      totalSteps\n      options { optionKey title }\n    }\n  }\n}\n",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        },
+        "description": "**Scenario: Member saves a home by address.**\n\n`addUserHome` takes ONLY the address - ownership & property type are collected afterward via `updateUserHome`, using the returned `questions` (OWNERSHIP, PROPERTY_TYPE).\n\n**Outcomes:**\n- New address -> home is saved and returned with the questionnaire.\n- Same address already saved -> **idempotent**: returns the existing home (no duplicate, no error).\n- Already at 3 homes -> `USER_HOME_LIMIT_REACHED` error."
+      },
+      "response": []
+    },
+    {
+      "name": "88 - Update User Home",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}",
+            "type": "text"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation {\n  updateUserHome(\n    homeId: \"{{userHomeId}}\"\n    input: {ownership: OWN}\n  ) {\n    homeId\n    ownership\n    ownershipLabel\n    homeType\n    homeTypeLabel\n    questions {\n      questionKey\n      title\n      step\n      totalSteps\n      options { optionKey title }\n    }\n  }\n}\n",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        },
+        "description": "**Scenario: Member answers Owner/Renter + property-type, or edits a saved home.**\n\nAny subset of `{address, ownership, homeType}` can be sent.\n\n**Outcomes:**\n- `homeType = PRIMARY` demotes the previous primary home.\n- New address matching another saved home -> `USER_HOME_DUPLICATE` error.\n- `homeId` not found -> `USER_HOME_NOT_FOUND` error."
+      },
+      "response": []
+    },
+    {
+      "name": "89 - Delete User Home",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}",
+            "type": "text"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation {\n  deleteUserHome(homeId: \"{{userHomeId}}\") {\n    status\n  }\n}\n",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        },
+        "description": "**Scenario: Member removes a saved home, freeing one of the 3 slots.**\n\nDeleting a funded home also drops its `loanNumber` marker (it will be re-discovered from product accounts only if still funded by Rate). `homeId` not found -> `USER_HOME_NOT_FOUND`."
+      },
+      "response": []
+    },
+    {
+      "name": "90 - Fetch Home Questionnaire",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}",
+            "type": "text"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "{\n  fetchHomeQuestionnaire {\n    entryQuestionKey\n    questions {\n      questionKey\n      title\n      step\n      totalSteps\n      options { optionKey title }\n    }\n  }\n}\n",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "91 - Fetch Home Value (Guest preview)",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}",
+            "type": "text"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "{\n  fetchHomeValue(address: {street: [\"2217 W Grace St\"], city: \"Richmond\", state: \"VA\", zip: \"23220\"}) {\n    screenTitle\n    homeId\n    propertyImage\n    ownership\n    ownershipLabel\n    homeType\n    homeTypeLabel\n    address { addressKey street city state zip addressLine1 addressLine2 }\n    sections {\n      __typename\n      sectionEnum\n      title\n      subTitle\n      newSection\n      ... on EstimatedValueSection {\n        rangeSelectors { value label }\n        valuation {\n          estimatedValue\n          estimatedValueDisplay\n          rangeMin\n          rangeMax\n          rangeDisplay\n          yoyChangeAmount\n          yoyChangePercent\n          yoyDirection\n          yoyDisplay\n          history {\n            oneYear { label value }\n            fiveYear { label value }\n            max { label value }\n          }\n        }\n      }\n      ... on PropertyDetailsSection {\n        propertyDetails {\n          livingAreaSqft\n          livingAreaDisplay\n          lotSizeAcres\n          beds\n          baths\n          yearBuilt\n          stories\n          foundation\n          roof\n          parking\n          heatingCooling\n          items { label value }\n        }\n      }\n      ... on RecommendedSection {\n        recommendations {\n          title\n          subTitle\n          displayIcon\n          altText\n          displayType\n          navigationRoute { title linkText androidNavigationRoute iOSNavigationRoute view analyticsName args }\n        }\n      }\n      ... on ComparablesSection {\n        disclaimer\n        altText\n        altIcon\n        comparables {\n          propertyImage\n          address\n          soldPrice\n          beds\n          sqft\n          summary\n          soldDate\n        }\n      }\n    }\n  }\n}\n",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        },
+        "description": "**Scenario: Unauthenticated visitor previews a home's value by address before signing in.**\n\nGuest-safe: no `UserSession` is read or written and no loan-servicing lookup happens. Returns `UserHomeDetailsV2` — the ordered `sections` list (ESTIMATED_VALUE, PROPERTY_DETAILS, RECOMMENDED, COMPARABLES); read each via `__typename` + inline fragments. Saving a home requires sign-in (`addUserHome`)."
       },
       "response": []
     },
@@ -5357,6 +5980,432 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "92 - CheckCreditMonitoringEligibility",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "{\n    checkCreditMonitoringEligibility {\n        eligible\n    }\n}\n"
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "93 - Save Questionnaire Answers",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation {\n    saveQuestionnaireAnswers(saveQuestionnaireAnswersRequest: {\n        type : ONBOARDING,\n        questionnaireVersion: \"1.0\"\n        status: COMPLETED\n        answers: [\n            {\n            questionKey: \"WELLNESS_STATUS\",\n            optionKey: \"BUILDING_A_ROUTINE\"\n            },\n            {\n            questionKey: \"FOCUS\",\n            optionKey: \"MIND\"\n            }\n        ]\n    }) {\n        status\n    }\n}"
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "94 - Disclosures",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query {\n    fetchDisclosures(disclosureRequest: {\n        productType: PERSONAL_LOAN # PERSONAL_LOAN or null (fetches all disclosures)\n    }) {\n      disclosures{ \n        id\n        title\n        productName\n        description\n    }\n    }\n}"
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "95 - Start Questionnaire",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation {\n    startQuestionnaire(startQuestionnaireRequest: {\n        type : ONBOARDING,\n        questionnaireVersion: \"1.0\"\n    }) {\n        status\n    }\n}"
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "96 -  Fetch LO and Agent",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query {\n    fetchLoanOfficerAndAgent {\n      contact {\n        name\n        id\n        title\n        subTitle\n        email\n        phone\n        mobile\n        avatarUrl\n        fax\n        displayRates\n        bio\n        schedulerLink\n        languages\n        address {\n            region\n            city\n        }\n      }\n      agent {\n        id\n        attributes {\n            firstName\n            lastName\n            professionalEmail\n            title\n            brokerageName\n            photoUrl\n        }\n     }\n   }\n}"
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "97 - Create Credit Monitoring User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}"
+          },
+          {
+            "key": "X-GR-Client-Type",
+            "value": "web",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation {\n    createCreditMonitoringUser(creditMonitoringUserRequest: {\n        firstName: \"Andy\",\n        lastName: \"America\",\n        ssn: \"999503335\",\n        dob: \"1997-09-25\",\n        address: {\n            street: \"1571 WILLOW PARK DR APT 426\",\n            city: \"CHARLOTTE\",\n            state: \"NC\",\n            zip: \"28205\"\n        },\n        emailAddress: \"qa-bns-1112c@yopmail.com\",\n        phoneNumber: \"9059972011\"\n    }) {\n        userId\n        authToken\n    }\n}"
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "98 - Today Screen Content",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "es",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query {\n    fetchTodayContent {\n        todayScreenOrder\n        todayScreenTitle\n        productSections {\n            sectionTitle\n            productSectionType\n            products {\n                productType\n                productTitle\n                featuredImageUrl\n                newContent\n            }\n        }\n        productCards {\n            productCardType\n            title\n            subTitle\n            ctaText\n            iconUrl\n        }\n        containedVideoSection {\n            videos {\n                id\n                title\n                featuredImageUrl\n                overviewImageUrl\n                detailedImageUrl\n                destination\n                hlsDestination\n                dashDestination\n                description\n                minutes\n                category {\n                    id\n                    title\n                }\n                subCategory {\n                    id\n                    title\n                }\n                level {\n                    id\n                    title\n                    colorCode\n                }\n                wellnessType\n            }\n        }\n        recommendedVideoSection {\n            recommendedSectionTitle\n            videos {\n                id\n                title\n                featuredImageUrl\n                overviewImageUrl\n                detailedImageUrl\n                destination\n                hlsDestination\n                dashDestination\n                description\n                wellnessType\n            }\n        }\n        mortgageSummary {\n            hasPendingMortgageLoans\n        }\n        marketingPromos {\n            id\n            name\n            imageUrl\n            title\n            subTitle\n            description\n            redirectUrl\n            analyticsEventName\n        }\n    }\n}",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "98.1 - Product Sections",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "es",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query {\n    fetchProductSections(productSectionRequest: { productSectionType: HOME_LOAN }) {\n        productSections {\n            sectionTitle\n            productSectionType\n            products {\n                productType\n                productTitle\n                featuredImageUrl\n                newContent\n            }\n        }\n    }\n}",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "99 - Contained Video",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "es",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query {\n    fetchContainedVideo {\n            videos {\n                id\n                title\n                featuredImageUrl\n                overviewImageUrl\n                detailedImageUrl\n                destination\n                hlsDestination\n                dashDestination\n                description\n                minutes\n                category {\n                    id\n                    title\n                }\n                subCategory {\n                    id\n                    title\n                }\n                level {\n                    id\n                    title\n                    colorCode\n                }\n                wellnessType\n            }\n        }\n}"
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "100 - Recommended Videos",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "es",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query {\n    fetchRecommendedVideos {\n             videos {\n                id\n                title\n                featuredImageUrl\n                overviewImageUrl\n                detailedImageUrl\n                destination\n                hlsDestination\n                dashDestination\n                description\n                wellnessType\n            }\n        }\n}"
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "101 - Fetch Home Tab",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-GR-FSP-TENANT-ID",
+            "value": "{{tenantId}}",
+            "type": "text"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "$${{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query FetchHomeTab {\n  fetchHomeTab {\n    tabTitle\n    tabSubTitle\n    sections {\n      sectionEnum\n      title\n      subTitle\n      newSection\n      sectionProperties {\n        displayType\n        displayIcon\n        ctaHeader\n        altText\n      }\n      ... on AccountsSection {\n        data {\n          mortgages {\n            productId\n            productType\n            loanStatus\n            loanNumber\n            applicationStatus\n            address { streetAddress city state zip }\n            canNavigateToApplication\n            canNavigateToMyAccount\n            redirectUrl\n            loanServicingDetails {\n              isPayNowEligible\n              loanServicingRedirectURL\n              manageLoanAccountEligible\n              loanServicingNumber\n              mortgageBalance\n            }\n            mortgageBaseLoanAmount\n            mortgageInterestRate\n            applicationDate\n            fundedDate\n          }\n          helocs {\n            productId\n            productType\n            loanAmount\n            loanStatus\n            loanNumber\n            address { streetAddress city state zip }\n            canNavigateToApplication\n            canNavigateToMyAccount\n            redirectUrl\n          }\n          personalLoans {\n            productId\n            productType\n            nextPaymentDate\n            loanAmount\n            loanStatus\n            loanNumber\n            canNavigateToApplication\n            canNavigateToMyAccount\n            redirectUrl\n          }\n        }\n      }\n      ... on UserHomeSection {\n        userHomes {\n          homeId\n          propertyImage\n          ownership\n          ownershipLabel\n          homeType\n          homeTypeLabel\n          address { addressKey street city state zip addressLine1 addressLine2 }\n          valuation {\n            estimatedValue\n            estimatedValueDisplay\n            rangeMin\n            rangeMax\n            rangeDisplay\n            yoyChangeAmount\n            yoyChangePercent\n            yoyDirection\n            yoyDisplay\n          }\n        }\n      }\n      ... on MembershipServicesSection {\n        subSections {\n          sectionEnum\n          title\n          subTitle\n          newSection\n          sectionProperties {\n            displayType\n            displayIcon\n            ctaHeader\n            altText\n          }\n          ... on HomeWarrantySection {\n            data {\n              subscriptions {\n                uuid\n                isActive\n                dateStart\n                dateEnd\n                dateCancelled\n                token\n                frequency\n                amount\n              }\n            }\n          }\n          ... on TechSupportSection {\n            data {\n              entitlements {\n                uuid\n                dtCreated\n                dtUpdated\n                subscription { uuid isActive dateStart dateEnd amount frequency }\n                datePurchase\n                pricePurchase\n                receiptNumber\n              }\n            }\n          }\n          ... on HomeSecuritySection {\n            data {\n              adtLeads {\n                id\n                createdDate\n                referenceNumber\n                status\n                address { streetAddress city state zip }\n              }\n              adtSubscriptions {\n                id\n                createdDate\n                adtId\n                secure24Id\n                planName\n                startDate\n                endDate\n                referenceNumber\n                status\n                address { streetAddress city state zip }\n              }\n            }\n          }\n          ... on AutoLoanVouchersSection {\n            data {\n              voucherDetails {\n                voucherCode\n                voucherExpirationDate\n                voucherResultDetails {\n                  vin\n                  lender\n                  monthly\n                  apr\n                  term\n                  qualified\n                }\n              }\n            }\n          }\n        }\n      }\n      ... on RateAlertSection {\n        data {\n          title\n          subTitle\n          bannerImageUrl\n          bannerIconUrl\n          status\n          redirectUrl\n          analyticsName\n        }\n      }\n      ... on MembershipProductInfoSection {\n        membershipSchemaResponse {\n          title\n          description\n          products {\n            id\n            detailViewId\n            productName\n            dashboardImageUrl\n            featuredImageUrl\n            featuredTitle\n            detailImageUrl\n            detailTitle\n            subtitle\n            newContent\n            shareUrl\n          }\n          shareUrl\n        }\n      }\n    }\n  }\n}\n",
+            "variables": "{}"
+          }
+        },
+        "url": {
+          "raw": "{{gateway}}/graphql",
+          "host": [
+            "{{gateway}}"
+          ],
+          "path": [
+            "graphql"
+          ]
+        },
+        "description": "**Scenario: Member opens the Home tab.**\n\nReturns the whole tab in one call. ContentStack owns **which** sections appear, their **order** and their **copy**; the Gateway fills each section with its payload. Sections come back in CMS order.\n\n`sections` is a GraphQL interface - use `__typename` plus inline fragments to read each section's payload:\n- `AccountsSection` -> `data` (mortgages / HELOCs / personal loans)\n- `UserHomeSection` -> `userHomes` (saved home cards, PRIMARY first)\n- `MembershipServicesSection` -> home warranty, tech support, home security, auto-loan vouchers\n- `MembershipProductInfoSection` -> `membershipSchemaResponse` (product catalogue)\n- `RateAlertSection` -> `data` (rate alert banner from CMS for the member's status - GOAL_ELIGIBLE / GOAL_MET - with redirectUrl from their alert; the section is omitted when there is no alert or no banner for the status)\n\nEach section degrades independently: if a downstream fails the section is still returned with its CMS copy and a `null` payload, so the rest of the tab stays usable. If the CMS `HOME_TAB` view is unavailable, `sections` is empty."
+      },
+      "response": []
     }
   ],
   "auth": {
@@ -5396,47 +6445,37 @@
     },
     {
       "key": "tenantId",
-      "value": ""
+      "value": "gri"
     },
     {
-      "key": "auth_secret_0hlv",
-      "secret": true
+      "key": "auth_secret_0hlv"
     },
     {
-      "key": "auth_secret_0sps",
-      "secret": true
+      "key": "auth_secret_0sps"
     },
     {
-      "key": "auth_secret_0xmo",
-      "secret": true
+      "key": "auth_secret_0xmo"
     },
     {
-      "key": "auth_secret_06fn",
-      "secret": true
+      "key": "auth_secret_06fn"
     },
     {
-      "key": "auth_secret_0hnj",
-      "secret": true
+      "key": "auth_secret_0hnj"
     },
     {
-      "key": "auth_secret_118t",
-      "secret": true
+      "key": "auth_secret_118t"
     },
     {
-      "key": "auth_secret_0wt4",
-      "secret": true
+      "key": "auth_secret_0wt4"
     },
     {
-      "key": "auth_secret_0jaj",
-      "secret": true
+      "key": "auth_secret_0jaj"
     },
     {
-      "key": "auth_secret_1d1y",
-      "secret": true
+      "key": "auth_secret_1d1y"
     },
     {
-      "key": "auth_secret_08wc",
-      "secret": true
+      "key": "auth_secret_08wc"
     }
   ]
 }

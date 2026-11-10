@@ -10,6 +10,20 @@ entries and keep secrets and raw account/response data out of documentation.
 
 ## Work history
 
+### 2026-11-10 - Credential exposure reduction
+
+- Removed local credential/config files from the Git index while preserving
+  ignored copies; replaced literal reset-account values in both API examples
+  with variables. No Yopmail test credentials were changed.
+- Preserved a pre-existing root Firebase diagnostic under dated `test-results/`
+  when the root guard found it.
+- Both API JSON files parse; local credential files remain ignored and
+  untracked. `npm run check:root` and `npm run test:root-hygiene` passed (7/7).
+  Existing history was not rewritten; token rotation and coordinated history
+  cleanup may still be needed if commits were pushed.
+- See the [root history](../README.md#2026-11-10---credential-exposure-reduction)
+  for scope and caveats.
+
 ### 2026-11-02 - IR chart-reference sync
 
 - Synced root/current framework guidance and affected histories for40 sanitized

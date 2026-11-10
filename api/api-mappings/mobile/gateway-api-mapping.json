@@ -339,7 +339,7 @@
         "X-Request-ID": "$${{$guid}}"
       },
       "body": {
-        "query": "mutation{\n  setPassword(emailId: \"James1.Gosling12374@rate.com\",token:\"ffcdbedf-4c50-4676-bf22-9e792f6f5414\",newPassword:\"GRPwd@1237\"){\n    status\n  }\n}"
+        "query": "mutation SetPasswordExample($emailId: String!, $token: String!, $newPassword: String!) {\n  setPassword(emailId: $emailId, token: $token, newPassword: $newPassword) {\n    status\n  }\n}"
       },
       "expected": {
         "status": 200

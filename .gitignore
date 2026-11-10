@@ -35,6 +35,8 @@ firebase-debug*.log
 .env.development
 .env.test
 .env.qa
+/jira.env
+/api/api-configs/gateway-api-config.json
 
 # Local simulator bundles and macOS metadata
 .DS_Store

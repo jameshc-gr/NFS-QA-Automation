@@ -11,6 +11,22 @@ writers: new execution evidence must still go under `test-results/`.
 Fixtures, reviewed CSV references, account registries/counters, build metadata,
 source and required application resources remain tracked.
 
+### 2026-11-10 - Credential exposure reduction
+
+- Removed the local Jira environment and generated API config from the Git index
+  while preserving both local files; added narrow ignore rules.
+- Replaced literal reset-account values in the API mapping and Postman collection
+  with GraphQL variables. No Yopmail test credentials were changed.
+- Preserved a pre-existing root Firebase diagnostic under dated `test-results/`
+  after the root guard found it.
+- Validation: both JSON files parse and contain variable-only reset examples;
+  local config copies remain present, ignored and untracked; `npm run check:root`
+  and `npm run test:root-hygiene` passed (7/7).
+- Limitation: existing Git history was not rewritten. Rotate any token or reset
+  credential that may still be valid, and coordinate a history purge if these
+  commits were pushed. See [API history](api/README.md#work-history) and
+  [memory history](memory/README.md#work-history).
+
 ### 2026-11-02 - Prevent generated-output conflicts
 
 - Request: keep other users' test/script runs from creating Git conflicts.
