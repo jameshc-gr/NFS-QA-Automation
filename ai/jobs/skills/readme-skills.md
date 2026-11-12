@@ -8,7 +8,7 @@ Skills are compact, reusable operating procedures that equip AI coding agents wi
 | --- | --- | --- | --- | --- |
 | `playwright-framework-context` | Web E2E | Living framework architecture, profile mappings, locator strategy, and conventions | `gpt-4o-mini` | Tier 3 (Fast / Token-Efficient) |
 | `api-testing` | API | Postman collection auto-extraction, contract testing, gateway config loading, and schema validation | `gpt-4o-mini` | Tier 2/3 (JSON & Contract Parsing) |
-| `mobile-testing` | Mobile | WebdriverIO + Appium for Android & iOS, build routing, OTP channels, and Compose/XCUITest locators | `gpt-4o-mini` | Tier 2 (Appium Session Routing) |
+| `mobile-testing` | Mobile | Emulator/simulator startup, WDIO build/device routing, agent intake, login, registration, and MFA/OTP | `gpt-4o-mini` | Tier 2 (Appium Session Routing) |
 | `test-data-engineer` | Data | Environment-aware account strategy, name/password rule compliance, and email/phone tagging | `gpt-4o-mini` | Tier 3 (Data Rule Formatting) |
 | `test-plan-generation` | Planning | Requirements and Jira stories to structured, reviewable Markdown test specifications | `gpt-4o-mini` | Tier 2 (Spec Extraction) |
 | `bug-report-writing` | Reporting | Root cause analysis, defect categorization, and standard Jira bug report formatting | `gpt-4o-mini` | Tier 3 (Jira Bug Formatting) |
@@ -19,6 +19,9 @@ Skills are compact, reusable operating procedures that equip AI coding agents wi
 | `test-discovery` | Discovery | Spec discovery and narrowing before execution | `gpt-4o-mini` | Tier 3 (Fast Spec Search) |
 | `test-execution` | Execution | Safe, focused test execution runner | `gpt-4o-mini` | Tier 3 (Command Trigger) |
 | `test-summary` | Summary | Test output diagnosis, failure categorization, and triage | `gpt-4o-mini` | Tier 3 (Log Summarization) |
+| `figma-regression-testing` | Design QA | Figma frame, text, token, and screenshot comparison procedure | Default | N/A |
+| `localization-testing` | Localization | Five-locale string, layout, RTL, and formatting checks | Default | N/A |
+| `exploratory-testing` | Exploratory QA | Bounded, risk-led exploration and evidence-based defect drafting | Default | N/A |
 
 ## Model Selection Guidelines
 
@@ -56,3 +59,11 @@ Use [ai/jobs/skills/SKILL_TEMPLATE.md](ai/jobs/skills/SKILL_TEMPLATE.md).
 - [Root framework guide](../../../readme.md)
 - [AI agent framework guide](../readme-agents.md)
 - [API how-to guide](../../../api/README.md)
+
+## 2026-11-11 - Mobile agent onboarding
+
+- Updated the mobile-testing description to include agent intake, Android/iOS
+  emulator startup, login, registration, and MFA/OTP handling.
+- Canonical behavior and safe execution boundaries are documented in
+  [docs/mobile-testing-rules.md](../../../docs/mobile-testing-rules.md) and
+  [mobile-testing/SKILL.md](mobile-testing/SKILL.md).

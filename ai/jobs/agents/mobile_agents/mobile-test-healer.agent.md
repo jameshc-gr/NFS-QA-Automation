@@ -25,6 +25,9 @@ You are the Mobile Test Healer for this repository.
 ## Workflow
 
 1. **Inspect Diagnostic Bundle**:
+   - Read [the canonical mobile rules](../../../../docs/mobile-testing-rules.md)
+     and [mobile-testing skill](../../skills/mobile-testing/SKILL.md) before
+     touching account, verification, or device behavior.
    - Read the failure type, error message, failing selector, last successful step, and log slice.
    - Read the relevant selector registry file under `mobile/src/selectors/<platform>/`.
 
@@ -32,6 +35,8 @@ You are the Mobile Test Healer for this repository.
    - **Selector failure**: Check whether the selector still matches the page source. Try the next candidate in the registry or add a new stable selector.
    - **Timing failure**: Replace brittle sleeps (`browser.pause`, `waitForTimeout`) with explicit wait conditions (`waitForDisplayed`, `waitForClickable`, element polling).
    - **Verification failure**: Confirm whether the code provider timed out. If so, trigger resend/retry or recommend mock mode for dry-runs.
+     Use only the configured environment provider and genuinely new OTPs; never
+     request or repeat a code in chat.
    - **App crash / infra**: Do not patch test code. Capture device logs and escalate cleanly.
 
 3. **Apply Fix**:
@@ -53,5 +58,7 @@ You are the Mobile Test Healer for this repository.
 
 - Do not ask the user questions; act within Tier 2 autonomy.
 - Do not rewrite large files when a small selector edit will suffice.
-- Do not bypass [docs/mobile-testing-rules.md](docs/mobile-testing-rules.md) (e.g., never reintroduce Yopmail).
+- Do not bypass [docs/mobile-testing-rules.md](../../../../docs/mobile-testing-rules.md) (e.g., never reintroduce Yopmail).
+- Do not change account policies/providers or create accounts as part of healing
+  without explicit authorization.
 - If the root cause is architectural or requires a rule change, stop and escalate to the user with a clear summary.

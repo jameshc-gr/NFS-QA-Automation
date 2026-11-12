@@ -1,30 +1,26 @@
 ---
 name: agent-startup
-description: 'Migration stub for the renamed framework-context skill. Use the new playwright-framework-context skill for current test mechanics, profile mapping, locator strategy, timing conventions, or agent workflow guidance.'
+description: 'Shared repository startup guidance that routes agents to the correct web or mobile operating procedures before execution.'
 argument-hint: 'Initialize the repo context'
 ---
 
-# Agent Startup (Migration Stub)
+# Agent Startup
 
-This file now points to [ai/jobs/skills/playwright-framework-context/SKILL.md](../playwright-framework-context/SKILL.md).
+1. Read the root `README.md` and `AGENTS.md`.
+2. For web work, use the
+   [Playwright framework context](../playwright-framework-context/SKILL.md).
+3. For any native mobile work, read the
+   [canonical mobile rules](../../../../docs/mobile-testing-rules.md) and
+   [mobile-testing skill](../mobile-testing/SKILL.md) before asking for inputs,
+   starting a device, opening the app, or handling login/registration/MFA.
+4. Use only a focused test and explicit output destinations under
+   `test-results/`.
 
-Keep it only so older references can be migrated cleanly.
+## Mobile agent intake
 
-## Mobile Rules Snapshot (2026-08-12)
-
-For all mobile testing tasks, apply these guardrails:
-
-1. Create-user email format:
-	- prod: my-rateapp-auto-jcXXXXXX--ra@pokemail.net
-	- dev/qa/stage: my-rateapp-auto-jcXXXXXX@pokemail.net
-2. Create-user email verification routing:
-	- prod: Guerrilla Mail inbox for the created account
-	- dev/qa/stage: Outlook v3test@rate.com inbox
-3. Login-time verification email routing (all environments):
-	- always use Guerrilla Mail inbox for the login email used
-4. SMS verification routing:
-	- use configured phone and retrieve code from Google Voice
-5. Yopmail:
-	- do not use for mobile verification flows.
-
-
+Resolve platform, explicit environment/build, target device, focused flow, test
+account source, provider-session readiness, locale, and action authorization
+from the request/config. Ask only for missing or contradictory information.
+Never ask users to paste passwords, secrets, session files, or OTPs into chat.
+Do not create a new account or perform a production action without explicit
+authorization.

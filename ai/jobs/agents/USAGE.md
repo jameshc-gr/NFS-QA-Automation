@@ -19,7 +19,7 @@ This document explains how to use the agent hierarchy, skills, and persistent me
 **Core QA Skills**
 - `playwright-framework-context`: Framework mechanics, profile mappings, locator rules, and conventions.
 - `api-testing`: Postman collection auto-extraction, contract testing, gateway config loading, and schema validation.
-- `mobile-testing`: Appium/WDIO execution for Android & iOS, build selection, and OTP channels (Guerrilla Mail, Outlook, Google Voice).
+- `mobile-testing`: Android/iOS emulator startup, Appium/WDIO build/device selection, login/registration/MFA, and OTP channel routing. Read `docs/mobile-testing-rules.md` before mobile actions.
 - `mobile-triage`: Extract concise diagnostic bundles from mobile test failures and classify root causes without loading full logs into context.
 - `test-data-engineer`: Secure, environment-compliant test data generation, realistic human names, `--ra` tag rules, and password validation checks.
 - `test-plan-generation`: Transforming requirements and Jira tickets into reviewable Markdown specifications.

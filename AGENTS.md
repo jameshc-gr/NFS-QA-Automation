@@ -42,6 +42,7 @@ This repo's latest human-readable guidance lives in [README.md](README.md). Trea
 
 - Read [README.md](README.md) first, then [ai/jobs/skills/playwright-framework-context/SKILL.md](ai/jobs/skills/playwright-framework-context/SKILL.md) when you need the current framework mechanics.
 - For ANY mobile testing task, [docs/mobile-testing-rules.md](docs/mobile-testing-rules.md) is the permanent, canonical rule set (email formats, verification routing, account recording, page-verbiage assertions). It must not be relaxed or reinterpreted without explicit user approval.
+- Before mobile work, also read [ai/jobs/skills/mobile-testing/SKILL.md](ai/jobs/skills/mobile-testing/SKILL.md). Resolve platform, explicit environment/build, pinned emulator/device, flow, account/session readiness, locale, and side-effect authorization. Never ask for passwords, tokens, session files, or OTPs in chat; require explicit authorization before creating accounts or running production flows.
 - For every future mobile rule, test, provider, locator, or workflow addition, update the canonical rules document and the affected specs/docs in the same change, then run and report the relevant validation matrix.
 - Use the framework-context skill for profile mapping, locator strategy, timing conventions, and other repo-specific test behavior.
 - Use the specialized agents listed in [README.md](README.md) for planning, generating, healing, and orchestrating tests.

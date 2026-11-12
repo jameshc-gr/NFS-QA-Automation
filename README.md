@@ -2,6 +2,34 @@
 
 Playwright QA automation for the Student Loan Refinance flow.
 
+### 2026-11-11 - Autonomous QA capability assessment
+
+- Added the session-verified capability inventory, requested MCP status,
+  GitHub QA repository reconnaissance, gaps, and ordered implementation
+  recommendations in
+  [the QA autonomy assessment](ai/jobs/QA_AUTONOMY_CAPABILITY_ASSESSMENT.md).
+- Added [Figma regression](ai/jobs/skills/figma-regression-testing/SKILL.md),
+  [localization](ai/jobs/skills/localization-testing/SKILL.md), and
+  [exploratory testing](ai/jobs/skills/exploratory-testing/SKILL.md) skills.
+- Follow-up: Figma identity and current-selection top-level page metadata
+  returned successfully; node-level traversal and visual comparison remain
+  untested.
+- No dependencies were installed and no live app, Jira issue, or design file
+  was modified. The assessment records the remaining validation limits.
+
+### 2026-11-11 - Mobile agent onboarding
+
+- Restored [the canonical mobile rules](docs/mobile-testing-rules.md) from
+  verified current repo behavior and added shared guidance for agent intake,
+  emulator/simulator startup, app launch, login, account registration, and MFA.
+- Updated the mobile-testing skill, startup entry, and mobile generator,
+  orchestrator, and healer profiles to use the same rules and avoid requesting
+  credentials/OTPs in chat.
+- No live device, login, registration, or MFA run was performed. Validation is
+  recorded in the [documentation history](docs/README.md),
+  [agent history](ai/jobs/agents/README.md), [skill index/history](ai/jobs/skills/readme-skills.md),
+  and [AI jobs history](ai/jobs/README.md).
+
 ## Shared Git ignore policy
 
 Generated test results, reports, traces, logs, caches, coverage and saved browser
@@ -721,12 +749,16 @@ Copilot-discoverable custom-agent profiles in `.github/agents`:
   - `playwright-framework-context`: Living framework architecture & conventions
   - `api-testing`: Postman auto-extraction, contract testing & schema validation
   - `mobile-testing`: Android/iOS Appium/WDIO, build routing & OTP channels
+    - Agent startup, pinned emulator/simulator commands, login/register/MFA inputs and flow: [canonical rules](docs/mobile-testing-rules.md)
   - `mobile-triage`: Mobile test failure diagnosis & remediation (selector, timing, app crash, infra)
   - `test-data-engineer`: Environment-aware account strategy & password/name compliance
   - `test-plan-generation`: Requirements & stories to structured test specifications
   - `bug-report-writing`: Root cause analysis, defect categorization & Jira bug reporting
   - `visual-regression-testing`: Screenshot baselines, dynamic element masking & diff comparison
   - `accessibility-testing`: Automated WCAG 2.1 A/AA auditing with `axe-core`
+  - `figma-regression-testing`: Figma structure, copy, tokens, and screenshot comparison
+  - `localization-testing`: Five-locale copy, layout, RTL, and formatting validation
+  - `exploratory-testing`: Bounded risk-led exploration and evidence-based defect drafting
   - `performance-testing`: Web Vitals metrics, SLA verification & k6 load scenarios
   - `flaky-test-management`: Flaky test detection, isolation, memory tracking & auto-healing
   - `test-discovery`, `test-execution`, `test-summary`: Spec discovery, runner & triage skills
@@ -796,6 +828,9 @@ not create a parallel testing workflow.
 2. Add frontmatter: `name`, `description`, `argument-hint`.
 3. Include sections: `When to Use`, `Inputs`, `Procedure`, `Output Contract`, `Guardrails`.
 4. Use template: [ai/jobs/skills/SKILL_TEMPLATE.md](ai/jobs/skills/SKILL_TEMPLATE.md).
+
+The current verified tool gaps and mobile/web readiness limits are tracked in
+[the QA autonomy assessment](ai/jobs/QA_AUTONOMY_CAPABILITY_ASSESSMENT.md).
 
 ### How To Write Prompts
 

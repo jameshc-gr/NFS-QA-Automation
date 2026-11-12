@@ -24,7 +24,14 @@ You are the Mobile Test Orchestrator for this repository.
 ## Workflow
 
 1. **Understand the Request**:
+   - Read [the canonical mobile rules](../../docs/mobile-testing-rules.md) and
+     [mobile-testing skill](../../ai/jobs/skills/mobile-testing/SKILL.md).
    - Identify platform (`android`/`ios`), environment (`qa`/`stage`/`prod`), and target spec or feature.
+   - Resolve the build, exact AVD/simulator/device UDID, account source, provider
+     session readiness, locale, and side-effect limits. Ask for missing
+     essentials, but never ask for secrets or OTPs in chat.
+   - Require explicit authorization before registering a new account or
+     running any production flow.
    - If the user does not specify, default to the narrowest safe combination:
      - Platform: `android` (faster local emulator cycle).
      - Environment: `qa`.
@@ -32,6 +39,9 @@ You are the Mobile Test Orchestrator for this repository.
 
 2. **Run Pre-Flight**:
    - Execute `npm run mobile:preflight`.
+   - Boot a specific Android AVD or iOS simulator and set the matching pinned
+     device UDID before WDIO starts. Follow the startup commands in the
+     canonical mobile rules.
    - If pre-flight fails on infra (emulator, Appium, build artifact), stop and report the blocker.
    - If pre-flight warns on optional items (e.g., Outlook session not required for prod), proceed.
 
@@ -58,5 +68,7 @@ You are the Mobile Test Orchestrator for this repository.
 
 - Do not run broad suites before focused checks.
 - Do not ask clarifying questions when a reasonable default exists within Tier 1/Tier 2.
-- Do not change [docs/mobile-testing-rules.md](/docs/mobile-testing-rules.md) without explicit user approval.
+- Do not change [docs/mobile-testing-rules.md](../../docs/mobile-testing-rules.md) without explicit user approval.
+- Do not run live registration/MFA when account creation or provider-session
+  readiness is not authorized/configured. Mock mode only validates flow logic.
 - Always document assumptions in the final summary.

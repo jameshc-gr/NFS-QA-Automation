@@ -3,6 +3,31 @@
 Canonical assets live in [agents](agents/), [skills](skills/) and [prompts](prompts/).
 Start with the [repository guide](../../README.md).
 
+## 2026-11-11 - Autonomous QA capability assessment
+
+- Recorded the session-verified MCP, web/API, Android, iOS, Figma, Jira,
+  localization, visual, accessibility, and network capabilities in
+  [the assessment](QA_AUTONOMY_CAPABILITY_ASSESSMENT.md).
+- Added Figma regression, localization, and exploratory-testing skills and
+  indexed them in the QA skills directory.
+- Validation was intentionally limited to read-only inventory. No package was
+  installed; no app, simulator, external request, ticket, or Jira issue was
+  changed. End-to-end execution remains blocked by the lack of a connected
+  device, target Figma file, and supplied test run inputs. The canonical mobile
+  rules path referenced by current guidance was not present.
+- Follow-up: revalidated Figma identity and read the current selection's
+  top-level page listing. Node-level traversal and design-to-app comparison
+  remain untested because no target node/app flow was specified.
+
+## 2026-11-11 - Mobile agent onboarding
+
+- Restored the missing canonical mobile rules from current helper/spec behavior,
+  including explicit agent inputs, Android/iOS device startup, configured app
+  launch, account-safe login/registration, and environment-routed MFA.
+- Updated the shared mobile skill and all repository mobile generator,
+  orchestrator, and healer profiles to consult the same rules. No live account,
+  OTP, app, or device was used.
+
 ## 2026-11-02 - IR chart-reference guidance
 
 - Updated current framework mechanics without changing skill frontmatter:
