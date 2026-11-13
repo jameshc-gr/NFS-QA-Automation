@@ -26,6 +26,7 @@ export interface Scenario {
   id: string;
   title: string;
   product: Product;
+  purchaseIntent?: 'signed-contract' | 'house-search';
   tags: string[];
   borrower: Person;
   coBorrower?: Person & { employment?: Employment; sameAddress?: boolean };
@@ -80,10 +81,10 @@ const dateOut = (days: number) => {
 };
 const digits = (s: string) => s.replace(/\D/g, '');
 
-async function fillResidenceDuration(page: Page, moveIn: string) {
-  const dateInput = page.locator('#user-residence-started-input');
+async function fillResidenceDuration(page: Page, moveIn: string, prefix = 'user') {
+  const dateInput = page.locator(`#${prefix}-residence-started-input`);
   if (await dateInput.isVisible()) {
-    await fillMasked(page, '#user-residence-started-input', digits(moveIn));
+    await fillMasked(page, `#${prefix}-residence-started-input`, digits(moveIn));
     return;
   }
   const match = /^(\d{2})\/?(\d{4})$/.exec(moveIn);
@@ -239,12 +240,28 @@ async function declarationsStep(p: Page, pre: string) {
   await clickNext(p);
 }
 
+async function fillRefiPropertyDetails(p: Page, s: Scenario) {
+  const loan = s.loan;
+  await fillMasked(p, '#refi-year-purchased-input', String(loan.yearPurchased ?? 2018));
+  await fillMasked(p, '#refi-purchase-price-input', String(loan.origPrice ?? 400000));
+  await p.locator('#property-type-select').selectOption({ label: s.property.propertyType });
+  if (loan.currentValue) await fillMasked(p, '#refi-estimated-value-input', String(loan.currentValue));
+  await clickNext(p);
+}
+
 type Handler = (p: Page, s: Scenario) => Promise<void>;
 
 /** Route -> handler. Keyed by /apply/<route>; states inside a route are detected by DOM. */
 export const handlers: Record<string, Handler> = {
   // ---------- purchase: property ----------
-  'purchase-needs': async (p, s) => pressExact(p, 'main', s.product === 'preapproval' ? 'I’m researching what I can afford' : s.property.address ? 'I signed a purchase agreement' : 'I found a house I’d like to buy'),
+  'purchase-needs': async (p, s) => {
+    const choice = s.product === 'preapproval'
+      ? 'I’m researching what I can afford'
+      : s.purchaseIntent === 'signed-contract' || (s.purchaseIntent !== 'house-search' && s.property.address)
+        ? 'I signed a purchase agreement'
+        : 'I found a house I’d like to buy';
+    await pressExact(p, 'main', choice);
+  },
   'property-buy-timeline': async (p, s) => pressExact(p, 'main', s.loan.timeline ?? 'As soon as possible'),
   'property-preferred-terms': async (p, s) => pressExact(p, 'main', s.loan.refiGoal ?? 'Lower my rate and monthly payment'),
   'borrower-referral': async p => {
@@ -266,14 +283,7 @@ export const handlers: Record<string, Handler> = {
     await p.locator('#property-zip-input').fill(s.property.zip);
     await clickNext(p);
   },
-  'property-details-refi2': async (p, s) => {
-    const l = s.loan;
-    await fillMasked(p, '#refi-year-purchased-input', String(l.yearPurchased ?? 2018));
-    await fillMasked(p, '#refi-purchase-price-input', String(l.origPrice ?? 400000));
-    await p.locator('#property-type-select').selectOption({ label: s.property.propertyType });
-    if (l.currentValue) await fillMasked(p, '#refi-estimated-value-input', String(l.currentValue));
-    await clickNext(p);
-  },
+  'property-details-refi2': async (p, s) => fillRefiPropertyDetails(p, s),
   'interest-rate-refi2': async (p, s) => {
     await fillMasked(p, '#refi-interest-rate-input', String(s.loan.interestRate ?? 6.75));
     await clickNext(p);
@@ -295,7 +305,11 @@ export const handlers: Record<string, Handler> = {
     await answer('co-government-ownership-interest-radio', 'No'); // not shown on refinance
     await answer('co-borrower-marital-status-radio', c.maritalStatus);
     await answer('co-borrower-address-same-radio', c.sameAddress === false ? 'No' : 'Yes');
-    if (await p.locator('#co-borrower-residence-started-input').count()) await fillMasked(p, '#co-borrower-residence-started-input', digits(s.residence.moveIn));
+    const coResidenceDate = p.locator('#co-borrower-residence-started-input');
+    const coResidenceYears = p.getByRole('textbox', { name: /^Years\*/i });
+    if (await coResidenceDate.count() || await coResidenceYears.count()) {
+      await fillResidenceDuration(p, s.residence.moveIn, 'co-borrower');
+    }
     await answer('co-borrower-dependents-radio', 'No');
     await clickNext(p);
   },
@@ -317,8 +331,18 @@ export const handlers: Record<string, Handler> = {
     await clickNext(p);
   },
   'property-address-refi2': async (p, s) => {
+    const address = p.locator('#property-address-input');
+    const purchasedYear = p.locator('#refi-year-purchased-input');
+    await Promise.race([
+      address.waitFor({ state: 'visible', timeout: 15000 }),
+      purchasedYear.waitFor({ state: 'visible', timeout: 15000 }),
+    ]).catch(() => { throw new Error('Neither refinance address nor property-confirmation form rendered'); });
+    if (await purchasedYear.isVisible().catch(() => false)) {
+      await fillRefiPropertyDetails(p, s);
+      return;
+    }
     const l = s.loan;
-    await p.locator('#property-address-input').fill(s.property.address);
+    await address.fill(s.property.address);
     await p.locator('#property-city-input').fill(s.property.city);
     await p.locator('#property-potential-state-select').selectOption({ label: s.property.state });
     await p.locator('#property-zip-input').fill(s.property.zip);

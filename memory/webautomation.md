@@ -1,5 +1,20 @@
 # NFS-QA-Automation Repository Memory
 
+## 2026-11-12 DMX purchase/refinance verification
+- DMX now has 16 complete scenarios, 5 resume scenarios and 23 generated cases.
+  `PUR-10` explicitly picks the fourth signed-purchase-agreement choice; the
+  offline fixture includes all four options. Preapproval selects the research/
+  affordability option.
+- Refinance route `/apply/property-address-refi2` can render the property
+  confirmation form rather than address fields. The handler branches by visible
+  fields; `npm run test:dmx:unit` passed 16/16 and focused engine/data `tsc` passed.
+- Live checks: initial suite 37/43; the five shared refinance failures passed on
+  one-worker rerun. One PROD GRI Enhanced read-only entry route assertion remains
+  mismatched; no PROD loan creation. See `tests/projects/DMX/README.md`.
+- Do not record account credentials or loan identifiers in docs. Root hygiene
+  passed after moving the pre-existing `firebase-debug.log` into dated
+  `test-results/2026-11-12/DMX/maintenance/`.
+
 ## 2026-11-06 Solution Finder lab startup diagnostic routing
 - **Decision:** The lab does not require Firebase CLI. Its startup now moves only
   an existing root `firebase-debug.log` into dated

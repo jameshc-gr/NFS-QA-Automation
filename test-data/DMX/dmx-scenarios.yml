@@ -166,6 +166,19 @@ scenarios:
     loan: { price: 585000, down: 117000, loan_amount: 468000 }
     expect: { credit: good }
 
+  - id: PUR-10-single-alice-signed-contract
+    title: Single first-time buyer, signed contract, strong income, low DTI
+    product: purchase
+    purchase_intent: signed-contract
+    tags: [purchase, single, first-time-buyer, signed-contract, good-credit, low-dti]
+    borrower: { profile: alice_firstimer, dob: "06/18/1994", marital: Unmarried }
+    residence: { address: "2150 W Diversey Pkwy", city: Chicago, state: Illinois, zip: "60647", move_in: "03/2021", status: Rent, monthly_rent: 1800 }
+    employment: { employer: Midwest Health Partners, title: Product Analyst, city: Chicago, state: Illinois, start: "01/15/2018", salary: 145000 }
+    assets: [{ type: Checking account, institution: Chase Bank, balance: 75000 }, { type: Savings account, institution: Ally Bank, balance: 65000 }]
+    property: { address: "6234 N Ravenswood Ave", city: Chicago, state: Illinois, zip: "60660", type: Single Family, usage: As a primary residence }
+    loan: { price: 420000, down: 84000, loan_amount: 336000 }
+    expect: { dti: low, credit: good }
+
   - id: REF-01-single-rate-term
     title: Single borrower, rate-and-term refinance, low DTI
     product: refinance
@@ -207,6 +220,18 @@ scenarios:
     property: { address: "5420 N Winthrop Ave", city: Chicago, state: Illinois, zip: "60640", type: Condo, usage: As a primary residence }
     loan: { refi_goal: Lower my rate and monthly payment, year_purchased: 2017, orig_price: 310000, current_value: 455000, balance: 240000, new_loan: 245000, interest_rate: 5.99, taxes: 5400, insurance: 900 }
     expect: { credit: good }
+
+  - id: REF-04-single-andy-america-rate-term
+    title: Single borrower, rate-and-term refinance, strong income, low DTI
+    product: refinance
+    tags: [refinance, single, rate-and-term, good-credit, low-dti]
+    borrower: { profile: andy_america, dob: "02/14/1981", marital: Unmarried }
+    residence: { address: "5420 N Winthrop Ave", city: Chicago, state: Illinois, zip: "60640", move_in: "08/2017", status: Own }
+    employment: { employer: Chicago Public Schools, title: Assistant Principal, city: Chicago, state: Illinois, start: "08/15/2011", salary: 165000 }
+    assets: [{ type: Checking account, institution: Chase Bank, balance: 55000 }, { type: Savings account, institution: Bank of America, balance: 72000 }]
+    property: { address: "5420 N Winthrop Ave", city: Chicago, state: Illinois, zip: "60640", type: Single Family, usage: As a primary residence }
+    loan: { refi_goal: Lower my rate and monthly payment, year_purchased: 2017, orig_price: 380000, current_value: 610000, balance: 325000, new_loan: 330000, interest_rate: 6.25, taxes: 6900, insurance: 1350 }
+    expect: { dti: low, credit: good }
 
   - id: PRE-01-single-preapproval
     title: First-time buyer researching what they can afford (pre-approval)

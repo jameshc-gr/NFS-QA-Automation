@@ -162,3 +162,85 @@ for (const variant of ['duration', 'date']) {
     }
   });
 }
+
+for (const variant of ['duration', 'date']) {
+  test(`co-borrower residence handler supports the ${variant} form contract`, async () => {
+    const scenario = loadScenarios().find(item => item.id === 'PUR-09-coborrower-good-credit-mid-loan');
+    const submitted = [];
+    await page.exposeFunction('recordCoResidence', value => submitted.push(value));
+    await page.route('**/*', route => fulfillCoBorrowerResidence(route, variant));
+    await page.goto('https://apply.dmx.test/apply/co-borrower-personal');
+    await runApplication(page, scenario, { stopAt: 'done' });
+    const values = Object.fromEntries(submitted[0].map(input => [input.id, input.value]));
+    if (variant === 'date') assert.equal(values['co-borrower-residence-started-input'], scenario.residence.moveIn.replace('/', ''));
+    else {
+      const [month, year] = scenario.residence.moveIn.split('/').map(Number);
+      const today = new Date();
+      const months = (today.getFullYear() - year) * 12 + today.getMonth() + 1 - month;
+      assert.equal(values.years, String(Math.floor(months / 12)));
+      assert.equal(values.months, String(months % 12));
+    }
+  });
+}
+
+function fulfillCoBorrowerResidence(route, variant) {
+  const fields = variant === 'date'
+    ? '<input id="co-borrower-residence-started-input">'
+    : '<label>Years*<input id="years"></label><label>Months*<input id="months"></label>';
+  const body = `<main>
+    <input id="co-borrower-email-input"><input id="co-borrower-home-phone-input">
+    <div id="co-government-ownership-interest-radio"><button>No</button></div>
+    <div id="co-borrower-marital-status-radio"><button>Married</button></div>
+    <div id="co-borrower-address-same-radio"><button>Yes</button><button>No</button></div>
+    ${fields}
+    <div id="co-borrower-dependents-radio"><button>No</button></div>
+    <button id="button-next" onclick="window.recordCoResidence(Array.from(document.querySelectorAll('input')).map(input => ({id: input.id, value: input.value}))).then(() => location.href='/apply/done')">Continue</button>
+  </main>`;
+  return route.fulfill({ contentType: 'text/html', body });
+}
+
+test('purchase-needs selects signed-contract path for the Alice purchase scenario', async () => {
+    const scenario = loadScenarios().find(item => item.id === 'PUR-10-single-alice-signed-contract');
+    const selected = [];
+    await page.exposeFunction('recordIntent', value => selected.push(value.trim()));
+    await page.route('**/*', route => {
+      const body = new URL(route.request().url()).pathname === '/apply/done'
+        ? '<main>Done</main>'
+        : `<main>
+          <button onclick="window.recordIntent(this.textContent).then(() => location.href='/apply/done')">I’m researching what I can afford</button>
+          <button onclick="window.recordIntent(this.textContent).then(() => location.href='/apply/done')">I’m looking at homes and listings</button>
+          <button onclick="window.recordIntent(this.textContent).then(() => location.href='/apply/done')">I found a house I’d like to buy</button>
+          <button onclick="window.recordIntent(this.textContent).then(() => location.href='/apply/done')">I signed a purchase agreement</button>
+        </main>`;
+      return route.fulfill({ contentType: 'text/html', body });
+    });
+    await page.goto('https://apply.dmx.test/apply/purchase-needs');
+    await runApplication(page, scenario, { stopAt: 'done' });
+    assert.deepEqual(selected, ['I signed a purchase agreement']);
+});
+
+test('refinance property route fills the confirmation form when it replaces address entry', async () => {
+  const scenario = loadScenarios().find(item => item.id === 'REF-04-single-andy-america-rate-term');
+  const submitted = [];
+  await page.exposeFunction('recordRefiDetails', values => submitted.push(values));
+  await page.route('**/*', route => {
+    const pathname = new URL(route.request().url()).pathname;
+    const body = pathname === '/apply/property-address-refi2'
+      ? `<main>
+          <input id="refi-year-purchased-input"><input id="refi-purchase-price-input">
+          <select id="property-type-select"><option>Single Family</option></select>
+          <input id="refi-estimated-value-input">
+          <button id="button-next" onclick="window.recordRefiDetails(Array.from(document.querySelectorAll('input, select')).map(input => ({id: input.id, value: input.value}))).then(() => location.href='/apply/interest-rate-refi2')">Confirm</button>
+        </main>`
+      : '<main>Interest rate</main>';
+    return route.fulfill({ contentType: 'text/html', body });
+  });
+  await page.goto('https://apply.dmx.test/apply/property-address-refi2');
+  await runApplication(page, scenario, { stopAt: 'interest-rate-refi2' });
+  assert.deepEqual(Object.fromEntries(submitted[0].map(field => [field.id, field.value])), {
+    'refi-year-purchased-input': String(scenario.loan.yearPurchased),
+    'refi-purchase-price-input': String(scenario.loan.origPrice),
+    'property-type-select': scenario.property.propertyType,
+    'refi-estimated-value-input': String(scenario.loan.currentValue),
+  });
+});

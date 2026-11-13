@@ -172,6 +172,16 @@
   establish a fresh live tenant suite outcome or certify pricing/underwriting.
   See the [lab suite workflow](../../scripts/solution-finder/lab/README.md#run-a-suite).
 
+## 2026-11-12 - DMX purchase intent and refinance state regressions
+
+- Added offline coverage for the signed-contract purchase choice with all four
+  purchase-needs options present, and for refinance property confirmation when
+  that form appears on the address route. Existing borrower and co-borrower
+  residence contracts remain covered.
+- `npm run test:dmx:unit` passed 16/16. Focused TypeScript for the DMX engine
+  and data loader passed. Live evidence and limitations are in the
+  [DMX maintenance history](../projects/DMX/README.md).
+
 ## 2026-10-30 - DMX browser regressions
 
 - Request/decision: Protect DMX login and residence repairs with intercepted

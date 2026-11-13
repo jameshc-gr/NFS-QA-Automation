@@ -40,6 +40,7 @@ function toScenario(r: RawFile, y: any): Scenario {
     id: y.id,
     title: y.title,
     product: y.product,
+    purchaseIntent: y.purchase_intent,
     tags: y.tags ?? [],
     borrower: person(r, y.borrower),
     residence: {
