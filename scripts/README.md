@@ -16,6 +16,16 @@ Use the [root guide](../README.md) for supported suite commands.
 
 ## Work history
 
+### 2026-11-13 - DMX Consumer Direct Lab policy
+
+- Added a strict no-LO exception only for the generated Consumer Direct
+  incomplete case on GRI Enhanced DEV; other categories still require LO-B.
+- The child test receives account credentials through runtime environment
+  variables rather than its run-config file. Dashboard history and public run
+  data omit credentials and loan identifiers for this category.
+- Offline DMX tests passed 21/21; script syntax passed. No live loan was created.
+  See [DMX Lab history](dmx-dashboard/README.md#work-history).
+
 ### 2026-11-02 - Sanitized IR reference tooling
 
 - Added `import:solution-finder:ir-reference` for the supplied IR chart;

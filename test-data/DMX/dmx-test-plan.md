@@ -16,8 +16,8 @@ Accounts: `my-dmx-<tag><n>--ra@yopmail.com` / `Test123!`. Every account created 
 | `tests/projects/DMX/dmx-engine.ts` | Route-to-handler driver that walks any product to the dashboard (or stops at a route) |
 | `tests/projects/DMX/dmx-data.ts` | YAML loader and account registry writer |
 | `tests/projects/DMX/dmx-dashboard.ts` | Dashboard, Accounts-card and loan-officer assertions |
-| `test-data/DMX/dmx-test-cases.csv` | The 21 test cases (generated from the YAML by `npm run dmx:test-cases`) |
-| `tests/projects/DMX/dmx-flows.ts` | Shared runners: complete loan, resume, logout/login resume, entry check |
+| `test-data/DMX/dmx-test-cases.csv` | The 24 test cases (generated from the YAML by `npm run dmx:test-cases`) |
+| `tests/projects/DMX/dmx-flows.ts` | Shared runners: complete loan, resume, consumer-direct incomplete draft, logout/login resume, entry check |
 | `tests/projects/DMX/<test_id>.spec.ts` | One generated spec file per CSV row (21 files) |
 
 Run: `npm run test:dmx:complete`, `npm run test:dmx:resume`, or `npm run test:project:DMX` (about 3-5 minutes per loan; 5 workers).
@@ -57,7 +57,18 @@ Each test: register, walk to the stop route, record the account as `incomplete`,
 
 `INC-01-relogin` additionally calls `/api/logout`, asserts the loan URL now requires Okta login, signs in with the account credentials and finishes the loan.
 
-## 4. Known limits (need a decision, not a code change)
+## 4. Consumer Direct incomplete draft (No LO)
+
+| ID | Starts from | Stops at | Outcome |
+| :--- | :--- | :--- | :--- |
+| CON-01 | Existing signed-in MyAccount account | `lo-selection`, immediately after selecting **No** | Saved incomplete purchase draft with no loan officer; not resumed or completed |
+
+This case uses the MyAccount profile menu to start an application, completes only the initial purchase basics, selects **No** for the loan-officer relationship, and exits without continuing into credit consent or later application pages. It verifies the saved draft is listed in **Loans in Progress**. The generated loan GUID is held only in memory for that assertion; it is not logged, added to the account registry, or written to dashboard history/run config. Screenshots, traces and video are disabled for this case.
+
+The DMX Lab allows this one incomplete category on GRI Enhanced DEV with **No loan officer**. All other loan-creation cases still require LO-B. Enter existing account credentials in the Lab at run time; they are cleared from the form after launch and are not persisted for this case. The runner is headed and allows manual MFA only; it does not automate OTP retrieval. The direct MyAccount selectors, MFA experience and application flow have not been live-validated for this case.
+For direct CLI use, provide `DMX_CONSUMER_EMAIL` and `DMX_CONSUMER_PASSWORD` through the local process environment; do not put their values in scenario files or source control.
+
+## 5. Known limits (need a decision, not a code change)
 
 - **MFA on direct MyAccount login.** Logging in from the DMX resume URL works with email + password (covered by `INC-01-relogin`). Logging in directly at `my.gr-dev.com` with a brand-new account showed Okta's "Set up security methods" (phone SMS code) screen, so a real MyAccount login is not automated. Automating OTP retrieval is a new auth provider and needs owner approval per `AGENTS.md`. `INC-01-relogin` still guards against that screen: it skips unless run headed with `DMX_MFA_MANUAL=1` and a person enters the code.
 - **Accounts before completion.** `my.gr-dev.com` has no session until the DMX handoff, so an in-progress loan card cannot be inspected in Accounts without a real login; resume is verified through the saved DMX loan URL instead.

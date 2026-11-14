@@ -19,6 +19,7 @@ const LOAN_OFFICERS = [
   { id: 'lo-a', label: 'DMX Testlo (LO-A)', empId: '12657', url: 'https://apply-gri.dev.saas.rate.com/apply/loan-purpose?emp-id=12657', expectedName: 'Testlo' },
   { id: 'lo-b', label: 'DMX Testlo (LO-B)', empId: '4723', url: 'https://apply-gri.dev.saas.rate.com/apply/loan-purpose?emp-id=4723', expectedName: 'John Sample' },
   { id: 'lo-c', label: 'DMX Indu (LO-C)', empId: '6068', url: 'https://apply-gri.dev.saas.rate.com/apply/lo-selection?emp-id=6068', expectedName: 'Indu' },
+  { id: 'none', label: 'No loan officer · Consumer Direct', empId: '', url: '', expectedName: '' },
 ];
 
 let activeRun = null;
@@ -73,6 +74,10 @@ function readBody(req) {
 function publicRun(run) {
   if (!run) return null;
   const { child, password, accountRowsAtStart, ...safe } = run;
+  if (run.category === 'incomplete-consumer-direct') {
+    safe.email = '';
+    if (safe.result) safe.result = { ...safe.result, email: '', password: '' };
+  }
   if (!run.finishedAt) {
     safe.elapsedSeconds = Math.floor((Date.now() - run.startedAt) / 1000);
     safe.estimatedSecondsRemaining = run.progress > 0
@@ -82,8 +87,18 @@ function publicRun(run) {
   return safe;
 }
 
+function canLaunchLoan(target, testCase, loanOfficerId) {
+  if (!target || target.id !== 'dev-gri-enhanced' || !target.supportsLoanCreation) return false;
+  if (testCase?.category === 'incomplete-consumer-direct') return loanOfficerId === 'none';
+  return loanOfficerId === 'lo-b' && LOAN_OFFICERS.some(officer => officer.id === loanOfficerId);
+}
+
 function addLog(run, text, kind = 'info') {
-  const line = String(text).replace(/\x1b\[[0-9;]*m/g, '').trim();
+  let line = String(text).replace(/\x1b\[[0-9;]*m/g, '').trim();
+  if (run.category === 'incomplete-consumer-direct') {
+    line = line.replace(/(https?:\/\/[^\s"'`?]+)\?[^\s"'`]+/gi, '$1?[redacted]')
+      .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[email]');
+  }
   if (!line) return;
   const diagnosticLine = line.match(/DMX_DASHBOARD_DIAGNOSTIC:(\{.*\})/);
   if (diagnosticLine) {
@@ -120,22 +135,26 @@ function finishRun(run, code, signal) {
   run.progress = code === 0 ? 100 : run.progress;
   run.estimatedSecondsRemaining = 0;
   run.currentStep = code === 0 ? 'Complete' : 'Failed';
+  const consumerDirect = run.category === 'incomplete-consumer-direct';
   if (signal) addLog(run, `Runner stopped by ${signal}`, 'error');
   const diagnosticFile = run.outputDir ? path.join(ROOT, run.outputDir, 'dmx-dashboard-diagnostic.json') : '';
   run.diagnostic = diagnosticFile ? readJson(diagnosticFile, run.diagnostic) : run.diagnostic;
-  if (run.diagnostic) run.diagnostic.screenshotUrl = `/api/runs/${run.id}/screenshot`;
+  if (run.diagnostic && !consumerDirect) run.diagnostic.screenshotUrl = `/api/runs/${run.id}/screenshot`;
   if (run.diagnostic && run.outputDir) {
     const diagnosticFile = path.join(ROOT, run.outputDir, 'dmx-dashboard-diagnostic.json');
     fs.mkdirSync(path.dirname(diagnosticFile), { recursive: true });
     fs.writeFileSync(diagnosticFile, JSON.stringify(run.diagnostic, null, 2), { mode: 0o600 });
   }
   run.result = {
-    email: run.email,
-    password: run.password,
+    email: consumerDirect ? '' : run.email,
+    password: consumerDirect ? '' : run.password,
     status: run.status,
     tenant: run.targetLabel || '',
     environment: 'DEV',
-    loanOfficerLabel: run.loanOfficerLabel || '',
+    loanOfficerLabel: consumerDirect ? 'No loan officer · Consumer Direct' : run.loanOfficerLabel || '',
+    consumerDirect,
+    incompleteDraft: consumerDirect && code === 0,
+    loanCreated: consumerDirect ? code === 0 : undefined,
     resumeGuid: '',
     dashboardLoanGuid: '',
     loanNumber: '',
@@ -146,29 +165,34 @@ function finishRun(run, code, signal) {
     screenshotUrl: run.diagnostic?.screenshotUrl || '',
   };
   try {
-    const rows = parseCsv(fs.readFileSync(path.join(ROOT, 'test-data/DMX/dmx-created-accounts.csv'), 'utf8'));
-    const matching = rows.slice(run.accountRowsAtStart).filter(row => row.email === run.email && row.scenarioId === run.testId);
-    const latest = matching[matching.length - 1];
-    if (latest) {
-      run.result = {
-        email: latest.email,
-        password: run.password,
-        status: latest.status,
-        resumeGuid: latest.stoppedAt ? latest.loanGuid : '',
-        dashboardLoanGuid: latest.dashboardUrl ? /\/loan\/([^/]+)\/overview/.exec(latest.dashboardUrl)?.[1] || '' : (!latest.stoppedAt ? latest.loanGuid : ''),
-        loanNumber: latest.loanNumber,
-        dashboardUrl: latest.dashboardUrl,
-        note: run.diagnostic?.error || latest.note,
-        failedPage: run.diagnostic?.page || '',
-        failedRoute: run.diagnostic?.route || '',
-        screenshotUrl: run.diagnostic?.screenshotUrl || '',
-      };
+    if (consumerDirect) {
+      if (code === 0) run.result.status = 'incomplete';
+      else run.result.note ||= 'Consumer-direct draft test failed; detailed identifiers were not retained.';
+    } else {
+      const rows = parseCsv(fs.readFileSync(path.join(ROOT, 'test-data/DMX/dmx-created-accounts.csv'), 'utf8'));
+      const matching = rows.slice(run.accountRowsAtStart).filter(row => row.email === run.email && row.scenarioId === run.testId);
+      const latest = matching[matching.length - 1];
+      if (latest) {
+        run.result = {
+          email: latest.email,
+          password: run.password,
+          status: latest.status,
+          resumeGuid: latest.stoppedAt ? latest.loanGuid : '',
+          dashboardLoanGuid: latest.dashboardUrl ? /\/loan\/([^/]+)\/overview/.exec(latest.dashboardUrl)?.[1] || '' : (!latest.stoppedAt ? latest.loanGuid : ''),
+          loanNumber: latest.loanNumber,
+          dashboardUrl: latest.dashboardUrl,
+          note: run.diagnostic?.error || latest.note,
+          failedPage: run.diagnostic?.page || '',
+          failedRoute: run.diagnostic?.route || '',
+          screenshotUrl: run.diagnostic?.screenshotUrl || '',
+        };
+      }
+      if (code === 0 && !['complete', 'resumed-complete'].includes(run.result?.status)) {
+        run.status = 'failed';
+        run.result.status = 'failed';
+        run.result.note ||= 'The test ended without completing the loan.';
+      } else if (code === 0) run.status = 'passed';
     }
-    if (code === 0 && !['complete', 'resumed-complete'].includes(run.result?.status)) {
-      run.status = 'failed';
-      run.result.status = 'failed';
-      run.result.note ||= 'The test ended without completing the loan.';
-    } else if (code === 0) run.status = 'passed';
     run.result.status = run.status === 'passed' ? (run.result.status || 'complete') : 'failed';
   } catch (error) { addLog(run, `Could not read run result: ${error.message}`, 'error'); }
   run.currentStep = run.status === 'passed' ? 'Complete' : 'Failed';
@@ -186,16 +210,25 @@ function finishRun(run, code, signal) {
 
 function launchRun(run, scenario, password, loanOfficer, target) {
   const config = {
-    testId: run.testId, email: run.email, password, scenario,
-    loanOfficerId: loanOfficer.id, loanOfficerLabel: loanOfficer.label, loanOfficerName: loanOfficer.expectedName, entryUrl: loanOfficer.url,
+    testId: run.testId, scenario,
     targetId: target.id, environment: target.environment, tenant: target.tenant,
   };
+  if (run.category !== 'incomplete-consumer-direct') {
+    config.email = run.email;
+    config.password = password;
+  }
+  if (loanOfficer) Object.assign(config, {
+    loanOfficerId: loanOfficer.id, loanOfficerLabel: loanOfficer.label,
+    loanOfficerName: loanOfficer.expectedName, entryUrl: loanOfficer.url,
+  });
+  else config.loanOfficerMode = 'none';
   fs.writeFileSync(RUN_CONFIG, JSON.stringify(config), { mode: 0o600 });
   const spec = path.resolve(ROOT, run.specFile);
   const runDate = new Date().toISOString().slice(0, 10);
   const output = `test-results/${runDate}/DMX/runs/${run.id}`;
   run.outputDir = output;
   const args = ['test', spec, '--project=chromium', '--workers=1', `--output=${output}`];
+  if (run.category === 'incomplete-consumer-direct') args.push('--headed');
   const env = {
     ...process.env,
     TEST_PROJECT: 'DMX',
@@ -203,12 +236,24 @@ function launchRun(run, scenario, password, loanOfficer, target) {
     DMX_DASHBOARD_RUN_CONFIG: RUN_CONFIG,
     DMX_DASHBOARD_OUTPUT_DIR: output,
   };
-  delete env.DMX_MFA_MANUAL;
+  if (run.category === 'incomplete-consumer-direct') {
+    env.DMX_MFA_MANUAL = '1';
+    env.DMX_MFA_MANUAL_TIMEOUT = '600000';
+    env.DMX_CONSUMER_EMAIL = run.email;
+    env.DMX_CONSUMER_PASSWORD = password;
+  } else {
+    delete env.DMX_MFA_MANUAL;
+    delete env.DMX_MFA_MANUAL_TIMEOUT;
+    delete env.DMX_CONSUMER_EMAIL;
+    delete env.DMX_CONSUMER_PASSWORD;
+  }
   const child = spawn(path.join(ROOT, 'node_modules/.bin/playwright'), args, {
     cwd: ROOT, env, stdio: ['ignore', 'pipe', 'pipe'], shell: false,
   });
   run.child = child;
-  addLog(run, `Launching ${run.testId} with one Chromium worker; account ${run.email}`);
+  addLog(run, run.category === 'incomplete-consumer-direct'
+    ? `Launching ${run.testId} with one headed Chromium worker; MyAccount credentials are runtime-only`
+    : `Launching ${run.testId} with one Chromium worker; account ${run.email}`);
   let buffers = { stdout: '', stderr: '' };
   for (const [stream, kind] of [[child.stdout, 'info'], [child.stderr, 'error']]) {
     stream.on('data', chunk => {
@@ -351,33 +396,45 @@ async function route(req, res) {
     const body = await readBody(req);
     if (activeRun && !activeRun.finishedAt) return send(res, 409, { error: 'A DMX run is already active. Wait for it to finish.' });
     const target = DMX_ENTRY_TARGETS.find(entry => entry.id === body.targetId);
-    if (!target || target.id !== 'dev-gri-enhanced' || !target.supportsLoanCreation || body.loanOfficerId !== 'lo-b' || !LOAN_OFFICERS.some(officer => officer.id === body.loanOfficerId)) {
-      return send(res, 400, { error: 'Loan creation is restricted to GRI Enhanced DEV with LO-B. Other targets are read-only entry checks.' });
-    }
     const testCase = parseCsv(fs.readFileSync(CASES_FILE, 'utf8')).find(row => row.test_id === body.testId);
     if (!testCase || testCase.automated !== 'yes' || !testCase.spec_file || !/^tests\/projects\/DMX\/[\w.-]+\.spec\.ts$/.test(testCase.spec_file)) {
       return send(res, 400, { error: 'Select an automated test case from the catalog.' });
+    }
+    if (!canLaunchLoan(target, testCase, body.loanOfficerId)) {
+      return send(res, 400, {
+        error: testCase.category === 'incomplete-consumer-direct'
+          ? 'Consumer-direct incomplete cases require GRI Enhanced DEV and No loan officer. Other cases remain restricted to GRI Enhanced DEV with LO-B.'
+          : 'Loan creation is restricted to GRI Enhanced DEV with LO-B. Other targets are read-only entry checks.',
+      });
     }
     const scenario = body.scenario;
     if (!scenario || !['purchase', 'refinance', 'preapproval'].includes(scenario.product) || !scenario.borrower || !scenario.employment || !scenario.property || !scenario.loan || !scenario.residence) {
       return send(res, 400, { error: 'The selected scenario is missing required DMX data.' });
     }
+    const consumerDirect = testCase.category === 'incomplete-consumer-direct';
     const email = String(body.email || '').trim() || undefined;
+    if (consumerDirect && !email) return send(res, 400, { error: 'Enter the existing MyAccount email for a consumer-direct case.' });
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return send(res, 400, { error: 'Enter a valid email address.' });
-    const password = String(body.password || 'Test123!');
+    const password = String(body.password || (consumerDirect ? '' : 'Test123!'));
+    if (consumerDirect && !password) return send(res, 400, { error: 'Enter the existing MyAccount password for a consumer-direct case.' });
     if (password.length < 8 || password.length > 128) return send(res, 400, { error: 'Password must contain 8 to 128 characters.' });
-    const loanOfficer = LOAN_OFFICERS.find(officer => officer.id === body.loanOfficerId);
-  const run = {
-      id: `dmx-${Date.now()}`, testId: testCase.test_id, title: testCase.title,
-      specFile: testCase.spec_file, email: email || '', password, status: 'running', loanOfficerId: loanOfficer.id, loanOfficerLabel: loanOfficer.label, loanOfficerName: loanOfficer.expectedName,
+    const loanOfficer = consumerDirect ? null : LOAN_OFFICERS.find(officer => officer.id === body.loanOfficerId);
+    const run = {
+      id: `dmx-${Date.now()}`, testId: testCase.test_id, title: testCase.title, category: testCase.category,
+      specFile: testCase.spec_file, email: email || '', password, status: 'running',
+      loanOfficerId: loanOfficer?.id || 'none',
+      loanOfficerLabel: consumerDirect ? 'No loan officer · Consumer Direct' : loanOfficer.label,
+      loanOfficerName: loanOfficer?.expectedName || '',
       targetId: target.id, targetLabel: target.label,
       progress: 0, estimatedSecondsRemaining: null, startedAt: Date.now(),
       elapsedSeconds: 0, currentStep: 'Starting browser', steps: 0, logs: [],
     };
     try {
+      if (!consumerDirect) {
       run.accountRowsAtStart = parseCsv(fs.readFileSync(path.join(ROOT, 'test-data/DMX/dmx-created-accounts.csv'), 'utf8')).length;
+      }
     } catch { run.accountRowsAtStart = 0; }
-    if (!run.email) {
+    if (!run.email && !consumerDirect) {
       const tag = testCase.test_id.split('-').slice(0, 2).join('').toLowerCase();
       run.email = `my-dmx-${tag}${Date.now().toString().slice(-5)}${Math.floor(Math.random() * 90 + 10)}--ra@yopmail.com`;
     }
@@ -427,12 +484,16 @@ const server = http.createServer((req, res) => {
     else res.end();
   });
 });
-server.listen(PORT, HOST, () => console.log(`DMX local runner: http://${HOST}:${PORT}`));
-for (const signal of ['SIGINT', 'SIGTERM']) {
-  process.on(signal, () => {
-    if (activeRun?.child && !activeRun.finishedAt) activeRun.child.kill('SIGTERM');
-    try { fs.unlinkSync(RUN_CONFIG); } catch {}
-    server.close(() => process.exit(0));
-    setTimeout(() => process.exit(1), 5000).unref();
-  });
+if (require.main === module) {
+  server.listen(PORT, HOST, () => console.log(`DMX local runner: http://${HOST}:${PORT}`));
+  for (const signal of ['SIGINT', 'SIGTERM']) {
+    process.on(signal, () => {
+      if (activeRun?.child && !activeRun.finishedAt) activeRun.child.kill('SIGTERM');
+      try { fs.unlinkSync(RUN_CONFIG); } catch {}
+      server.close(() => process.exit(0));
+      setTimeout(() => process.exit(1), 5000).unref();
+    });
+  }
 }
+
+module.exports = { canLaunchLoan, publicRun };

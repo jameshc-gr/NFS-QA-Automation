@@ -1,39 +1,51 @@
 import { test, expect, Page, BrowserContext, TestInfo } from '@playwright/test';
 import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { register, runApplication, newEmail, routeOf, ENTRY_URL, PASSWORD } from './dmx-engine';
+import { register, runApplication, newEmail, routeOf, ENTRY_URL, PASSWORD, handleLoginRedirect } from './dmx-engine';
 import { loadScenarios, loadTestCase, recordAccount } from './dmx-data';
-import { assertDashboard, assertAccountsCard, assertLoanOfficer } from './dmx-dashboard';
+import { assertDashboard, assertAccountsCard, assertLoanOfficer, MYACCOUNT_LOANS_URL } from './dmx-dashboard';
 import { dmxEntryTarget } from './dmx-environments';
 
 test.afterEach(async ({ page, context }, testInfo) => {
   const dashboardRun = Boolean(process.env.RUN_ID);
   if (testInfo.status === 'passed' || (!dashboardRun && testInfo.status === testInfo.expectedStatus)) return;
 
+  const consumerDirect = testInfo.title.startsWith('CON-01-consumer-direct-no-lo-incomplete');
   const runId = process.env.RUN_ID;
   let openPages: Page[] = [];
   try { openPages = context.pages().filter(candidate => !candidate.isClosed()); } catch { /* Context may already be closed after a runner failure. */ }
   const diagnosticPage = openPages[openPages.length - 1] || page;
   const outputDir = process.env.DMX_DASHBOARD_OUTPUT_DIR;
-  const screenshotPath = testInfo.outputPath('dmx-failure.png');
+  const screenshotPath = consumerDirect ? '' : testInfo.outputPath('dmx-failure.png');
   let screenshot = '';
-  try {
-    mkdirSync(join(screenshotPath, '..'), { recursive: true });
-    await diagnosticPage.screenshot({ path: screenshotPath, fullPage: true, timeout: 15000 });
-    screenshot = screenshotPath.replace(`${process.cwd()}/`, '');
-  } catch (error) {
-    await testInfo.attach('dmx-failure-screenshot-error', { body: (error as Error).message, contentType: 'text/plain' });
+  if (!consumerDirect) {
+    try {
+      mkdirSync(join(screenshotPath, '..'), { recursive: true });
+      await diagnosticPage.screenshot({ path: screenshotPath, fullPage: true, timeout: 15000 });
+      screenshot = screenshotPath.replace(`${process.cwd()}/`, '');
+    } catch (error) {
+      await testInfo.attach('dmx-failure-screenshot-error', { body: (error as Error).message, contentType: 'text/plain' });
+    }
   }
 
   let pageUrl = '';
-  try { pageUrl = diagnosticPage.url(); } catch { /* The browser page may already have closed. */ }
+  try {
+    pageUrl = diagnosticPage.url();
+    if (consumerDirect) {
+      const safeUrl = new URL(pageUrl);
+      safeUrl.search = '';
+      safeUrl.hash = '';
+      pageUrl = safeUrl.toString();
+    }
+  } catch { /* The browser page may already have closed. */ }
   const diagnostic = {
     testId: testInfo.title.match(/^[A-Z]+-\d+(?:-[^:]*)?/)?.[0] || testInfo.title,
     title: testInfo.title,
     page: pageUrl,
     route: (() => { try { return routeOf(diagnosticPage); } catch { return pageUrl; } })(),
     screenshot,
-    error: testInfo.errors[0]?.message?.split('\n')[0]
+    error: consumerDirect ? 'Consumer-direct draft test failed; detailed account and loan identifiers were not retained.'
+      : testInfo.errors[0]?.message?.split('\n')[0]
       || testInfo.annotations.find(annotation => annotation.type === 'skip')?.description
       || `Expected ${testInfo.expectedStatus}, received ${testInfo.status}`,
   };
@@ -143,6 +155,64 @@ export async function runCompleteLoan(id: string, page: Page, context: BrowserCo
 async function abandon(page: Page) {
   const url = page.url();
   return { resumeUrl: url, guid: new URL(url).searchParams.get('gr-loan-guid')! };
+}
+
+// Consumer-direct runs require an existing MyAccount session and never complete the loan.
+export async function runConsumerDirectIncomplete(id: string, page: Page, context: BrowserContext) {
+  const tc = loadTestCase(id);
+  const run = dashboardRun(id);
+  const s = { ...runScenario(id, tc.scenario_ref), id };
+  const email = run?.email || process.env.DMX_CONSUMER_EMAIL || '';
+  const password = run?.password || process.env.DMX_CONSUMER_PASSWORD || '';
+  test.setTimeout(12 * 60_000);
+  test.skip(!email || !password, 'Supply an existing MyAccount email and password through the DMX Lab or DMX_CONSUMER_EMAIL/DMX_CONSUMER_PASSWORD.');
+
+  await page.goto(MYACCOUNT_LOANS_URL, { waitUntil: 'domcontentloaded' });
+  await handleLoginRedirect(page, email, password, MYACCOUNT_LOANS_URL, { startNewApplication: false });
+  const profileMenu = page.locator('button[title="Open menu"]');
+  await expect(profileMenu, 'signed-in MyAccount profile menu').toBeVisible({ timeout: 10 * 60_000 });
+
+  await profileMenu.click();
+  const startApplication = page.locator('[role="menuitem"], button, a')
+    .filter({ hasText: /^\s*(Start an application|Create a new loan)\s*$/i }).first();
+  await expect(startApplication, 'start an application from the profile menu').toBeVisible({ timeout: 15000 });
+  await startApplication.click();
+
+  const createNew = page.locator('button, a, [role="button"]')
+    .filter({ hasText: /^\s*Create new(?: loan)?\s*$/i }).first();
+  if (await createNew.isVisible({ timeout: 3000 }).catch(() => false)) await createNew.click();
+
+  const isApplicationPage = (candidate: Page) => {
+    try { return new URL(candidate.url()).hostname === 'apply-gri.dev.saas.rate.com'; }
+    catch { return false; }
+  };
+  await expect.poll(() => context.pages().some(isApplicationPage), {
+    message: 'MyAccount should open the GRI Enhanced DEV application',
+    timeout: 45000,
+  }).toBe(true);
+  const appPage = context.pages().find(isApplicationPage)!;
+  await expect.poll(() => new URL(appPage.url()).pathname).toMatch(/^\/apply\/(express-loan|loan-purpose)$/);
+  expect(new URL(appPage.url()).searchParams.has('emp-id'), 'consumer-direct entry has no loan-officer attribution').toBe(false);
+
+  const visited = await runApplication(appPage, s, {
+    stopAfter: tc.stop_at_route,
+    loanOfficerMode: 'none',
+  });
+  expect(visited, 'consumer-direct flow reached the no-loan-officer selection').toContain(tc.stop_at_route);
+  expect(visited.at(-1), 'no route after the loan-officer selection was acted on').toBe(tc.stop_at_route);
+  const loanGuid = new URL(appPage.url()).searchParams.get('gr-loan-guid');
+  expect(loanGuid, 'application was saved before it was abandoned').toBeTruthy();
+  expect(new URL(appPage.url()).searchParams.has('emp-id'), 'saved application remains unassigned').toBe(false);
+  expect(new URL(appPage.url()).pathname).not.toMatch(/\/loan\/[^/]+\/overview$/);
+
+  await page.goto(MYACCOUNT_LOANS_URL, { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('body')).toContainText(/Loans in Progress/i, { timeout: 30000 });
+  await expect.poll(() => page.locator('a').evaluateAll(
+    (links, guid) => links.some(link => (link as HTMLAnchorElement).href.includes(String(guid))),
+    loanGuid,
+  ), { message: 'saved incomplete draft appears in MyAccount', timeout: 60000 }).toBe(true);
+  console.log(`[${id}] saved consumer-direct incomplete draft with no loan officer; identifiers were not retained`);
+  await appPage.close();
 }
 
 // Incomplete loan: abandon at stop_at_route, come back in the same session and finish the SAME loan.

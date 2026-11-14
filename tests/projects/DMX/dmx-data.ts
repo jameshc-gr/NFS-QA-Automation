@@ -12,6 +12,7 @@ interface RawFile {
   credit_profiles: Record<string, { first: string; last: string; ssn: string }>;
   scenarios: any[];
   incomplete: { id: string; base: string; stop_at: string; note: string }[];
+  consumer_direct_incomplete?: { id: string; base: string; stop_at: string; note: string }[];
 }
 
 let cache: RawFile | undefined;

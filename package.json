@@ -115,6 +115,7 @@
     "test:project:DMX": "TEST_PROJECT=DMX npx playwright test tests/projects/DMX --project=chromium --workers=5",
     "test:dmx:complete": "TEST_PROJECT=DMX npx playwright test tests/projects/DMX/PUR- tests/projects/DMX/REF- tests/projects/DMX/PRE- tests/projects/DMX/ENTRY- --project=chromium --workers=5",
     "test:dmx:resume": "TEST_PROJECT=DMX npx playwright test tests/projects/DMX/INC- --project=chromium --workers=3",
+    "test:dmx:consumer-direct": "DMX_MFA_MANUAL=1 TEST_PROJECT=DMX npx playwright test tests/projects/DMX/CON- --project=chromium --workers=1 --headed",
     "dmx:test-cases": "ts-node scripts/generate-dmx-test-cases.ts",
     "dmx:dashboard": "node scripts/dmx-local-dashboard.js",
     "test:dmx:unit": "node --require ts-node/register/transpile-only --test tests/unit/dmx-login.test.cjs",

@@ -1,5 +1,21 @@
 # NFS-QA-Automation Repository Memory
 
+## 2026-11-13 DMX Consumer Direct
+- The generated `CON-01` case uses an existing MyAccount account, starts from
+  the Profile menu and leaves a saved purchase draft after selecting **No** for
+  loan-officer relationship. It is not a resume/complete test and skips credit
+  consent.
+- Lab policy permits no LO only for this incomplete category on GRI Enhanced
+  DEV; all other loan-creation categories still require LO-B. Consumer Direct
+  credentials are runtime-only; no account registry/history/run-config
+  credentials or loan GUIDs, and no screenshots/traces/video for this case.
+- MFA is manual in headed mode only; no OTP provider or live validation was
+  added. Offline DMX tests passed 21/21; focused TypeScript, syntax/JSON,
+  `git diff --check`, and root-hygiene tests (7/7) passed. Playwright discovery
+  found one test without execution. `npm run check:root` is blocked by the
+  pre-existing root `firebase-debug.log`, left untouched. See
+  `tests/projects/DMX/README.md`.
+
 ## 2026-11-12 DMX purchase/refinance verification
 - DMX now has 16 complete scenarios, 5 resume scenarios and 23 generated cases.
   `PUR-10` explicitly picks the fourth signed-purchase-agreement choice; the

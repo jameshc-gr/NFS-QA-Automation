@@ -3,6 +3,8 @@ const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
 const { handleLoginRedirect, register, runApplication, ENTRY_URL, ENTRY_URLS } = require('../projects/DMX/dmx-engine.ts');
 const { loadScenarios } = require('../projects/DMX/dmx-data.ts');
+const { canLaunchLoan, publicRun } = require('../../scripts/dmx-local-dashboard.js');
+const { DMX_ENTRY_TARGETS } = require('../projects/DMX/dmx-environments.ts');
 
 let browser;
 let context;
@@ -86,6 +88,104 @@ test('manual MFA expiry fails instead of reporting login success', async () => {
   await assert.rejects(handleLoginRedirect(page, credentials.email, credentials.password), /Manual MFA\/sign-in did not complete/);
   assert.equal(page.url(), loginUrl);
   assert.equal(await page.locator('input').inputValue(), '');
+});
+
+test('direct MyAccount login returns to Loans without automatically starting an application', async () => {
+  const myAccountLogin = 'https://my.gr-dev.com/login';
+  const myLoans = 'https://my.gr-dev.com/loans';
+  await page.route('**/*', route => {
+    const url = new URL(route.request().url());
+    const body = url.href === myAccountLogin
+      ? `<form onsubmit="event.preventDefault(); location.href='${myLoans}'">${form}</form>`
+      : url.href === myLoans
+        ? `<main><a href="${applicationUrl}">Start a new application</a></main>`
+        : '<main>Unexpected destination</main>';
+    return route.fulfill({ contentType: 'text/html; charset=utf-8', body });
+  });
+  await page.goto(myAccountLogin);
+  assert.equal(await handleLoginRedirect(page, credentials.email, credentials.password, myLoans, { startNewApplication: false }), true);
+  assert.equal(page.url(), myLoans);
+});
+
+test('consumer-direct application selects No and stops before continuing', async () => {
+  const selected = [];
+  const continued = [];
+  await page.exposeFunction('recordDirectChoice', value => selected.push(value));
+  await page.exposeFunction('recordContinue', () => continued.push(true));
+  await page.route('**/*', route => route.fulfill({ contentType: 'text/html', body: `<main>
+    <div id="loan-officer-choice-radio"><button onclick="window.recordDirectChoice('Yes')">Yes</button><button onclick="window.recordDirectChoice('No')">No</button></div>
+    <button id="button-next" onclick="window.recordContinue()">Continue</button>
+  </main>` }));
+  await page.goto('https://apply.dmx.test/apply/lo-selection?gr-loan-guid=fixture-only');
+
+  const visited = await runApplication(page, loadScenarios()[0], {
+    loanOfficerMode: 'none',
+    stopAfter: 'lo-selection',
+  });
+  assert.deepEqual(selected, ['No']);
+  assert.deepEqual(continued, []);
+  assert.deepEqual(visited, ['lo-selection']);
+  assert.equal(new URL(page.url()).pathname, '/apply/lo-selection');
+});
+
+test('consumer-direct fills only initial purchase basics before selecting No', async () => {
+  const scenario = loadScenarios()[0];
+  const captured = [];
+  const choices = [];
+  await page.exposeFunction('captureDirectBasics', value => captured.push(value));
+  await page.exposeFunction('captureDirectChoice', value => choices.push(value));
+  await page.route('**/*', route => {
+    const path = new URL(route.request().url()).pathname;
+    const body = path === '/apply/lo-selection'
+      ? `<main><button onclick="window.captureDirectChoice('No')">No</button><button id="button-next">Continue</button></main>`
+      : `<main>
+        <select id="loan-purpose-select"><option>I'm Purchasing</option></select>
+        <select id="property-potential-state-select"><option>${scenario.property.state}</option></select>
+        <select id="self-credit-score-select"><option>Good (700 – 739)</option></select>
+        <input id="property-estimated-price-input"><input id="property-down-payment-input">
+        <button id="button-next" onclick="window.captureDirectBasics({
+          price: document.querySelector('#property-estimated-price-input').value,
+          down: document.querySelector('#property-down-payment-input').value
+        }).then(() => location.href='/apply/lo-selection?gr-loan-guid=fixture-only')">Continue</button>
+      </main>`;
+    return route.fulfill({ contentType: 'text/html; charset=utf-8', body });
+  });
+  await page.goto('https://apply.dmx.test/apply/express-loan?gr-loan-guid=fixture-only');
+
+  const visited = await runApplication(page, scenario, {
+    loanOfficerMode: 'none',
+    stopAfter: 'lo-selection',
+  });
+  assert.deepEqual(captured, [{ price: String(scenario.loan.price), down: String(scenario.loan.down) }]);
+  assert.deepEqual(choices, ['No']);
+  assert.deepEqual(visited, ['express-loan', 'lo-selection']);
+  assert.match(new URL(page.url()).pathname, /\/apply\/lo-selection$/);
+});
+
+test('consumer-direct Lab policy is limited to GRI DEV without LO-B', () => {
+  const dev = DMX_ENTRY_TARGETS.find(target => target.id === 'dev-gri-enhanced');
+  const prod = DMX_ENTRY_TARGETS.find(target => target.id === 'prod-gri-enhanced');
+  assert.equal(canLaunchLoan(dev, { category: 'incomplete-consumer-direct' }, 'none'), true);
+  assert.equal(canLaunchLoan(dev, { category: 'incomplete-consumer-direct' }, 'lo-b'), false);
+  assert.equal(canLaunchLoan(dev, { category: 'incomplete-resume' }, 'none'), false);
+  assert.equal(canLaunchLoan(dev, { category: 'complete-application' }, 'lo-b'), true);
+  assert.equal(canLaunchLoan(prod, { category: 'incomplete-consumer-direct' }, 'none'), false);
+});
+
+test('public consumer-direct run omits runtime account credentials', () => {
+  const result = publicRun({
+    id: 'fixture',
+    category: 'incomplete-consumer-direct',
+    email: credentials.email,
+    password: credentials.password,
+    status: 'running',
+    startedAt: Date.now(),
+    progress: 0,
+  });
+  assert.equal(result.email, '');
+  assert.equal(Object.hasOwn(result, 'password'), false);
+  assert.equal(JSON.stringify(result).includes(credentials.email), false);
+  assert.equal(JSON.stringify(result).includes(credentials.password), false);
 });
 
 test('existing loan list uses the selected entry when no new-application action exists', async () => {

@@ -120,17 +120,26 @@ export async function settle(page: Page, prev: string, timeout = 15000) {
 /** Detect common Okta/login pages by hostname or page contents. */
 function looksLikeLoginUrl(u: string | URL) {
   try {
-    const h = new URL(String(u)).hostname.toLowerCase();
-    return h.includes('login') || h.includes('okta') || h.includes('auth') || h.includes('authorize');
+    const url = new URL(String(u));
+    const h = url.hostname.toLowerCase();
+    return h.includes('login') || h.includes('okta') || h.includes('auth') || h.includes('authorize')
+      || (h === 'my.gr-dev.com' && url.pathname.startsWith('/login'));
   } catch (e) {
     return /login|okta|auth|authorize/i.test(String(u));
   }
 }
 
 /** Handle an on-the-fly login redirect. Supports manual MFA wait when DMX_MFA_MANUAL is set. */
-export async function handleLoginRedirect(page: Page, email: string, password: string, entryUrl = ENTRY_URL) {
+export async function handleLoginRedirect(
+  page: Page,
+  email: string,
+  password: string,
+  entryUrl = ENTRY_URL,
+  options: { startNewApplication?: boolean } = {},
+) {
   const url = page.url();
   if (!looksLikeLoginUrl(url)) return false;
+  const startNewApplication = options.startNewApplication ?? true;
   console.log('[DMX] detected login page:', new URL(url).hostname);
   const manual = /^(1|true)$/i.test(process.env.DMX_MFA_MANUAL ?? '');
   const mfaTimeout = Number(process.env.DMX_MFA_MANUAL_TIMEOUT ?? 600000);
@@ -161,7 +170,7 @@ export async function handleLoginRedirect(page: Page, email: string, password: s
   } catch {
     throw new Error(manual ? 'Manual MFA/sign-in did not complete within DMX_MFA_MANUAL_TIMEOUT' : 'Login did not complete; MFA may be required. Set DMX_MFA_MANUAL=1 for manual completion.');
   }
-  if (isDashboard(page) || new URL(page.url()).pathname === '/loans') {
+  if (startNewApplication && (isDashboard(page) || new URL(page.url()).pathname === '/loans')) {
     console.log('[DMX] existing loan dashboard; starting a new application');
     const startBtn = page.locator('button, a').filter({ hasText: /start (a )?new (application|loan)/i }).first();
     if (await startBtn.isVisible()) {
@@ -253,6 +262,33 @@ type Handler = (p: Page, s: Scenario) => Promise<void>;
 
 /** Route -> handler. Keyed by /apply/<route>; states inside a route are detected by DOM. */
 export const handlers: Record<string, Handler> = {
+  'express-loan': async (p, s) => {
+    const purpose = s.product === 'refinance' ? "I'm Refinancing" : "I'm Purchasing";
+    await p.locator('#loan-purpose-select').selectOption({ label: purpose });
+    await p.locator('#property-potential-state-select').selectOption({ label: s.property.state });
+    const credit = String(s.expect.credit ?? 'good').toLowerCase();
+    const score = credit.includes('excellent') ? 'Excellent (740+)'
+      : credit.includes('good') ? 'Good (700 – 739)'
+        : credit.includes('average') ? 'Average (640 – 699)'
+          : credit.includes('fair') ? 'Fair (580 – 639)'
+            : 'Needs Improvement (less than 580)';
+    await p.locator('#self-credit-score-select').selectOption({ label: score });
+
+    const amount = s.product === 'refinance'
+      ? p.locator('#refi-estimated-value-input')
+      : p.locator('#property-estimated-price-input');
+    if (!(await amount.isVisible().catch(() => false))) await clickNext(p);
+    await amount.waitFor({ state: 'visible', timeout: 15000 });
+    if (s.product === 'refinance') {
+      await fillMasked(p, '#refi-estimated-value-input', String(s.loan.currentValue ?? s.loan.price ?? 400000));
+      await fillMasked(p, '#refi-current-loan-balance-input', String(s.loan.balance ?? s.loan.newLoan ?? 300000));
+    } else {
+      await fillMasked(p, '#property-estimated-price-input', String(s.loan.price ?? 400000));
+      await fillMasked(p, '#property-down-payment-input', String(s.loan.down ?? 80000));
+    }
+    await clickNext(p);
+  },
+
   // ---------- purchase: property ----------
   'purchase-needs': async (p, s) => {
     const choice = s.product === 'preapproval'
@@ -497,6 +533,9 @@ async function fallback(page: Page, route: string) {
 export interface RunOptions {
   /** Stop (without acting) when this route is reached, for incomplete-loan scenarios. */
   stopAt?: string;
+  /** Stop after acting on the route; used by incomplete consumer-direct cases. */
+  stopAfter?: string;
+  loanOfficerMode?: 'none';
   maxSteps?: number;
   log?: (msg: string) => void;
 }
@@ -526,9 +565,14 @@ export async function runApplication(page: Page, s: Scenario, opts: RunOptions =
     if (same === 0) visited.push(route);
     log(`step ${i}: ${route}`);
     const h = handlers[route];
-    if (h) await h(page, s);
+    if (route === 'lo-selection' && opts.loanOfficerMode === 'none') await pressExact(page, 'main', 'No');
+    else if (route === 'loan-purpose' && opts.loanOfficerMode === 'none') {
+      await pressExact(page, 'main', s.product === 'refinance' ? "I'm Refinancing" : "I'm Purchasing");
+    }
+    else if (h) await h(page, s);
     else await fallback(page, route);
     await settle(page, route);
+    if (opts.stopAfter === route) return visited;
     // after settling, re-check for login redirects that may have occurred during route transitions
     if (looksLikeLoginUrl(page.url())) {
       const runEmail = String(process.env.DMX_RUN_EMAIL ?? s.borrower.email ?? '');

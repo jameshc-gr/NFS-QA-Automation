@@ -12,6 +12,7 @@ const specOf = (id: string) => `${SPEC_DIR}/${id}.spec.ts`;
 const FLOW: Record<string, string> = {
   'complete-application': 'runCompleteLoan',
   'incomplete-resume': 'runResumeLoan',
+  'incomplete-consumer-direct': 'runConsumerDirectIncomplete',
   'incomplete-relogin': 'runRelogin',
   entry: 'runEntry',
 };
@@ -100,6 +101,24 @@ for (const c of raw.incomplete) {
   }));
 }
 
+for (const c of raw.consumer_direct_incomplete ?? []) {
+  const y = byId[c.base];
+  if (!y) throw new Error(`consumer direct case ${c.id} references unknown scenario ${c.base}`);
+  rows.push(row({
+    test_id: c.id,
+    category: 'incomplete-consumer-direct',
+    spec_file: specOf(c.id),
+    scenario_ref: c.base,
+    title: `Consumer-direct ${y.product} draft with no loan officer (${c.note})`,
+    stop_at_route: c.stop_at,
+    preconditions: 'Existing signed-in MyAccount test account; credentials supplied at run time; GRI Enhanced DEV only; no loan officer',
+    steps: `Sign in to MyAccount; open Welcome profile menu and start an application; choose Create new if prompted; enter ${y.product} basics; select No at the loan-officer question; stop at /apply/${c.stop_at} after the saved loan GUID appears`,
+    expected_result: `One additional saved incomplete ${y.product} appears in Loans in Progress; no loan officer attribution or emp-id; no completion or credit-consent step`,
+    automated: 'yes',
+    ...scenarioRow(y, {}),
+  }));
+}
+
 const first = raw.incomplete[0];
 rows.push(row({
   test_id: `${first.id}-relogin`,
@@ -132,6 +151,7 @@ writeFileSync(OUT, `${HEADER.join(',')}\n${rows.join('\n')}\n`);
 const ids = [
   ...raw.scenarios.map((y: any) => ({ id: y.id, category: 'complete-application' })),
   ...raw.incomplete.map((c: any) => ({ id: c.id, category: 'incomplete-resume' })),
+  ...(raw.consumer_direct_incomplete ?? []).map((c: any) => ({ id: c.id, category: 'incomplete-consumer-direct' })),
   { id: `${first.id}-relogin`, category: 'incomplete-relogin' },
   { id: 'ENTRY-01-loan-officer-attribution', category: 'entry' },
 ];
@@ -144,6 +164,9 @@ for (const { id, category } of ids) {
   const fn = FLOW[category];
   const call = category === 'entry' ? `${fn}(page)` : `${fn}(id, page, context)`;
   const fixtures = category === 'entry' ? '{ page }' : '{ page, context }';
+  const testOptions = category === 'incomplete-consumer-direct'
+    ? ["test.use({ screenshot: 'off', trace: 'off', video: 'off' });", '']
+    : [];
   writeFileSync(resolve(CASES_DIR, `${id}.spec.ts`), [
     `${GENERATED_MARK} from test-data/DMX/dmx-test-cases.csv; do not edit.`,
     "import { test } from '@playwright/test';",
@@ -152,6 +175,7 @@ for (const { id, category } of ids) {
     '',
     `const id = '${id}';`,
     '',
+    ...testOptions,
     `test(\`\${id}: \${loadTestCase(id).title}\`, async (${fixtures}) => {`,
     `  await ${call};`,
     '});',

@@ -273,3 +273,7 @@ incomplete:
   - { id: INC-03-abandon-during-income,        base: PUR-03-single-high-dti,            stop_at: add-income-information,           note: "left on employment entry" }
   - { id: INC-04-abandon-refi-mid-flow,        base: REF-01-single-rate-term,           stop_at: interest-rate-refi2,              note: "refinance left after property details" }
   - { id: INC-05-abandon-before-government,    base: PUR-07-coborrower-excellent-credit, stop_at: government-questions-hmda,       note: "co-borrower loan left before government questions" }
+
+# Existing-account consumer-direct flow; this one is saved without an LO and is not resumed.
+consumer_direct_incomplete:
+  - { id: CON-01-consumer-direct-no-lo-incomplete, base: PUR-01-single-good-credit-low-dti, stop_at: lo-selection, note: "consumer direct purchase saved with no loan officer" }

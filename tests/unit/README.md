@@ -1,5 +1,16 @@
 # Unit Tests
 
+## 2026-11-13 - DMX Consumer Direct safeguards
+
+- Added offline coverage for selecting **No** and stopping before Continue,
+  returning from direct MyAccount login without auto-starting an application,
+  the GRI DEV/no-LO Lab policy boundary, and runtime-credential redaction.
+- The express-loan fixture serves UTF-8 so its credit-score en dash matches the
+  application label rather than a Windows-1252-decoded variant.
+- `npm run test:dmx:unit` passed 21/21. Focused DMX TypeScript passed; no live
+  account login or loan creation was performed.
+- See the [DMX maintenance history](../projects/DMX/README.md).
+
 ## 2026-11-02 - IR reference and action-gate regressions
 
 - IR normalization/table tests moved from scripts to the existing
