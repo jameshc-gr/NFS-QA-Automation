@@ -71,9 +71,9 @@ flowchart TD
   Engineer, Team UAT Tester, and Team Pentester. Profiles are in
   `.github/agents/team-*.agent.md`; role instructions and the workflow are in
   `ai/team-agent/`.
-- Every profile must read `README.md`, `AGENTS.md`, and
-  `ai/team-agent/memory/team-memory.md` before acting, then read the applicable
-  role file and canonical framework rules.
+- Every profile must read `README.md`, `AGENTS.md`, and the applicable role
+  file/canonical framework rules. Consult local `ai/memory/team-memory.md` if
+  present; never require or commit it.
 - PM owns peer handoffs and the QA/UAT rework loop. Pentesting is opt-in and
   requires explicit target scope and authorization.
 - No team profile may create/switch branches, commit, push, or open a pull

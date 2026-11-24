@@ -1,0 +1,24 @@
+<html>
+<body style="font-family:Arial, sans-serif; color:#222222;">
+    <p>Hello,</p>
+    <p>Here are the pipeline assignments and processor first-review results for {{REPORT_DATE}} — {{LOAN_COUNT}} assignment(s) total.</p>
+    <p></p>
+    <table style="border-collapse:collapse; margin-top:16px;">
+        <tr style="white-space:nowrap;">
+            <th style="padding:8px;border:1px solid #dddddd;text-align:left;background:#f0f0f0;">Loan Number</th>
+            <th style="padding:8px;border:1px solid #dddddd;text-align:left;background:#f0f0f0;">Company</th>
+            <th style="padding:8px;border:1px solid #dddddd;text-align:left;background:#f0f0f0;">Assigned UW</th>
+            <th style="padding:8px;border:1px solid #dddddd;text-align:left;background:#f0f0f0;">Assigned Processor</th>
+            <th style="padding:8px;border:1px solid #dddddd;text-align:left;background:#f0f0f0;">Assigned CC</th>
+            <th style="padding:8px;border:1px solid #dddddd;text-align:left;background:#f0f0f0;">Disclosures</th>
+            <th style="padding:8px;border:1px solid #dddddd;text-align:left;background:#f0f0f0;">Hard Credit</th>
+            <th style="padding:8px;border:1px solid #dddddd;text-align:left;background:#f0f0f0;">DTI</th>
+            <th style="padding:8px;border:1px solid #dddddd;text-align:left;background:#f0f0f0;">UW Eligible</th>
+        </tr>
+        {{LOAN_ROWS}}
+    </table>
+    <p style="margin-top:16px;">Review checks are PASS, FAIL, or UNKNOWN. "No review recorded" means no matching first-review audit was available when this digest was generated.</p>
+    <p>UW Eligible indicates eligibility for automatic advancement to Assigned to UW, not completed movement. Missing eligibility information is shown as No.</p>
+    <p>Available pipeline assignment and first-review PDFs are attached below. If an attachment is unavailable, it is omitted.</p>
+</body>
+</html>

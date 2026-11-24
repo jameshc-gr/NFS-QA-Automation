@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HELOAN Daily Decline Digest</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f4f7;font-family:Arial, Helvetica, sans-serif;color:#333333;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f7;padding:24px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:6px;overflow:hidden;">
+          <tr>
+            <td style="background-color:#c0392b;padding:20px 24px;">
+              <h1 style="margin:0;color:#ffffff;font-size:20px;">HELOAN Daily Decline Digest</h1>
+              <p style="margin:4px 0 0;color:#f7d7d3;font-size:13px;">{{REPORT_DATE}}</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:24px;">
+              <p style="font-size:14px;line-height:1.5;">
+                The following {{LOAN_COUNT}} HELOAN application(s) received a <strong>DECLINE</strong> recommendation
+                over the past day. Full credit decision reports are attached as PDFs.
+              </p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px;margin-top:12px;">
+                <thead>
+                  <tr style="background-color:#f0f0f0;text-align:left;">
+                    <th style="padding:8px;border:1px solid #dddddd;">Loan Number</th>
+                    <th style="padding:8px;border:1px solid #dddddd;">Company</th>
+                    <th style="padding:8px;border:1px solid #dddddd;">Decline Reason</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{LOAN_ROWS}}
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:16px 24px;background-color:#f7f7f9;font-size:11px;color:#888888;">
+              This is an automated notification from the Digital Mortgage Systems MCP HELOAN pipeline.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

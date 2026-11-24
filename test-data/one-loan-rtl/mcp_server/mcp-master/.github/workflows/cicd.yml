@@ -1,0 +1,74 @@
+name: CI/CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_to_prod:
+        description: 'Request review for prod deployment'
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: [self-hosted, Linux, X64, nonprod-platform]
+    permissions:
+      id-token: write
+      contents: read
+    outputs:
+      image_name_mcp: ${{ env.IMAGE_NAME_MCP }}
+    steps:
+      - name: Check Out Code
+        uses: actions/checkout@v5
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.BUILD_IAM_ROLE }}
+          aws-region: us-east-1
+          role-session-name: GitHubActions
+          mask-aws-account-id: false
+
+      - name: Log In to ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          mask-password: true
+
+      - name: Create image_tag
+        run: echo "IMAGE_TAG=${GITHUB_SHA::7}-$(date +'%s')" >> $GITHUB_ENV
+
+      - name: Set Docker Image Name MCP
+        run: echo "IMAGE_NAME_MCP=${{ steps.ecr-login.outputs.registry }}/digital-mortgage-systems-mcp:${IMAGE_TAG}" >> $GITHUB_ENV
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+        with:
+          driver: docker
+
+      - name: Build and push MCP
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          secrets: GITHUB_TOKEN=${{ secrets.GLOBAL_PACKAGE_ACCESS_TOKEN }}
+          tags: ${{ env.IMAGE_NAME_MCP }}
+
+  deploy-dev:
+    uses: ./.github/workflows/eks-deploy.yml
+    needs: build
+    if: needs.build.result == 'success'
+    with:
+      image-name-mcp: ${{ needs.build.outputs.image_name_mcp }}
+      environment: dev
+      deploy-runner-tag: nonprod-platform
+
+  deploy-prod:
+    uses: ./.github/workflows/eks-deploy.yml
+    needs: [build, deploy-dev]
+    if: needs.deploy-dev.result == 'success' && inputs.deploy_to_prod == true
+    with:
+      image-name-mcp: ${{ needs.build.outputs.image_name_mcp }}
+      environment: prod
+      deploy-runner-tag: prod-platform

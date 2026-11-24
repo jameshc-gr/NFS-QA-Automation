@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: digital-mortgage-systems-mcp-dev
+  name: digital-mortgage-systems-mcp-dev
+  namespace: digital-mortgage-systems-mcp
+  annotations:
+    logstash-prefix-key: k8s-${cluster}-${namespace}-${appname}
+spec:
+  replicas: 2
+  revisionHistoryLimit: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: digital-mortgage-systems-mcp-dev
+  template:
+    metadata:
+      labels:
+        app: digital-mortgage-systems-mcp-dev
+        datadoghq.com/apm-instrumentation: "true"
+    spec:
+      serviceAccountName: digital-mortgage-systems-mcp-dev
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: digital-mortgage-systems-mcp
+          image: "${DOCKER_IMAGE_MCP}"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              scheme: HTTP
+              path: /health
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /health
+              port: 8080
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /health
+              port: 8080
+            timeoutSeconds: 5
+          env:
+            - name: AWS_SECRET_NAME
+              value: "digital-mortgage-systems-mcp/digital-mortgage-systems-mcp-dev"
+            - name: APP_ENVIRONMENT
+              value: "dev"
+            - name: VAULT_ADDR
+              value: "https://vault.dev.platform.rate.com"
+            - name: VAULT_ROLE
+              value: "arn-aws-iam-336015931235-role-k8s-svc-digital-mortgage-systems-mcp-dev"
+            - name: DYNAMODB_LO_TABLE_ARN
+              value: "arn:aws:dynamodb:us-east-1:597067671424:table/Databricks_lo_data"
+            - name: DYNAMODB_PRAJNA_CREDIT_TRIGGER_TABLE_ARN
+              value: "arn:aws:dynamodb:us-east-1:597067671424:table/prajna_credittrigger_segment"
+            - name: DYNAMODB_PRAJNA_HIGHLY_ENGAGED_TABLE_ARN
+              value: "arn:aws:dynamodb:us-east-1:597067671424:table/prajna_highlyengaged_segment"
+            - name: DYNAMODB_PRAJNA_HIGHEQUITY_TABLE_ARN
+              value: "arn:aws:dynamodb:us-east-1:597067671424:table/prajna_highequity_segment"
+            - name: DYNAMODB_PRAJNA_JUSTLISTED_TABLE_ARN
+              value: "arn:aws:dynamodb:us-east-1:597067671424:table/prajna_justlisted_segment"
+            - name: DYNAMODB_PRAJNA_PREDICTIVE_TABLE_ARN
+              value: "arn:aws:dynamodb:us-east-1:597067671424:table/prajna_predictive_segment"
+            - name: ROOT_PATH
+              value: "/mcp/digital-mortgage-systems"
+            - name: ENABLE_DOCS
+              value: "true"
+            # FitBUX / Rate Wealth tools (src/tools/rate_wealth_tools.py)
+            # Secrets (FITBUX_OKTA_*, FITBUX_EMAIL_ENCRYPTION_KEY) come from Secrets Manager
+            - name: FITBUX_IDR_BASE_URL
+              value: "http://idrtracking.dev.fitbux.com:5200/api/v3"
+            - name: FITBUX_USER_API_BASE_URL
+              value: "http://internal-wealthi-1988763285.us-east-1.elb.amazonaws.com:5300"
+            # Writes and deletes change real borrower records; deletes also require writes to be "true"
+            - name: FITBUX_WRITES_ENABLED
+              value: "true"
+            - name: FITBUX_DELETES_ENABLED
+              value: "true"
+            - name: DD_TRACE_PEER_SERVICE_DEFAULTS_ENABLED
+              value: "true"
+            - name: DD_ENV
+              value: "nonprod"
+            - name: DD_SERVICE
+              value: "digital-mortgage-systems-mcp-dev"
+            - name: DD_TRACE_AGENT_URL
+              value: "unix:///var/run/datadog/apm.socket"
+            - name: DD_DOGSTATSD_SOCKET
+              value: "/var/run/datadog/dsd.socket"
+            - name: CACHE_TOOLS
+              value: "pull_credit, patch_and_pull_credit, bluesteel_property_valuation, get_borrower_loans, get_borrower_loans_by_email, search_oneloan, search_loans"
+            - name: CACHE_TTL
+              value: "3600"
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-cache-config
+                  key: REDIS_URL
+                  optional: true
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

@@ -14,7 +14,7 @@ function fixture(t) {
 
 test('preserves intentional root configs, local environments and source folders', t => {
   const root = fixture(t);
-  for (const name of ['README.md', 'auth.json', 'package.json', 'environment.qa.json',
+  for (const name of ['README.md', 'auth.json', '.mcp.json', 'package.json', 'environment.qa.json',
     'playwright.new-solution-finder.config.ts', 'codegen.cjs', '.env', '.env.qa.local']) {
     fs.writeFileSync(path.join(root, name), '');
   }

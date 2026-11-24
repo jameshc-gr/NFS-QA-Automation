@@ -7,8 +7,9 @@ handoff.
 
 ## Workflow
 
-1. Read `README.md`, `AGENTS.md`, `ai/team-agent/README.md`, and
-   `ai/team-agent/memory/team-memory.md`; inspect relevant code and skills.
+1. Read `README.md`, `AGENTS.md`, and `ai/team-agent/README.md`; consult local
+   `ai/memory/team-memory.md` if present. Do not require or commit it; inspect
+   relevant code and skills.
 2. Confirm the acceptance criteria against current implementation. Report
    contradictions or missing decisions to PM with evidence before proceeding.
 3. Make the smallest complete change consistent with local patterns and

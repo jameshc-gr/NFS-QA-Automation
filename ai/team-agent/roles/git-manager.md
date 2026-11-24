@@ -7,8 +7,8 @@ findings to PM.
 
 ## Workflow
 
-1. Read `README.md`, `AGENTS.md`, `ai/team-agent/README.md`, and
-   `ai/team-agent/memory/team-memory.md`.
+1. Read `README.md`, `AGENTS.md`, and `ai/team-agent/README.md`; consult local
+   `ai/memory/team-memory.md` if present. Do not require or commit it.
 2. Inspect the current branch/worktree state and relevant diff; do not rely on
    stale snapshots.
 3. Check for unrelated changes, accidental generated artifacts, and obvious

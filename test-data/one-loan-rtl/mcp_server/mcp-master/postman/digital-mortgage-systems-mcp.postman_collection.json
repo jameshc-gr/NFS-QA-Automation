@@ -1,0 +1,1516 @@
+{
+  "info": {
+    "_postman_id": "b8c3590b-8e59-4352-ae09-96930b8394ca",
+    "name": "MCP",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "27778131"
+  },
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "grant_type",
+        "value": "client_credentials",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "{{okta-token-url}}",
+        "type": "string"
+      },
+      {
+        "key": "clientId",
+        "value": "{{okta-client-id}}",
+        "type": "string"
+      },
+      {
+        "key": "clientSecret",
+        "value": "{{okta-client-secret}}",
+        "type": "string"
+      },
+      {
+        "key": "scope",
+        "value": "api.all.digital-mortgage-systems-mcp",
+        "type": "string"
+      },
+      {
+        "key": "addTokenTo",
+        "value": "header",
+        "type": "string"
+      },
+      {
+        "key": "tokenType",
+        "value": "Bearer",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Loan Credit Tools",
+      "item": [
+        {
+          "name": "Pull Credit",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"company-name\": \"gri\",\n    \"loan-id\": \"0966c1e0-f2bc-4137-ad9d-6e356be6bcc5\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/pull_credit",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "pull_credit"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Patch and Pull Credit",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"company-name\": \"owning\",\n    \"loan-id\": \"42a88ded-d5c9-4e1a-bb8a-2ab057db496a\",\n    \"application-id\": \"_borrower1\",\n    \"product\": \"soft credit\",\n    \"credit-pull-type\": \"softDynamic\",\n    \"borrower\": {\n        \"first-name\": \"Wei\",\n        \"last-name\": \"Dai\",\n        \"middle-name\": \"\",\n        \"birth-date\": \"1974-04-05\",\n        \"ssn\": \"999603333\",\n        \"address\": \"11 East Main Street\",\n        \"city\": \"Chicago Heights\",\n        \"state\": \"IL\",\n        \"postal-code\": \"60411\",\n        \"consent-type\": \"Internet\",\n        \"consent-date\": \"2026-02-02T08:00:00.000Z\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/patch_and_pull_credit",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "patch_and_pull_credit"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bluesteel Tools",
+      "item": [
+        {
+          "name": "Property Valuation",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"street_address\": \"8 Azalea\",\n    \"city\": \"Irvine\",\n    \"state\": \"CA\",\n    \"zip\": \"92620\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/bluesteel_property_valuation",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "bluesteel_property_valuation"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Leads Manager Tools",
+      "item": [
+        {
+          "name": "Create Loan",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Wei\",\n  \"lastName\": \"Dai\",\n  \"loanPurposeType\": \"NoCash-Out Refinance\",\n  \"emailAddress\": \"daiwei@gmail.com\",\n  \"mobilePhone\": \"(949)-532-4567\",\n  \"company-name\": \"gri\"\n//   \"companyEID\": 5,\n//   \"company-name\": \"owning\",\n//   \"originatingApp\": \"4\",\n//   \"dmFlow\": \"avatar2026\",\n//   \"loanFolder\": \"DMA Temp\"\n}\n\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/create_loan",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "create_loan"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Loan",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"grLoanGuid\": \"784e43d0-a5e0-4b44-a3b6-8ff3f75b7919\",\n    \"loanAmount\": 200000,\n    // \"subjectProperty\": {\n    //     \"appraisedValue\": 800000,\n    //     \"refinancePropertyOriginalCostAmount\": 500000\n    // },\n    \"company-name\": \"owning\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/update_loan",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "update_loan"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Copy Loan",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"loan-id\": \"1741c2aa-b2cc-4a3b-ac71-9f76bf708d7c\",\n    \"company-name\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/copy_loan",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "copy_loan"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Copy Loan Parts",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"sourceLoanId\": \"e2349289-8898-4b5c-85c7-820afa810c4a\", \n    \"destinationLoanId\": \"1741c2aa-b2cc-4a3b-ac71-9f76bf708d7c\",\n    \"company-name\": \"gri\",\n    \"loanParts\": [\n        \"CoBorrowerAll\"\n    ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/copy_loan_parts",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "copy_loan_parts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Loan Properties",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"loanIdentifier\": \"81cf6c80-f0f9-4d16-ac6f-7b47692c1cc2\",\n    \"requestedProperties\": [\"ApplicationId\", \"LoanNumber\", \"EncompassLoanId\"],\n    \"company-name\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_loan_properties",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_loan_properties"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "CRAM (Velocify) Tools",
+      "item": [
+        {
+          "name": "Create Lead",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"Andy\",\n    \"lastName\": \"America\",\n    \"emailAddress\": \"john.homeowner.mcp-test-020325.1--ra@yopmail.com\",\n    \"homePhoneNumber\": \"(949)-555-1212\",\n    \"mortgageType\": \"refinance\",\n    \"fico\": 750\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/create_lead",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "create_lead"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Lead",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"fico\": 670,\n    \"loanAmount\": \"100000\",\n    \"cram-id\": \"7f370d8f-1a94-42ed-a847-f38b4788ca36\",\n    \"encompassLoanNumber\": \"265077067DEV\",\n    \"propertyCity\": \"Irvine\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/update_lead",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "update_lead"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Email Tools",
+      "item": [
+        {
+          "name": "Send Application Completion Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"Danny\",\n    \"emailAddress\": \"dannycowless@gmail.com\",\n    \"loanType\": \"refinance\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/send_application_completion_email",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "send_application_completion_email"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Send Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"body\": \"<html><body><h3>Hello John</h3><br/><p>Your loan application is complete.</p></body></html>\",\n    \"to\": [\n        {\n            \"name\": \"Test Recipient\",\n            \"address\": \"test@example.com\"\n        }\n    ],\n    \"from\": {\n        \"name\": \"Test Sender\",\n        \"address\": \"testuser@example.com\"\n    },\n    \"subject\": \"Test Email Subject\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/send_email",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "send_email"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Doc Storage Tools",
+      "item": [
+        {
+          "name": "Prepare Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"encompass-loan-guid\": \"fd9e6d8f-f7d2-4424-ab44-22ff9d4c9fd6\",\n    \"name\": \"test doc 3/26\",\n    \"docHolderName\": \"Income\",\n    \"grConsumerIds\": [],\n    \"company-name\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/prepare_document",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "prepare_document"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "3c77074c-b732-4b41-8482-0e3a47647815",
+                  "src": "/Users/dacowles/Documents/TEST-DOC.docx"
+                },
+                {
+                  "key": "access_token",
+                  "value": "eyJraWQiOiJYOFpBdkF5MHZWcGpLSkhoUTlueGRMWHRfbVl1SXlsaWJZNFAzVWw5Q1BZIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULk9uVjlPMWZ6cktQUGhJV1d5WTZsRnlqdklLNWlRcDNZTUt5RGxhcDdsREEiLCJpc3MiOiJodHRwczovL2dyLm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzdnRldHA2NGpFbDJBdUUwaDciLCJhdWQiOiJhcGk6Ly93b3JrZm9yY2UiLCJpYXQiOjE3NzE0NDUwMTEsImV4cCI6MTc3MTQ0ODYxMSwiY2lkIjoiMG9hMm43MGFybTZpUllDUGYwaDgiLCJzY3AiOlsiYXBpLmFsbC5kb2Mtc3RvcmFnZS1zZXJ2aWNlIiwiYXBpLmFsbC5sb2FuLWNyZWRpdC1zZXJ2aWNlIiwiYXBpLmxlYWQubGVhZHMtbWFuYWdlciJdLCJzdWIiOiIwb2EybjcwYXJtNmlSWUNQZjBoOCIsImFwaS5sZWFkLmxlYWRzLW1hbmFnZXIiOlsiYXBpLmxlYWQubGVhZHMtbWFuYWdlci53cml0ZSJdLCJzY29wZSI6WyJhcGkuYWxsLmRvYy1zdG9yYWdlLXNlcnZpY2UiLCJhcGkuYWxsLmxvYW4tY3JlZGl0LXNlcnZpY2UiLCJhcGkubGVhZC5sZWFkcy1tYW5hZ2VyIl0sImZ1bGxOYW1lIjoibnVsbCBudWxsIiwiYXBpLmFsbC5sb2FuLWNyZWRpdC1zZXJ2aWNlIjpbImFwaS5hbGwubG9hbi1jcmVkaXQtc2VydmljZS5yZWFkIl0sImxhYmVsIjoiQVBJLURpZ2l0YWxNb3J0Z2FnZU1DUEludGVybmFsIiwiYXBpLmFsbC5kb2Mtc3RvcmFnZS1zZXJ2aWNlIjpbImFwaS5hbGwuZG9jLXN0b3JhZ2Utc2VydmljZS53cml0ZSJdLCJlbnYiOiJkZXYifQ.B_Gt-4oO2q5pf82KVhCoG9cPZQAw717ySYbVjj02QYOL202FBJfp7QwLmrH4QYjeXRnwcgzcXrbh1TRUa3a0d5RYzbWgzKkMghFTzDLics8tMfruqK-CcMuHG0jJSj65oI4c850J1QrclsqdIh9EETRDpD4TBMeGIYoNzkF4kb47VgG7N01EEwscSwZ1JQ4Fjy3u81ytYE99_CZaQupeIhorGVsqlNLj5zgSF6H50WexbPYXGaLssZBt8qD_4DJLwynaLFxwfLI73ZNe8YLhnPk_zZ9CmhD08ln0uQ569lt0B900bnTtRxWYxt7xyiLFpL9HTJo015idrMo38nJzHg",
+                  "type": "text",
+                  "uuid": "8c440f3d-b015-470d-8d9d-6f094358ef5e"
+                },
+                {
+                  "key": "company_name",
+                  "value": "gri",
+                  "type": "text",
+                  "uuid": "fd352c4c-5b41-421f-b846-ea2e88003ede"
+                },
+                {
+                  "key": "document_id",
+                  "value": "ca5e961b-7af4-48d5-92c9-ee7af960445f",
+                  "type": "text",
+                  "uuid": "dbc8c567-259a-46d1-bcc1-7f6337555ad3"
+                },
+                {
+                  "key": "encompass_loan_guid",
+                  "value": "2eaa96e9-6c6a-4d90-ac64-3a330c1896f0",
+                  "type": "text",
+                  "uuid": "5a508327-e045-49c9-98aa-f588792b391a"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/upload_document",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "upload_document"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Move Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"encompass-loan-guid\": \"8651c55b-8d1b-4d17-a980-84bedc24b50a\",\n    \"document-id\": \"ade8f4f6-c6f6-4c60-8b3e-9bf100f8d729\",\n    \"docHolderName\": \"Asset\",\n    \"company-name\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/move_document",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "move_document"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"encompass-loan-guid\": \"2eaa96e9-6c6a-4d90-ac64-3a330c1896f0\",\n    \"document-id\": \"\",\n    \"company-name\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/delete_document",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "delete_document"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Okta Tools",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"profile\": {\n        \"firstName\": \"Andy\",\n        \"lastName\": \"America\",\n        \"email\": \"andy-america-TEST324443@gmail.com\",\n        \"login\": \"andy-america-TEST324443@gmail.com\",\n        \"mobilePhone\": \"(949)-704-5667\"\n    },\n    \"credentials\": {\n        \"password\": {\n            \"value\": \"Password123!\"\n        } \n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/create_okta_user",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "create_okta_user"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"andy-america@gmail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_okta_user",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_okta_user"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Borrower Entity Tools",
+      "item": [
+        {
+          "name": "Create Borrower",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email-address\": {\n        \"primary\": \"andy-america-dc@gmail.com\"\n    },\n    \"identifier\": {\n        \"okta-id\": \"00uwgcijiz2QOoOWz1d7\"\n    },\n    \"name\": {\n        \"first\": \"Andy\",\n        \"last\": \"AmericaTEST\"\n    },\n    \"phone\": {\n        \"home\": \"(949)-704-5667\"\n    },\n    \"language-preference\": \"en\",\n    \"company-name\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/create_borrower_entity",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "create_borrower_entity"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Borrower",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"borrower-guid\": \"0c1f46c3-f0b2-46c3-ac87-46564d299ced\",     \n    \"name\": {\n        \"last\": \"America2\"\n    },\n    \"company-name\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/update_borrower_entity",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "update_borrower_entity"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Borrower",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"andy-america@gmail.com\",\n    \"company-name\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/search_borrower_entity",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "search_borrower_entity"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "MyAccount Tools",
+      "item": [
+        {
+          "name": "Get Borrower Loans",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"user-id\": \"3d29693f-fa35-498b-9a29-4fc592afaa9a\",\n    \"company-name\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_borrower_loans",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_borrower_loans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Borrower Loans By Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"andy-america@gmail.com\",\n    \"company-name\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_borrower_loans_by_email",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_borrower_loans_by_email"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Mortgage Guids",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"user-id\": \"\",\n    \"company-name\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_mortgage_guids",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_mortgage_guids"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Mortgage Numbers",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"user-id\": \"0c1f46c3-f0b2-46c3-ac87-46564d299ced\",\n    \"company-name\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_mortgage_numbers",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_mortgage_numbers"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Simon Tools",
+      "item": [
+        {
+          "name": "Batch eConsent",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"borrower\": {\n        \"name\": \"John Freddie\",\n        \"email\": \"myaccount-mlasdlkajslkjk@yopmail.com\",\n        \"source\": \"local\",\n        \"agreed-eConsent\": true,\n        \"agreed-twnConsent\": true,\n        \"language\": \"en\"\n    },\n    \"coborrower\": {\n        \"name\": \"Mary Freddie\",\n        \"email\": \"myaccount012031023@yopmail.com\",\n        \"source\": \"local\",\n        \"agreed-eConsent\": true,\n        \"agreed-twnConsent\": true,\n        \"language\": \"en\"\n    },\n    \"loan-guid\": \"d3773382-fea1-496b-a795-8b19d9a1187f\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/set_batch_simon_econsent",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "set_batch_simon_econsent"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "DynamoDB Tools",
+      "item": [
+        {
+          "name": "Query Databricks LO",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"query_by\": \"paidloname\",\n    \"query_value\": \"paul zgalich\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/query_loan_officer_data",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "query_loan_officer_data"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Query Prajna Credit Segment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"christopher.osterman815@gmail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/query_credit_trigger_segment",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "query_credit_trigger_segment"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get LO Contacts",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"lo_email\": \"paul.zgalich@rate.com\",\n    \"table\": \"prajna_highequity_segment\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_lo_contacts",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_lo_contacts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get LO Contacts Count",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"lo_email\": \"paul.zgalich@rate.com\",\n    \"tables\": [\"prajna_highlyengaged_segment\", \"prajna_credittrigger_segment\", \"prajna_highequity_segment\", \"prajna_justlisted_segment\", \"prajna_predictive_segment\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_lo_contacts_count",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_lo_contacts_count"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Document Extraction",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"docId\": \"document_id_here\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_document_extraction_centralized",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_document_extraction_centralized"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "DMX Tools",
+      "item": [
+        {
+          "name": "Finalize Loan",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"gr-loan-guid\": \"d464735c-9700-4f70-a95e-14e0a4e4de6d\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/finalize_loan",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "finalize_loan"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "OneLoan Tools",
+      "item": [
+        {
+          "name": "Get OneLoan Properties",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"loan_identifier\": \"1cb509b8-150c-44a6-9948-83bfbe5b0c15\",\n    \"company\": \"owning\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_oneloan_properties",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_oneloan_properties"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get OneLoan Properties by Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"borrowerEmail\": \"borrower@example.com\",\n    \"loEmail\": \"loan.officer@rate.com\",\n    \"requestedProperties\": [\n        \"VEND.X141\", \"CX.BUYERAGENTADMINEML\", \"VEND.X119\", \"VEND.X152\",\n        \"CX.SELLERAGENTADMINEML\", \"VEND.X130\", \"745\", \"LOCKRATE.2149\",\n        \"LOCKRATE.2151\", \"CX.APPSENT.1\", \"CX.APPRCVD.1\", \"3197\",\n        \"3153\", \"2298\", \"Log.MS.DateTime.Conditions_Submitted_to_UW\",\n        \"CX.CTC.REQUESTED\", \"CX.CONDITIONSUBMIT.1\", \"2301\", \"2305\",\n        \"CX.CTCCOMMIT.1\", \"CX.APPPAKCOMPLETE\", \"CX.APPR.OR.PIW.OR.ACE\",\n        \"CX.APPRORDERTRANS.10\", \"CX.APPRDUE2.4\", \"CX.APPRINSPDATE2.4\",\n        \"CX.COLLATERAL.UW.STATUS\", \"CX.APPRRECTRANS.10\", \"356\", \"3624\",\n        \"CX.CONDODOCS.10\", \"CX.CONDORECV.10\", \"CX.UWCONDOAPPR\",\n        \"3977\", \"CX.CDSIGNEDALL\", \"CX.HUDTOPOD\", \"CX.TITLEORDER.1\",\n        \"CX.TITREQUEST\", \"CX.SFC1\", \"CX.TITLERCVD.1\", \"CX.CPL.DATE\",\n        \"CX.TITLE.INVOICE\", \"CX.WIRE.IN\", \"CX.TITLE.COM\",\n        \"CX.TITLE.CLEAR.DATE\", \"CX.CLSVOEDATE\", \"748\",\n        \"CX.GR.INSURANCE.APPROVED\", \"CX.GR.INS.DATE\",\n        \"CX.TRUSTAPPROVED\", \"CX.TRUST\", \"CX.POAAPPROVEDDATE\",\n        \"CX.POA.EXPDATE\", \"CX.POA.TRACKING.INFO\",\n        \"CX.ESTCLOSELASTVALIDBY\", \"CX.CLSSCHED.1\", \"CX.CLSTIME.1\",\n        \"CX.TIME.ZONE\"\n    ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_oneloan_properties_by_email",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_oneloan_properties_by_email"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search OneLoan",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    // \"propertyPostalCode\": \"92115\",\n    // \"borrowerLast4SSN\": \"9991\",\n    // \"borrowerMobilePhone\": \"6565656565\",\n    \"loanNumber\": \"254933542DEV\",\n    \"company\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/search_oneloan",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "search_oneloan"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Patch OneLoan",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"loan_guid\": \"0966c1e0-f2bc-4137-ad9d-6e356be6bcc5\",\n    \"company\": \"gri\",\n    \"application_id\": \"application_id_here\",\n    \"fields\": [\n        {\n            \"fieldId\": \"4000\",\n            \"value\": \"250000\"\n        }\n    ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/patch_oneloan",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "patch_oneloan"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Encompass Tools",
+      "item": [
+        {
+          "name": "Get Encompass Loan Properties",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"loanId\": \"24c818c3-264b-4589-8472-4f5a47a32c0b\",\n    \"requestedProperties\": [\"745\", \"LOCKRATE.2149\", \"LOCKRATE.2151\", \"CX.APPSENT.1\", \"CX.APPRCVD.1\", \"3197\", \"3153\", \"2298\", \"Log.MS.DateTime.Conditions_Submitted_to_UW\", \"CX.CTC.REQUESTED\", \"CX.CONDITIONSUBMIT.1\", \"2301\", \"2305\", \"CX.CTCCOMMIT.1\", \"CX.APPPAKCOMPLETE\", \"CX.APPR.OR.PIW.OR.ACE\", \"CX.APPRORDERTRANS.10\", \"CX.APPRDUE2.4\", \"CX.APPRINSPDATE2.4\", \"CX.COLLATERAL.UW.STATUS\", \"CX.APPRRECTRANS.10\", \"356\", \"3624\", \"CX.CONDODOCS.10\", \"CX.CONDORECV.10\", \"CX.UWCONDOAPPR\", \"3977\", \"CX.CDSIGNEDALL\", \"CX.HUDTOPOD\", \"CX.TITLEORDER.1\", \"CX.TITREQUEST\", \"CX.SFC1\", \"CX.TITLERCVD.1\", \"CX.CPL.DATE\", \"CX.TITLE.INVOICE\", \"CX.WIRE.IN\", \"CX.TITLE.COM\", \"CX.TITLE.CLEAR.DATE\", \"CX.CLSVOEDATE\", \"748\", \"CX.GR.INSURANCE.APPROVED\", \"CX.GR.INS.DATE\", \"2305\", \"CX.TRUSTAPPROVED\", \"CX.TRUST\", \"CX.POAAPPROVEDDATE\", \"CX.POA.EXPDATE\", \"CX.POA.TRACKING.INFO\", \"CX.ESTCLOSELASTVALIDBY\", \"CX.CLSSCHED.1\", \"CX.CLSTIME.1\", \"CX.TIME.ZONE\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_encompass_loan",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_encompass_loan"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Encompass Loan by Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"borrowerEmail\": \"alice-firstimer-929@gmail.com\",\n    \"loEmail\": \"Howard.Bono@rate.com\",\n    \"requestedProperties\": [\"745\", \"LOCKRATE.2149\", \"LOCKRATE.2151\", \"CX.APPSENT.1\", \"CX.APPRCVD.1\", \"3197\", \"3153\", \"2298\", \"Log.MS.DateTime.Conditions_Submitted_to_UW\", \"CX.CTC.REQUESTED\", \"CX.CONDITIONSUBMIT.1\", \"2301\", \"2305\", \"CX.CTCCOMMIT.1\", \"CX.APPPAKCOMPLETE\", \"CX.APPR.OR.PIW.OR.ACE\", \"CX.APPRORDERTRANS.10\", \"CX.APPRDUE2.4\", \"CX.APPRINSPDATE2.4\", \"CX.COLLATERAL.UW.STATUS\", \"CX.APPRRECTRANS.10\", \"356\", \"3624\", \"CX.CONDODOCS.10\", \"CX.CONDORECV.10\", \"CX.UWCONDOAPPR\", \"3977\", \"CX.CDSIGNEDALL\", \"CX.HUDTOPOD\", \"CX.TITLEORDER.1\", \"CX.TITREQUEST\", \"CX.SFC1\", \"CX.TITLERCVD.1\", \"CX.CPL.DATE\", \"CX.TITLE.INVOICE\", \"CX.WIRE.IN\", \"CX.TITLE.COM\", \"CX.TITLE.CLEAR.DATE\", \"CX.CLSVOEDATE\", \"748\", \"CX.GR.INSURANCE.APPROVED\", \"CX.GR.INS.DATE\", \"2305\", \"CX.TRUSTAPPROVED\", \"CX.TRUST\", \"CX.POAAPPROVEDDATE\", \"CX.POA.EXPDATE\", \"CX.POA.TRACKING.INFO\", \"CX.ESTCLOSELASTVALIDBY\", \"CX.CLSSCHED.1\", \"CX.CLSTIME.1\", \"CX.TIME.ZONE\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_encompass_loan_by_email",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_encompass_loan_by_email"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Data Platform Tools",
+      "item": [
+        {
+          "name": "Search Loans",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    //\"loanNumber\": \"265096248DEV\"\n    //\"borrowerLastName\": \"America\",\n    \"borrowerFirstName\": \"Andy\"\n    //\"borrowerSsnLast4\": \"3333\"\n    // \"propertyZip\": \"48185\"\n    //\"borrowerPhoneNumber\": \"(245) 633-8373\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/search_loans",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "search_loans"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Taskmaster Tools",
+      "item": [
+        {
+          "name": "Create Task",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"loan-id\": \"265106112DEV\",\n    \"task-template-id\": \"83e9d0e6-bfbb-418a-97c9-b8a8f151ea74\",\n    \"task-title\": \"Test 6/2\",\n    \"task-description\": \"Testing task creation\",\n    \"task-type\": \"income_w2_most_recent\",\n    \"company\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/create_task",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "create_task"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Tasks",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n   \"tasks\": [\n    {\n        \"task-template-id\": \"e79b721c-ba0d-498f-8398-8a346df2add1\",\n        \"task-title\": \"Test 6/2\",\n        \"task-description\": \"Testing task creation\",\n        \"task-type\": \"income_w2_most_recent\"\n    },\n    {\n        \"task-template-id\": \"e79b721c-ba0d-498f-8398-8a346df2add1\",\n        \"task-title\": \"Test 6/2 #2\",\n        \"task-description\": \"Testing task creation\",\n        \"task-type\": \"income_w2_most_recent\"\n    },\n    {\n        \"task-template-id\": \"e79b721c-ba0d-498f-8398-8a346df2add1\",\n        \"task-title\": \"\",\n        \"task-description\": \"\",\n        \"task-type\": \"\"\n    }\n   ],\n    \"loan-id\": \"265106112DEV\",\n    \"company\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/create_tasks",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "create_tasks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Task",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"loan-id\": \"265184665DEV\",\n    \"task-id\": \"01a10e7d-e297-7f75-9e5d-adf56325e56f\",\n    \"company\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_task",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_task"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tasks",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"loan-id\": \"901e00a3-b2dc-4770-83ee-9e31d2528fd0\",\n    \"company\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_tasks",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_tasks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Task",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"loan-id\": \"6d23c722-2e2b-442d-b1f3-a8cb14ddbd4d\",\n    \"task-id\": \"01a0d09c-4547-7a1b-b3b4-2550a895fd88\",\n    \"company\": \"gri\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/remove_task",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "remove_task"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Task Templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_task_templates",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_task_templates"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Condition Task Templates",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"conditionKeys\": [\"Assets - Large Deposit Source\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_condition_task_templates",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_condition_task_templates"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ECS Tools",
+      "item": [
+        {
+          "name": "Get Credit Information",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"loan_number\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/get_ecs_credit",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "get_ecs_credit"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reissue Credit",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"loanId\": \"\",\n    \"company\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/reissue_credit",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "reissue_credit"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "List All Tools",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{mcp-url}}/mcp/tools",
+          "host": [
+            "{{mcp-url}}"
+          ],
+          "path": [
+            "mcp",
+            "tools"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Communication Tools",
+      "item": [
+        {
+          "name": "Send SMS",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"to\": \"+1234567890\",\n    \"message\": \"SMS message content\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{mcp-url}}/tools/send_sms",
+              "host": [
+                "{{mcp-url}}"
+              ],
+              "path": [
+                "tools",
+                "send_sms"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

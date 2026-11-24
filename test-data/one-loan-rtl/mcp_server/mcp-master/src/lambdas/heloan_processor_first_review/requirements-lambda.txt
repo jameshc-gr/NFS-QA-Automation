@@ -1,0 +1,5 @@
+boto3
+requests
+PyJWT
+python-dotenv
+reportlab==5.0.1

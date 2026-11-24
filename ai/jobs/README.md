@@ -3,6 +3,22 @@
 Canonical assets live in [agents](agents/), [skills](skills/) and [prompts](prompts/).
 Start with the [repository guide](../../README.md).
 
+## 2026-11-24 - Local-only agent memory
+
+- Moved tracked assistant/team memory into ignored local storage; current
+  learnings and dated archives belong under `ai/memory/`, with lookup metadata
+  in the local `ai/memory/INDEX.md`.
+- Memory has no fixed size cap. Archive details by topic/date and preserve an
+  index entry; never copy saved Copilot chat history into tracked files or
+  memory. VS Code retains chat history locally.
+- `README.md` and affected-area README histories remain concise technical
+  project records, not assistant memory or chat transcripts.
+- Validation: local memory/index/archive paths are ignored, and the moved
+  memory files compare byte-for-byte with their original Git blobs.
+  `npm run test:root-hygiene` passed 7/7; `npm run check:root` passed after a
+  pre-existing root Firebase diagnostic was relocated under dated
+  `test-results/`.
+
 ## 2026-11-11 - Autonomous QA capability assessment
 
 - Recorded the session-verified MCP, web/API, Android, iOS, Figma, Jira,
@@ -40,7 +56,8 @@ Start with the [repository guide](../../README.md).
 - Supplied validation:93/93 lab checks, scoped typecheck/JS syntax, all40/120
   live comparisons with zero POSTs/page errors and clean165 extraction/runtime
   verification passed. Completed live screening not duplicated/rerun.
-  External memory unavailable; tracked memory updated, no raw/account data.
+  At that time, external memory was unavailable and the tracked memory document
+  was updated. It was later moved to local-only archive storage on 2026-11-24.
 
 ## 2026-11-02 - PRIMARY editing and named IR lab guidance
 
@@ -64,9 +81,8 @@ Start with the [repository guide](../../README.md).
 - Request: retain work history even when assistant memory does not contain all
   prior work. Memory is selective context, not a complete archive or backup.
 - Change: agent bootstrap now requires dated affected-folder README history.
-  The documentation-sync agent uses tracked
-  [repository memory](../../memory/webautomation.md) when the external memory
-  mount is unavailable, rather than targeting a nonexistent path.
+  The documentation-sync agent now writes durable learnings only to ignored
+  local `ai/memory/`, with an index for topic/date archives.
 - Framework context now documents the root guard, explicit evidence output
   paths and the history contract. Earlier historical records remain intact.
 - Validation: these are documentation changes; runtime guard evidence is in the

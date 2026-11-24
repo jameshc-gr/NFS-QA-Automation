@@ -1,0 +1,296 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'MCP Server Deployment - Deploy MCP server to EC2 with Auto Scaling'
+
+Parameters:
+  Region:
+    Type: String
+    Default: us-east-2
+    Description: AWS region for deployment
+  
+  AccountId:
+    Type: String
+    Default: 933897080848
+    Description: AWS Account ID
+  
+  Domain:
+    Type: String
+    Default: mcp.prajnagpt.net
+    Description: Domain name for the MCP server
+  
+  KeyName:
+    Type: String
+    Default: gpt-aws-key
+    Description: EC2 Key Pair name
+  
+  ExistingEIPAllocationId:
+    Type: String
+    Default: eipalloc-0957b2097dab3bd0f
+    Description: Existing Elastic IP Allocation ID
+  
+  UbuntuAMI:
+    Type: String
+    Default: ami-0e83be366243f524a
+    Description: Ubuntu AMI ID
+  
+  InstanceType:
+    Type: String
+    Default: t2.small
+    Description: EC2 instance type
+  
+  MCPVersion:
+    Type: String
+    Default: latest
+    Description: MCP Server version/tag to deploy
+  
+  MCPAuthToken:
+    Type: String
+    Default: fb67ddba7ec0b7e936ca012091a560413e9a6fa32fc808545be137df104d1d0d
+    Description: Authentication token for MCP server
+  
+  LogLevel:
+    Type: String
+    Default: INFO
+    Description: Log level for the application
+  
+  MinSize:
+    Type: Number
+    Default: 1
+    Description: Minimum number of instances
+  
+  MaxSize:
+    Type: Number
+    Default: 3
+    Description: Maximum number of instances
+  
+  DesiredCapacity:
+    Type: Number
+    Default: 1
+    Description: Desired number of instances
+
+Resources:
+  # Security Group
+  MCPSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for MCP Server
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+          Description: SSH access
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: HTTP access
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: HTTPS access
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+          Description: MCP Server API access
+      Tags:
+        - Key: Name
+          Value: MCP-Server-SG
+
+  # IAM Role for EC2 instances
+  MCPInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: mcp-instance-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+      Policies:
+        - PolicyName: MCPInstancePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ecr:GetAuthorizationToken
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:BatchGetImage
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - logs:DescribeLogStreams
+                Resource: '*'
+      Tags:
+        - Key: Name
+          Value: mcp-instance-role
+
+  # Instance Profile for EC2 instances
+  MCPInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref MCPInstanceRole
+
+  # Launch Template
+  MCPLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: mcp-server-template
+      LaunchTemplateData:
+        ImageId: !Ref UbuntuAMI
+        InstanceType: !Ref InstanceType
+        KeyName: !Ref KeyName
+        SecurityGroupIds:
+          - !Ref MCPSecurityGroup
+        IamInstanceProfile:
+          Name: !Ref MCPInstanceProfile
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            set -e
+            
+            # Update system and install dependencies
+            apt-get update -y
+            apt-get install -y docker.io git awscli jq
+            
+            # Start and enable Docker
+            systemctl start docker
+            systemctl enable docker
+            usermod -a -G docker ubuntu
+            
+            # Authenticate to ECR
+            aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${AccountId}.dkr.ecr.${Region}.amazonaws.com
+            
+            # Pull and run MCP server
+            docker pull ${AccountId}.dkr.ecr.${Region}.amazonaws.com/mcp-server:${MCPVersion}
+            docker run -d \
+              --name mcp-server \
+              --restart unless-stopped \
+              -p 8080:8080 \
+              -e MCP_HOST=0.0.0.0 \
+              -e MCP_PORT=8080 \
+              -e MCP_AUTH_ENABLED=true \
+              -e MCP_AUTH_TOKEN=${MCPAuthToken} \
+              -e LOG_LEVEL=${LogLevel} \
+              ${AccountId}.dkr.ecr.${Region}.amazonaws.com/mcp-server:${MCPVersion}
+            
+            # Wait for service to be healthy
+            timeout 300 bash -c 'until docker ps | grep -q "mcp-server"; do sleep 5; done'
+            
+            echo "MCP Server started successfully!"
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - Key: Name
+                Value: MCP-Server
+              - Key: Environment
+                Value: Production
+
+  # Auto Scaling Group
+  MCPAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: mcp-server-asg
+      LaunchTemplate:
+        LaunchTemplateId: !Ref MCPLaunchTemplate
+        Version: !GetAtt MCPLaunchTemplate.LatestVersionNumber
+      MinSize: !Ref MinSize
+      MaxSize: !Ref MaxSize
+      DesiredCapacity: !Ref DesiredCapacity
+      VPCZoneIdentifier:
+        - subnet-0795bc6b2526424f3  # Replace with actual subnet IDs
+        - subnet-0a1b2c3d4e5f6789  # Replace with actual subnet IDs
+      HealthCheckType: EC2
+      HealthCheckGracePeriod: 300
+      Tags:
+        - Key: Name
+          Value: MCP-Server-Instance
+          PropagateAtLaunch: true
+        - Key: Environment
+          Value: Production
+          PropagateAtLaunch: true
+
+  # Auto Scaling Policy
+  MCPScaleUpPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AdjustmentType: ChangeInCapacity
+      AutoScalingGroupName: !Ref MCPAutoScalingGroup
+      Cooldown: 300
+      ScalingAdjustment: 1
+
+  MCPScaleDownPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AdjustmentType: ChangeInCapacity
+      AutoScalingGroupName: !Ref MCPAutoScalingGroup
+      Cooldown: 300
+      ScalingAdjustment: -1
+
+  # CloudWatch Alarms
+  MCPHighCPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: MCP-High-CPU
+      AlarmDescription: Alarm when CPU exceeds 70%
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 70
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref MCPAutoScalingGroup
+      AlarmActions:
+        - !Ref MCPScaleUpPolicy
+
+  MCPLowCPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: MCP-Low-CPU
+      AlarmDescription: Alarm when CPU is below 20%
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 20
+      ComparisonOperator: LessThanThreshold
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref MCPAutoScalingGroup
+      AlarmActions:
+        - !Ref MCPScaleDownPolicy
+
+Outputs:
+  AutoScalingGroupName:
+    Description: Auto Scaling Group Name
+    Value: !Ref MCPAutoScalingGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-ASG"
+  
+  SecurityGroupId:
+    Description: Security Group ID
+    Value: !Ref MCPSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-SG"
+  
+  LaunchTemplateId:
+    Description: Launch Template ID
+    Value: !Ref MCPLaunchTemplate
+    Export:
+      Name: !Sub "${AWS::StackName}-LT"

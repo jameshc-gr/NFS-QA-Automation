@@ -1,0 +1,263 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'MCP Server Build Pipeline - Build and push Docker image to ECR from EC2'
+
+Parameters:
+  Region:
+    Type: String
+    Default: us-east-2
+    Description: AWS region for the build
+  
+  AccountId:
+    Type: String
+    Default: 933897080848
+    Description: AWS Account ID
+  
+  RepositoryName:
+    Type: String
+    Default: mcp-server
+    Description: ECR repository name for MCP server
+  
+  ImageTag:
+    Type: String
+    Default: latest
+    Description: Docker image tag
+  
+  KeyName:
+    Type: String
+    Default: gpt-aws-key
+    Description: EC2 Key Pair name for build instance
+  
+  UbuntuAMI:
+    Type: String
+    Default: ami-0e83be366243f524a
+    Description: Ubuntu AMI ID for build instance
+  
+  InstanceType:
+    Type: String
+    Default: t2.small
+    Description: EC2 instance type for build
+  
+  VpcId:
+    Type: String
+    Description: VPC ID for build instance
+  
+  SubnetId:
+    Type: String
+    Description: Subnet ID for build instance
+  
+  GitBranch:
+    Type: String
+    Default: main
+    Description: Git branch to build
+  
+  GitTag:
+    Type: String
+    Default: v0.0.0
+    Description: Git tag to build
+
+Resources:
+  # ECR Repository
+  MCPRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Ref RepositoryName
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Keep last 10 images",
+                "selection": {
+                  "tagStatus": "any",
+                  "countType": "imageCountMoreThan",
+                  "countNumber": 10
+                },
+                "action": {
+                  "type": "expire"
+                }
+              }
+            ]
+          }
+
+  # Security Group for Build Instance
+  BuildSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for MCP build instance
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+          Description: SSH access
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+          Description: All outbound traffic
+      Tags:
+        - Key: Name
+          Value: MCP-Build-SG
+
+  # IAM Role for Build Instance
+  BuildInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: mcp-build-instance-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Policies:
+        - PolicyName: MCPBuildPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ecr:GetAuthorizationToken
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:BatchGetImage
+                  - ecr:InitiateLayerUpload
+                  - ecr:UploadLayerPart
+                  - ecr:CompleteLayerUpload
+                  - ecr:PutImage
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: '*'
+      Tags:
+        - Key: Name
+          Value: mcp-build-instance-role
+
+  # Instance Profile for Build Instance
+  BuildInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref BuildInstanceRole
+
+  # Build Instance
+  BuildInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref UbuntuAMI
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !Ref BuildSecurityGroup
+      SubnetId: !Ref SubnetId
+      IamInstanceProfile: !Ref BuildInstanceProfile
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -e
+          
+          # Update system
+          apt-get update -y
+          apt-get upgrade -y
+          
+          # Install Docker
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sh get-docker.sh
+          usermod -aG docker ubuntu
+          
+          # Install Git
+          apt-get install -y git
+          
+          # Install AWS CLI v2
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          ./aws/install
+          
+          # Create build directory
+          mkdir -p /opt/mcp-build
+          cd /opt/mcp-build
+          
+          # Retrieve the GitHub PAT from AWS Systems Manager Parameter Store
+          TOKEN=$(aws ssm get-parameter --name "prajnagpt-repo-github-pat" --with-decryption --region us-east-2 --output json | jq -r ".Parameter.Value")
+      
+          # Configure Git to use the token
+          git config --global credential.helper store
+      
+          # Clone the private repository
+          cd /home/ubuntu
+          echo "url=https://$TOKEN@github.com" > .git-credentials
+          git clone https://$TOKEN:x-oauth-basic@github.com/prajnaai/mcp.git
+      
+          # Navigate to the repo directory
+          cd mcp
+
+          # Determine whether to checkout a tag or a branch
+          if [ "${GitTag}" != "v0.0.0" ]; then
+              git checkout tags/${GitTag}
+          else
+              git switch ${GitBranch}
+          fi
+          
+          # Build Docker image directly
+          echo "Starting MCP build process..."
+          
+          # Login to ECR
+          aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${AccountId}.dkr.ecr.${Region}.amazonaws.com
+          
+          # Build Docker image
+          echo "Building Docker image..."
+          docker build -t ${AccountId}.dkr.ecr.${Region}.amazonaws.com/${RepositoryName}:${ImageTag} .
+          docker tag ${AccountId}.dkr.ecr.${Region}.amazonaws.com/${RepositoryName}:${ImageTag} ${AccountId}.dkr.ecr.${Region}.amazonaws.com/${RepositoryName}:latest
+          
+          # Push to ECR
+          echo "Pushing to ECR..."
+          docker push ${AccountId}.dkr.ecr.${Region}.amazonaws.com/${RepositoryName}:${ImageTag}
+          docker push ${AccountId}.dkr.ecr.${Region}.amazonaws.com/${RepositoryName}:latest
+          
+          echo "Build completed successfully!"
+          echo "Image URI: ${AccountId}.dkr.ecr.${Region}.amazonaws.com/${RepositoryName}:${ImageTag}"
+          
+          # Signal completion
+          aws cloudformation signal-resource --stack-name ${AWS::StackName} --logical-resource-id BuildInstance --unique-id ${AWS::StackId} --status SUCCESS
+          
+          # Set environment variables for future use
+          echo "export AWS_REGION=${Region}" >> /home/ubuntu/.bashrc
+          echo "export AWS_ACCOUNT_ID=${AccountId}" >> /home/ubuntu/.bashrc
+          echo "export REPOSITORY_URI=${AccountId}.dkr.ecr.${Region}.amazonaws.com/${RepositoryName}" >> /home/ubuntu/.bashrc
+          echo "export IMAGE_TAG=${ImageTag}" >> /home/ubuntu/.bashrc
+          
+          # Signal that instance is ready
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource BuildInstance --region ${Region}
+      Tags:
+        - Key: Name
+          Value: MCP-Build-Instance
+        - Key: Environment
+          Value: Production
+
+Outputs:
+  RepositoryURI:
+    Description: ECR Repository URI
+    Value: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${MCPRepository}"
+    Export:
+      Name: !Sub "${AWS::StackName}-RepositoryURI"
+  
+  BuildInstanceId:
+    Description: Build Instance ID
+    Value: !Ref BuildInstance
+    Export:
+      Name: !Sub "${AWS::StackName}-BuildInstanceId"
+  
+  BuildSecurityGroupId:
+    Description: Build Security Group ID
+    Value: !Ref BuildSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-BuildSecurityGroupId"

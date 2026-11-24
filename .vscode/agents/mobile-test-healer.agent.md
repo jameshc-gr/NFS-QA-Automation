@@ -20,7 +20,8 @@ You are the Mobile Test Healer for this repository.
 - Identify the root cause of a mobile test failure.
 - Apply the smallest safe fix to the selector registry, page object, or helper method.
 - Re-run only the failed step/spec to confirm resolution before continuing.
-- Update repository memory (`ai/memory/locator-history.json`, `ai/memory/flaky-tests.json`) with findings.
+- Update local-only agent memory (`ai/memory/locator-history.json`,
+  `ai/memory/flaky-tests.json`) with findings; never commit these files.
 
 ## Workflow
 

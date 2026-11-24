@@ -36,9 +36,14 @@ Current Framework Notes
   check the root; browser CI jobs check it even after failure. Direct commands
   and MCP sessions must also use explicit `test-results/` destinations and run
   the guard on completion. Ignoring output does not redirect its writer.
-- Memory is selective, not a full archive. Append dated request/change/validation
-  history to affected-folder READMEs and link from root README; use tracked
-  `memory/webautomation.md` when the external memory mount is unavailable.
+- Agent memory is local-only under ignored `ai/memory/`; start with its
+  `INDEX.md`, search archives before adding learnings, and keep the index updated.
+  There is no fixed size cap: split detailed notes by topic/date and link them
+  from a concise active summary. Do not copy saved Copilot chat history into the
+  repository or memory; it stays in VS Code's local host-managed storage.
+- Append dated technical request/change/validation histories to affected-folder
+  READMEs and link from root README. These project records are not chat archives
+  or general-purpose assistant memory.
 - Profile values are loaded through `tests/projects/student-loan-refi/test-setup.ts` from suffix-based env vars such as `FIRST_NAME_LK1`.
 - Specialized profiles use uppercase enum-style values for dropdowns where possible.
 - Narrow test runs are preferred before broad suite runs.

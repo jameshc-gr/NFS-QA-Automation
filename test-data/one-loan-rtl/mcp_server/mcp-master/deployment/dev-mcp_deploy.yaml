@@ -1,0 +1,624 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'MCP Server Unified Deployment - Complete VPC infrastructure with dedicated subnets'
+
+Parameters:
+  Region:
+    Type: String
+    Default: us-east-2
+    Description: AWS region for deployment
+  
+  AccountId:
+    Type: String
+    Default: 730784326723
+    Description: AWS Account ID
+  
+  Domain:
+    Type: String
+    Default: mcp.prajnagpt.net
+    Description: Domain name for the MCP server
+  
+  VpcId:
+    Type: String
+    Description: Existing VPC ID for deployment
+  
+  NATAllocationId:
+    Type: String
+    Default: ""
+    Description: Existing Elastic IP AllocationId for NAT Gateway (required in prod)
+  
+  KeyName:
+    Type: String
+    Default: gpt-aws-key-2
+    Description: EC2 Key Pair name
+  
+  UbuntuAMI:
+    Type: String
+    Default: ami-0e83be366243f524a
+    Description: Ubuntu AMI ID
+  
+  InstanceType:
+    Type: String
+    Default: t3.micro
+    Description: EC2 instance type
+  
+  MCPVersion:
+    Type: String
+    Default: latest
+    Description: MCP Server version/tag to deploy
+  
+  LogLevel:
+    Type: String
+    Default: INFO
+    Description: Log level for the application
+  
+  HostedZoneName:
+    Type: String
+    Default: prajnagpt.net.
+    Description: Route53 hosted zone name ending with a dot (e.g., example.com.)
+  
+  MCPAuthToken:
+    Type: String
+    Default: fb67ddba7ec0b7e936ca012091a560413e9a6fa32fc808545be137df104d1d0d
+    Description: Authentication token for MCP server
+  
+  MinSize:
+    Type: Number
+    Default: 1
+    Description: Minimum number of instances
+  
+  MaxSize:
+    Type: Number
+    Default: 1
+    Description: Maximum number of instances
+  
+  DesiredCapacity:
+    Type: Number
+    Default: 1
+    Description: Desired number of instances
+
+Conditions:
+  HasVpcId: !Not [!Equals [!Ref VpcId, '']]
+  HasNATAllocationId: !Not [!Equals [!Ref NATAllocationId, '']]
+
+Resources:
+  # Use existing Internet Gateway (already attached to VPC)
+  # No need to create or attach - it already exists
+
+  # NAT Gateway for private subnet internet access (parameterized EIP)
+  NATGateway:
+    Type: AWS::EC2::NatGateway
+    Condition: HasNATAllocationId
+    Properties:
+      AllocationId: !Ref NATAllocationId
+      SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: mcp-nat-gateway
+        - Key: Environment
+          Value: Production
+
+  # Public Subnet 1 (us-east-2a)
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcId
+      AvailabilityZone: !Select [0, !GetAZs '']
+      CidrBlock: 172.31.200.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: mcp-public-subnet-1
+        - Key: Environment
+          Value: Production
+        - Key: Type
+          Value: Public
+
+  # Public Subnet 2 (us-east-2b)
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcId
+      AvailabilityZone: !Select [1, !GetAZs '']
+      CidrBlock: 172.31.201.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: mcp-public-subnet-2
+        - Key: Environment
+          Value: Production
+        - Key: Type
+          Value: Public
+
+  # Public Subnet 3 (us-east-2c)
+  PublicSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcId
+      AvailabilityZone: !Select [2, !GetAZs '']
+      CidrBlock: 172.31.202.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: mcp-public-subnet-3
+        - Key: Environment
+          Value: Production
+        - Key: Type
+          Value: Public
+
+  # Private Subnet 1 (us-east-2a)
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcId
+      AvailabilityZone: !Select [0, !GetAZs '']
+      CidrBlock: 172.31.210.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: mcp-private-subnet-1
+        - Key: Environment
+          Value: Production
+        - Key: Type
+          Value: Private
+
+  # Private Subnet 2 (us-east-2b)
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcId
+      AvailabilityZone: !Select [1, !GetAZs '']
+      CidrBlock: 172.31.211.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: mcp-private-subnet-2
+        - Key: Environment
+          Value: Production
+        - Key: Type
+          Value: Private
+
+  # Private Subnet 3 (us-east-2c)
+  PrivateSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcId
+      AvailabilityZone: !Select [2, !GetAZs '']
+      CidrBlock: 172.31.212.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: mcp-private-subnet-3
+        - Key: Environment
+          Value: Production
+        - Key: Type
+          Value: Private
+
+  # Route Table for Public Subnets
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VpcId
+      Tags:
+        - Key: Name
+          Value: mcp-public-rt
+        - Key: Environment
+          Value: Production
+
+  # Default route for public subnets
+  DefaultPublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: igw-0fae59e56fae0408f
+
+  # Associate Public Subnets with Route Table
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet1
+
+  PublicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet2
+
+  PublicSubnet3RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet3
+
+  # Route Table for Private Subnets
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VpcId
+      Tags:
+        - Key: Name
+          Value: mcp-private-rt
+        - Key: Environment
+          Value: Production
+
+  # Default route for private subnets (through NAT Gateway)
+  DefaultPrivateRoute:
+    Type: AWS::EC2::Route
+    Condition: HasNATAllocationId
+    DependsOn: NATGateway
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NATGateway
+
+  # Associate Private Subnets with Route Table
+  PrivateSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateSubnet1
+
+  PrivateSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateSubnet2
+
+  PrivateSubnet3RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateSubnet3
+
+  # Security Group for ALB (Internal only)
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: mcp-alb-sg
+      GroupDescription: Security group for MCP ALB - Internal VPC access only
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 172.31.0.0/16
+          Description: HTTP from VPC
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 172.31.0.0/16
+          Description: HTTPS from VPC
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+          Description: All outbound traffic
+      Tags:
+        - Key: Name
+          Value: mcp-alb-sg
+        - Key: Environment
+          Value: Production
+
+  # Security Group for VPC access
+  VPCSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: mcp-vpc-sg
+      GroupDescription: Security group for VPC access to MCP server
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 172.31.0.0/16
+          Description: MCP server from VPC
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 172.31.0.0/16
+          Description: SSH from VPC
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+          Description: All outbound traffic
+      Tags:
+        - Key: Name
+          Value: mcp-vpc-sg
+        - Key: Environment
+          Value: Production
+
+  # Application Load Balancer (Internal)
+  InternalALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: mcp-internal-alb
+      Scheme: internal
+      Type: application
+      Subnets: 
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+        - !Ref PublicSubnet3
+      SecurityGroups:
+        - !Ref ALBSecurityGroup
+      Tags:
+        - Key: Name
+          Value: mcp-internal-alb
+        - Key: Environment
+          Value: Production
+
+  # Target Group for MCP Server
+  MCPTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: mcp-target-group
+      Port: 8080
+      Protocol: HTTP
+      VpcId: !Ref VpcId
+      HealthCheckPath: /health
+      HealthCheckProtocol: HTTP
+      HealthCheckIntervalSeconds: 30
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      TargetType: instance
+      Tags:
+        - Key: Name
+          Value: mcp-target-group
+        - Key: Environment
+          Value: Production
+
+  # ALB Listener (HTTP)
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref MCPTargetGroup
+      LoadBalancerArn: !Ref InternalALB
+      Port: 80
+      Protocol: HTTP
+
+  # IAM Role for EC2 instances
+  MCPInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: mcp-instance-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+      Policies:
+        - PolicyName: MCPInstancePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ecr:GetAuthorizationToken
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:BatchGetImage
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - logs:DescribeLogStreams
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - elbv2:DescribeTargetGroups
+                Resource: !Ref MCPTargetGroup
+      Tags:
+        - Key: Name
+          Value: mcp-instance-role
+        - Key: Environment
+          Value: Production
+
+  # Instance Profile for EC2 instances
+  MCPInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref MCPInstanceRole
+
+  # Launch Template for EC2 instances
+  MCPLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: mcp-launch-template
+      LaunchTemplateData:
+        ImageId: !Ref UbuntuAMI
+        InstanceType: !Ref InstanceType
+        KeyName: !Ref KeyName
+        SecurityGroupIds:
+          - !Ref VPCSecurityGroup
+        IamInstanceProfile:
+          Name: !Ref MCPInstanceProfile
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - Key: Name
+                Value: mcp-instance
+              - Key: Environment
+                Value: Production
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            # Update system and install dependencies
+            apt-get update -y
+            apt-get install -y docker.io git awscli jq
+            
+            # Start and enable Docker
+            systemctl start docker
+            systemctl enable docker
+            usermod -a -G docker ubuntu
+            
+            # Authenticate to ECR (using older method that works reliably)
+            $(aws ecr get-login --no-include-email --region ${Region})
+            
+            # Pull and run MCP server
+            docker pull ${AccountId}.dkr.ecr.${Region}.amazonaws.com/mcp-server:${MCPVersion}
+            docker run -d \
+              --name mcp-server \
+              --restart unless-stopped \
+              -p 8080:8080 \
+              -e MCP_HOST=0.0.0.0 \
+              -e MCP_PORT=8080 \
+              -e MCP_AUTH_ENABLED=true \
+              -e MCP_AUTH_TOKEN=${MCPAuthToken} \
+              -e LOG_LEVEL=${LogLevel} \
+              ${AccountId}.dkr.ecr.${Region}.amazonaws.com/mcp-server:${MCPVersion}
+            
+            # Register with ALB target group
+            INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+            aws elbv2 register-targets \
+              --target-group-arn ${MCPTargetGroup} \
+              --targets Id=$INSTANCE_ID,Port=8080 \
+              --region ${Region}
+
+  # Auto Scaling Group
+  MCPAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: mcp-asg
+      LaunchTemplate:
+        LaunchTemplateId: !Ref MCPLaunchTemplate
+        Version: !GetAtt MCPLaunchTemplate.LatestVersionNumber
+      MinSize: !Ref MinSize
+      MaxSize: !Ref MaxSize
+      DesiredCapacity: !Ref DesiredCapacity
+      VPCZoneIdentifier: 
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+        - !Ref PrivateSubnet3
+      TargetGroupARNs:
+        - !Ref MCPTargetGroup
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+      Tags:
+        - Key: Name
+          Value: mcp-instance
+          PropagateAtLaunch: true
+        - Key: Environment
+          Value: Production
+          PropagateAtLaunch: true
+
+  # Auto Scaling Policies
+  ScaleUpPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AdjustmentType: ChangeInCapacity
+      AutoScalingGroupName: !Ref MCPAutoScalingGroup
+      Cooldown: 300
+      ScalingAdjustment: 1
+
+  ScaleDownPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AdjustmentType: ChangeInCapacity
+      AutoScalingGroupName: !Ref MCPAutoScalingGroup
+      Cooldown: 300
+      ScalingAdjustment: -1
+
+  # CloudWatch Alarms
+  CPUAlarmHigh:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Alarm when CPU exceeds 70%
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 70
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref MCPAutoScalingGroup
+      AlarmActions:
+        - !Ref ScaleUpPolicy
+
+  CPUAlarmLow:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Alarm when CPU drops below 20%
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 20
+      ComparisonOperator: LessThanThreshold
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref MCPAutoScalingGroup
+      AlarmActions:
+        - !Ref ScaleDownPolicy
+
+  # Route 53 DNS Record
+  MCPDNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Ref HostedZoneName
+      Name: mcp.prajnagpt.net
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt InternalALB.DNSName
+        HostedZoneId: !GetAtt InternalALB.CanonicalHostedZoneID
+
+Outputs:
+  VPCId:
+    Description: VPC ID where MCP server is deployed
+    Value: !Ref VpcId
+    Export:
+      Name: !Sub ${AWS::StackName}-VPCId
+  
+  PublicSubnetIds:
+    Description: Public subnet IDs for ALB
+    Value: !Join [',', [!Ref PublicSubnet1, !Ref PublicSubnet2, !Ref PublicSubnet3]]
+    Export:
+      Name: !Sub ${AWS::StackName}-PublicSubnetIds
+  
+  PrivateSubnetIds:
+    Description: Private subnet IDs for EC2 instances
+    Value: !Join [',', [!Ref PrivateSubnet1, !Ref PrivateSubnet2, !Ref PrivateSubnet3]]
+    Export:
+      Name: !Sub ${AWS::StackName}-PrivateSubnetIds
+  
+  ALBDNSName:
+    Description: DNS name of the internal ALB
+    Value: !GetAtt InternalALB.DNSName
+    Export:
+      Name: !Sub ${AWS::StackName}-ALBDNSName
+  
+  ALBSecurityGroupId:
+    Description: Security Group ID for ALB
+    Value: !Ref ALBSecurityGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-ALBSecurityGroupId
+  
+  VPCSecurityGroupId:
+    Description: Security Group ID for VPC access
+    Value: !Ref VPCSecurityGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-VPCSecurityGroupId
+  
+  MCPDomain:
+    Description: MCP server domain name
+    Value: !Ref Domain
+    Export:
+      Name: !Sub ${AWS::StackName}-MCPDomain
+  
+  AutoScalingGroupName:
+    Description: Auto Scaling Group name
+    Value: !Ref MCPAutoScalingGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-AutoScalingGroupName

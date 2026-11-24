@@ -1,0 +1,62 @@
+name: eks-deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      deploy-runner-tag:
+        required: true
+        type: string
+      image-name-mcp:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    name: "Deploy To EKS"
+    environment: ${{ inputs.environment }}
+    runs-on: [self-hosted, Linux, X64, "${{ inputs.deploy-runner-tag }}"]
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Check Out Code
+        uses: actions/checkout@v5
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.DEPLOY_IAM_ROLE }}
+          aws-region: us-east-1
+          role-session-name: GitHubActions-Deploy
+          mask-aws-account-id: false
+
+      - name: Install and Configure Kubectl
+        run: |
+          VERSION=$(curl --silent https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+          curl https://storage.googleapis.com/kubernetes-release/release/$VERSION/bin/linux/amd64/kubectl \
+              --progress-bar \
+              --location \
+              --remote-name
+          chmod +x kubectl
+          sudo mv kubectl /usr/bin/
+
+      - name: Set Docker Image Name
+        uses: Guaranteed-Rate/inplace-envsubst-action@v1.2.2
+        env:
+          DOCKER_IMAGE_MCP: ${{ inputs.image-name-mcp }}
+        with:
+          working-directory: ./deploy/kubernetes/${{ inputs.environment }}
+          search_input: |
+            {
+              "files": ["deployment-mcp.yml"]
+            }
+
+      - name: Deploy to Kubernetes
+        run: |
+          aws eks update-kubeconfig --region us-east-1 --name ${{ vars.EKS_CLUSTER }} --alias ${{ vars.EKS_CLUSTER }} --kubeconfig $GITHUB_WORKSPACE/kubeconfig.yml
+          export KUBECONFIG=$GITHUB_WORKSPACE/kubeconfig.yml
+          kubectl --context ${{ vars.EKS_CLUSTER }} apply -f ./deploy/kubernetes/${{ inputs.environment }}
+          kubectl --context ${{ vars.EKS_CLUSTER }} --namespace ${{ vars.EKS_NAMESPACE }} rollout status deployment/digital-mortgage-systems-mcp-${{ inputs.environment }}

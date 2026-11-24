@@ -1,0 +1,79 @@
+# Virtual Environment
+venv-mcp/
+venv/
+env/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environment Variables
+.env
+.env.local
+.env.production
+.env.aws
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+formatted-encompass-fields
+
+# Terraform files
+.terraform
+terraform.tfstate
+terraform.tfvars
+terraform.tfstate.backup
+*.tfstate*
+*.plan
+*.swpns
+
+test_encompass_auth.py
+split_conditions_to_tasks.py
+conditions-to-tasks-output/
+heloan_decision.pdf
+prajna_response.json
+encompass_response.json
+myaccount-dump.json
+get_tasks_review.json
+get_tasks_review.json
+src/lambdas/heloan/generate_pdf_standalone.py
+ecs_response.json

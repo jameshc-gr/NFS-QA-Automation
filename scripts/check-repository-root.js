@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const rootFiles = new Set([
-  '.DS_Store', '.editorconfig', '.gitignore', '.node-version', '.npmrc', '.nvmrc',
+  '.DS_Store', '.editorconfig', '.gitignore', '.mcp.json', '.node-version', '.npmrc', '.nvmrc',
   'AGENTS.md', 'CONTRIBUTING.md', 'README.md', 'SECURITY-RESET-PREVENTION.md',
   'auth.json', 'codegen.cjs', 'codegen.js', 'environment.prod.json',
   'environment.qa.json', 'jira.env', 'package-lock.json', 'package.json',

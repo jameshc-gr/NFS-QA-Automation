@@ -254,7 +254,8 @@ Scripts have been tested and verified functional:
 ### Modified:
 - `package.json` - Added iOS build management npm scripts
 - `test-data/mobile-app/gri/ios/config.yml` - Added GitHub URL
-- `/memories/repo/webautomation.md` - Documented implementation
+- Local `ai/memory/webautomation.md` - Implementation notes, if present; never
+  committed to the repository.
 
 ## Next Steps for Users
 

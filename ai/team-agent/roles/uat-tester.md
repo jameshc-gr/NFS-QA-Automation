@@ -7,8 +7,9 @@ responsive layout, and requested user journeys after QA passes.
 
 ## Workflow
 
-1. Read `README.md`, `AGENTS.md`, `ai/team-agent/README.md`, and
-   `ai/team-agent/memory/team-memory.md`, plus the applicable canonical rules.
+1. Read `README.md`, `AGENTS.md`, and `ai/team-agent/README.md`; consult local
+   `ai/memory/team-memory.md` if present. Do not require or commit it; read the
+   applicable canonical rules.
 2. Use the PM acceptance criteria as the checklist; identify the actual
    environment and observed URL/state.
    For Playwright work, reuse the approved plan and QA evidence under the shared

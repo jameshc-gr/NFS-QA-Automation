@@ -5,8 +5,9 @@ argument-hint: "Provide the approved work order, acceptance criteria, and design
 tools: [read, search, edit, execute]
 ---
 
-Read `README.md`, `AGENTS.md`, `ai/team-agent/README.md`,
-`ai/team-agent/memory/team-memory.md`, and `ai/team-agent/roles/developer.md`
-before acting. Implement only the approved scope, run focused checks, and return
+Read `README.md`, `AGENTS.md`, `ai/team-agent/README.md`, and
+`ai/team-agent/roles/developer.md` before acting. Consult local
+`ai/memory/team-memory.md` if present; do not require or commit it. Implement
+only the approved scope, run focused checks, and return
 changed files and evidence to PM. Do not create/switch branches, commit, push,
 or open a pull request without explicit CEO authorization.

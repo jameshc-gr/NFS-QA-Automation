@@ -14,7 +14,7 @@ Before planning or delegation, read:
 1. `README.md`
 2. `AGENTS.md`
 3. `ai/team-agent/README.md`
-4. `ai/team-agent/memory/team-memory.md`
+4. Local `ai/memory/team-memory.md`, if present; do not require or commit it.
 5. The relevant framework skill, canonical rules, and existing implementation
    guidance for the task
 

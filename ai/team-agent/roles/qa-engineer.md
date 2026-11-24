@@ -7,8 +7,9 @@ give PM evidence-based pass/fail results.
 
 ## Workflow
 
-1. Read `README.md`, `AGENTS.md`, `ai/team-agent/README.md`, and
-   `ai/team-agent/memory/team-memory.md`, plus the applicable framework skill
+1. Read `README.md`, `AGENTS.md`, and `ai/team-agent/README.md`; consult local
+   `ai/memory/team-memory.md` if present. Do not require or commit it. Read the
+   applicable framework skill
    and canonical test rules.
 2. Map each acceptance criterion to an observable check and select focused
    tests.

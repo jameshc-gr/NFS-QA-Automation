@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ company.name }} — HELOAN Decision</title>
+</head>
+<body style="margin:0; padding:0; background:#f6f5f3; font-family: Helvetica, Arial, sans-serif; color:#262729;">
+  <div style="max-width:600px; margin:0 auto; background:#ffffff; padding:32px 28px;">
+
+    <div style="padding-bottom:20px;">
+      <a href="http://www.rate.com" target="_blank">
+        <img src="assets/rate-companies-2color.png" alt="Rate" height="40" style="display:block; border:0;">
+      </a>
+    </div>
+
+    <h1 style="font-size:20px; font-weight:600; margin:0 0 16px 0; color:#262729;">
+      HELOAN application update — Loan {{Loan.LoanNumber}}
+    </h1>
+
+    <p style="font-size:16px; line-height:24px; margin:0 0 16px 0;">Hi,</p>
+
+    <p style="font-size:16px; line-height:24px; margin:0 0 16px 0;">
+      Your borrower {{Borrower.FirstName}} {{Borrower.LastName}}'s HELOAN application has been declined based on our initial review of the requested product and has been sent to our 2nd level review team.
+    </p>
+
+    <p style="font-size:16px; line-height:24px; margin:0 0 16px 0;">
+      <strong>Reason for decline:</strong> {{Loan.DeclineReason}}
+    </p>
+
+    <p style="font-size:16px; line-height:24px; margin:0 0 16px 0;">
+      We recommend exploring other loan products that may be a better fit for your borrower.
+    </p>
+
+    <p style="font-size:16px; line-height:24px; margin:0 0 16px 0;">
+      We will reach out if there is anything you need to do.
+    </p>
+
+    <p style="font-size:16px; line-height:24px; margin:24px 0 4px 0;">Best regards,</p>
+    <p style="font-size:16px; line-height:24px; margin:0 0 16px 0;">HELOAN Team</p>
+
+  </div>
+</body>
+</html>

@@ -1,6 +1,7 @@
-# Existing .gitignore content preserved. Adding test-results and ai/memory
+# Existing .gitignore content preserved. Local run state and agent memory stay out of Git.
 test-results/
 ai/memory/
+/memory/
 temp/
 # End additions
 

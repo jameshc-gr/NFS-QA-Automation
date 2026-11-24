@@ -71,7 +71,7 @@ Orchestrator executes: MOBILE_SPECS=tests/android/login-logout.spec.ts npx wdio 
 - Diagnoses why a test failed (selector? timing? verification? app crash?)
 - Applies the smallest safe fix
 - Re-tests the failure in mock mode
-- Records learning in repository memory
+- Records learning in local-only agent memory
 
 **When to use:**
 ```bash
@@ -84,15 +84,15 @@ Orchestrator executes: MOBILE_SPECS=tests/android/login-logout.spec.ts npx wdio 
 **Failure classification** (from `mobile-triage` skill):
 1. **Selector failure** — Element no longer matches page source
    - Fix: Check selector registry, try next candidate, add stable fallback
-  - Memory: Record selector change in `ai/memory/locator-history.json`
+  - Local memory: Record selector change in ignored `ai/memory/locator-history.json`
 
 2. **Timing failure** — Element exists but not yet visible/clickable
    - Fix: Replace `browser.pause()` with explicit waits (`waitForDisplayed`, `waitForClickable`)
-  - Memory: Record in `ai/memory/flaky-tests.json` if intermittent
+  - Local memory: Record in ignored `ai/memory/flaky-tests.json` if intermittent
 
 3. **Verification failure** — Email/SMS code didn't arrive or timed out
    - Fix: Trigger resend/retry or recommend mock mode for dev cycles
-  - Memory: Track code retrieval patterns in `ai/memory/healing-history.json`
+  - Local memory: Track code retrieval patterns in ignored `ai/memory/healing-history.json`
 
 4. **App crash / Infrastructure** — Device offline, Appium disconnected, etc.
    - Action: Capture logs, stop cleanly, escalate to user (NOT a code fix)
@@ -178,7 +178,7 @@ await stepCheckpoint('Fill email field', async () => {
   → Healer reads this and knows exactly where to look
 ```
 
-### Memory Tracking
+### Local Memory Tracking
 
 **Files:**
 - `ai/memory/locator-history.json` — Selector changes applied by Healer
@@ -285,9 +285,13 @@ Healer checks this before proposing a fix: "This selector was already fixed on 8
 - Not sequential; not iterative
 
 ### Strategy 5: Memory-Driven Learning
-- Agents check `memory/locator-history.json` before proposing fixes
+- Agents check `ai/memory/locator-history.json` before proposing fixes
 - Avoids re-learning the same failure; recommends existing fix
 - No redundant diagnosis
+- For narrative learnings, start at local `ai/memory/INDEX.md`, search the
+  indexed archives, and add dated/topic keywords when recording new material.
+  There is no fixed size cap; split notes into archives rather than deleting
+  useful context. Never copy saved Copilot chats into memory or Git.
 
 ---
 
@@ -347,7 +351,10 @@ ai/memory/
 └── webautomation.md          # Permanent learning (this file)
 ```
 
-**These are NOT committed to git**; they're durable session memory. Agents use them to:
+**These local files are NOT committed to Git**; they are test-agent operational
+memory, not Copilot chat history. Durable narrative learnings belong in local
+`ai/memory/webautomation.md` and are indexed in `ai/memory/INDEX.md`. Agents use
+the records to:
 - Avoid re-fixing the same selector
 - Detect patterns in flaky tests
 - Learn from past failures
@@ -390,7 +397,7 @@ This shouldn't happen. Check:
 
 ### "A selector got fixed multiple times"
 
-Check `memory/locator-history.json`. If the same selector changed twice in one day, it indicates:
+Check `ai/memory/locator-history.json`. If the same selector changed twice in one day, it indicates:
 - UI is unstable (needs investigation)
 - Selector choice was wrong (should pick more stable locator)
 - Multiple issues hitting the same selector (need deeper fix)

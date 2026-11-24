@@ -1,5 +1,35 @@
 # NFS-QA-Automation
 
+### 2026-11-24 - GR MCP loan systems agent
+
+- Added the [GR MCP Loan Systems agent](.github/agents/gr-mcp-loan-systems.agent.md)
+  and workspace [MCP configuration](.mcp.json) for the hosted DEV endpoint.
+  The tool allowlist covers loan lookup/search and create/copy/update/patch;
+  every mutation requires explicit per-operation confirmation.
+- The bearer token is referenced as `GR_MCP_DEV_TOKEN`, not stored in the
+  repository. The local MCP server requires AWS credentials unavailable in this
+  environment; the hosted DEV endpoint is reachable but requires authentication.
+- No authenticated MCP calls or loan-system changes were made. See the
+  [agent history](ai/jobs/agents/README.md#2026-11-24---gr-mcp-loan-systems-agent).
+
+### 2026-11-24 - Local-only indexed Copilot memory
+
+- Request: keep Copilot memory and saved chat history local, and retain older
+  learnings in an indexed archive without a fixed size limit.
+- Moved the existing checked-in memory files and team memory into ignored local
+  storage, preserving their contents. Current memory and archives live under
+  `ai/memory/`; `ai/memory/INDEX.md` describes lookup and archive conventions.
+- Copilot chat history remains in VS Code's local host-managed storage and is
+  not copied into the repository or memory. Project README histories remain
+  concise technical change records, not chat transcripts.
+- Validation: local-only paths are ignored, and archived files compare
+  byte-for-byte with their original Git blobs. `npm run test:root-hygiene`
+  passed 7/7 and `npm run check:root` passed after relocating the pre-existing
+  root Firebase diagnostic to
+  `test-results/2026-11-24/maintenance/local-memory-policy/`.
+- See the [agent memory workflow](ai/jobs/agents/doc-memory-sync.agent.md) and
+  [agent guidance history](ai/jobs/README.md#2026-11-24---local-only-agent-memory).
+
 ### 2026-11-13 - MSAM November sprint CSV report
 
 - Exported the Jira workflow results and separate Today/Home watchlist for
@@ -58,8 +88,7 @@ source and required application resources remain tracked.
   and `npm run test:root-hygiene` passed (7/7).
 - Limitation: existing Git history was not rewritten. Rotate any token or reset
   credential that may still be valid, and coordinate a history purge if these
-  commits were pushed. See [API history](api/README.md#work-history) and
-  [memory history](memory/README.md#work-history).
+  commits were pushed. See [API history](api/README.md#work-history).
 - Follow-up: the local mobile Postman collection was compared with the `qa`
   source, refreshed from revision `c9a0074`, and the corporate reset request was
   converted to runtime variables. The obsolete July collection was removed from
@@ -77,7 +106,7 @@ source and required application resources remain tracked.
   legacy capture rules; removed generated captures and sessions from the Git
   index only, preserving any existing local copies and reusable inputs.
 - See [test-data history](test-data/README.md#2026-11-02---local-only-generated-evidence)
-  and [memory history](memory/README.md#2026-11-02---shared-ignore-policy).
+  and [scripts history](scripts/README.md).
 - Validation: 22 generated-path and 12 source/input ignore checks passed;
   99 generated files were untracked, four existing local session/temp captures
   remained present, and `npm run check:root` and scoped whitespace checks passed.
@@ -89,15 +118,20 @@ source and required application resources remain tracked.
 
 ## Work History and Root Hygiene
 
-Assistant memory is selective and does **not** retain every detail of every task.
-Keep a dated work-history entry in each affected area/folder's README (create one
-if missing): request, root cause/decision, changes, validation and limitations.
-Preserve previous entries and link relevant histories here. Do not copy secrets,
-account data or raw response bodies into documentation. The tracked
-[repository memory](memory/webautomation.md) holds durable learnings; the optional
-external `/memories/repo/webautomation.md` mount is not available in this checkout.
-READMEs are summaries, not complete conversation archives or backups. Unrecorded
-past work cannot be reconstructed reliably.
+Copilot memory is local-only under the ignored `ai/memory/` directory. Start with
+its local `INDEX.md` (create it if missing); search active notes and dated
+archives before recording a new learning. Archives have no fixed size cap:
+split material by topic/date when needed, preserve prior notes, and keep the
+index current. Never copy saved
+Copilot chats into the repository or memory; VS Code retains chat history in its
+local host-managed storage.
+
+Keep a concise dated work-history entry in each affected area/folder's README
+(create one if missing): request, root cause/decision, changes, validation and
+limitations. These are technical project records, not assistant memory or chat
+transcripts. Preserve previous entries and link relevant histories here. Do not
+copy secrets, account data or raw response bodies into documentation. READMEs
+are summaries, not complete conversation archives or backups.
 
 All generated diagnostics, snapshots, response captures, logs, screenshots and
 reports belong under `test-results/<YYYY-MM-DD>/<project>/<run>/`, including
@@ -165,8 +199,8 @@ not a filesystem sandbox; fix the writer rather than allowlisting evidence.
   See [scripts history](scripts/README.md),
   [CI history](.github/workflows/README.md),
   [agent guidance history](ai/jobs/README.md),
-  [test-data history](test-data/README.md#work-history) and
-  [memory history](memory/README.md).
+  [test-data history](test-data/README.md#work-history) and the
+  [agent memory workflow](ai/jobs/agents/doc-memory-sync.agent.md).
 - Verification (completed evidence supplied for this documentation sync):
   `npm run test:root-hygiene` passed all 7 Node tests: root configs preserved;
   arbitrary diagnostic extensions rejected; default MCP/reporter directories
@@ -533,7 +567,7 @@ one N. No additional live inquiries. See the
   [IR tests](tests/projects/solution-finder/workbook-scenarios/tri-bureau-40/README.md#2026-11-02---chart-context-without-repeat-screening),
   [IR inputs](test-data/solution-finder/workbook-scenarios/tri-bureau-40/README.md#2026-11-02---sanitized-historical-chart-reference),
   [agent guidance](ai/jobs/README.md#2026-11-02---ir-chart-reference-guidance),
-  [tracked memory](memory/README.md#2026-11-02---ir-chart-reference-sync).
+  [agent guidance history](ai/jobs/README.md#2026-11-02---current-solution-finder-ir-runtime-guidance).
   Earlier version/count entries below are historical, not the current release.
 
 #### 2026-11-02 - PRIMARY edits and named IR controls
@@ -749,6 +783,8 @@ Copilot-discoverable custom-agent profiles in `.github/agents`:
 
 - `ai/jobs/agents`: agent mode files (`*.agent.md`)
 - `.github/agents`: Copilot-discoverable agent profiles, including the closed-loop team roles
+- [GR MCP Loan Systems](.github/agents/gr-mcp-loan-systems.agent.md): scoped DEV
+  loan lookup and explicitly confirmed create/copy/update/patch operations
 - `ai/team-agent`: closed-loop role instructions, PM handoff contract, and durable team memory
 - `ai/jobs/prompts`: user-facing prompts (`*.prompt.md`)
 - `ai/jobs/skills`: reusable QA domain skills (`*/SKILL.md`)
@@ -769,6 +805,12 @@ Copilot-discoverable custom-agent profiles in `.github/agents`:
   - `flaky-test-management`: Flaky test detection, isolation, memory tracking & auto-healing
   - `test-discovery`, `test-execution`, `test-summary`: Spec discovery, runner & triage skills
   - `jira twg`: Atlassian enterprise context suite (14 skills for Jira workitems, JQL, Confluence PRDs, PR tracing, duplicate bug detection, Rovo search, and Artifact publishing)
+
+The GR MCP profile uses the hosted Development endpoint from [.mcp.json](.mcp.json).
+Set `GR_MCP_DEV_TOKEN` in the environment used to launch Copilot, using an
+approved Okta token with scope `api.all.digital-mortgage-systems-mcp` from IAM;
+never put the token in this workspace file or chat. The local server's
+AWS-backed startup is not required for this hosted connection.
 
 ### Atlassian & Jira TWG Agent Skills
 The repository integrates the 14-skill **The Work Graph (TWG)** Atlassian suite under `ai/jobs/skills/jira twg/` powered by the `twg` CLI:
@@ -807,15 +849,15 @@ flowchart TD
 2. Run the narrowest possible test first (single spec, single browser).
 3. Use healer only after reproducing failures in a focused run.
 4. Generate new tests into `tests/projects/<project>/generated/`.
-5. After validated behavior changes, run `doc-memory-sync` (`ai/jobs/agents/doc-memory-sync.agent.md`) to update `README.md` and `/memories/repo/webautomation.md`.
+5. After validated behavior changes, run `doc-memory-sync` (`ai/jobs/agents/doc-memory-sync.agent.md`) to update `README.md` and local `ai/memory/INDEX.md`/notes. Never add Copilot memory or saved chat transcripts to Git.
 
 For CEO-directed feature delivery, select **PM** from the Copilot custom-agent
 picker (or use `@PM` where supported). PM coordinates the role profiles in
 `.github/agents/team-*.agent.md` using the workflow and handoff contract in
 [ai/team-agent/README.md](ai/team-agent/README.md). Detailed role instructions
-are in `ai/team-agent/roles/`, and verified shared process learnings are stored
-in [ai/team-agent/memory/team-memory.md](ai/team-agent/memory/team-memory.md).
-Each role reads `README.md`, `AGENTS.md`, and team memory before acting. The PM
+are in `ai/team-agent/roles/`, and verified shared process learnings may be
+available in local `ai/memory/team-memory.md`. Each
+role reads `README.md`, `AGENTS.md`, and team memory when present. The PM
 routes QA/UAT failures back for targeted rework; Pentester requires explicit
 scope and authorization. No team agent creates/switches branches or commits,
 pushes, or opens a PR without explicit CEO approval.

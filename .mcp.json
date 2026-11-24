@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "grLoanSystemsDev": {
+      "type": "http",
+      "url": "https://partner-gateway-dev.dev.saas.rate.com/mcp/digital-mortgage-systems",
+      "headers": {
+        "Authorization": "Bearer ${GR_MCP_DEV_TOKEN}"
+      },
+      "tools": [
+        "get_loan_properties",
+        "get_encompass_loan",
+        "get_oneloan_properties",
+        "search_oneloan",
+        "search_loans",
+        "create_loan",
+        "copy_loan",
+        "update_loan",
+        "patch_oneloan"
+      ]
+    }
+  }
+}

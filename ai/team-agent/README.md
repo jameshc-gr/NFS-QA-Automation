@@ -2,7 +2,7 @@
 
 This folder defines the shared operating contract for the team-agent workflow.
 The discoverable Copilot agent profiles live in `.github/agents/team-*.agent.md`;
-their role instructions and persistent team memory live here.
+role instructions live here. Team memory is local-only under `ai/memory/`.
 
 ## Roles
 
@@ -22,9 +22,8 @@ their role instructions and persistent team memory live here.
 Select **PM** from the repository's Copilot custom-agent list (or address it
 as `@PM` where the host supports agent mentions). Give it the feature,
 defect, test, or security objective and any known scope. The PM reads
-`README.md`, `AGENTS.md`, this guide, and
-[`memory/team-memory.md`](memory/team-memory.md), then delegates only the
-necessary work to the named team agents.
+`README.md`, `AGENTS.md`, this guide, and local `ai/memory/team-memory.md` if
+present, then delegates only the necessary work to the named team agents.
 
 The custom-agent profiles in `.github/agents/` make the roles discoverable. The
 role files in `roles/` are the detailed operating instructions and are explicitly
@@ -108,12 +107,17 @@ diagnostics, and the next handoff. Never include secret values.
 - `README.md` is the first repository reference for commands, framework layout,
   profiles, and test conventions.
 - `AGENTS.md` supplies repository-wide agent rules and approval boundaries.
-- `memory/team-memory.md` contains only durable, verified team-process learnings.
+- Local `ai/memory/team-memory.md` contains durable, verified team-process
+  learnings when present; it is ignored by Git and may not exist in a fresh clone.
+- `ai/memory/INDEX.md` is the local lookup index. Archives have no fixed size
+  cap; organize older notes by topic/date, keep index entries searchable, and
+  preserve VS Code's saved Copilot chat history only in its local host-managed
+  storage. Never copy chats into repository files or memory.
 - Read the relevant framework skill and canonical rules for each task (for
   example `ai/jobs/skills/playwright-framework-context/SKILL.md` for Playwright
   mechanics and `docs/mobile-testing-rules.md` for mobile testing).
-- Treat runtime `/memories/repo/webautomation.md` as supplementary when
-  available; it is not a replacement for the checked-in repository guidance.
+- Treat local `ai/memory/` as supplemental to checked-in repository guidance.
+  Do not commit its contents.
 - Do not place credentials, tokens, customer data, or unapproved security
   artifacts in handoffs or memory.
 

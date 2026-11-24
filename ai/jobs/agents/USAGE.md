@@ -5,7 +5,11 @@ This document explains how to use the agent hierarchy, skills, and persistent me
 **Quick Summary**
 - Agents orchestrate workflows and make testing decisions using specialised modes (`*.agent.md`).
 - Skills (`ai/jobs/skills/*/SKILL.md`) are domain-specific operating procedures that provide expert QA knowledge for Web, Mobile, API, Test Data, Planning, and Bug Reporting.
-- Memory was previously stored under `memory/`. Repository agents now use `ai/memory/` and `/memories/repo/webautomation.md` to track locator changes, flaky tests, and framework conventions over time.
+- Agent memory is local-only under ignored `ai/memory/`; it is never committed.
+  Start with `ai/memory/INDEX.md` and search its archives before adding a
+  learning. Archives have no fixed size cap; keep the index current when
+  splitting notes by topic/date. Saved Copilot chats remain in VS Code's local
+  host-managed history and must not be copied into the repository or memory.
 
 **Copilot Agent Modes**
 - `playwright-test-orchestrator`: Top-level coordinator that discovers, executes, and summarizes test workflows.
@@ -47,7 +51,8 @@ This document explains how to use the agent hierarchy, skills, and persistent me
   - `locator-history.json` — learned locator mappings.
   - `healing-history.json` — records of healing attempts and results.
   - `flaky-tests.json` — flakiness metadata for tests.
-- Repository Memory: `/memories/repo/webautomation.md` for living framework conventions and build rules.
+- Local agent memory: `ai/memory/` for private, durable notes and the local
+  archive index; repository README files remain concise technical guidance.
 
 **Recommended Workflow**
 1. **Plan**: Use `test-plan-generation` skill or `playwright-test-planner` agent to draft `.md` test specs in `specs/` or `ai/tests/mobile/`.

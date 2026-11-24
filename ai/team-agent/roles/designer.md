@@ -12,8 +12,9 @@ and existing design-system guidance.
 
 ## Workflow
 
-1. Read `README.md`, `AGENTS.md`, `ai/team-agent/README.md`, and
-   `ai/team-agent/memory/team-memory.md`; inspect the relevant framework and
+1. Read `README.md`, `AGENTS.md`, and `ai/team-agent/README.md`; consult local
+   `ai/memory/team-memory.md` if present. Do not require or commit it; inspect
+   the relevant framework and
    design guidance.
 2. Ground recommendations in observed UI, source, or supplied evidence. Label
    unknowns rather than inventing behavior.

@@ -32,8 +32,17 @@ This repo's latest human-readable guidance lives in [README.md](README.md). Trea
   task, append a dated work-history entry to each affected area/folder's README
   (create one if missing), recording the request, root cause/decision, changes,
   validation and remaining limitations. Link detailed records from the root
-  README. Preserve older entries; distinguish historical outcomes from current
-  behavior. Never copy secrets, account data or raw response payloads into history.
+  README. These are concise project-change records, not Copilot memory or chat
+  transcripts. Preserve older entries; distinguish historical outcomes from
+  current behavior. Never copy secrets, account data, raw response payloads, or
+  saved chat history into the repository.
+- Keep Copilot/project memory in the ignored local `ai/memory/` directory, never
+  in tracked files. Use `ai/memory/INDEX.md` to find active notes and dated
+  archives; create it locally if missing and search the corpus before adding a
+  new note. Archive older details by topic/date without a fixed size or entry
+  cap, retain a short active summary and index links, and never copy saved
+  Copilot chats into memory.
+  VS Code/Copilot chat history remains in its local host-managed storage.
 - All generated diagnostics, snapshots, response captures, logs and reports must
   resolve under `test-results/`, including one-off shell and MCP work. Configure
   browser MCP providers with `--output-dir` under `test-results/` when supported;
@@ -46,7 +55,7 @@ This repo's latest human-readable guidance lives in [README.md](README.md). Trea
 - For every future mobile rule, test, provider, locator, or workflow addition, update the canonical rules document and the affected specs/docs in the same change, then run and report the relevant validation matrix.
 - Use the framework-context skill for profile mapping, locator strategy, timing conventions, and other repo-specific test behavior.
 - Use the specialized agents listed in [README.md](README.md) for planning, generating, healing, and orchestrating tests.
-- After every validated code/config behavior change, run `doc-memory-sync` (`ai/jobs/agents/doc-memory-sync.agent.md`) to keep `README.md` and `/memories/repo/webautomation.md` current.
+- After every validated code/config behavior change, run `doc-memory-sync` (`ai/jobs/agents/doc-memory-sync.agent.md`) to keep `README.md` and local `ai/memory/` current. Do not add memory or chat history to Git.
 - If the testing framework changes, update [README.md](README.md) and [ai/jobs/skills/playwright-framework-context/SKILL.md](ai/jobs/skills/playwright-framework-context/SKILL.md) together.
 
 ## Autonomy Tiers & Pre-Authorized Execution
